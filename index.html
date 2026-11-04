@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#1558b0"><title>NNT School · My page</title><link rel="stylesheet" href="shared.css">
+<style>
+.unit{display:flex;align-items:center;gap:13px;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:16px;padding:14px;margin-bottom:11px;cursor:pointer}
+.unit .no{min-width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,#1558b0,#2a7ae0);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px}
+.unit.none .no{background:#aebfd0}.unit b{display:block;font-size:15.5px;line-height:1.25}.unit small{color:var(--ink2);display:block;margin-top:3px}
+.unit .sp{flex:1}.unit .chev{color:#8aa0b8;font-size:22px}
+.pass{background:#e4f7ee;color:#0b6b45}.fail{background:#fde9ee;color:#9b1c3a}.wait{background:#eef2f7;color:#546a82}
+.back{background:none;border:0;color:var(--brand);font-weight:700;font-size:15px;padding:6px 0;cursor:pointer}
+.big{font-size:46px;font-weight:800;line-height:1}.lvl{display:inline-block;color:#fff;border-radius:10px;padding:5px 12px;font-weight:800;letter-spacing:.5px}
+.ex{display:grid;grid-template-columns:1fr 62px;gap:6px 10px;align-items:center;font-size:14px;margin-top:6px}.ex .b{height:9px;background:#e1ebf6;border-radius:9px;overflow:hidden;grid-column:1}.ex .b i{display:block;height:100%;background:var(--brand)}
+.ex .n{grid-column:1}.ex .v{grid-row:span 2;text-align:right;font-weight:700}
+.row{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--line)}.row:last-child{border:0}.row .rk{min-width:34px;height:34px;border-radius:50%;background:#e8f0fa;color:var(--brand2);display:flex;align-items:center;justify-content:center;font-weight:800}
+.row .rk.g1{background:#ffd75e;color:#5a4200}.row .rk.g2{background:#e3e8ee}.row .rk.g3{background:#f1c8a0;color:#6a3d12}.row.me{background:#fff8dd;border-radius:10px}.row .sc{margin-left:auto;font-weight:800}
+.msgbox{border-radius:14px;padding:14px;font-size:15px;line-height:1.45;margin-bottom:10px}.mb-best{background:linear-gradient(135deg,#fff4c2,#ffe08a);color:#5a4200}.mb-top3{background:#e4f7ee;color:#0b6b45}.mb-mid{background:#e8f0fa;color:#16406f}.mb-last{background:#fff1e0;color:#8a4b00}
+#pdfv{position:fixed;inset:0;background:#2b3138;z-index:50;overflow:auto;-webkit-user-select:none;user-select:none}
+#pdfv .bar{position:sticky;top:0;z-index:2;background:#1b2026;color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px}
+#pdfv canvas{display:block;margin:10px auto;max-width:100%;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.4)}
+#fbv{position:fixed;inset:0;background:#fff;z-index:50;display:flex;flex-direction:column}#fbv iframe{flex:1;border:0;width:100%}
+@media print{body *{display:none!important}}
+</style></head><body>
+<div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small>My page</small></div><div class="sp"></div><button class="btn sm alt hide" id="out">Log out</button></div>
+<div class="wrap">
+ <div id="s_login" class="card hide"><h1>Welcome 👋</h1><p>Choose your name and type your personal code. You only do this once on your phone.</p>
+  <label for="nq">Your name</label><input type="search" id="nq" placeholder="Start typing your name…" autocomplete="off"><div class="pick" id="plist"></div>
+  <label for="code">Your 5-digit code</label><input type="password" id="code" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="•••••">
+  <div style="height:14px"></div><button class="btn" id="go">Log in</button><div id="m_login"></div></div>
+ <div id="s_home" class="hide"><h1 id="hi"></h1><p style="color:var(--ink2)">Your units</p><div id="units"></div><div id="m_home"></div></div>
+ <div id="s_unit" class="hide"><button class="back" id="ub">← All units</button><div id="ubody"></div></div>
+</div>
+<div id="pdfv" class="hide"><div class="bar"><button class="btn sm alt" id="pclose">✕ Close</button><span id="ptitle" style="font-weight:700"></span></div><div id="pages"></div></div>
+<div id="fbv" class="hide"><div class="bar" style="background:#1b2026;color:#fff;padding:10px 14px"><button class="btn sm alt" id="fclose">✕ Close</button></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
+<script src="core.js"></script>
+<script type="module">
+import * as pdfjs from "./vendor/pdf.mjs";
+pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
+var TOK = ls("nnt_phone_token"), ROSTER = [], pickId = 0, ME = null, CUR = null;
+function show(id){ ["s_login","s_home","s_unit"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); $("out").classList.toggle("hide", id === "s_login"); window.scrollTo(0,0); }
+function note(el, cls, txt){ $(el).innerHTML = txt ? '<div class="msg ' + cls + '">' + txt + '</div>' : ""; }
+function boot(){ if (TOK) home(); else loginScreen(); }
+function loginScreen(){
+  show("s_login"); note("m_login","info","Loading the class list…");
+  rpc("roster").then(function(r){ ROSTER = r; note("m_login","",""); drawList(); }).catch(function(){ note("m_login","err","No internet connection. Please try again."); });
+}
+function drawList(){
+  var q = $("nq").value.trim().toLowerCase(), h = "";
+  ROSTER.filter(function(r){ return !q || r.name.toLowerCase().indexOf(q) > -1; }).slice(0, 60).forEach(function(r){ h += '<div data-id="' + r.id + '" class="' + (r.id === pickId ? "sel" : "") + '">' + esc(r.name) + '</div>'; });
+  $("plist").innerHTML = h || '<div style="color:#6b86a3">No name found</div>';
+}
+$("nq").oninput = function(){ pickId = 0; drawList(); };
+$("plist").onclick = function(e){ var d = e.target.closest("div[data-id]"); if (!d) return; pickId = +d.getAttribute("data-id"); drawList(); $("code").focus(); };
+$("go").onclick = function(){
+  if (!pickId){ note("m_login","err","Please choose your name from the list."); return; }
+  var c = $("code").value.trim(); if (!/^\d{5}$/.test(c)){ note("m_login","err","Your code has 5 digits."); return; }
+  $("go").disabled = true; note("m_login","info","Checking…");
+  rpc("login_phone", {sid: pickId, pcode: c, plabel: deviceLabel()}).then(function(r){
+    $("go").disabled = false;
+    if (r.ok){ TOK = r.token; ls("nnt_phone_token", TOK); $("code").value = ""; home(); return; }
+    var m = {wrong:"That code is not correct. " + (r.left != null ? r.left + " tries left." : ""), locked:"Too many wrong codes. Try again in " + (r.minutes || 10) + " minutes.", nocode:"You have no code at the moment. Ask your teacher for a new one.", nostudent:"Name not found."};
+    note("m_login","err", m[r.err] || "Could not log in.");
+  }).catch(function(){ $("go").disabled = false; note("m_login","err","No internet connection."); });
+};
+$("code").onkeydown = function(e){ if (e.key === "Enter") $("go").click(); };
+$("out").onclick = function(){ if (!confirm("Log out? You will need a new code from your teacher to log in again.")) return; rpc("logout", {tok: TOK}); ls("nnt_phone_token", null); TOK = null; pickId = 0; loginScreen(); };
+function home(){
+  show("s_home"); note("m_home","info","Loading…");
+  rpc("me", {tok: TOK}).then(function(r){
+    if (!r.ok){ ls("nnt_phone_token", null); TOK = null; loginScreen(); note("m_login","err","Your login has ended. Please log in again with a new code from your teacher."); return; }
+    ME = r; note("m_home","",""); $("hi").textContent = "Hi, " + r.name.split(" ")[0] + "!";
+    var h = ""; r.units.forEach(function(u){
+      var badge = u.status === "finished" ? (u.passed ? '<span class="pill pass">PASSED</span>' : '<span class="pill fail">FAILED</span>') : '<span class="pill wait">' + (u.status === "started" ? "In progress" : "Not taken") + '</span>';
+      h += '<button class="unit ' + (u.status === "none" ? "none" : "") + '" data-u="' + esc(u.unit) + '"><span class="no">' + u.no + '</span><span><b>' + esc(u.title.replace(/^Unit \d+ · /, "")) + '</b><small>Unit ' + u.no + '</small></span><span class="sp"></span>' + badge + '<span class="chev">›</span></button>';
+    });
+    $("units").innerHTML = h;
+  }).catch(function(){ note("m_home","err","No internet connection."); });
+}
+$("units").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b) return; unit(b.getAttribute("data-u")); };
+$("ub").onclick = function(){ home(); };
+function lvlPill(l){ return '<span class="lvl" style="background:' + LVC[l] + '">' + LVN[l] + '</span>'; }
+function unit(u){
+  CUR = ME.units.filter(function(x){ return x.unit === u; })[0]; show("s_unit");
+  var c = CUR, h = '<h1>' + esc(c.title.replace(/^Unit \d+ · /, "")) + '</h1><p style="color:var(--ink2)">Unit ' + c.no + '</p>';
+  if (c.status !== "finished"){
+    h += '<div class="card"><h2>Not finished yet</h2><p>Your results, feedback and the explanation PDF appear here after you finish this test in the classroom.</p></div>';
+    h += '<div class="card"><h2>📘 Explanations</h2><button class="btn" disabled>🔒 Locked until you finish the test</button></div>';
+    $("ubody").innerHTML = h; return;
+  }
+  h += '<div class="card"><h2>' + (c.passed ? "✅ PASSED" : "Not passed this time") + '</h2>' + (c.released ? '<div id="res"></div>' : '<p>Your detailed result will appear here when your teacher shares the results.</p>') + '</div>';
+  if (c.released) h += '<div class="card" id="lbcard"><h2>🏅 Class ranking</h2><div id="lb">Loading…</div></div>';
+  h += '<div class="card"><h2>📘 Explanations</h2><p>All answers explained in English and Uzbek. View only.</p><button class="btn gold" id="openpdf">Open explanations</button><div id="m_pdf"></div></div>';
+  h += '<div class="card"><h2>✍️ My essay feedback</h2><button class="btn alt" id="openfb">Show my essay and feedback</button><div id="m_fb"></div></div>';
+  $("ubody").innerHTML = h;
+  $("openpdf").onclick = function(){ openPdf(u, c.title); }; $("openfb").onclick = function(){ openFb(u); };
+  if (c.released){
+    var r = c.result || {}, rh = '<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div class="big">' + Math.round(r.pct) + '%</div><div>' + lvlPill(r.level) + '<div style="margin-top:6px;color:var(--ink2)">' + r.score + ' / ' + r.total + (r.w != null ? ' · Writing ' + r.w + '/10' : '') + '</div></div></div>';
+    if (r.tt && r.x){ rh += '<h3 style="margin:16px 0 4px;font-size:15px">My exercises</h3><div class="ex">'; r.tt.forEach(function(t, i){ var p = r.y[i] ? Math.round(100 * r.x[i] / r.y[i]) : 0; rh += '<div class="n">' + (i + 1) + '. ' + esc(t) + '</div><div class="v">' + r.x[i] + ' / ' + r.y[i] + '</div><div class="b"><i style="width:' + p + '%"></i></div>'; }); rh += '</div>'; }
+    $("res").innerHTML = rh;
+    rpc("leaderboard", {tok: TOK, u: u}).then(function(l){
+      if (!l.ok){ $("lb").innerHTML = "<p>Ranking is not available yet.</p>"; return; }
+      var msg = {alone:["mb-mid","You are the first one with a result so far."], best:["mb-best","🏆 You are number 1 in the class! Outstanding work. Congratulations, you should be very proud."], top3:["mb-top3","🌟 You are in the top 3! Great result. Keep going!"],
+        mid:["mb-mid","You are number " + l.rank + " of " + l.n + ". The students just ahead of you are below. You can catch them!"], last:["mb-last","You are at the bottom of the class for this unit. Please do not give up: watch the lesson video again, read the explanations and ask your teacher for help. You can climb quickly."]}[l.tier];
+      var row = function(x, me){ return '<div class="row ' + (me ? "me" : "") + '"><span class="rk g' + (x.rank <= 3 ? x.rank : 0) + '">' + x.rank + '</span><span>' + esc(x.name) + (me ? " (you)" : "") + '</span><span class="sc">' + Math.round(x.pct) + '%</span></div>'; };
+      var o = '<div class="msgbox ' + msg[0] + '">' + msg[1] + '</div><h3 style="margin:12px 0 2px;font-size:15px">Top 3 in the class</h3>' + l.top.map(function(x){ return row(x, x.me); }).join("");
+      if (l.above.length && l.tier !== "top3" && l.tier !== "best") o += '<h3 style="margin:16px 0 2px;font-size:15px">Just ahead of you</h3>' + l.above.map(function(x){ return row(x, false); }).join("");
+      $("lb").innerHTML = o;
+    }).catch(function(){ $("lb").innerHTML = "<p>Could not load.</p>"; });
+  }
+}
+function openFb(u){
+  note("m_fb","info","Loading…");
+  rpc("unit_detail", {tok: TOK, u: u}).then(function(d){
+    note("m_fb","","");
+    if (!d.ok){ note("m_fb","err","Not available."); return; }
+    if (!d.feedback){ note("m_fb","info","No essay feedback was saved for this unit."); return; }
+    var essay = d.essay ? '<div style="font:16px/1.5 system-ui;padding:16px;margin:12px;border:1px solid #dbe6f1;border-radius:12px;background:#f7fafd"><b>Your essay</b><p style="white-space:pre-wrap">' + esc(d.essay) + '</p></div>' : "";
+    var html = d.feedback;
+    $("fbf").srcdoc = "<!doctype html><meta name=viewport content='width=device-width,initial-scale=1'>" + essay + html;
+    $("fbv").classList.remove("hide");
+  }).catch(function(){ note("m_fb","err","No internet connection."); });
+}
+$("fclose").onclick = function(){ $("fbv").classList.add("hide"); $("fbf").srcdoc = ""; };
+function openPdf(u, title){
+  note("m_pdf","info","Opening… this takes a few seconds.");
+  rpc("get_pdf", {tok: TOK, u: u}).then(function(r){
+    if (!r.ok){ note("m_pdf","err", r.err === "locked" ? "Locked until you finish this test in the classroom." : "The explanations for this unit are not ready yet."); return; }
+    return fetchDecrypt(r.path, r.key).then(function(buf){ note("m_pdf","",""); return renderPdf(buf, r.name, title); });
+  }).catch(function(e){ note("m_pdf","err","Could not open (" + esc(e.message || e) + ")."); });
+}
+async function renderPdf(buf, name, title){
+  $("pages").innerHTML = ""; $("ptitle").textContent = title.replace(/^Unit \d+ · /, ""); $("pdfv").classList.remove("hide"); document.body.style.overflow = "hidden";
+  var pdf = await pdfjs.getDocument({data: new Uint8Array(buf)}).promise, W = Math.min(window.innerWidth - 20, 900), dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  var holders = [];
+  for (var i = 1; i <= pdf.numPages; i++){ var cv = document.createElement("canvas"); cv.style.width = W + "px"; cv.style.height = Math.round(W * 1.414) + "px"; cv.dataset.n = i; $("pages").appendChild(cv); holders.push(cv); }
+  var drawn = {};
+  async function draw(cv){
+    var n = +cv.dataset.n; if (drawn[n]) return; drawn[n] = 1;
+    var page = await pdf.getPage(n), vp0 = page.getViewport({scale: 1}), sc = W / vp0.width * dpr, vp = page.getViewport({scale: sc});
+    cv.width = vp.width; cv.height = vp.height; cv.style.height = Math.round(vp.height / dpr) + "px";
+    var ctx = cv.getContext("2d"); await page.render({canvasContext: ctx, viewport: vp, canvas: cv}).promise;
+    ctx.save(); ctx.globalAlpha = .08; ctx.fillStyle = "#000"; ctx.font = "bold " + Math.round(vp.width / 14) + "px sans-serif"; ctx.textAlign = "center";
+    for (var y = vp.height * .12; y < vp.height; y += vp.height / 4){ ctx.save(); ctx.translate(vp.width / 2, y); ctx.rotate(-Math.PI / 7); ctx.fillText(name, 0, 0); ctx.restore(); }
+    ctx.restore();
+  }
+  var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) draw(e.target); }); }, {root: $("pdfv"), rootMargin: "800px 0px"});
+  holders.forEach(function(c){ io.observe(c); });
+}
+$("pclose").onclick = function(){ $("pdfv").classList.add("hide"); $("pages").innerHTML = ""; document.body.style.overflow = ""; };
+document.addEventListener("contextmenu", function(e){ if (e.target.closest("#pdfv")) e.preventDefault(); });
+boot();
+</script></body></html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>NNT School · Classroom tests</title><link rel="stylesheet" href="shared.css">
+<style>
+.tg{display:grid;gap:12px}.t{display:flex;align-items:center;gap:14px;padding:16px;border-radius:16px;background:#fff;border:1.5px solid var(--line);cursor:pointer;text-align:left;width:100%}
+.t .no{min-width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,#1558b0,#2a7ae0);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px}
+.t.done{opacity:.6;cursor:default}.t.done .no{background:#9fb0c3}.t b{display:block;font-size:16px}.t small{color:var(--ink2)}
+.t.retake{border-color:var(--gold);background:#fff9e8}.who{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.bar{height:8px;background:#e1ebf6;border-radius:9px;overflow:hidden;margin-top:12px}.bar i{display:block;height:100%;background:var(--brand);width:0}
+</style></head><body>
+<div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small>Classroom tests</small></div><div class="sp"></div><button class="btn sm alt hide" id="out">Log out</button></div>
+<div class="wrap">
+ <div id="s_setup" class="card hide"><h2>Set up this computer</h2><p>Only the teacher does this, once per computer.</p>
+  <label for="ck">Classroom key</label><input type="password" id="ck" autocomplete="off"><div style="height:12px"></div><button class="btn" id="cksave">Save</button><div id="m_setup"></div></div>
+ <div id="s_login" class="card hide"><h1>Welcome</h1><p>Choose your name and type your personal code.</p>
+  <label for="nq">Your name</label><input type="search" id="nq" placeholder="Start typing your name…" autocomplete="off"><div class="pick" id="plist"></div>
+  <label for="code">Your 5-digit code</label><input type="password" id="code" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="•••••">
+  <div style="height:14px"></div><button class="btn" id="go">Log in</button><div id="m_login"></div>
+  <p style="margin-top:16px"><a href="#" id="resetkey" style="color:#6b86a3;font-size:12px">Teacher: change this computer’s key</a></p></div>
+ <div id="s_lib" class="hide"><div class="card who"><div><small style="color:var(--ink2)">Logged in as</small><h2 id="who" style="margin:2px 0 0"></h2></div></div>
+  <div id="tests" class="tg"></div><div id="m_lib"></div></div>
+ <div id="s_load" class="card hide"><h2 id="ltitle">Opening your test…</h2><p>Please wait. This can take a few seconds.</p><div class="bar"><i id="lbar"></i></div></div>
+</div>
+<script src="core.js"></script>
+<script>
+var TOK = null, NAME = "", SID = 0, ROSTER = [], pickId = 0;
+function show(id){ ["s_setup","s_login","s_lib","s_load"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); $("out").classList.toggle("hide", id !== "s_lib"); }
+function note(el, cls, txt){ $(el).innerHTML = txt ? '<div class="msg ' + cls + '">' + txt + '</div>' : ""; }
+function init(){
+  if (!ls("nnt_class_key")){ show("s_setup"); return; }
+  show("s_login"); note("m_login","info","Loading the class list…");
+  rpc("roster").then(function(r){ ROSTER = r; note("m_login","",""); drawList(); }).catch(function(){ note("m_login","err","No internet connection. Please tell your teacher."); });
+}
+function drawList(){
+  var q = $("nq").value.trim().toLowerCase(), h = "";
+  ROSTER.filter(function(r){ return !q || r.name.toLowerCase().indexOf(q) > -1; }).slice(0, 60).forEach(function(r){ h += '<div data-id="' + r.id + '" class="' + (r.id === pickId ? "sel" : "") + '">' + esc(r.name) + '</div>'; });
+  $("plist").innerHTML = h || '<div style="color:#6b86a3">No name found</div>';
+}
+$("nq").oninput = function(){ pickId = 0; drawList(); };
+$("plist").onclick = function(e){ var d = e.target.closest("div[data-id]"); if (!d) return; pickId = +d.getAttribute("data-id"); drawList(); $("code").focus(); };
+$("cksave").onclick = function(){ var k = $("ck").value.trim(); if (k.length < 6){ note("m_setup","err","Please type the classroom key."); return; } ls("nnt_class_key", k); $("ck").value = ""; init(); };
+$("resetkey").onclick = function(e){ e.preventDefault(); ls("nnt_class_key", null); init(); };
+$("go").onclick = function(){
+  if (!pickId){ note("m_login","err","Please choose your name from the list."); return; }
+  var c = $("code").value.trim(); if (!/^\d{5}$/.test(c)){ note("m_login","err","Your code has 5 digits."); return; }
+  $("go").disabled = true; note("m_login","info","Checking…");
+  rpc("login_class", {sid: pickId, pcode: c, pclass_key: ls("nnt_class_key") || "", plabel: "classroom " + deviceLabel()}).then(function(r){
+    $("go").disabled = false;
+    if (r.ok){ TOK = r.token; NAME = r.name; SID = r.id; $("code").value = ""; loadTests(); return; }
+    var m = {wrong:"That code is not correct. " + (r.left != null ? r.left + " tries left." : ""), locked:"Too many wrong codes. Try again in " + (r.minutes || 10) + " minutes.", nocode:"You have no code at the moment. Ask your teacher.",
+      classkey:"This computer is not set up for tests. Ask your teacher.", busy:"Please wait a few minutes and try again.", network:"Tests can only be taken in the classroom.", nostudent:"Name not found."};
+    note("m_login","err", m[r.err] || "Could not log in."); if (r.err === "classkey"){ ls("nnt_class_key", null); setTimeout(init, 2500); }
+  }).catch(function(){ $("go").disabled = false; note("m_login","err","No internet connection."); });
+};
+$("code").onkeydown = function(e){ if (e.key === "Enter") $("go").click(); };
+$("out").onclick = function(){ if (TOK) rpc("logout", {tok: TOK}); TOK = null; pickId = 0; $("nq").value = ""; show("s_login"); drawList(); };
+function loadTests(){
+  show("s_lib"); $("who").textContent = NAME; note("m_lib","info","Loading tests…");
+  rpc("class_tests", {tok: TOK}).then(function(r){
+    if (!r.ok){ note("m_lib","err","Please log in again."); return; }
+    note("m_lib","",""); var h = "";
+    if (!r.tests.length) h = '<div class="card">No tests are open yet.</div>';
+    r.tests.forEach(function(t){
+      var st = t.done ? (t.retake ? "Retake allowed · tap to start" : "✓ Finished") : (t.can ? "Tap to start" : "Not open");
+      h += '<button class="t ' + (t.done && !t.retake ? "done" : "") + (t.retake ? " retake" : "") + '" data-u="' + esc(t.unit) + '"' + ((!t.can) ? " disabled" : "") + '><span class="no">' + t.no + '</span><span><b>' + esc(t.title.replace(/^Unit \d+ · /, "")) + '</b><small>Unit ' + t.no + " · " + st + '</small></span></button>';
+    });
+    $("tests").innerHTML = h;
+  }).catch(function(){ note("m_lib","err","No internet connection."); });
+}
+$("tests").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b || b.disabled) return; openTest(b.getAttribute("data-u")); };
+function openTest(u){
+  show("s_load"); $("lbar").style.width = "5%";
+  rpc("get_test", {tok: TOK, u: u}).then(function(r){
+    if (!r.ok){ show("s_lib"); note("m_lib","err", r.err === "notallowed" ? "You cannot open this test." : "Could not open the test. Tell your teacher."); return; }
+    return fetchDecrypt(r.path, r.key, function(p){ $("lbar").style.width = (5 + 80 * p) + "%"; }).then(function(buf){
+      $("lbar").style.width = "95%";
+      var html = new TextDecoder("utf-8").decode(buf);
+      return fetch("shim.js", {cache:"no-store"}).then(function(x){ return x.text(); }).then(function(shim){ launch(html, shim, u, r.name); });
+    });
+  }).catch(function(e){ show("s_lib"); note("m_lib","err","Could not open the test (" + esc(e.message || e) + "). Check the internet and try again."); });
+}
+function launch(html, shim, u, name){
+  var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: TOK, unit: u, name: name}) + ";";
+  var tag = "<script>" + cfg + "\n" + shim.replace(/<\/script/gi, "<\\/script") + "<\/script>";
+  var i = html.search(/<head[^>]*>/i);
+  if (i > -1){ var m = html.match(/<head[^>]*>/i)[0]; html = html.slice(0, i + m.length) + tag + html.slice(i + m.length); } else html = tag + html;
+  document.open(); document.write(html); document.close();
+}
+init();
+</script></body></html>
