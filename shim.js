@@ -6,8 +6,12 @@
     return of(P.url + "/rest/v1/rpc/" + name, {method:"POST", headers:{"Content-Type":"application/json","apikey":P.key,"Authorization":"Bearer " + P.key}, body: JSON.stringify(args)})
       .then(function(r){ return r.json().then(function(j){ if (!r.ok) throw new Error((j && j.message) || r.status); return j; }); });
   }
-  function ping(){ call("ping", {tok: P.tok}).catch(function(){}); }
-  if (!PRAC) pinged = setInterval(ping, 40000);
+  function ping(){
+    var a = {tok: P.tok}, e = document.getElementById("progtxt");
+    if (started && e && e.textContent) a.prog = e.textContent.replace(/\s+/g, " ").trim();
+    call("ping", a).catch(function(){ if (a.prog) call("ping", {tok: P.tok}).catch(function(){}); });
+  }
+  if (!PRAC) pinged = setInterval(ping, 15000);
   function banner(msg){
     var d = document.createElement("div"); d.style.cssText = "position:fixed;inset:0;z-index:99999;background:rgba(14,42,71,.92);color:#fff;display:flex;align-items:center;justify-content:center;font:600 22px system-ui,sans-serif;text-align:center;padding:30px";
     d.innerHTML = "<div>" + msg + "<br><br><button style='font:700 18px system-ui;padding:12px 22px;border-radius:12px;border:0;cursor:pointer'>OK</button></div>";
@@ -28,7 +32,7 @@
     e.preventDefault(); e.stopImmediatePropagation();
     var trk = b.id === "trkml" ? "ml" : b.id === "trkie" ? "ie" : null;
     call("start_attempt", {tok: P.tok, u: P.unit, trk: trk}).then(function(r){
-      if (r && r.ok){ started = true; b.click(); }
+      if (r && r.ok){ started = true; b.click(); setTimeout(ping, 4000); }
       else banner("You cannot start this test." + (r && r.err === "auth" ? " Please log in again." : ""));
     }).catch(function(){ banner("No internet connection. Please tell your teacher."); });
   }, true);
