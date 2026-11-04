@@ -20,8 +20,23 @@
 .row .rk{min-width:34px;height:34px;border-radius:50%;background:#e9edf7;color:var(--ink);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700}
 .row .rk.g1{background:linear-gradient(180deg,#f0cf7a,var(--gold));color:#2a1c00}.row .rk.g2{background:#dfe4ee}.row .rk.g3{background:#ecc9a4;color:#5c3410}
 .row.me{background:var(--gold3);border-radius:10px}.row .sc{margin-left:auto;font-weight:800}
-.msgbox{border-radius:10px;padding:14px;font-size:15.5px;line-height:1.5;margin-bottom:10px;border-left:3px solid}
-.mb-best{background:var(--gold3);color:#5a4210;border-color:var(--gold)}.mb-top3{background:var(--okbg);color:var(--ok);border-color:var(--ok)}.mb-mid{background:#eaeffa;color:#16356f;border-color:var(--royal)}.mb-last{background:#fff1e0;color:#7a4300;border-color:#d98a1d}
+.msgbox{position:relative;overflow:hidden;border-radius:18px;padding:18px 112px 18px 18px;font-size:15px;line-height:1.5;margin-bottom:12px;color:#fff;box-shadow:0 8px 22px rgba(7,23,51,.25)}
+.msgbox .mh{display:block;font-family:"Bodoni Moda",Georgia,serif;font-weight:800;font-size:25px;line-height:1.1;margin-bottom:6px;letter-spacing:.2px}
+.msgbox .stk{position:absolute;display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:50%;background:#fff;border:3px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.35);font-size:28px}
+.msgbox .stk.a{top:10px;right:12px;transform:rotate(12deg)}.msgbox .stk.b{top:58px;right:50px;width:42px;height:42px;font-size:23px;transform:rotate(-14deg)}.msgbox .stk.c{bottom:8px;right:10px;width:38px;height:38px;font-size:21px;transform:rotate(8deg)}
+@keyframes shine{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+@keyframes bob{0%,100%{translate:0 0}50%{translate:0 -4px}}
+.msgbox .stk{animation:bob 2.4s ease-in-out infinite}.msgbox .stk.b{animation-delay:.5s}.msgbox .stk.c{animation-delay:1s}
+.mb-best{background:linear-gradient(135deg,#2b0a63 0%,#7b2ff7 38%,#ff2d95 70%,#ffb300 100%);border:2px solid #ffe08a}
+.mb-best .mh{background:linear-gradient(90deg,#fff6c2,#ffd54a,#fff,#ffd54a,#fff6c2);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 3s linear infinite;font-size:28px}
+.mb-top3{background:linear-gradient(135deg,#032b2a 0%,#0e8f6a 55%,#f2c744 100%);border:2px solid #9ff0c9}
+.mb-top3 .mh{color:#ffe27a;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.mb-alone{background:linear-gradient(135deg,#071733,#123f9c);border:2px solid var(--gold)}.mb-alone .mh{color:var(--gold2)}
+.mb-mid{background:linear-gradient(135deg,#1c2433 0%,#2f3a52 100%);border:2px solid #56627f}.mb-mid .mh{color:#ffb454}
+.mb-last{background:linear-gradient(135deg,#0d0a14 0%,#2a0f1f 60%,#4a0f27 100%);border:2px solid #7a2540}.mb-last .mh{color:#ff6b81;text-shadow:0 0 14px rgba(255,80,110,.45)}
+.mb-last .stk,.mb-mid .stk{filter:saturate(.8)}
+.msgbox b{color:inherit;text-decoration:underline;text-decoration-color:currentColor}
+.mb-best b{color:#ffe27a}.mb-top3 b{color:#ffe27a}.mb-mid b{color:#ffb454}.mb-last b{color:#ff9aa8}
 .tile{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:14px 16px;background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;cursor:pointer;transition:box-shadow .15s,transform .15s;box-shadow:0 1px 2px rgba(7,23,51,.04)}
 .tile:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 10px 22px -14px rgba(7,23,51,.35)}
 .tile .ic{flex:none;width:46px;height:46px;border-radius:10px;background:linear-gradient(160deg,#14367e,var(--ink));color:var(--gold2);display:flex;align-items:center;justify-content:center}
@@ -62,8 +77,8 @@
 <div id="pdfv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="pclose">Close</button><span id="ptitle"></span></div><div id="pages"></div></div>
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 9</div>
-<script src="core.js?v=9"></script>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 10</div>
+<script src="core.js?v=10"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
@@ -157,10 +172,13 @@ function unit(u){
     $("res").innerHTML = rh;
     rpc("leaderboard", {tok: TOK, u: u}).then(function(l){
       if (!l.ok){ $("lb").innerHTML = "<p>Ranking is not available yet.</p>"; return; }
-      var msg = {alone:["mb-mid","You are the first one with a result so far."], best:["mb-best","You are number 1 in the class! Outstanding work. Congratulations, be proud of it."], top3:["mb-top3","You are in the top 3. Great result. Keep going!"],
-        mid:["mb-mid","You are number " + l.rank + " of " + l.n + ". The students just ahead of you are listed below. You can catch them!"], last:["mb-last","You are at the bottom of the class for this unit. Please do not give up: watch the video lessons again in the Study area, read the explanations and ask your teacher for help. You can climb quickly."]}[l.tier];
+      var msg = {alone:["mb-alone","First on the board!","You are the first one with a result so far. Set the standard!",["\u2B50","\uD83D\uDE80"]],
+        best:["mb-best","NUMBER 1! \uD83C\uDF89","You are <b>number 1</b> in the class! Outstanding, brilliant, legendary work. Congratulations, be proud of it!",["\uD83D\uDC51","\uD83C\uDFC6","\uD83D\uDD25"]],
+        top3:["mb-top3","TOP 3! Superb!","You are in the <b>top 3</b>. Great result, strong and sharp. Keep going, number 1 is within reach!",["\uD83E\uDD47","\uD83D\uDE80","\u2728"]],
+        mid:["mb-mid","Keep climbing!","You are number <b>" + l.rank + " of " + l.n + "</b>. Not bad, but you can do better. The students just ahead of you are listed below. Catch them!",["\uD83D\uDCAA","\uD83E\uDDD7"]],
+        last:["mb-last","Wake up, champion.","You are at the <b>bottom of the class</b> for this unit. Do not give up: watch the video lessons again in the Study area, read the explanations and ask your teacher for help. You can climb quickly.",["\uD83E\uDD40","\uD83C\uDF27\uFE0F","\uD83D\uDE14"]]}[l.tier];
       var row = function(x, me){ return '<div class="row ' + (me ? "me" : "") + '"><span class="rk g' + (x.rank <= 3 ? x.rank : 0) + '">' + x.rank + '</span><span>' + esc(x.name) + (me ? " (you)" : "") + '</span><span class="sc">' + Math.round(x.pct) + '%</span></div>'; };
-      var o = '<div class="msgbox ' + msg[0] + '">' + msg[1] + '</div><h3 style="margin:14px 0 2px">Top 3 in the class</h3>' + l.top.map(function(x){ return row(x, x.me); }).join("");
+      var o = '<div class="msgbox ' + msg[0] + '"><span class="mh">' + msg[1] + '</span>' + msg[2] + msg[3].map(function(e,k){ return '<span class="stk ' + "abc"[k] + '">' + e + '</span>'; }).join("") + '</div><h3 style="margin:14px 0 2px">Top 3 in the class</h3>' + l.top.map(function(x){ return row(x, x.me); }).join("");
       if (l.above.length && l.tier !== "top3" && l.tier !== "best") o += '<h3 style="margin:18px 0 2px">Just ahead of you</h3>' + l.above.map(function(x){ return row(x, false); }).join("");
       $("lb").innerHTML = o;
     }).catch(function(){ $("lb").innerHTML = "<p>Could not load.</p>"; });
