@@ -2,8 +2,8 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#1558b0"><title>NNT School · My page</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared.css">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css?v=14">
 <style>
 .hero{padding:6px 2px 18px}.hero .g{color:var(--mute);font-size:15px}.hero h1{font-size:38px;margin:2px 0 8px}.hero p{color:var(--mute);margin:0}
 .hub{display:grid;gap:14px;margin-top:8px}.hubbtn{display:flex;align-items:center;gap:16px;width:100%;text-align:left;padding:22px 20px;border:0;border-radius:14px;background:linear-gradient(150deg,#14367e,var(--ink));color:#fff;cursor:pointer;border-bottom:3px solid var(--gold);box-shadow:0 14px 28px -16px rgba(7,23,51,.6);transition:transform .15s}.hubbtn:hover{transform:translateY(-2px)}
@@ -21,7 +21,7 @@
 .row .rk.g1{background:linear-gradient(180deg,#f0cf7a,var(--gold));color:#2a1c00}.row .rk.g2{background:#dfe4ee}.row .rk.g3{background:#ecc9a4;color:#5c3410}
 .row.me{background:var(--gold3);border-radius:10px}.row .sc{margin-left:auto;font-weight:800}
 .msgbox{position:relative;overflow:hidden;border-radius:18px;padding:18px 112px 18px 18px;font-size:15px;line-height:1.5;margin-bottom:12px;color:#fff;box-shadow:0 8px 22px rgba(7,23,51,.25)}
-.msgbox .mh{display:block;font-family:"Bodoni Moda",Georgia,serif;font-weight:800;font-size:25px;line-height:1.1;margin-bottom:6px;letter-spacing:.2px}
+.msgbox .mh{display:block;font-family:var(--serif);font-weight:700;font-size:25px;line-height:1.1;margin-bottom:6px;letter-spacing:.2px}
 .msgbox .stk{position:absolute;display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:50%;background:#fff;border:3px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.35);font-size:28px}
 .msgbox .stk.a{top:10px;right:12px;transform:rotate(12deg)}.msgbox .stk.b{top:58px;right:50px;width:42px;height:42px;font-size:23px;transform:rotate(-14deg)}.msgbox .stk.c{bottom:8px;right:10px;width:38px;height:38px;font-size:21px;transform:rotate(8deg)}
 @keyframes shine{0%{background-position:0% 50%}100%{background-position:200% 50%}}
@@ -81,8 +81,8 @@
 <div id="pdfv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="pclose">Close</button><span id="ptitle"></span></div><div id="pages"></div></div>
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 13</div>
-<script src="core.js?v=13"></script>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 14</div>
+<script src="core.js?v=14"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
@@ -173,7 +173,7 @@ function unit(u){
   if (c.released){
     var r = c.result || {}, rh = '<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div class="big">' + Math.round(r.pct) + '%</div><div>' + lvlPill(r.level) + '<div style="margin-top:6px;color:var(--mute)">' + r.score + ' / ' + r.total + '' + '</div></div></div>';
     var wm = typeof r.ws === "number" ? r.ws : null;
-    if (wm !== null) rh += '<div style="margin-top:16px;display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:14px;background:linear-gradient(135deg,#071733,#123f9c);color:#fff"><span style="font-size:26px">✍️</span><span style="flex:1;font-weight:700">Writing mark<br><small style="font-weight:500;color:#cfd9f5">Separate from your 100-question result</small></span><span style="font:800 34px Georgia,serif;color:#efdca8">' + wm + '<small style="font:700 16px system-ui;color:#cfd9f5"> / 10</small></span></div>';
+    if (wm !== null) rh += '<div style="margin-top:16px;display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:14px;background:linear-gradient(135deg,#071733,#123f9c);color:#fff"><span style="font-size:26px">✍️</span><span style="flex:1;font-weight:700">Writing mark<br><small style="font-weight:500;color:#cfd9f5">Separate from your 100-question result</small></span><span style="font:700 32px var(--serif);color:#efdca8">' + wm + '<small style="font:700 16px system-ui;color:#cfd9f5"> / 10</small></span></div>';
     if (r.tt && r.x){ rh += '<h3 style="margin:18px 0 2px">My exercises</h3><div class="ex">'; r.tt.forEach(function(t, i){ var p = r.y[i] ? Math.round(100 * r.x[i] / r.y[i]) : 0; rh += '<div class="n">' + (i + 1) + '. ' + esc(t) + '</div><div class="v">' + r.x[i] + ' / ' + r.y[i] + '</div><div class="b"><i style="width:' + p + '%"></i></div>'; }); rh += '</div>'; }
     $("res").innerHTML = rh;
     rpc("leaderboard", {tok: TOK, u: u}).then(function(l){

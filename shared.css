@@ -3,8 +3,8 @@
   --ink:#071733;--ink2:#0d2552;--royal:#123f9c;--gold:#c8963a;--gold2:#efdca8;--gold3:#fbf4df;
   --paper:#f3f4f8;--card:#fff;--line:#e1e4ee;--text:#0f1a33;--mute:#5a6785;
   --ok:#0e6b4d;--okbg:#e3f4ec;--bad:#9c2442;--badbg:#fbe8ed;
-  --serif:"Bodoni Moda","Didot","Bodoni 72",Georgia,"Times New Roman",serif;
-  --sans:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --serif:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --sans:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
 }
 *{box-sizing:border-box}html,body{margin:0}
 body{font-family:var(--sans);color:var(--text);background:var(--paper);min-height:100vh;-webkit-text-size-adjust:100%;font-size:16px;line-height:1.5}
