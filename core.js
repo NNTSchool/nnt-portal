@@ -40,3 +40,9 @@ function fetchDecrypt(path, keyHex, onProgress){
 var LVN = ["FAILED","GOOD JOB","EXCELLENT","NAILED IT","LEGENDARY"];
 var LVC = ["#e5365f","#e0409a","#0a9f6e","#ff6a00","#7b2ff7"];
 function deviceLabel(){ var u = navigator.userAgent || ""; var m = /\(([^)]*)\)/.exec(u); return (m ? m[1] : u).slice(0, 100); }
+
+function welcomeInit(){
+  var Q = ["Every test you finish is a step closer to your goal.","Small steps every day make a big difference.","Mistakes are proof that you are trying. Keep going!","Your English is growing. Be proud of it.","Practise today, shine tomorrow.","Learn a little. Learn every day. Learn for life.","Believe in yourself. You are ready for this."];
+  var q = document.getElementById("wq"); if (q) q.textContent = Q[Math.floor(Date.now() / 864e5) % Q.length];
+  [].forEach.call(document.querySelectorAll(".pol .ph[data-src]"), function(p){ var im = new Image(); im.onload = function(){ p.style.backgroundImage = "url(" + im.src + ")"; p.className += " real"; }; im.src = p.getAttribute("data-src"); });
+}

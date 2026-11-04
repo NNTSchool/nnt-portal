@@ -76,3 +76,26 @@ input:focus,select:focus{outline:none;border-color:var(--royal);box-shadow:0 0 0
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 @media(max-width:480px){.top{padding:12px 14px;gap:11px}.top b{font-size:17px}.top img{width:40px;height:40px}.hero h1{font-size:34px}}
+
+/* ---- welcome scene (login) ---- */
+.wel{position:relative;overflow:hidden;border-radius:22px;padding:26px 18px 22px;margin:0 0 14px;text-align:center;color:#fff;background:radial-gradient(120% 90% at 15% 0%,#1d4fbf 0%,#0b2a6e 45%,#071733 100%);box-shadow:0 14px 34px -14px rgba(7,23,51,.55);border:1.5px solid rgba(239,220,168,.55)}
+.wel::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 12%,rgba(239,220,168,.28),transparent 38%),radial-gradient(circle at 8% 90%,rgba(255,45,149,.18),transparent 40%);pointer-events:none}
+.wel>*{position:relative}
+.wel .crest{width:74px;height:74px;border-radius:50%;object-fit:cover;border:2.5px solid var(--gold2);box-shadow:0 0 0 6px rgba(200,150,58,.22),0 8px 20px rgba(0,0,0,.4);margin-bottom:10px}
+.wel .uz{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2);font-weight:700}
+.wel h1{color:#fff;font-size:30px;margin:4px 0 8px}.wel h1 em{font-style:normal;background:linear-gradient(90deg,#fff1b8,#ffc93c,#ff8fb8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.wel .tag{margin:0 auto;max-width:420px;color:#dbe4fb;font-size:15.5px;min-height:46px}
+.wel .stk{position:absolute;display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;background:#fff;border:3px solid #fff;box-shadow:0 4px 10px rgba(0,0,0,.35);font-size:22px;animation:welbob 3s ease-in-out infinite}
+.wel .s1{top:12px;left:12px;transform:rotate(-14deg)}.wel .s2{top:16px;right:14px;transform:rotate(12deg);animation-delay:.4s}.wel .s3{top:96px;left:6px;transform:rotate(10deg);animation-delay:.9s;width:36px;height:36px;font-size:19px}.wel .s4{top:104px;right:6px;transform:rotate(-10deg);animation-delay:1.3s;width:36px;height:36px;font-size:19px}
+@keyframes welbob{0%,100%{translate:0 0}50%{translate:0 -5px}}
+.polas{display:flex;justify-content:center;gap:12px;margin-top:18px;flex-wrap:nowrap}
+.pol{margin:0;background:#fff;padding:6px 6px 8px;border-radius:6px;box-shadow:0 8px 18px rgba(0,0,0,.4);width:30%;max-width:150px;color:var(--ink)}
+.pol .ph{aspect-ratio:1/1;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:40px;background-size:cover;background-position:center}
+.pol.p1{transform:rotate(-6deg)}.pol.p2{transform:translateY(-6px) rotate(2deg)}.pol.p3{transform:rotate(5deg)}
+.pol.p1 .ph{background-color:#ffe7a8}.pol.p2 .ph{background-color:#cfe0ff}.pol.p3 .ph{background-color:#ffd3e4}
+.pol .ph.real span{display:none}
+.pol figcaption{font-family:var(--serif);font-weight:700;font-size:14px;margin-top:5px}
+.wel .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.wel .chips span{background:rgba(255,255,255,.12);border:1px solid rgba(239,220,168,.5);color:var(--gold2);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600}
+.signin{border-top:3px solid var(--gold);border-radius:18px}
+.signin h2{display:flex;align-items:center;gap:8px}
