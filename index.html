@@ -35,7 +35,10 @@
 #pdfv{overflow:auto;display:block;-webkit-user-select:none;user-select:none}
 #pdfv .bar2{position:sticky;top:0;z-index:2}
 #pdfv canvas{display:block;margin:10px auto;max-width:100%;background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.4)}
-#fbv{background:#fff}#fbv iframe,#vidv iframe{flex:1;border:0;width:100%}#vidv{background:#000}
+#fbv{background:#fff}#fbv iframe{flex:1;border:0;width:100%}#vidv{background:#000}
+#vbox{width:100%;aspect-ratio:16/9;background:#000;position:relative}#vbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+#vhint{color:#9fb0cf;text-align:center;font-size:14px;padding:14px}
+@media (orientation:landscape){#vbox{aspect-ratio:auto;flex:1;min-height:0}#vhint{display:none}}
 @media print{body *{display:none!important}}
 </style>
 </head><body>
@@ -54,7 +57,7 @@
 </div>
 <div id="pdfv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="pclose">Close</button><span id="ptitle"></span></div><div id="pages"></div></div>
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
-<div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span></div><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+<div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
 <script src="core.js"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
@@ -174,6 +177,13 @@ function openVideo(u, title){
     $("vidv").classList.remove("hide"); document.body.style.overflow = "hidden";
   }).catch(function(){ note("m_study","err","No internet connection."); });
 }
+$("vfull").onclick = function(){
+  var b = $("vbox"), f = b.requestFullscreen || b.webkitRequestFullscreen;
+  if (!f){ $("vf").contentWindow && $("vf").focus(); return; }
+  var p = f.call(b); var lock = function(){ try{ if (screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(function(){}); }catch(e){} };
+  if (p && p.then) p.then(lock).catch(function(){}); else lock();
+};
+document.addEventListener("fullscreenchange", function(){ if (!document.fullscreenElement){ try{ screen.orientation && screen.orientation.unlock && screen.orientation.unlock(); }catch(e){} } });
 $("vclose").onclick = function(){ $("vidv").classList.add("hide"); $("vf").src = "about:blank"; document.body.style.overflow = ""; };
 function openPractice(u){
   note("m_openprac","info","Opening your practice test… this can take a few seconds.");
