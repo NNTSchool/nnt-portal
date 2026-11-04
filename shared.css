@@ -127,3 +127,7 @@ input:focus,select:focus{outline:none;border-color:var(--royal);box-shadow:0 0 0
 
 .vol .cs{position:absolute;right:12px;bottom:10px;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.04em;color:#8a5a00;background:#fff1c9;border:1px solid #e6c36a;border-radius:999px;padding:3px 11px}
 .vol.soon{opacity:.85}.vol.soon .bd b{color:#5d6b86}
+
+.vol .cr{position:absolute;right:12px;bottom:10px;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.04em;color:#fff;background:linear-gradient(135deg,#0e9f6e,#0a7d57);border-radius:999px;padding:4px 12px;box-shadow:0 4px 10px -4px rgba(10,125,87,.6)}
+.vol.rec{border-color:#0e9f6e;box-shadow:0 0 0 2px rgba(14,159,110,.25),0 10px 24px -14px rgba(10,125,87,.55)}
+.vol.rec.retake{background:#fff}

@@ -3,7 +3,7 @@
 <title>NNT School · Classroom tests</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared.css?v=16">
+<link rel="stylesheet" href="shared.css?v=17">
 <style>
 .who{display:flex;align-items:center;justify-content:space-between;gap:12px}.who small{color:var(--mute);font-size:14px}
 .who h2{font-size:26px;margin:2px 0 0}
@@ -59,6 +59,9 @@ $("go").onclick = function(){
 };
 $("code").onkeydown = function(e){ if (e.key === "Enter") $("go").click(); };
 $("out").onclick = function(){ if (TOK) rpc("logout", {tok: TOK}); TOK = null; pickId = 0; $("nq").value = ""; show("s_login"); drawList(); };
+/* Daily plan: one test per day, counted in Tashkent time. Day 0 = 5 Nov 2026 = Unit 14, then one unit per day. */
+var PLAN_START = Date.UTC(2026, 10, 5), PLAN_UNIT = 14;
+function todayUnit(){ var d = Math.floor((Date.now() + 5 * 3600e3 - PLAN_START) / 864e5); return d < 0 ? 0 : PLAN_UNIT + d; }
 function loadTests(){
   show("s_lib"); $("who").textContent = NAME; note("m_lib","info","Loading tests…");
   rpc("class_tests", {tok: TOK}).then(function(r){
@@ -69,7 +72,8 @@ function loadTests(){
       var soon = !!t.novideo && !t.can;
       var st = soon ? "Video lesson first" : (t.done ? (t.retake ? "Retake allowed · tap to start" : "Finished") : (t.can ? "Tap to start" : "Not open"));
       var fin = !soon && t.done && !t.retake;
-      h += '<button class="vol ' + ((fin || soon) ? "dim" : "") + (soon ? " soon" : "") + (!soon && t.retake ? " retake" : "") + '" data-u="' + esc(t.unit) + '"' + ((!t.can) ? " disabled" : "") + '><span class="sp">' + t.no + '</span><span class="bd"><b>' + esc(t.title.replace(/^Unit \d+ · /, "")) + '</b><small>Unit ' + t.no + " · " + st + '</small></span>' + (fin ? '<i class="rib">✓</i>' : '') + (soon ? '<em class="cs">Coming soon</em>' : '') + '</button>';
+      var rec = !soon && t.can && t.no === todayUnit();
+      h += '<button class="vol ' + ((fin || soon) ? "dim" : "") + (soon ? " soon" : "") + (!soon && t.retake ? " retake" : "") + (rec ? " rec" : "") + '" data-u="' + esc(t.unit) + '"' + ((!t.can) ? " disabled" : "") + '><span class="sp">' + t.no + '</span><span class="bd"><b>' + esc(t.title.replace(/^Unit \d+ · /, "")) + '</b><small>Unit ' + t.no + " · " + st + '</small></span>' + (fin ? '<i class="rib">✓</i>' : '') + (soon ? '<em class="cs">Coming soon</em>' : '') + (rec ? '<em class="cr">★ Recommended today</em>' : '') + '</button>';
     });
     $("tests").innerHTML = h;
   }).catch(function(){ note("m_lib","err","No internet connection."); });
