@@ -124,3 +124,6 @@ input:focus,select:focus{outline:none;border-color:var(--royal);box-shadow:0 0 0
  .cert.c2{right:max(16px,calc(50% - 320px - 270px));transform:translateY(-50%) rotate(3deg)}
  .cert h4{font-size:18px}.cert .band{width:70px;height:70px}.cert .band b{font-size:25px}.cert .cf{font-size:13px}
 }
+
+.vol .cs{position:absolute;right:12px;bottom:10px;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.04em;color:#8a5a00;background:#fff1c9;border:1px solid #e6c36a;border-radius:999px;padding:3px 11px}
+.vol.soon{opacity:.85}.vol.soon .bd b{color:#5d6b86}
