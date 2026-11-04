@@ -39,6 +39,10 @@
 #vbox{width:100%;aspect-ratio:16/9;background:#000;position:relative}#vbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 #vhint{color:#9fb0cf;text-align:center;font-size:14px;padding:14px}
 @media (orientation:landscape){#vbox{aspect-ratio:auto;flex:1;min-height:0}#vhint{display:none}}
+#vbox:fullscreen{width:100vw;height:100vh;aspect-ratio:auto}
+#vbox.rot{position:fixed;z-index:70;top:0;left:100vw;width:100vh;height:100vw;aspect-ratio:auto;transform-origin:top left;transform:rotate(90deg)}
+#vexit{display:none;position:absolute;top:10px;right:10px;z-index:5;background:rgba(7,23,51,.85);color:#fff;border:1.5px solid var(--gold);border-radius:10px;padding:8px 14px;font-weight:700;font-size:15px}
+#vbox.rot #vexit,#vbox:fullscreen #vexit{display:block}
 @media print{body *{display:none!important}}
 </style>
 </head><body>
@@ -57,7 +61,7 @@
 </div>
 <div id="pdfv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="pclose">Close</button><span id="ptitle"></span></div><div id="pages"></div></div>
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
-<div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
+<div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit">Exit full screen</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
 <script src="core.js"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
@@ -173,18 +177,26 @@ function openVideo(u, title){
     if (!r.ok){ note("m_study","err", r.err === "locked" ? "Locked until you finish this test in the classroom." : "The video lessons for this unit are not ready yet."); return; }
     note("m_study","","");
     $("vtitle").textContent = title.replace(/^Unit \d+ · /, "");
-    $("vf").src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + encodeURIComponent(r.playlist) + "&rel=0&modestbranding=1";
+    $("vf").src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + encodeURIComponent(r.playlist) + "&rel=0&modestbranding=1&fs=0";
     $("vidv").classList.remove("hide"); document.body.style.overflow = "hidden";
   }).catch(function(){ note("m_study","err","No internet connection."); });
 }
+function vExit(){
+  $("vbox").classList.remove("rot");
+  try{ if (document.fullscreenElement) document.exitFullscreen(); }catch(e){}
+  try{ screen.orientation && screen.orientation.unlock && screen.orientation.unlock(); }catch(e){}
+}
+$("vexit").onclick = vExit;
 $("vfull").onclick = function(){
-  var b = $("vbox"), f = b.requestFullscreen || b.webkitRequestFullscreen;
-  if (!f){ $("vf").contentWindow && $("vf").focus(); return; }
-  var p = f.call(b); var lock = function(){ try{ if (screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(function(){}); }catch(e){} };
-  if (p && p.then) p.then(lock).catch(function(){}); else lock();
+  var b = $("vbox"), f = b.requestFullscreen || b.webkitRequestFullscreen, landscape = function(){ return window.innerWidth > window.innerHeight; };
+  var fallback = function(){ if (!landscape()){ try{ if (document.fullscreenElement) document.exitFullscreen(); }catch(e){} b.classList.add("rot"); } };
+  if (!f){ if (landscape()) return; fallback(); return; }
+  var p = f.call(b), lock = function(){ try{ if (screen.orientation && screen.orientation.lock) return screen.orientation.lock("landscape").catch(function(){}); }catch(e){} };
+  var after = function(){ Promise.resolve(lock()).then(function(){ setTimeout(fallback, 450); }); };
+  if (p && p.then) p.then(after).catch(fallback); else after();
 };
 document.addEventListener("fullscreenchange", function(){ if (!document.fullscreenElement){ try{ screen.orientation && screen.orientation.unlock && screen.orientation.unlock(); }catch(e){} } });
-$("vclose").onclick = function(){ $("vidv").classList.add("hide"); $("vf").src = "about:blank"; document.body.style.overflow = ""; };
+$("vclose").onclick = function(){ vExit(); $("vidv").classList.add("hide"); $("vf").src = "about:blank"; document.body.style.overflow = ""; };
 function openPractice(u){
   note("m_openprac","info","Opening your practice test… this can take a few seconds.");
   rpc("practice_test", {tok: TOK, u: u}).then(function(r){
