@@ -62,8 +62,8 @@
 <div id="pdfv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="pclose">Close</button><span id="ptitle"></span></div><div id="pages"></div></div>
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 8</div>
-<script src="core.js?v=8"></script>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 9</div>
+<script src="core.js?v=9"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
@@ -116,6 +116,7 @@ function home(){
       var rib = "", st = "Not taken yet", fin = u.status === "finished";
       if (fin){ rib = u.passed ? '<i class="rib">✓</i>' : '<i class="rib bad">✕</i>'; st = u.passed ? "Passed" : "Not passed"; }
       else if (u.status === "started"){ rib = '<i class="rib go">…</i>'; st = "In progress"; }
+      if (u.retake && !fin) st = u.status === "started" ? "Retake in progress" : "Retake allowed · do it in the classroom";
       var t = esc(u.title.replace(/^Unit \d+ · /, ""));
       h += '<button class="vol ' + (u.status === "none" ? "dim" : "") + '" data-u="' + esc(u.unit) + '"><span class="sp">' + u.no + '</span><span class="bd"><b>' + t + '</b><small>Unit ' + u.no + ' · ' + st + '</small></span>' + rib + '</button>';
       var hv = !!VIDS[u.unit], sst = hv ? "Watch the video lessons" : "Coming soon";
@@ -134,7 +135,8 @@ function tile(id, ic, title, sub, off){ return '<button class="tile" id="' + id 
 function unit(u){
   CUR = ME.units.filter(function(x){ return x.unit === u; })[0]; show("s_unit");
   var c = CUR, fin = c.status === "finished", h = '<h1>' + esc(c.title.replace(/^Unit \d+ · /, "")) + '</h1><p style="color:var(--mute)">Unit ' + c.no + '</p><div style="height:14px"></div>';
-  if (!fin) h += '<div class="card gilt"><h2>Not finished yet</h2><p>Finish this test in the classroom. Your result, ranking, video lessons and explanations open here straight after.</p></div>';
+  if (!fin && c.retake) h += '<div class="card gilt"><h2>Retake allowed</h2><p>Your teacher allowed you to take this test again. Do it in the classroom. Your result, ranking and explanations open here again when you finish.</p></div>';
+  else if (!fin) h += '<div class="card gilt"><h2>Not finished yet</h2><p>Finish this test in the classroom. Your result, ranking, video lessons and explanations open here straight after.</p></div>';
   else {
     h += '<div class="card gilt"><h2>' + (c.passed ? "Passed" : "Not passed this time") + '</h2>' + (c.released ? '<div id="res" style="margin-top:8px"></div>' : '<p>Your detailed result appears here when your teacher shares the results.</p>') + '</div>';
     if (c.released) h += '<div class="card"><h2>Class ranking</h2><div id="lb" style="margin-top:8px">Loading…</div></div>';
