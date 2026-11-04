@@ -91,6 +91,8 @@ function openTest(u){
   }).catch(function(e){ show("s_lib"); note("m_lib","err","Could not open the test (" + esc(e.message || e) + "). Check the internet and try again."); });
 }
 function launch(html, shim, u, name){
+  /* Units 1-5 were written without a result address: give them one so they report to the portal (the shim catches it) */
+  html = html.replace(/REPORT_URL\s*=\s*""/, 'REPORT_URL = "https://script.google.com/macros/s/portal/exec"');
   var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: TOK, unit: u, name: name}) + ";";
   var tag = "<script>" + cfg + "\n" + shim.replace(/<\/script/gi, "<\\/script") + "<\/script>";
   var i = html.search(/<head[^>]*>/i);
