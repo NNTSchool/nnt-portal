@@ -102,7 +102,7 @@ function home(){
     ME = r; note("m_home","","");
     $("hg").textContent = greet(); $("hi").textContent = r.name.split(" ")[0];
     var done = r.units.filter(function(u){ return u.status === "finished"; }).length;
-    $("hp").textContent = done ? done + " of " + r.units.length + " units finished" : "Finish a test in class to unlock its video lessons and explanations.";
+    $("hp").textContent = done ? done + " of " + r.units.length + " units finished" : "Watch the video lessons any time. Finish a test in class to unlock its explanations.";
     $("hb").style.width = Math.round(100 * done / Math.max(1, r.units.length)) + "%";
     var h = "", sh = ""; r.units.forEach(function(u){
       var rib = "", st = "Not taken yet", fin = u.status === "finished";
@@ -110,8 +110,8 @@ function home(){
       else if (u.status === "started"){ rib = '<i class="rib go">…</i>'; st = "In progress"; }
       var t = esc(u.title.replace(/^Unit \d+ · /, ""));
       h += '<button class="vol ' + (u.status === "none" ? "dim" : "") + '" data-u="' + esc(u.unit) + '"><span class="sp">' + u.no + '</span><span class="bd"><b>' + t + '</b><small>Unit ' + u.no + ' · ' + st + '</small></span>' + rib + '</button>';
-      var hv = !!VIDS[u.unit], sst = !hv ? "Coming soon" : fin ? "Watch the video lessons" : "Opens after you finish this test";
-      sh += '<button class="vol ' + (hv && fin ? "" : "dim") + '" data-u="' + esc(u.unit) + '"' + (hv && fin ? "" : " disabled") + '><span class="sp">' + u.no + '</span><span class="bd"><b>' + t + '</b><small>Unit ' + u.no + ' · ' + sst + '</small></span></button>';
+      var hv = !!VIDS[u.unit], sst = hv ? "Watch the video lessons" : "Coming soon";
+      sh += '<button class="vol ' + (hv ? "" : "dim") + '" data-u="' + esc(u.unit) + '"' + (hv ? "" : " disabled") + '><span class="sp">' + u.no + '</span><span class="bd"><b>' + t + '</b><small>Unit ' + u.no + ' · ' + sst + '</small></span></button>';
     });
     $("units").innerHTML = h; $("sunits").innerHTML = sh;
     var back = ss("nnt_back_unit"); if (back){ ss("nnt_back_unit", null); if (r.units.some(function(u){ return u.unit === back; })) unit(back); }
