@@ -81,8 +81,8 @@
 <div id="pdfv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="pclose">Close</button><span id="ptitle"></span></div><div id="pages"></div></div>
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 11</div>
-<script src="core.js?v=11"></script>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 12</div>
+<script src="core.js?v=12"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
@@ -171,7 +171,9 @@ function unit(u){
   $("openpdf").onclick = function(){ openPdf(u, c.title); }; $("openfb").onclick = function(){ openFb(u); }; $("openprac").onclick = function(){ openPractice(u); };
   drawPractice(u);
   if (c.released){
-    var r = c.result || {}, rh = '<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div class="big">' + Math.round(r.pct) + '%</div><div>' + lvlPill(r.level) + '<div style="margin-top:6px;color:var(--mute)">' + r.score + ' / ' + r.total + (r.w != null ? ' · Writing ' + r.w + '/10' : '') + '</div></div></div>';
+    var r = c.result || {}, rh = '<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div class="big">' + Math.round(r.pct) + '%</div><div>' + lvlPill(r.level) + '<div style="margin-top:6px;color:var(--mute)">' + r.score + ' / ' + r.total + '' + '</div></div></div>';
+    var wm = typeof r.ws === "number" ? r.ws : null;
+    if (wm !== null) rh += '<div style="margin-top:16px;display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:14px;background:linear-gradient(135deg,#071733,#123f9c);color:#fff"><span style="font-size:26px">✍️</span><span style="flex:1;font-weight:700">Writing mark<br><small style="font-weight:500;color:#cfd9f5">Separate from your 100-question result</small></span><span style="font:800 34px Georgia,serif;color:#efdca8">' + wm + '<small style="font:700 16px system-ui;color:#cfd9f5"> / 10</small></span></div>';
     if (r.tt && r.x){ rh += '<h3 style="margin:18px 0 2px">My exercises</h3><div class="ex">'; r.tt.forEach(function(t, i){ var p = r.y[i] ? Math.round(100 * r.x[i] / r.y[i]) : 0; rh += '<div class="n">' + (i + 1) + '. ' + esc(t) + '</div><div class="v">' + r.x[i] + ' / ' + r.y[i] + '</div><div class="b"><i style="width:' + p + '%"></i></div>'; }); rh += '</div>'; }
     $("res").innerHTML = rh;
     rpc("leaderboard", {tok: TOK, u: u}).then(function(l){
@@ -254,8 +256,10 @@ function openFb(u){
     if (!d.ok){ note("m_openfb","err","Not available."); return; }
     if (!d.feedback){ note("m_openfb","info","No essay feedback was saved for this unit."); return; }
     var essay = d.essay ? '<div style="font:16px/1.5 system-ui;padding:16px;margin:12px;border:1px solid #dbe6f1;border-radius:12px;background:#f7fafd"><b>Your essay</b><p style="white-space:pre-wrap">' + esc(d.essay) + '</p></div>' : "";
-    var html = d.feedback;
-    $("fbf").srcdoc = "<!doctype html><meta name=viewport content='width=device-width,initial-scale=1'>" + essay + html;
+    var html = d.feedback, wr = d.result && typeof d.result.ws === "number" ? d.result.ws : null;
+    var wb = wr === null ? "" : '<div style="margin:12px;padding:14px;border-radius:14px;background:linear-gradient(135deg,#071733,#123f9c);color:#fff;text-align:center;font:700 16px system-ui,sans-serif">\u270D\uFE0F Your writing mark<br><span style="font:900 44px Georgia,serif;color:#efdca8">' + wr + '</span> <span style="color:#cfd9f5">/ 10</span></div>';
+    var fix = "<style>.photo2,.fbp .photo2{display:none!important}.fbp .fbnote,.fbnote{color:#46566e!important;font-weight:600}.gvs:empty{display:none}</style>";
+    $("fbf").srcdoc = "<!doctype html><meta name=viewport content='width=device-width,initial-scale=1'>" + wb + essay + html + fix;
     $("fbv").classList.remove("hide"); document.body.style.overflow = "hidden";
   }).catch(function(){ note("m_openfb","err","No internet connection."); });
 }
