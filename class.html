@@ -59,9 +59,10 @@ $("go").onclick = function(){
 };
 $("code").onkeydown = function(e){ if (e.key === "Enter") $("go").click(); };
 $("out").onclick = function(){ if (TOK) rpc("logout", {tok: TOK}); TOK = null; pickId = 0; $("nq").value = ""; show("s_login"); drawList(); };
-/* Daily plan: one test per day, counted in Tashkent time. Day 0 = 5 Nov 2026 = Unit 14, then one unit per day. */
+/* Daily plan: one test per day, counted in Tashkent time. Day 0 = 5 Nov 2026 = Unit 14, then one unit per day except Sundays (no lesson). */
 var PLAN_START = Date.UTC(2026, 10, 5), PLAN_UNIT = 14;
-function todayUnit(){ var d = Math.floor((Date.now() + 5 * 3600e3 - PLAN_START) / 864e5); return d < 0 ? 0 : PLAN_UNIT + d; }
+function nonSun(n){ var c = 0; for (var i = 0; i < n; i++){ if ((4 + i) % 7 !== 0) c++; } return c; } /* day 0 = Thursday 5 Nov 2026; Sundays have no lesson */
+function todayUnit(){ var d = Math.floor((Date.now() + 5 * 3600e3 - PLAN_START) / 864e5); if (d < 0 || (4 + d) % 7 === 0) return 0; return PLAN_UNIT + nonSun(d); }
 function loadTests(){
   show("s_lib"); $("who").textContent = NAME; note("m_lib","info","Loading tests…");
   rpc("class_tests", {tok: TOK}).then(function(r){
