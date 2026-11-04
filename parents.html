@@ -48,70 +48,166 @@
 .tp h4{margin:0 0 8px;font:700 13px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#8a6410}
 .tr{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:16px}
 .tr .m{font-size:22px;width:28px}.tr .nm{flex:1;font-weight:600;color:var(--ink)}.tr .pc{font-weight:800;color:var(--ink)}
+.lang{margin-left:auto;display:flex;gap:2px;background:rgba(255,255,255,.14);border-radius:999px;padding:3px}
+.lang button{border:0;background:none;color:#dbe4fb;font:700 14px var(--sans);padding:6px 12px;border-radius:999px;cursor:pointer}
+.lang button.on{background:#fff;color:var(--ink)}
+.hint{margin:8px 0 0;color:var(--mute);font-size:15px}
+.allb{background:none;border:0;color:var(--royal);font:700 16px var(--sans);padding:12px 0 2px;cursor:pointer;text-decoration:underline}
+.plist.big{max-height:60vh;overflow:auto}
+.pas{display:inline-block;font:700 20px var(--serif)}.pas.ok{color:var(--ok)}.pas.no{color:var(--bad)}
+.legend{margin:6px 0 12px;padding:10px 14px;border-radius:12px;background:#fff;border:1px solid var(--line);font-size:14.5px;color:var(--text)}
+.legend b.g{color:var(--ok)}.legend b.r{color:var(--bad)}
+.tip{display:flex;gap:12px;align-items:flex-start;margin-top:14px;padding:14px;border-radius:14px;background:#eaf1ff;border:1px solid #c9d9fb;color:var(--ink);font-size:15.5px}
+.tip button{margin-top:8px;border:0;background:var(--royal);color:#fff;font:700 15px var(--sans);padding:9px 18px;border-radius:10px;cursor:pointer}
 .foot{text-align:center;color:#9aa6bf;font-size:13px;margin-top:26px}
 </style></head><body>
-<div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small>Ota-onalar uchun</small></div></div>
+<div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small data-i="sub"></small></div><div class="lang"><button id="l_lat">Lotin</button><button id="l_cyr">Кирилл</button></div></div>
 <div class="pwrap">
  <div id="s_find">
-  <div class="phero"><img src="logo.jpg" alt=""><h1>Farzandingiz <em>natijalari</em></h1><p>Farzandingizning ismini yozing va uning barcha testlar bo'yicha natijalarini ko'ring.</p></div>
+  <div class="phero"><img src="logo.jpg" alt=""><h1 data-h="h1"></h1><p data-i="intro"></p></div>
   <div class="card sbox">
-   <label for="q">Farzandingizning ismi</label>
-   <input type="search" id="q" placeholder="Masalan: Fotima" autocomplete="off">
+   <label for="q" data-i="lbl"></label>
+   <input type="search" id="q" autocomplete="off">
+   <p class="hint" data-i="hint"></p>
    <div class="plist" id="plist"></div><div id="nf"></div>
+   <button class="allb" id="allb" type="button"></button>
   </div>
+  <div class="tip" id="tip"><div>📲</div><div><b data-i="tipT"></b><br><span data-i="tipB"></span><br><button id="tipx" type="button" data-i="tipOk"></button></div></div>
  </div>
  <div id="s_kid" class="hide">
-  <button class="back2" id="back">← Boshqa o'quvchini qidirish</button>
+  <button class="back2" id="back"></button>
   <div class="kid"><h2 id="kname"></h2></div>
-  <div class="sumrow"><div class="sum"><b id="s1">0</b><span>Bajarilgan testlar</span></div><div class="sum"><b id="s2">–</b><span>O'rtacha natija</span></div></div>
-  <div class="live"><i></i><span id="upd">Natijalar avtomatik yangilanib turadi</span></div>
+  <div class="sumrow"><div class="sum"><b id="s1">0</b><span data-i="done"></span></div><div class="sum"><b id="s2">–</b><span data-i="avg"></span></div></div>
+  <div class="legend" id="legend"></div>
+  <div class="live"><i></i><span id="upd"></span></div>
   <div id="units"></div>
  </div>
  <div class="foot">NNT School Academy</div>
 </div>
 <script src="core.js?v=14"></script>
 <script>
-var SID = 0, T = null, LVN = ["Qayta urinish kerak","Yaxshi","A'lo","Ajoyib","Afsonaviy"], LVC = ["#e5365f","#e0409a","#0a9f6e","#ff6a00","#7b2ff7"], MED = ["🥇","🥈","🥉"];
-function show(k){ $("s_find").classList.toggle("hide", k !== "find"); $("s_kid").classList.toggle("hide", k !== "kid"); window.scrollTo(0,0); }
-function find(){
-  var q = $("q").value.trim();
-  if (q.length < 2){ $("plist").innerHTML = ""; $("nf").innerHTML = ""; return; }
-  var my = q;
-  rpc("parent_search", {q: q}).then(function(r){
-    if ($("q").value.trim() !== my) return;
-    if (!r.length){ $("plist").innerHTML = ""; $("nf").innerHTML = '<div class="nf">Bunday ism topilmadi. Ismni boshqacha yozib ko\'ring (masalan, faqat ismini yoki familiyasini).</div>'; return; }
-    $("nf").innerHTML = ""; $("plist").innerHTML = r.map(function(x){ return '<div data-id="' + x.id + '" data-n="' + esc(x.name) + '">' + esc(x.name) + '</div>'; }).join("");
-  }).catch(function(){ $("nf").innerHTML = '<div class="nf">Internet bilan aloqa yo\'q. Iltimos, qayta urinib ko\'ring.</div>'; });
+var SID = 0, T = null, ROS = null, ALL = false, KNAME = "", LAST = null, LVC = ["#e5365f","#e0409a","#0a9f6e","#ff6a00","#7b2ff7"], MED = ["🥇","🥈","🥉"];
+var LANG = ls("nnt_parent_lang") === "cyr" ? "cyr" : "lat";
+var D = {
+ lat:{sub:"Ota-onalar uchun",intro:"Farzandingizning ismini yozing va uning barcha testlar bo'yicha natijalarini ko'ring.",lbl:"Farzandingizning ismi",ph:"Masalan: Fotima",
+  hint:"Ismning boshlanishini yozing va ro'yxatdan o'quvchini tanlang.",all:"Barcha o'quvchilar ro'yxatini ko'rsatish",hide:"Ro'yxatni yashirish",
+  nf:"Bunday ism topilmadi. Ismni boshqacha yozib ko'ring (masalan, faqat ismini yoki familiyasini).",net:"Internet bilan aloqa yo'q. Iltimos, qayta urinib ko'ring.",
+  tipT:"Telefoningizga saqlab qo'ying",tipB:"Brauzer menyusini oching va «Bosh ekranga qo'shish» tugmasini bosing. Shunda sahifa ilova kabi bir bosishda ochiladi.",tipOk:"Tushunarli",
+  back:"← Boshqa o'quvchini qidirish",done:"Bajarilgan testlar",avg:"O'rtacha natija",
+  legend:"<b class='g'>O'tdi</b> — 60% va undan yuqori natija. <b class='r'>O'tmadi</b> — 60% dan past natija.",
+  upd:"Natijalar avtomatik yangilanib turadi",updAt:"Natijalar avtomatik yangilanib turadi · oxirgi yangilanish ",off:"Internet bilan aloqa yo'q. Qayta urinilmoqda…",
+  load:"Yuklanmoqda…",nodata:"Ma'lumot topilmadi.",pass:"O'tdi",fail:"O'tmadi",
+  lv:["Qayta urinish kerak","Yaxshi","A'lo","Ajoyib","Afsonaviy"],
+  wait:"Test topshirilgan. Natija tez orada e'lon qilinadi.",live:"Hozir test ishlayapti…",none:"Testni bajarmagan",
+  rank:function(r,n){return "Sinfdagi o'rni: <b>"+r+"-o'rin</b> ("+n+" nafar o'quvchi ichida)";},wr:"Yozma ish bahosi: ",top:"Eng yaxshi 3 o'quvchi"},
+ cyr:{sub:"Ота-оналар учун",intro:"Фарзандингизнинг исмини ёзинг ва унинг барча тестлар бўйича натижаларини кўринг.",lbl:"Фарзандингизнинг исми",ph:"Масалан: Фотима",
+  hint:"Исмнинг бошланишини ёзинг ва рўйхатдан ўқувчини танланг.",all:"Барча ўқувчилар рўйхатини кўрсатиш",hide:"Рўйхатни яшириш",
+  nf:"Бундай исм топилмади. Исмни бошқачароқ ёзиб кўринг (масалан, фақат исмини ёки фамилиясини).",net:"Интернет билан алоқа йўқ. Илтимос, қайта уриниб кўринг.",
+  tipT:"Телефонингизга сақлаб қўйинг",tipB:"Браузер менюсини очинг ва «Бош экранга қўшиш» тугмасини босинг. Шунда саҳифа илова каби бир босишда очилади.",tipOk:"Тушунарли",
+  back:"← Бошқа ўқувчини излаш",done:"Бажарилган тестлар",avg:"Ўртача натижа",
+  legend:"<b class='g'>Ўтди</b> — 60% ва ундан юқори натижа. <b class='r'>Ўтмади</b> — 60% дан паст натижа.",
+  upd:"Натижалар автоматик янгиланиб туради",updAt:"Натижалар автоматик янгиланиб туради · охирги янгиланиш ",off:"Интернет билан алоқа йўқ. Қайта уринилмоқда…",
+  load:"Юкланмоқда…",nodata:"Маълумот топилмади.",pass:"Ўтди",fail:"Ўтмади",
+  lv:["Қайта уриниш керак","Яхши","Аъло","Ажойиб","Афсонавий"],
+  wait:"Тест топширилган. Натижа тез орада эълон қилинади.",live:"Ҳозир тест ишлаяпти…",none:"Тестни бажармаган",
+  rank:function(r,n){return "Синфдаги ўрни: <b>"+r+"-ўрин</b> ("+n+" нафар ўқувчи ичида)";},wr:"Ёзма иш баҳоси: ",top:"Энг яхши 3 ўқувчи"}
+};
+function t(k){ return D[LANG][k]; }
+/* Latin -> Cyrillic for names (Uzbek) */
+var L2C = [["o'","ў"],["o\u2018","ў"],["o\u02bb","ў"],["g'","ғ"],["g\u2018","ғ"],["g\u02bb","ғ"],["sh","ш"],["ch","ч"],["yo","ё"],["yu","ю"],["ya","я"],["ye","е"],["ts","ц"],["ng","нг"],
+ ["a","а"],["b","б"],["d","д"],["e","е"],["f","ф"],["g","г"],["h","ҳ"],["i","и"],["j","ж"],["k","к"],["l","л"],["m","м"],["n","н"],["o","о"],["p","п"],["q","қ"],["r","р"],["s","с"],["t","т"],["u","у"],["v","в"],["x","х"],["y","й"],["z","з"],["w","в"],["'","ъ"],["\u2019","ъ"]];
+function capIf(c, up){ return up ? c.charAt(0).toUpperCase() + c.slice(1) : c; }
+function toCyr(str){
+  return String(str || "").split(/(\s+|-)/).map(function(w){
+    var out = "", i = 0, lw = w.toLowerCase();
+    while (i < lw.length){
+      var hit = null;
+      for (var k = 0; k < L2C.length; k++){ if (lw.substr(i, L2C[k][0].length) === L2C[k][0]){ hit = L2C[k]; break; } }
+      if (!hit){ out += w.charAt(i); i++; continue; }
+      var up = w.charAt(i) !== lw.charAt(i), c = hit[1];
+      if (i === 0 && hit[0] === "e") c = "э";
+      out += capIf(c, up); i += hit[0].length;
+    }
+    return out;
+  }).join("");
 }
-var qt = null; $("q").oninput = function(){ clearTimeout(qt); qt = setTimeout(find, 250); };
+var C2L = {"а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"yo","ж":"j","з":"z","и":"i","й":"y","к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r","с":"s","т":"t","у":"u","ф":"f","х":"h","ц":"ts","ч":"ch","ш":"sh","щ":"sh","э":"e","ю":"yu","я":"ya","ў":"o","ғ":"g","қ":"k","ҳ":"h","ъ":"","ь":"","ы":"i"};
+function norm(s){
+  s = String(s || "").toLowerCase().replace(/[а-яёўғқҳъь]/g, function(c){ return C2L[c] != null ? C2L[c] : c; });
+  return s.replace(/['\u2018\u2019\u02bb\u02bc`´]/g, "").replace(/x/g, "h").replace(/q/g, "k").replace(/w/g, "v").replace(/ts/g, "s").replace(/j/g, "y").replace(/yy+/g, "y").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+}
+function nm(x){ return LANG === "cyr" ? toCyr(x) : x; }
+function applyLang(){
+  document.documentElement.lang = LANG === "cyr" ? "uz-Cyrl" : "uz";
+  document.title = "NNT School · " + t("sub");
+  [].forEach.call(document.querySelectorAll("[data-i]"), function(e){ e.textContent = t(e.getAttribute("data-i")); });
+  $("q").placeholder = t("ph"); $("back").textContent = t("back"); $("legend").innerHTML = t("legend");
+  document.querySelector("[data-h=h1]").innerHTML = LANG === "cyr" ? "Фарзандингиз <em>натижалари</em>" : "Farzandingiz <em>natijalari</em>";
+  $("l_lat").className = LANG === "lat" ? "on" : ""; $("l_cyr").className = LANG === "cyr" ? "on" : "";
+  $("allb").textContent = ALL ? t("hide") : t("all");
+  find(); if (LAST) draw(LAST); else if (SID) $("kname").textContent = nm(KNAME);
+  if (!$("kname").textContent) $("upd").textContent = t("upd"); 
+}
+$("l_lat").onclick = function(){ LANG = "lat"; ls("nnt_parent_lang", "lat"); applyLang(); };
+$("l_cyr").onclick = function(){ LANG = "cyr"; ls("nnt_parent_lang", "cyr"); applyLang(); };
+function show(k){ $("s_find").classList.toggle("hide", k !== "find"); $("s_kid").classList.toggle("hide", k !== "kid"); window.scrollTo(0,0); }
+function getRoster(){
+  if (ROS) return Promise.resolve(ROS);
+  return rpc("roster").then(function(r){ ROS = r.map(function(x){ x.k = norm(x.name); return x; }); return ROS; });
+}
+function listHtml(r){ return r.map(function(x){ return '<div data-id="' + x.id + '" data-n="' + esc(x.name) + '">' + esc(nm(x.name)) + '</div>'; }).join(""); }
+function find(){
+  var raw = $("q").value.trim(), q = norm(raw), pl = $("plist");
+  pl.classList.toggle("big", ALL);
+  if (!ALL && q.length < 2){ pl.innerHTML = ""; $("nf").innerHTML = ""; return; }
+  getRoster().then(function(R){
+    if ($("q").value.trim() !== raw) return;
+    var toks = q.split(" ").filter(Boolean);
+    var r = R.filter(function(x){ return toks.every(function(w){ return x.k.indexOf(w) > -1; }); });
+    if (!ALL) r = r.slice(0, 12);
+    if (!r.length){ pl.innerHTML = ""; $("nf").innerHTML = '<div class="nf">' + t("nf") + '</div>'; return; }
+    $("nf").innerHTML = ""; pl.innerHTML = listHtml(r);
+  }).catch(function(){
+    if (raw.length < 2){ $("nf").innerHTML = '<div class="nf">' + t("net") + '</div>'; return; }
+    rpc("parent_search", {q: LANG === "cyr" || /[а-яёўғқҳ]/i.test(raw) ? norm(raw) : raw}).then(function(r){ $("nf").innerHTML = r.length ? "" : '<div class="nf">' + t("nf") + '</div>'; pl.innerHTML = listHtml(r); }).catch(function(){ $("nf").innerHTML = '<div class="nf">' + t("net") + '</div>'; });
+  });
+}
+var qt = null; $("q").oninput = function(){ clearTimeout(qt); qt = setTimeout(find, 200); };
+$("allb").onclick = function(){ ALL = !ALL; $("allb").textContent = ALL ? t("hide") : t("all"); find(); };
 $("plist").onclick = function(e){ var d = e.target.closest("div[data-id]"); if (!d) return; openKid(+d.getAttribute("data-id"), d.getAttribute("data-n")); };
-function openKid(id, name){ SID = id; ls("nnt_parent_sid", String(id)); $("kname").textContent = name || ""; $("units").innerHTML = '<p style="color:var(--mute)">Yuklanmoqda…</p>'; show("kid"); load(); }
-$("back").onclick = function(){ SID = 0; ls("nnt_parent_sid", null); clearInterval(T); $("q").value = ""; $("plist").innerHTML = ""; $("nf").innerHTML = ""; show("find"); };
+function openKid(id, name){ SID = id; LAST = null; KNAME = name || ""; ls("nnt_parent_sid", String(id)); $("kname").textContent = nm(KNAME); $("units").innerHTML = '<p style="color:var(--mute)">' + t("load") + '</p>'; show("kid"); load(); }
+$("back").onclick = function(){ SID = 0; LAST = null; ls("nnt_parent_sid", null); clearInterval(T); $("q").value = ""; ALL = false; $("allb").textContent = t("all"); $("plist").innerHTML = ""; $("nf").innerHTML = ""; show("find"); };
 function draw(d){
-  $("kname").textContent = d.name;
+  LAST = d; KNAME = d.name; $("kname").textContent = nm(d.name);
   var done = 0, sum = 0, cnt = 0, h = "";
   d.units.forEach(function(u){
     var top = u.top && u.top.length, st = "", left = "";
     if (u.state === "done"){
       done++; sum += +u.pct; cnt++;
-      st = '<div class="res"><span class="big2">' + Math.round(u.pct) + '%</span><span class="lv" style="background:' + LVC[u.level] + '">' + LVN[u.level] + '</span></div>' +
-           '<div class="pos">Sinfdagi o\'rni: <b>' + u.rank + '-o\'rin</b> (' + u.n + ' nafar o\'quvchi ichida)</div>' +
-           (u.ws != null ? '<div class="wr">Yozma ish bahosi: <b>' + u.ws + ' / 10</b></div>' : '');
-    } else if (u.state === "wait"){ done++; st = '<div class="pst wait">Test topshirilgan. Natija tez orada e\'lon qilinadi.</div>'; }
-    else if (u.state === "live"){ st = '<div class="pst liv">Hozir test ishlayapti…</div>'; }
-    else st = '<div class="pst none">Testni bajarmagan</div>';
+      var ok = +u.pct >= 60;
+      st = '<div class="pas ' + (ok ? "ok" : "no") + '">' + (ok ? "✓ " + t("pass") : "✕ " + t("fail")) + '</div>' +
+           '<div class="res"><span class="big2">' + Math.round(u.pct) + '%</span><span class="lv" style="background:' + LVC[u.level] + '">' + t("lv")[u.level] + '</span></div>' +
+           '<div class="pos">' + t("rank")(u.rank, u.n) + '</div>' +
+           (u.ws != null ? '<div class="wr">' + t("wr") + '<b>' + u.ws + ' / 10</b></div>' : '');
+    } else if (u.state === "wait"){ done++; st = '<div class="pst wait">' + t("wait") + '</div>'; }
+    else if (u.state === "live"){ st = '<div class="pst liv">' + t("live") + '</div>'; }
+    else st = '<div class="pst none">' + t("none") + '</div>';
     left = '<div class="pl"><div class="pn">' + u.no + '</div><div><div class="pt">' + esc(u.title.replace(/^Unit \d+ · /, "")) + '</div>' + st + '</div></div>';
-    var right = top ? '<div class="tp"><h4>Eng yaxshi 3 o\'quvchi</h4>' + u.top.map(function(x, i){ return '<div class="tr"><span class="m">' + MED[i] + '</span><span class="nm">' + esc(x.name) + '</span><span class="pc">' + Math.round(x.pct) + '%</span></div>'; }).join("") + '</div>' : "";
+    var right = top ? '<div class="tp"><h4>' + t("top") + '</h4>' + u.top.map(function(x, i){ return '<div class="tr"><span class="m">' + MED[i] + '</span><span class="nm">' + esc(nm(x.name)) + '</span><span class="pc">' + Math.round(x.pct) + '%</span></div>'; }).join("") + '</div>' : "";
     h += '<div class="pu' + (top ? " has-top" : "") + '">' + left + right + '</div>';
   });
   $("units").innerHTML = h;
   $("s1").textContent = done + " / " + d.units.length; $("s2").textContent = cnt ? Math.round(sum / cnt) + "%" : "–";
-  var t = new Date(); $("upd").textContent = "Natijalar avtomatik yangilanib turadi · oxirgi yangilanish " + ("0" + t.getHours()).slice(-2) + ":" + ("0" + t.getMinutes()).slice(-2);
+  var n = new Date(); $("upd").textContent = t("updAt") + ("0" + n.getHours()).slice(-2) + ":" + ("0" + n.getMinutes()).slice(-2);
 }
 function load(){
   if (!SID) return;
-  rpc("parent_view", {p_sid: SID}).then(function(d){ if (!d || !d.ok){ $("units").innerHTML = '<div class="nf">Ma\'lumot topilmadi.</div>'; return; } draw(d); }).catch(function(){ $("upd").textContent = "Internet bilan aloqa yo'q. Qayta urinilmoqda…"; });
+  rpc("parent_view", {p_sid: SID}).then(function(d){ if (!d || !d.ok){ $("units").innerHTML = '<div class="nf">' + t("nodata") + '</div>'; return; } draw(d); }).catch(function(){ $("upd").textContent = t("off"); });
   clearInterval(T); T = setInterval(function(){ if (!document.hidden) load(); }, 8000);
 }
+var tipHide = ls("nnt_parent_tip") === "1" || (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone;
+if (tipHide) $("tip").style.display = "none";
+$("tipx").onclick = function(){ ls("nnt_parent_tip", "1"); $("tip").style.display = "none"; };
+applyLang();
 (function(){ var s = +ls("nnt_parent_sid"); if (s){ openKid(s, ""); } else show("find"); })();
 </script></body></html>
