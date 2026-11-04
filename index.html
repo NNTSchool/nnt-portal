@@ -59,6 +59,24 @@
 #vexit{display:none;position:absolute;right:14px;top:58px;z-index:5;width:38px;height:38px;padding:0;border-radius:50%;background:rgba(7,23,51,.7);color:#fff;border:1.5px solid rgba(239,220,168,.8);font-size:18px;line-height:1;opacity:0;pointer-events:none;transition:opacity .25s}#vexit.show{opacity:.85;pointer-events:auto}
 #vbox.rot #vexit,#vbox:fullscreen #vexit{display:block}
 @media print{body *{display:none!important}}
+
+.zone{position:relative;overflow:hidden;border-radius:20px;padding:20px 18px 18px;margin:4px 0 16px;color:#fff}
+.zone small{display:block;font-size:12px;font-weight:800;letter-spacing:.24em}
+.zone h1{color:#fff;font-size:32px;margin:4px 0 6px}.zone p{margin:0;max-width:440px;font-size:15.5px;line-height:1.45}
+.zst{position:absolute;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:#fff;box-shadow:0 4px 10px rgba(0,0,0,.28);font-size:20px;animation:welbob 3s ease-in-out infinite}
+.zst.z1{top:12px;right:14px;transform:rotate(10deg)}.zst.z2{top:16px;right:60px;transform:rotate(-8deg);animation-delay:.6s;width:34px;height:34px;font-size:17px}.zst.z3{display:none}
+.vol .bd small b{display:inline}
+/* study: bright and calm */
+.zs{background:radial-gradient(120% 120% at 10% 0%,#38c6c9 0%,#1f8fd1 55%,#1d4fbf 100%);box-shadow:0 14px 30px -16px rgba(31,143,209,.7)}.zs small{color:#d8fbff}.zs p{color:#eafcff}
+#s_study .vol{border-color:#cfe9f2;background:linear-gradient(180deg,#fff,#f1fafc)}
+#s_study .vol .sp{background:linear-gradient(160deg,#2db7c4,#1f7fc8);border-right-color:#8fe3ea;color:#fff}
+#s_study .vol:not(:disabled)::after{content:"▶";position:absolute;right:14px;top:50%;translate:0 -50%;width:34px;height:34px;border-radius:50%;background:linear-gradient(160deg,#2db7c4,#1f7fc8);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;padding-left:2px;box-shadow:0 6px 14px -6px rgba(31,127,200,.8)}
+#s_study .vol.dim .sp{background:linear-gradient(160deg,#9fb3bf,#7c8f9c)}
+/* exam: serious and golden */
+.ze{background:radial-gradient(120% 120% at 90% 0%,#5a1636 0%,#241046 45%,#0a1030 100%);border:1.5px solid rgba(239,220,168,.6);box-shadow:0 14px 30px -16px rgba(10,16,48,.8)}.ze small{color:var(--gold2)}.ze p{color:#e4e8fa}.ze h1{background:linear-gradient(90deg,#fff1b8,#ffc93c);-webkit-background-clip:text;background-clip:text;color:transparent}
+#s_exam .vol{border-left:0}
+#s_exam .vol .sp{background:linear-gradient(160deg,#3a1450,#12113a);border-right:3px solid var(--gold);color:var(--gold2);text-shadow:0 0 12px rgba(255,201,60,.55)}
+#s_exam .vol.dim .sp{background:linear-gradient(160deg,#5d6b86,#3c4863);text-shadow:none}
 </style>
 </head><body>
 <div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small>Student portal</small></div><div class="sp"></div><button class="btn sm alt hide" id="out">Log out</button></div>
@@ -74,14 +92,14 @@
  <div id="s_home" class="hide"><div class="hero"><div class="g" id="hg"></div><h1 id="hi"></h1><p id="hp"></p><div class="bar"><i id="hb"></i></div></div>
   <div class="hub"><button class="hubbtn" id="go_study"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg></span><span><b>Study area</b><small>Video lessons, unit by unit</small></span><span class="ch">›</span></button>
   <button class="hubbtn" id="go_exam"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20"/></svg></span><span><b>Exam area</b><small>Results, ranking, explanations, essay feedback and practice</small></span><span class="ch">›</span></button></div><div id="m_home"></div></div>
- <div id="s_study" class="hide"><button class="back" id="sb">← Back</button><h1>Study area</h1><p style="color:var(--mute)">Video lessons. Choose a unit.</p><div style="height:12px"></div><div id="sunits" class="vols"></div><div id="m_study"></div></div>
- <div id="s_exam" class="hide"><button class="back" id="eb">← Back</button><h1>Exam area</h1><p style="color:var(--mute)">Choose a unit to see your result, explanations and essay feedback.</p><div style="height:12px"></div><div id="units" class="vols"></div></div>
+ <div id="s_study" class="hide zonepg"><button class="back" id="sb">← Back</button><div class="zone zs"><span class="zst z1">🎬</span><span class="zst z2">💡</span><span class="zst z3">📖</span><small>LEARN</small><h1>Study area</h1><p>Watch the video lessons, one unit at a time. Pause, replay and learn at your own pace.</p></div><div id="sunits" class="vols"></div><div id="m_study"></div></div>
+ <div id="s_exam" class="hide zonepg"><button class="back" id="eb">← Back</button><div class="zone ze"><span class="zst z1">🏆</span><span class="zst z2">🎯</span><span class="zst z3">📝</span><small>PROVE IT</small><h1>Exam area</h1><p>Your results, class ranking, explanations and essay feedback.</p></div><div id="units" class="vols"></div></div>
  <div id="s_unit" class="hide"><button class="back" id="ub">← All units</button><div id="ubody"></div></div>
 </div>
 <div id="pdfv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="pclose">Close</button><span id="ptitle"></span></div><div id="pages"></div></div>
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 15</div>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 16</div>
 <script src="core.js?v=14"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
