@@ -125,7 +125,7 @@
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
 <div id="audv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="aclose">Close</button><span id="atitle"></span></div><div id="alist"></div></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 23</div>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 24</div>
 <script src="core.js?v=14"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
@@ -288,7 +288,7 @@ function unit(u){
     if (wm !== null) rh += '<div style="margin-top:16px;display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:14px;background:linear-gradient(135deg,#071733,#123f9c);color:#fff"><span style="font-size:26px">✍️</span><span style="flex:1;font-weight:700">Writing mark<br><small style="font-weight:500;color:#cfd9f5">Separate from your 100-question result</small></span><span style="font:700 32px var(--serif);color:#efdca8">' + wm + '<small style="font:700 16px system-ui;color:#cfd9f5"> / 10</small></span></div>';
     if (r.tt && r.x){ rh += '<h3 style="margin:18px 0 2px">My exercises</h3><div class="ex">'; r.tt.forEach(function(t, i){ var p = r.y[i] ? Math.round(100 * r.x[i] / r.y[i]) : 0; rh += '<div class="n">' + (i + 1) + '. ' + esc(t) + '</div><div class="v">' + r.x[i] + ' / ' + r.y[i] + '</div><div class="b"><i style="width:' + p + '%"></i></div>'; }); rh += '</div>'; }
     $("res").innerHTML = rh;
-    rpc("leaderboard", {tok: TOK, u: u}).then(function(l){
+    var loadLb = function(first){ rpc("leaderboard", {tok: TOK, u: u}).then(function(l){
       if (!l.ok){ $("lb").innerHTML = "<p>Ranking is not available yet.</p>"; return; }
       var msg = {alone:["mb-alone","First on the board!","You are the first one with a result so far. Set the standard!",["\u2B50","\uD83D\uDE80"]],
         best:["mb-best","NUMBER 1! \uD83C\uDF89","You are <b>number 1</b> in the class! Outstanding, brilliant, legendary work. Congratulations, be proud of it!",["\uD83D\uDC51","\uD83C\uDFC6","\uD83D\uDD25"]],
@@ -299,7 +299,8 @@ function unit(u){
       var o = '<div class="msgbox ' + msg[0] + '"><span class="mh">' + msg[1] + '</span>' + msg[2] + msg[3].map(function(e,k){ return '<span class="stk ' + "abc"[k] + '">' + e + '</span>'; }).join("") + '</div><h3 style="margin:14px 0 2px">Top 3 in the class</h3>' + l.top.map(function(x){ return row(x, x.me); }).join("");
       if (l.above.length && l.tier !== "top3" && l.tier !== "best") o += '<h3 style="margin:18px 0 2px">Just ahead of you</h3>' + l.above.map(function(x){ return row(x, false); }).join("");
       $("lb").innerHTML = o;
-    }).catch(function(){ $("lb").innerHTML = "<p>Could not load.</p>"; });
+    }).catch(function(){ if (first) $("lb").innerHTML = "<p>Could not load.</p>"; }); };
+    loadLb(true); clearInterval(window.LBT); window.LBT = setInterval(function(){ if (!$("lb") || $("s_unit").classList.contains("hide")){ clearInterval(window.LBT); return; } loadLb(false); }, 15000);
   }
 }
 function drawPractice(u){
