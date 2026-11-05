@@ -59,21 +59,23 @@ $("go").onclick = function(){
 };
 $("code").onkeydown = function(e){ if (e.key === "Enter") $("go").click(); };
 $("out").onclick = function(){ if (TOK) rpc("logout", {tok: TOK}); TOK = null; pickId = 0; $("nq").value = ""; show("s_login"); drawList(); };
-/* Daily plan: one test per day, counted in Tashkent time. Day 0 = 5 Nov 2026 = Unit 14, then one unit per day except Sundays (no lesson). */
-var PLAN_START = Date.UTC(2026, 10, 5), PLAN_UNIT = 14;
-function nonSun(n){ var c = 0; for (var i = 0; i < n; i++){ if ((4 + i) % 7 !== 0) c++; } return c; } /* day 0 = Thursday 5 Nov 2026; Sundays have no lesson */
-function todayUnit(){ var d = Math.floor((Date.now() + 5 * 3600e3 - PLAN_START) / 864e5); if (d < 0 || (4 + d) % 7 === 0) return 0; return PLAN_UNIT + nonSun(d); }
+/* Daily plan: one test per day, counted in Tashkent time. Day 0 = 5 Nov 2026 = Unit 14, then one unit per day except days off. */
+var REC = null, PLAN_START = Date.UTC(2026, 10, 5), PLAN_UNIT = 14;
+var OFFD = [3]; /* days off since 5 Nov 2026 (3 = Sunday 8 Nov). The server sends the real plan; this is only a fallback */
+function testDays(n){ var c = 0; for (var i = 0; i < n; i++){ if (OFFD.indexOf(i) < 0) c++; } return c; }
+function todayUnit(){ var d = Math.floor((Date.now() + 5 * 3600e3 - PLAN_START) / 864e5); if (d < 0 || OFFD.indexOf(d) > -1) return 0; return PLAN_UNIT + testDays(d); }
 function loadTests(){
   show("s_lib"); $("who").textContent = NAME; note("m_lib","info","Loading tests…");
   rpc("class_tests", {tok: TOK}).then(function(r){
     if (!r.ok){ note("m_lib","err","Please log in again."); return; }
+    REC = r.tests.length && typeof r.tests[0].rec === "number" ? r.tests[0].rec : null;
     note("m_lib","",""); var h = "";
     if (!r.tests.length) h = '<div class="card">No tests are open yet. Please wait for your teacher.</div>';
     r.tests.forEach(function(t){
       var soon = !!(t.novideo || t.later) && !t.can;
       var st = soon ? (t.later ? "Opens on its day" : "Video lesson first") : (t.done ? (t.retake ? "Retake allowed · tap to start" : "Finished") : (t.can ? "Tap to start" : "Not open"));
       var fin = !soon && t.done && !t.retake;
-      var rec = !soon && t.can && t.no === todayUnit();
+      var rec = !soon && t.can && t.no === (typeof REC === "number" ? REC : todayUnit());
       h += '<button class="vol ' + ((fin || soon) ? "dim" : "") + (soon ? " soon" : "") + (!soon && t.retake ? " retake" : "") + (rec ? " rec" : "") + '" data-u="' + esc(t.unit) + '"' + ((!t.can) ? " disabled" : "") + '><span class="sp">' + t.no + '</span><span class="bd"><b>' + esc(t.title.replace(/^Unit \d+ · /, "")) + '</b><small>Unit ' + t.no + " · " + st + '</small></span>' + (fin ? '<i class="rib">✓</i>' : '') + (soon ? '<em class="cs">Coming soon</em>' : '') + (rec ? '<em class="cr">★ Recommended today</em>' : '') + '</button>';
     });
     $("tests").innerHTML = h;

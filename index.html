@@ -102,7 +102,7 @@
 <div id="pdfv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="pclose">Close</button><span id="ptitle"></span></div><div id="pages"></div></div>
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 19</div>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 20</div>
 <script src="core.js?v=14"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
@@ -135,22 +135,23 @@ $("go").onclick = function(){
 };
 $("code").onkeydown = function(e){ if (e.key === "Enter") $("go").click(); };
 $("out").onclick = function(){ if (!confirm("Log out? You will need a new code from your teacher to log in again.")) return; rpc("logout", {tok: TOK}); ls("nnt_phone_token", null); TOK = null; pickId = 0; loginScreen(); };
-var VIDS = {};
+var VIDS = {}, VREC = null;
 var IC = {play:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg>',
   book:'<svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20"/></svg>',
   pen:'<svg viewBox="0 0 24 24"><path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19z"/><path d="M14.5 6.5l3 3"/></svg>',
   redo:'<svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>'};
-/* Daily plan (same as the classroom page): Day 0 = 5 Nov 2026 = Unit 14, one unit per day, no Sundays, Tashkent time.
+/* Daily plan (same as the classroom page): Day 0 = 5 Nov 2026 = Unit 14, one unit per day, except days off, Tashkent time.
    The video to watch is the one for the NEXT day's test, so students watch it the evening before. */
-function nonSun(n){ var c = 0; for (var i = 0; i < n; i++){ if ((4 + i) % 7 !== 0) c++; } return c; } /* day 0 = Thursday 5 Nov 2026; Sundays have no lesson */
-function videoUnit(){ var d = Math.floor((Date.now() + 5 * 3600e3 - Date.UTC(2026, 10, 5)) / 864e5); return d < 0 ? 14 : 14 + nonSun(d + 1); }
+var OFFD = [3]; /* days off since 5 Nov 2026 (3 = Sunday 8 Nov). The server sends the real plan; this is only a fallback */
+function testDays(n){ var c = 0; for (var i = 0; i < n; i++){ if (OFFD.indexOf(i) < 0) c++; } return c; }
+function videoUnit(){ if (typeof VREC === "number") return VREC; var d = Math.floor((Date.now() + 5 * 3600e3 - Date.UTC(2026, 10, 5)) / 864e5); return d < 0 ? 14 : 14 + testDays(d + 1); }
 function greet(){ var h = new Date().getHours(); return h < 5 ? "Good evening" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; }
 function home(){
   show("s_home"); note("m_home","info","Loading…");
   Promise.all([rpc("me", {tok: TOK}), rpc("video_units", {tok: TOK}).catch(function(){ return {ok:false}; })]).then(function(x){
     var r = x[0];
     if (!r.ok){ ls("nnt_phone_token", null); TOK = null; loginScreen(); note("m_login","err","Your login has ended. Please log in again with a new code from your teacher."); return; }
-    VIDS = {}; var VI = []; if (x[1] && x[1].ok){ x[1].units.forEach(function(u){ VIDS[u] = 1; }); VI = x[1].items || []; }
+    VIDS = {}; var VI = []; if (x[1] && x[1].ok){ x[1].units.forEach(function(u){ VIDS[u] = 1; }); VI = x[1].items || []; VREC = typeof x[1].rec === "number" ? x[1].rec : null; }
     ME = r; note("m_home","","");
     $("hg").textContent = greet(); $("hi").textContent = r.name.split(" ")[0];
     var done = r.units.filter(function(u){ return u.status === "finished"; }).length;
