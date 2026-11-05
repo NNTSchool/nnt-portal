@@ -102,7 +102,7 @@
 <div id="pdfv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="pclose">Close</button><span id="ptitle"></span></div><div id="pages"></div></div>
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 18</div>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 19</div>
 <script src="core.js?v=14"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
@@ -150,29 +150,33 @@ function home(){
   Promise.all([rpc("me", {tok: TOK}), rpc("video_units", {tok: TOK}).catch(function(){ return {ok:false}; })]).then(function(x){
     var r = x[0];
     if (!r.ok){ ls("nnt_phone_token", null); TOK = null; loginScreen(); note("m_login","err","Your login has ended. Please log in again with a new code from your teacher."); return; }
-    VIDS = {}; if (x[1] && x[1].ok) x[1].units.forEach(function(u){ VIDS[u] = 1; });
+    VIDS = {}; var VI = []; if (x[1] && x[1].ok){ x[1].units.forEach(function(u){ VIDS[u] = 1; }); VI = x[1].items || []; }
     ME = r; note("m_home","","");
     $("hg").textContent = greet(); $("hi").textContent = r.name.split(" ")[0];
     var done = r.units.filter(function(u){ return u.status === "finished"; }).length;
     $("hp").textContent = done ? done + " of " + r.units.length + " units finished" : "Watch the video lessons any time. Finish a test in class to unlock its explanations.";
     $("hb").style.width = Math.round(100 * done / Math.max(1, r.units.length)) + "%";
-    var h = "", sh = ""; r.units.forEach(function(u){
+    var h = "", sh = "", SE = {}; r.units.forEach(function(u){
       var rib = "", st = "Not taken yet", fin = u.status === "finished";
       if (fin){ rib = u.passed ? '<i class="rib">✓</i>' : '<i class="rib bad">✕</i>'; st = u.passed ? '<b style="color:var(--ok)">Passed</b>' : '<b style="color:var(--bad)">Not passed</b>'; }
       else if (u.status === "started"){ rib = '<i class="rib go">…</i>'; st = "In progress"; }
       if (u.retake && !fin) st = u.status === "started" ? "Retake in progress" : "Retake allowed · do it in the classroom";
       var t = esc(u.title.replace(/^Unit \d+ · /, ""));
       h += '<button class="vol ' + (u.status === "none" ? "dim" : "") + '" data-u="' + esc(u.unit) + '"><span class="sp">' + u.no + '</span><span class="bd"><b>' + t + '</b><small>Unit ' + u.no + ' · ' + st + '</small></span>' + rib + '</button>';
-      var hv = !!VIDS[u.unit], sst = hv ? "Watch the video lessons" : "Coming soon";
-      var rv = hv && u.no === videoUnit();
-      sh += '<button class="vol ' + (hv ? "" : "dim") + (rv ? " rec" : "") + '" data-u="' + esc(u.unit) + '"' + (hv ? "" : " disabled") + '><span class="sp">' + u.no + '</span><span class="bd"><b>' + t + '</b><small>Unit ' + u.no + ' · ' + sst + '</small></span>' + (rv ? '<em class="cr">★ Recommended today</em>' : '') + '</button>';
+      SE[u.no] = {unit: u.unit, no: u.no, title: u.title};
+    });
+    /* Study area: every unit that has a video shows up, even if its test is not on the site yet */
+    VI.forEach(function(v){ if (!SE[v.no]) SE[v.no] = {unit: v.unit, no: v.no, title: v.title}; });
+    Object.keys(SE).map(Number).sort(function(a, b){ return b - a; }).forEach(function(k){
+      var e = SE[k], hv = !!VIDS[e.unit], sst = hv ? "Watch the video lessons" : "Coming soon", rv = hv && e.no === videoUnit(), tt = esc(e.title.replace(/^Unit \d+ · /, ""));
+      sh += '<button class="vol ' + (hv ? "" : "dim") + (rv ? " rec" : "") + '" data-u="' + esc(e.unit) + '" data-t="' + esc(e.title) + '"' + (hv ? "" : " disabled") + '><span class="sp">' + e.no + '</span><span class="bd"><b>' + tt + '</b><small>Unit ' + e.no + ' · ' + sst + '</small></span>' + (rv ? '<em class="cr">★ Recommended today</em>' : '') + '</button>';
     });
     $("units").innerHTML = h; $("sunits").innerHTML = sh;
     var back = ss("nnt_back_unit"); if (back){ ss("nnt_back_unit", null); if (r.units.some(function(u){ return u.unit === back; })) unit(back); }
   }).catch(function(){ note("m_home","err","No internet connection."); });
 }
 $("units").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b) return; unit(b.getAttribute("data-u")); };
-$("sunits").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b || b.disabled) return; var u = b.getAttribute("data-u"), c = ME.units.filter(function(x){ return x.unit === u; })[0]; openVideo(u, c.title); };
+$("sunits").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b || b.disabled) return; openVideo(b.getAttribute("data-u"), b.getAttribute("data-t") || ""); };
 $("go_study").onclick = function(){ show("s_study"); }; $("go_exam").onclick = function(){ show("s_exam"); };
 $("sb").onclick = function(){ show("s_home"); }; $("eb").onclick = function(){ show("s_home"); }; $("ub").onclick = function(){ show("s_exam"); };
 function lvlPill(l){ return '<span class="lvl" style="background:' + LVC[l] + '">' + LVN[l] + '</span>'; }

@@ -70,8 +70,8 @@ function loadTests(){
     note("m_lib","",""); var h = "";
     if (!r.tests.length) h = '<div class="card">No tests are open yet. Please wait for your teacher.</div>';
     r.tests.forEach(function(t){
-      var soon = !!t.novideo && !t.can;
-      var st = soon ? "Video lesson first" : (t.done ? (t.retake ? "Retake allowed · tap to start" : "Finished") : (t.can ? "Tap to start" : "Not open"));
+      var soon = !!(t.novideo || t.later) && !t.can;
+      var st = soon ? (t.later ? "Opens on its day" : "Video lesson first") : (t.done ? (t.retake ? "Retake allowed · tap to start" : "Finished") : (t.can ? "Tap to start" : "Not open"));
       var fin = !soon && t.done && !t.retake;
       var rec = !soon && t.can && t.no === todayUnit();
       h += '<button class="vol ' + ((fin || soon) ? "dim" : "") + (soon ? " soon" : "") + (!soon && t.retake ? " retake" : "") + (rec ? " rec" : "") + '" data-u="' + esc(t.unit) + '"' + ((!t.can) ? " disabled" : "") + '><span class="sp">' + t.no + '</span><span class="bd"><b>' + esc(t.title.replace(/^Unit \d+ · /, "")) + '</b><small>Unit ' + t.no + " · " + st + '</small></span>' + (fin ? '<i class="rib">✓</i>' : '') + (soon ? '<em class="cs">Coming soon</em>' : '') + (rec ? '<em class="cr">★ Recommended today</em>' : '') + '</button>';
