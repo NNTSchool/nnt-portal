@@ -89,6 +89,9 @@
 #s_audio .vol .bd{padding-right:60px}
 .hub2 .hubbtn.vid{background:linear-gradient(150deg,#1f8fd1,#1d4fbf)}.hub2 .hubbtn.aud{background:linear-gradient(150deg,#e8478b,#6a2bb8)}
 .hub2 .hubbtn .ic{border-color:rgba(255,255,255,.5);color:#fff}.hub2 .hubbtn .ch{color:#fff}
+#s_audio .vol .cr{position:absolute;left:84px;right:auto;bottom:10px;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.04em;color:#fff;background:linear-gradient(135deg,#0e9f6e,#0a7d57);border-radius:999px;padding:4px 12px}
+#s_audio .vol.rec .bd{padding-bottom:46px}
+#s_audio .vol.rec{border-color:#0e9f6e;box-shadow:0 0 0 2px rgba(14,159,110,.25),0 10px 24px -14px rgba(10,125,87,.55)}
 #audv{background:#2a1238}#audv .bar2{background:#1a0a26;border-bottom-color:#ff8a4c}
 #alist{overflow:auto;padding:14px;display:grid;gap:12px;align-content:start}
 .trk{background:linear-gradient(160deg,#4a2070,#2a1238);border:1px solid #8a4bb8;border-radius:14px;padding:14px;color:#fff}
@@ -122,7 +125,7 @@
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
 <div id="audv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="aclose">Close</button><span id="atitle"></span></div><div id="alist"></div></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 22</div>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 23</div>
 <script src="core.js?v=14"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
@@ -209,7 +212,8 @@ function loadAudios(){
     if (!r.ok){ note("m_audio","err","Could not load the audios. Please try again."); return; }
     AUD = r.items; note("m_audio","","");
     $("aunits").innerHTML = r.items.length ? r.items.map(function(u){
-      return '<button class="vol" data-u="' + esc(u.unit) + '"><span class="sp">' + u.no + '</span><span class="bd"><b>' + esc(u.title.replace(/^Unit \d+ · /, "")) + '</b><small>Unit ' + u.no + ' · ' + u.tracks.length + (u.tracks.length === 1 ? " audio" : " audios") + '</small></span></button>';
+      var rv = u.no === videoUnit();
+      return '<button class="vol' + (rv ? " rec" : "") + '" data-u="' + esc(u.unit) + '"><span class="sp">' + u.no + '</span><span class="bd"><b>' + esc(u.title.replace(/^Unit \d+ · /, "")) + '</b><small>Unit ' + u.no + ' · ' + u.tracks.length + (u.tracks.length === 1 ? " audio" : " audios") + '</small></span>' + (rv ? '<em class="cr">★ Recommended today</em>' : '') + '</button>';
     }).join("") : '<div class="msg info">No audios yet.</div>';
   }).catch(function(){ note("m_audio","err","No internet connection."); });
 }
