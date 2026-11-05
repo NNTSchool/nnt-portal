@@ -80,6 +80,23 @@
 #s_exam .vol{border-left:0}
 #s_exam .vol .sp{background:linear-gradient(160deg,#3a1450,#12113a);border-right:3px solid var(--gold);color:var(--gold2);text-shadow:0 0 12px rgba(255,201,60,.55)}
 #s_exam .vol.dim .sp{background:linear-gradient(160deg,#5d6b86,#3c4863);text-shadow:none}
+
+/* audios: warm and musical */
+.za{background:radial-gradient(120% 120% at 15% 0%,#ff9a5a 0%,#e8478b 50%,#6a2bb8 100%);box-shadow:0 14px 30px -16px rgba(200,60,140,.7)}.za small{color:#ffe8f3}.za p{color:#fff0f7}
+#s_audio .vol{border-color:#f3cfe2;background:linear-gradient(180deg,#fff,#fff5fa)}
+#s_audio .vol .sp{background:linear-gradient(160deg,#ff8a4c,#d6338a);border-right-color:#ffc2dc;color:#fff}
+#s_audio .vol::after{content:"♪";position:absolute;right:14px;top:50%;translate:0 -50%;width:34px;height:34px;border-radius:50%;background:linear-gradient(160deg,#ff8a4c,#d6338a);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px}
+#s_audio .vol .bd{padding-right:60px}
+.hub2 .hubbtn.vid{background:linear-gradient(150deg,#1f8fd1,#1d4fbf)}.hub2 .hubbtn.aud{background:linear-gradient(150deg,#e8478b,#6a2bb8)}
+.hub2 .hubbtn .ic{border-color:rgba(255,255,255,.5);color:#fff}.hub2 .hubbtn .ch{color:#fff}
+#audv{background:#2a1238}#audv .bar2{background:#1a0a26;border-bottom-color:#ff8a4c}
+#alist{overflow:auto;padding:14px;display:grid;gap:12px;align-content:start}
+.trk{background:linear-gradient(160deg,#4a2070,#2a1238);border:1px solid #8a4bb8;border-radius:14px;padding:14px;color:#fff}
+.trk b{display:block;font-family:var(--serif);font-size:17px;margin-bottom:10px}.trk b i{font-style:normal;color:#ffb38a;margin-right:6px}
+.tr{display:flex;align-items:center;gap:10px}.tr .pb{flex:none;width:46px;height:46px;border-radius:50%;border:0;background:linear-gradient(160deg,#ff8a4c,#e8478b);color:#fff;font-size:20px;cursor:pointer}
+.tr .sk{flex:none;border:1px solid #8a4bb8;background:transparent;color:#ffd9e8;border-radius:10px;padding:8px 9px;font-size:12px;font-weight:800;cursor:pointer}
+.tr input[type=range]{flex:1;min-width:0;accent-color:#ff8a4c}.tr{flex-wrap:wrap}.tr .tm{flex:1 0 100%;order:9;font-size:13px;color:#e6c9f5;text-align:center;margin-top:2px}
+.trk .st{font-size:12.5px;color:#ffc2dc;margin-top:6px}
 </style>
 </head><body>
 <div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small>Student portal</small></div><div class="sp"></div><button class="btn sm alt hide" id="out">Log out</button></div>
@@ -93,22 +110,25 @@
   <label for="code">Your 5-digit code</label><input type="password" id="code" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="•••••">
   <div style="height:14px"></div><button class="btn" id="go">Log in</button><div id="m_login"></div></div><div class="hall"><h3>🏆 Our students scored IELTS 8.0 — you can be the next!</h3><div class="cert c1"><div class="ct">IELTS Academic · Sep 2026</div><h4>Noila Amonova</h4><div class="cb"><div class="band"><b>8.0</b><small>BAND</small></div><div class="sk"><div><small>Listening</small><b>8.0</b></div><div><small>Reading</small><b>8.5</b></div><div><small>Writing</small><b>7.0</b></div><div><small>Speaking</small><b>7.5</b></div></div></div><div class="cf">CEFR C1 · <b>You can be the next!</b> ⭐</div></div><div class="cert c2"><div class="ct">IELTS Academic · Apr 2025</div><h4>Jahongir Shodiyev</h4><div class="cb"><div class="band"><b>8.0</b><small>BAND</small></div><div class="sk"><div><small>Listening</small><b>8.5</b></div><div><small>Reading</small><b>8.0</b></div><div><small>Writing</small><b>8.0</b></div><div><small>Speaking</small><b>6.5</b></div></div></div><div class="cf">CEFR C1 · <b>You can be the next!</b> ⭐</div></div></div></div>
  <div id="s_home" class="hide"><div class="hero"><div class="g" id="hg"></div><h1 id="hi"></h1><p id="hp"></p><div class="bar"><i id="hb"></i></div></div>
-  <div class="hub"><button class="hubbtn" id="go_study"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg></span><span><b>Study area</b><small>Video lessons, unit by unit</small></span><span class="ch">›</span></button>
+  <div class="hub"><button class="hubbtn" id="go_study"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg></span><span><b>Study area</b><small>Video lessons and audio tracks</small></span><span class="ch">›</span></button>
   <button class="hubbtn" id="go_exam"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20"/></svg></span><span><b>Exam area</b><small>Results, ranking, explanations, essay feedback and practice</small></span><span class="ch">›</span></button></div><div id="m_home"></div></div>
+ <div id="s_sthub" class="hide zonepg"><button class="back" id="hb2">← Back</button><div class="zone zs"><span class="zst z1">🎬</span><span class="zst z2">🎧</span><small>LEARN</small><h1>Study area</h1><p>Choose how you want to study today.</p></div><div class="hub hub2"><button class="hubbtn vid" id="go_vid"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg></span><span><b>Study with videos</b><small>Video lessons, unit by unit</small></span><span class="ch">›</span></button><button class="hubbtn aud" id="go_aud"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></svg></span><span><b>Audios</b><small>Listen to the audio tracks of every unit</small></span><span class="ch">›</span></button></div></div>
+ <div id="s_audio" class="hide zonepg"><button class="back" id="ab">← Back</button><div class="zone za"><span class="zst z1">🎧</span><span class="zst z2">🎵</span><small>LISTEN</small><h1>Audios</h1><p>Every audio track of every unit. Play, pause, jump to any moment and listen as many times as you like.</p></div><div id="aunits" class="vols"></div><div id="m_audio"></div></div>
  <div id="s_study" class="hide zonepg"><button class="back" id="sb">← Back</button><div class="zone zs"><span class="zst z1">🎬</span><span class="zst z2">💡</span><span class="zst z3">📖</span><small>LEARN</small><h1>Study area</h1><p>Watch the video lessons, one unit at a time. Pause, replay and learn at your own pace.</p></div><div id="sunits" class="vols"></div><div id="m_study"></div></div>
  <div id="s_exam" class="hide zonepg"><button class="back" id="eb">← Back</button><div class="zone ze"><span class="zst z1">🏆</span><span class="zst z2">🎯</span><span class="zst z3">📝</span><small>PROVE IT</small><h1>Exam area</h1><p>Your results, class ranking, explanations and essay feedback.</p></div><div id="units" class="vols"></div></div>
  <div id="s_unit" class="hide"><button class="back" id="ub">← All units</button><div id="ubody"></div></div>
 </div>
 <div id="pdfv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="pclose">Close</button><span id="ptitle"></span></div><div id="pages"></div></div>
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
+<div id="audv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="aclose">Close</button><span id="atitle"></span></div><div id="alist"></div></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 21</div>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 22</div>
 <script src="core.js?v=14"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
 var TOK = ls("nnt_phone_token"), ROSTER = [], pickId = 0, ME = null, CUR = null;
-function show(id){ ["s_login","s_home","s_study","s_exam","s_unit"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); $("out").classList.toggle("hide", id === "s_login"); window.scrollTo(0,0); }
+function show(id){ ["s_login","s_home","s_sthub","s_study","s_audio","s_exam","s_unit"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); $("out").classList.toggle("hide", id === "s_login"); window.scrollTo(0,0); }
 function note(el, cls, txt){ $(el).innerHTML = txt ? '<div class="msg ' + cls + '">' + txt + '</div>' : ""; }
 function boot(){ if (TOK) home(); else loginScreen(); }
 function loginScreen(){
@@ -178,8 +198,65 @@ function home(){
 }
 $("units").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b) return; unit(b.getAttribute("data-u")); };
 $("sunits").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b || b.disabled) return; openVideo(b.getAttribute("data-u"), b.getAttribute("data-t") || ""); };
-$("go_study").onclick = function(){ show("s_study"); }; $("go_exam").onclick = function(){ show("s_exam"); };
-$("sb").onclick = function(){ show("s_home"); }; $("eb").onclick = function(){ show("s_home"); }; $("ub").onclick = function(){ show("s_exam"); };
+$("go_study").onclick = function(){ show("s_sthub"); }; $("go_vid").onclick = function(){ show("s_study"); }; $("go_aud").onclick = function(){ show("s_audio"); loadAudios(); }; $("hb2").onclick = function(){ show("s_home"); }; $("ab").onclick = function(){ show("s_sthub"); }; $("go_exam").onclick = function(){ show("s_exam"); };
+$("sb").onclick = function(){ show("s_sthub"); }; $("eb").onclick = function(){ show("s_home"); }; $("ub").onclick = function(){ show("s_exam"); };
+
+/* Audios area */
+var AUD = null, AEL = null, ABLOB = {};
+function loadAudios(){
+  note("m_audio","info","Loading…");
+  rpc("audio_list", {tok: TOK}).then(function(r){
+    if (!r.ok){ note("m_audio","err","Could not load the audios. Please try again."); return; }
+    AUD = r.items; note("m_audio","","");
+    $("aunits").innerHTML = r.items.length ? r.items.map(function(u){
+      return '<button class="vol" data-u="' + esc(u.unit) + '"><span class="sp">' + u.no + '</span><span class="bd"><b>' + esc(u.title.replace(/^Unit \d+ · /, "")) + '</b><small>Unit ' + u.no + ' · ' + u.tracks.length + (u.tracks.length === 1 ? " audio" : " audios") + '</small></span></button>';
+    }).join("") : '<div class="msg info">No audios yet.</div>';
+  }).catch(function(){ note("m_audio","err","No internet connection."); });
+}
+$("aunits").onclick = function(e){
+  var b = e.target.closest("button[data-u]"); if (!b || !AUD) return;
+  var u = AUD.filter(function(x){ return x.unit === b.getAttribute("data-u"); })[0]; if (!u) return;
+  $("atitle").textContent = "Unit " + u.no + " · " + u.title.replace(/^Unit \d+ · /, "");
+  $("alist").innerHTML = u.tracks.map(function(t, i){
+    return '<div class="trk" data-id="' + esc(t.id) + '"><b><i>Audio ' + (i + 1) + '</i>' + esc(t.title) + '</b><div class="tr"><button class="pb" data-a="play" aria-label="Play">▶</button><button class="sk" data-a="back">−10s</button><input type="range" min="0" max="1000" value="0" data-a="seek" aria-label="Position"><button class="sk" data-a="fwd">+10s</button><span class="tm">0:00 / 0:00</span></div><div class="st"></div></div>';
+  }).join("");
+  $("audv").classList.remove("hide"); document.body.style.overflow = "hidden";
+};
+function aStop(){ if (AEL){ AEL.pause(); AEL = null; } document.querySelectorAll("#alist .pb").forEach(function(b){ b.textContent = "▶"; }); }
+$("aclose").onclick = function(){ aStop(); $("audv").classList.add("hide"); document.body.style.overflow = ""; };
+function fmt(x){ x = Math.max(0, Math.floor(x || 0)); return Math.floor(x / 60) + ":" + ("0" + (x % 60)).slice(-2); }
+function aTrack(card, cb){
+  var id = card.getAttribute("data-id"), st = card.querySelector(".st");
+  if (ABLOB[id]){ cb(ABLOB[id]); return; }
+  st.textContent = "Loading…";
+  rpc("get_audio", {tok: TOK, fid: id}).then(function(r){
+    if (!r.ok) throw new Error("not ready");
+    return fetchDecrypt(r.path, r.key, function(p){ st.textContent = "Loading… " + Math.round(p * 100) + "%"; }).then(function(buf){
+      var a = new Audio(); a.preload = "auto"; a.src = URL.createObjectURL(new Blob([buf], {type: r.mime || "audio/mpeg"}));
+      a.controlsList = "nodownload"; ABLOB[id] = a; st.textContent = ""; cb(a);
+    });
+  }).catch(function(){ st.textContent = "Could not load this audio. Check your internet and try again."; });
+}
+$("alist").onclick = function(e){
+  var b = e.target.closest("button[data-a]"); if (!b) return; var card = b.closest(".trk"), act = b.getAttribute("data-a");
+  var pb = card.querySelector(".pb"), rg = card.querySelector("input"), tm = card.querySelector(".tm");
+  aTrack(card, function(a){
+    function wire(){ if (a._w) return; a._w = 1;
+      a.ontimeupdate = function(){ if (a._drag) return; rg.value = a.duration ? Math.round(1000 * a.currentTime / a.duration) : 0; tm.textContent = fmt(a.currentTime) + " / " + fmt(a.duration); };
+      a.onloadedmetadata = a.ontimeupdate; a.onended = function(){ pb.textContent = "▶"; };
+    }
+    wire();
+    if (act === "play"){
+      if (AEL && AEL !== a){ AEL.pause(); document.querySelectorAll("#alist .pb").forEach(function(x){ x.textContent = "▶"; }); }
+      if (a.paused){ AEL = a; a.play(); pb.textContent = "❚❚"; } else { a.pause(); pb.textContent = "▶"; }
+    } else if (act === "back"){ a.currentTime = Math.max(0, a.currentTime - 10); }
+    else if (act === "fwd"){ a.currentTime = Math.min(a.duration || 1e9, a.currentTime + 10); }
+  });
+};
+$("alist").oninput = function(e){
+  var rg = e.target; if (rg.getAttribute("data-a") !== "seek") return; var card = rg.closest(".trk"), a = ABLOB[card.getAttribute("data-id")];
+  if (a && a.duration){ a._drag = 1; a.currentTime = a.duration * rg.value / 1000; card.querySelector(".tm").textContent = fmt(a.currentTime) + " / " + fmt(a.duration); clearTimeout(a._dt); a._dt = setTimeout(function(){ a._drag = 0; }, 400); }
+};
 function lvlPill(l){ return '<span class="lvl" style="background:' + LVC[l] + '">' + LVN[l] + '</span>'; }
 function tile(id, ic, title, sub, off){ return '<button class="tile" id="' + id + '"' + (off ? " disabled" : "") + '><span class="ic">' + IC[ic] + '</span><span><b>' + title + '</b><small>' + sub + '</small></span><span class="ch">›</span></button><div id="m_' + id + '"></div>'; }
 function unit(u){
