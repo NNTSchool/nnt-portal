@@ -102,7 +102,7 @@
 <div id="pdfv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="pclose">Close</button><span id="ptitle"></span></div><div id="pages"></div></div>
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 20</div>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 21</div>
 <script src="core.js?v=14"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
@@ -192,7 +192,7 @@ function unit(u){
     if (c.released) h += '<div class="card"><h2>Class ranking</h2><div id="lb" style="margin-top:8px">Loading…</div></div>';
   }
   h += '<div class="sec">Explanations and feedback</div>';
-  h += tile("openpdf", "book", "Explanations", fin ? "Every answer explained in English and Uzbek" : "Opens after you finish the test", !fin);
+  h += tile("openpdf", "book", "Explanations", !fin ? "Opens after you finish the test" : (c.exp ? "Every answer explained in English and Uzbek" : "Not available yet — your teacher will open it"), !(fin && c.exp));
   h += tile("openfb", "pen", "My essay and feedback", fin ? "Read your essay with the feedback" : "Opens after you finish the test", !fin);
   h += '<div class="sec">Practice</div>';
   h += tile("openprac", "redo", "Practice again", fin ? "Take the test again for yourself. It does not count." : "Opens after you finish the test", !fin);
@@ -298,7 +298,7 @@ $("fclose").onclick = function(){ $("fbv").classList.add("hide"); $("fbf").srcdo
 function openPdf(u, title){
   note("m_openpdf","info","Opening… this takes a few seconds.");
   rpc("get_pdf", {tok: TOK, u: u}).then(function(r){
-    if (!r.ok){ note("m_openpdf","err", r.err === "locked" ? "Locked until you finish this test in the classroom." : "The explanations for this unit are not ready yet."); return; }
+    if (!r.ok){ note("m_openpdf","err", r.err === "locked" ? "Locked until you finish this test in the classroom." : r.err === "expnotreleased" ? "Not available yet — your teacher will open it." : "The explanations for this unit are not ready yet."); return; }
     return fetchDecrypt(r.path, r.key).then(function(buf){ note("m_openpdf","",""); return renderPdf(buf, r.name, title); });
   }).catch(function(e){ note("m_openpdf","err","Could not open (" + esc(e.message || e) + ")."); });
 }
