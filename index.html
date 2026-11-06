@@ -92,10 +92,11 @@
 .hub2 .hubbtn.wrd{background:linear-gradient(150deg,#7c5cff,#4a2fc2)}
 /* word lists: indigo and gold */
 .zw{background:radial-gradient(120% 120% at 12% 0%,#9b7bff 0%,#5b3fd6 52%,#2b1d86 100%);box-shadow:0 14px 30px -16px rgba(91,63,214,.7)}.zw small{color:#efe6ff}.zw p{color:#f1ebff}
-#s_words .vol{border-color:#d9d0f7;background:linear-gradient(180deg,#fff,#f7f4ff)}
-#s_words .vol .sp{background:linear-gradient(160deg,#8f6dff,#4a2fc2);border-right-color:#d9d0f7;color:#fff}
+#s_words .vol,#s_wread .vol{border-color:#d9d0f7;background:linear-gradient(180deg,#fff,#f7f4ff)}
+#s_words .vol .sp,#s_wread .vol .sp{background:linear-gradient(160deg,#8f6dff,#4a2fc2);border-right-color:#d9d0f7;color:#fff}
 #s_words .vol::after{content:"Aa";position:absolute;right:14px;top:50%;translate:0 -50%;width:34px;height:34px;border-radius:50%;background:linear-gradient(160deg,#8f6dff,#4a2fc2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800}
-#s_words .vol .bd{padding-right:60px}
+#s_wread .vol::after{content:"›";position:absolute;right:14px;top:50%;translate:0 -50%;width:34px;height:34px;border-radius:50%;background:linear-gradient(160deg,#8f6dff,#4a2fc2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px}
+#s_words .vol .bd,#s_wread .vol .bd{padding-right:60px}
 #s_words .vol .cr{position:absolute;left:84px;right:auto;bottom:10px;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.04em;color:#fff;background:linear-gradient(135deg,#0e9f6e,#0a7d57);border-radius:999px;padding:4px 12px}
 #s_words .vol.rec .bd{padding-bottom:46px}
 #s_words .vol.rec{border-color:#0e9f6e;box-shadow:0 0 0 2px rgba(14,159,110,.25),0 10px 24px -14px rgba(10,125,87,.55)}
@@ -157,7 +158,7 @@
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
 <div id="audv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="aclose">Close</button><span id="atitle"></span></div><div id="alist"></div></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 30</div>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 31</div>
 <script src="core.js?v=14"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
@@ -237,7 +238,7 @@ $("go_study").onclick = function(){ show("s_sthub"); }; $("go_vid").onclick = fu
 $("sb").onclick = function(){ show("s_sthub"); }; $("eb").onclick = function(){ show("s_home"); }; $("ub").onclick = function(){ show("s_exam"); };
 
 /* Word lists */
-var WD = null, WCUR = null;
+var WD = null, WCUR = null, WTXT = -1;
 function loadWords(){
   if (WD){ drawWords(); return; }
   note("m_words","info","Loading…");
@@ -261,10 +262,18 @@ function wcards(t, tab){
 }
 function openWordUnit(n){
   var u = WD.units.filter(function(x){ return x.no === n; })[0]; if (!u) return;
-  $("wbody").innerHTML = '<div class="wtitle">Unit ' + u.no + ' · ' + esc(u.title.replace(/^Unit \d+ · /, "")) + '</div><p class="wsub">Tap a word to see where it is in the text.</p>' + u.texts.map(function(t, i){
-    return '<div class="wsplit" data-i="' + i + '"><div class="wtxt"><span class="trk">Multi-Level + IELTS · same text</span><div class="wp">' + t.html + '</div></div><div class="wvoc"><div class="wtabs"><button class="on" data-tab="w">Words (' + t.w.length + ')</button><button data-tab="p">Phrases (' + t.p.length + ')</button></div><div class="wlist">' + wcards(t, "w") + '</div></div></div>';
-  }).join("");
-  WCUR = u; show("s_wread");
+  WCUR = u; WTXT = -1;
+  $("wb2").textContent = "← All units";
+  $("wbody").innerHTML = '<div class="zone zw"><span class="zst z1">📖</span><span class="zst z2">✨</span><small>UNIT ' + u.no + '</small><h1 style="font-size:26px">' + esc(u.title.replace(/^Unit \d+ · /, "")) + '</h1><p>Choose a text to read it with its words and phrases.</p></div><div class="vols wtl">' + u.texts.map(function(t, i){
+    return '<button class="vol" data-t="' + i + '"><span class="sp">' + (i + 1) + '</span><span class="bd"><b>' + esc(t.title) + '</b><small>Text ' + (i + 1) + ' · ' + t.w.length + ' words · ' + t.p.length + ' phrases</small></span></button>';
+  }).join("") + '</div>';
+  show("s_wread"); document.querySelector(".wrap").classList.remove("wide");
+}
+function openWordText(i){
+  var t = WCUR.texts[i]; if (!t) return; WTXT = i;
+  $("wb2").textContent = "← Unit " + WCUR.no + " texts";
+  $("wbody").innerHTML = '<div class="wtitle">' + esc(t.title) + '</div><p class="wsub">Unit ' + WCUR.no + ' · tap a word to see where it is in the text.</p><div class="wsplit" data-i="' + i + '"><div class="wtxt"><span class="trk">Multi-Level + IELTS · same text</span><div class="wp">' + t.html + '</div></div><div class="wvoc"><div class="wtabs"><button class="on" data-tab="w">Words (' + t.w.length + ')</button><button data-tab="p">Phrases (' + t.p.length + ')</button></div><div class="wlist">' + wcards(t, "w") + '</div></div></div>';
+  show("s_wread");
 }
 function wstem(w){ w = w.toLowerCase().replace(/\(.*?\)/g, "").replace(/[^a-z\s'’-]/g, " ").trim(); return w.split(/\s+/).filter(function(x){ return x && !/^(a|an|the|to|of|in|on|for|with|up|out|off|over|into|at|by)$/.test(x); }).map(function(x){ return x.length > 5 ? x.slice(0, -2) : (x.length > 3 ? x.slice(0, -1) : x); }); }
 function wmark(box, key){
@@ -280,9 +289,10 @@ function wmark(box, key){
   if (first && window.matchMedia("(min-width: 900px)").matches) first.scrollIntoView({block: "center", behavior: "smooth"});
 }
 $("go_wrd").onclick = function(){ show("s_words"); loadWords(); };
-$("wb").onclick = function(){ show("s_sthub"); }; $("wb2").onclick = function(){ show("s_words"); };
+$("wb").onclick = function(){ show("s_sthub"); }; $("wb2").onclick = function(){ if (WTXT >= 0 && WCUR) openWordUnit(WCUR.no); else show("s_words"); };
 $("wunits").onclick = function(e){ var b = e.target.closest("button[data-n]"); if (b && WD) openWordUnit(+b.getAttribute("data-n")); };
 $("wbody").onclick = function(e){
+  var tl = e.target.closest("button[data-t]"); if (tl && WCUR){ openWordText(+tl.getAttribute("data-t")); return; }
   var sp = e.target.closest(".wsplit"); if (!sp || !WCUR) return;
   var t = WCUR.texts[+sp.getAttribute("data-i")], tb = e.target.closest("button[data-tab]");
   if (tb){ [].forEach.call(sp.querySelectorAll(".wtabs button"), function(x){ x.classList.toggle("on", x === tb); }); sp.querySelector(".wlist").innerHTML = wcards(t, tb.getAttribute("data-tab")); wmark(sp.querySelector(".wp"), ""); return; }
