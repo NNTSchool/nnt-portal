@@ -13,7 +13,7 @@
 <div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small>Classroom tests</small></div><div class="sp"></div><button class="btn sm alt hide" id="out">Log out</button></div>
 <div class="wrap wide">
  <div id="s_setup" class="card gilt login hide"><h2>Set up this computer</h2><p>Only the teacher does this, once per computer.</p>
-  <label for="ck">Classroom key</label><input type="password" id="ck" autocomplete="off"><div style="height:14px"></div><button class="btn" id="cksave">Save</button><div id="m_setup"></div></div>
+  <label for="ck">Classroom key</label><input type="password" id="ck" autocomplete="off"><label for="pcn" style="display:block;margin-top:12px">This computer's number</label><select id="pcn" style="width:100%;padding:12px;border:1.5px solid var(--line);border-radius:10px;font:inherit"><option value="">Not set</option><option value="1">PC 1</option><option value="2">PC 2</option><option value="3">PC 3</option><option value="4">PC 4</option><option value="5">PC 5</option><option value="6">PC 6</option><option value="7">PC 7</option><option value="8">PC 8</option><option value="9">PC 9</option><option value="10">PC 10</option><option value="11">PC 11</option><option value="M1">Middle M1</option><option value="M2">Middle M2</option></select><div style="height:14px"></div><button class="btn" id="cksave">Save</button> <button class="btn alt hide" id="cksback">Cancel</button><div id="m_setup"></div></div>
  <div id="s_login" class="login hide" style="max-width:640px"><div class="wel"><span class="stk s1">🎓</span><span class="stk s2">⭐</span><span class="stk s3">✏️</span><span class="stk s4">🚀</span>
    <img class="crest" src="logo.jpg" alt=""><div class="uz">Xush kelibsiz!</div><h1>Welcome to <em>NNT School</em></h1><p class="tag" id="wq">Every test you finish is a step closer to your goal.</p>
    <div class="polas"><figure class="pol grp"><div class="ph" data-src="photos/group.jpg"><span>📚</span></div><figcaption>Our NNT family 💙</figcaption></figure></div>
@@ -21,7 +21,7 @@
   <div class="card gilt signin"><h2>Log in</h2><p style="margin:0;color:var(--mute)">Choose your name and type your personal code.</p>
   <label for="nq">Your name</label><input type="search" id="nq" placeholder="Start typing your name…" autocomplete="off"><div class="pick" id="plist"></div>
   <label for="code">Your 5-digit code</label><input type="password" id="code" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="•••••">
-  <div style="height:16px"></div><button class="btn" id="go">Log in</button><div id="m_login"></div>
+  <div style="height:16px"></div><button class="btn" id="go">Log in</button><div id="m_login"></div><div style="text-align:center;margin-top:10px"><a href="#" id="cfglink" style="font-size:12px;color:#9aa6bf;text-decoration:none">Computer <span id="pcshow">–</span> · setup</a></div>
 </div><div class="hall"><h3>🏆 Our students scored IELTS 8.0 — you can be the next!</h3><div class="cert c1"><div class="ct">IELTS Academic · Sep 2026</div><h4>Noila Amonova</h4><div class="cb"><div class="band"><b>8.0</b><small>BAND</small></div><div class="sk"><div><small>Listening</small><b>8.0</b></div><div><small>Reading</small><b>8.5</b></div><div><small>Writing</small><b>7.0</b></div><div><small>Speaking</small><b>7.5</b></div></div></div><div class="cf">CEFR C1 · <b>You can be the next!</b> ⭐</div></div><div class="cert c2"><div class="ct">IELTS Academic · Apr 2025</div><h4>Jahongir Shodiyev</h4><div class="cb"><div class="band"><b>8.0</b><small>BAND</small></div><div class="sk"><div><small>Listening</small><b>8.5</b></div><div><small>Reading</small><b>8.0</b></div><div><small>Writing</small><b>8.0</b></div><div><small>Speaking</small><b>6.5</b></div></div></div><div class="cf">CEFR C1 · <b>You can be the next!</b> ⭐</div></div></div></div>
  <div id="s_lib" class="hide"><div class="card gilt who"><div><small>Logged in as</small><h2 id="who"></h2></div></div>
   <div class="sec">Your tests</div><div id="tests" class="vols"></div><div id="m_lib"></div></div>
@@ -34,6 +34,7 @@ function show(id){ ["s_setup","s_login","s_lib","s_load"].forEach(function(x){ $
 function note(el, cls, txt){ $(el).innerHTML = txt ? '<div class="msg ' + cls + '">' + txt + '</div>' : ""; }
 function init(){
   if (!ls("nnt_class_key")){ show("s_setup"); return; }
+  $("pcshow").textContent = ls("nnt_pc") ? (/^M/.test(ls("nnt_pc")) ? "middle " + ls("nnt_pc") : ls("nnt_pc")) : "not numbered";
   show("s_login"); welcomeInit(); note("m_login","info","Loading the class list…");
   rpc("roster").then(function(r){ ROSTER = r; note("m_login","",""); drawList(); }).catch(function(){ note("m_login","err","No internet connection. Please tell your teacher."); });
 }
@@ -44,14 +45,20 @@ function drawList(){
 }
 $("nq").oninput = function(){ pickId = 0; drawList(); };
 $("plist").onclick = function(e){ var d = e.target.closest("div[data-id]"); if (!d) return; pickId = +d.getAttribute("data-id"); drawList(); $("code").focus(); };
-$("cksave").onclick = function(){ var k = $("ck").value.trim(); if (k.length < 6){ note("m_setup","err","Please type the classroom key."); return; } ls("nnt_class_key", k); $("ck").value = ""; init(); };
+$("cksave").onclick = function(){
+  var k = $("ck").value.trim(), old = ls("nnt_class_key"); if (k.length < 6){ note("m_setup","err","Please type the classroom key."); return; }
+  if (old && k !== old){ note("m_setup","err","That is not the classroom key."); return; }
+  ls("nnt_class_key", k); ls("nnt_pc", $("pcn").value || null); $("ck").value = ""; init();
+};
+$("cksback").onclick = function(){ $("ck").value = ""; note("m_setup","",""); init(); };
+$("cfglink").onclick = function(e){ e.preventDefault(); $("pcn").value = ls("nnt_pc") || ""; $("cksback").classList.remove("hide"); note("m_setup","info","Type the classroom key to change this computer's number."); show("s_setup"); };
 $("go").onclick = function(){
   if (!pickId){ note("m_login","err","Please choose your name from the list."); return; }
   var c = $("code").value.trim(); if (!/^\d{5}$/.test(c)){ note("m_login","err","Your code has 5 digits."); return; }
   $("go").disabled = true; note("m_login","info","Checking…");
-  rpc("login_class", {sid: pickId, pcode: c, pclass_key: ls("nnt_class_key") || "", plabel: "classroom " + deviceLabel()}).then(function(r){
+  rpc("login_class", {sid: pickId, pcode: c, pclass_key: ls("nnt_class_key") || "", plabel: "classroom " + deviceLabel() + (ls("nnt_pc") ? " · PC" + ls("nnt_pc") : "")}).then(function(r){
     $("go").disabled = false;
-    if (r.ok){ TOK = r.token; NAME = r.name; SID = r.id; $("code").value = ""; loadTests(); return; }
+    if (r.ok){ TOK = r.token; NAME = r.name; SID = r.id; $("code").value = ""; if (!window.__pingH) window.__pingH = setInterval(function(){ if (TOK) rpc("ping", {tok: TOK}).catch(function(){}); }, 40000); loadTests(); return; }
     var m = {wrong:"That code is not correct. " + (r.left != null ? r.left + " tries left." : ""), locked:"Too many wrong codes. Try again in " + (r.minutes || 10) + " minutes.", nocode:"You have no code at the moment. Ask your teacher.",
       classkey:"This computer is not set up for tests. Ask your teacher.", busy:"Please wait a few minutes and try again.", network:"Tests can only be taken in the classroom.", nostudent:"Name not found."};
     note("m_login","err", m[r.err] || "Could not log in."); if (r.err === "classkey"){ ls("nnt_class_key", null); setTimeout(init, 2500); }
