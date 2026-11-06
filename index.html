@@ -89,6 +89,35 @@
 #s_audio .vol .bd{padding-right:60px}
 .zh{background:linear-gradient(115deg,#1f8fd1 0%,#1d4fbf 38%,#7a35c0 68%,#e8478b 100%);box-shadow:0 14px 30px -16px rgba(106,43,184,.7)}.zh small{color:#e6f4ff}.zh p{color:#f4eaff}
 .hub2 .hubbtn.vid{background:linear-gradient(150deg,#1f8fd1,#1d4fbf)}.hub2 .hubbtn.aud{background:linear-gradient(150deg,#e8478b,#6a2bb8)}
+.hub2 .hubbtn.wrd{background:linear-gradient(150deg,#7c5cff,#4a2fc2)}
+/* word lists: indigo and gold */
+.zw{background:radial-gradient(120% 120% at 12% 0%,#9b7bff 0%,#5b3fd6 52%,#2b1d86 100%);box-shadow:0 14px 30px -16px rgba(91,63,214,.7)}.zw small{color:#efe6ff}.zw p{color:#f1ebff}
+#s_words .vol{border-color:#d9d0f7;background:linear-gradient(180deg,#fff,#f7f4ff)}
+#s_words .vol .sp{background:linear-gradient(160deg,#8f6dff,#4a2fc2);border-right-color:#d9d0f7;color:#fff}
+#s_words .vol::after{content:"Aa";position:absolute;right:14px;top:50%;translate:0 -50%;width:34px;height:34px;border-radius:50%;background:linear-gradient(160deg,#8f6dff,#4a2fc2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800}
+#s_words .vol .bd{padding-right:60px}
+#s_words .vol .cr{position:absolute;left:84px;right:auto;bottom:10px;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.04em;color:#fff;background:linear-gradient(135deg,#0e9f6e,#0a7d57);border-radius:999px;padding:4px 12px}
+#s_words .vol.rec .bd{padding-bottom:46px}
+#s_words .vol.rec{border-color:#0e9f6e;box-shadow:0 0 0 2px rgba(14,159,110,.25),0 10px 24px -14px rgba(10,125,87,.55)}
+.wtitle{font-family:var(--serif);font-size:26px;font-weight:600;margin:4px 0 4px}.wsub{color:var(--mute);font-size:14px;margin:0 0 12px}
+.wsplit{display:grid;gap:12px;margin:0 0 26px}
+.wtxt,.wvoc{border:1.5px solid #d9d0f7;border-radius:16px;background:#fff;min-width:0}
+.wtxt{padding:16px 18px}.wtxt h4{margin:0 0 8px;font-family:var(--serif);font-size:22px;border-left:5px solid #7c5cff;padding-left:10px}
+.wtxt .wp{font-family:var(--serif);font-size:17px;line-height:1.7}.wtxt .wp p{margin:0 0 10px}
+.wtxt .trk{display:inline-block;margin-bottom:10px;font-size:12px;font-weight:800;letter-spacing:.04em;color:#4a2fc2;background:#efeaff;border-radius:999px;padding:4px 11px}
+.wtxt mark{background:#ffe27a;color:inherit;border-radius:3px;padding:0 2px}
+.wvoc{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.wtabs{display:flex;gap:6px;padding:10px;background:#f3efff;border-bottom:1.5px solid #d9d0f7;position:sticky;top:0;z-index:2}
+.wtabs button{flex:1;border:0;border-radius:10px;padding:10px 8px;font:inherit;font-weight:700;font-size:14px;color:#4a2fc2;background:transparent;cursor:pointer}
+.wtabs button.on{background:linear-gradient(150deg,#8f6dff,#4a2fc2);color:#fff}
+.wlist{padding:6px 14px 14px}
+.wc{padding:12px 4px;border-bottom:1px solid #ece7fb;cursor:pointer}.wc:last-child{border-bottom:0}
+.wc b{font-size:17px;color:#2b1d86}.wc i{font-style:normal;font-size:12px;font-weight:700;color:#7a6bb5;margin-left:8px;background:#f3efff;border-radius:6px;padding:2px 7px}
+.wc .uz{font-weight:700;color:#0a7d57;margin-top:3px;font-size:16px}
+.wc .sy{font-size:14px;margin-top:3px;color:#46566e}.wc .sy u{text-decoration:none;font-weight:800;font-size:11px;letter-spacing:.06em;color:#b8860b;margin-right:6px;text-transform:uppercase}
+.wc .df{font-size:14px;margin-top:2px;color:#46566e}.wc .ex{font-size:13.5px;margin-top:4px;color:#7a869c;font-style:italic}
+.wc.hot{background:#fff9e0;border-radius:10px}
+@media(min-width:900px){.wsplit{grid-template-columns:1.1fr .9fr;align-items:start}.wtxt,.wvoc{max-height:calc(100vh - 150px);overflow:auto;position:sticky;top:12px}}
 .hub2 .hubbtn .ic{border-color:rgba(255,255,255,.5);color:#fff}.hub2 .hubbtn .ch{color:#fff}
 #s_audio .vol .cr{position:absolute;left:84px;right:auto;bottom:10px;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.04em;color:#fff;background:linear-gradient(135deg,#0e9f6e,#0a7d57);border-radius:999px;padding:4px 12px}
 #s_audio .vol.rec .bd{padding-bottom:46px}
@@ -116,8 +145,10 @@
  <div id="s_home" class="hide"><div class="hero"><div class="g" id="hg"></div><h1 id="hi"></h1><p id="hp"></p><div class="bar"><i id="hb"></i></div></div>
   <div class="hub"><button class="hubbtn" id="go_study"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg></span><span><b>Study hub</b><small>Video lessons and audio tracks</small></span><span class="ch">›</span></button>
   <button class="hubbtn" id="go_exam"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20"/></svg></span><span><b>Exam area</b><small>Results, ranking, explanations, essay feedback and practice</small></span><span class="ch">›</span></button></div><div id="m_home"></div></div>
- <div id="s_sthub" class="hide zonepg"><button class="back" id="hb2">← Back</button><div class="zone zs zh"><span class="zst z1">🎬</span><span class="zst z2">🎧</span><small>LEARN</small><h1>Study area</h1><p>Choose how you want to study today.</p></div><div class="hub hub2"><button class="hubbtn vid" id="go_vid"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg></span><span><b>Study with videos</b><small>Video lessons, unit by unit</small></span><span class="ch">›</span></button><button class="hubbtn aud" id="go_aud"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></svg></span><span><b>Audios</b><small>Listen to the audio tracks of every unit</small></span><span class="ch">›</span></button></div></div>
+ <div id="s_sthub" class="hide zonepg"><button class="back" id="hb2">← Back</button><div class="zone zs zh"><span class="zst z1">🎬</span><span class="zst z2">🎧</span><small>LEARN</small><h1>Study area</h1><p>Choose how you want to study today.</p></div><div class="hub hub2"><button class="hubbtn vid" id="go_vid"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg></span><span><b>Study with videos</b><small>Video lessons, unit by unit</small></span><span class="ch">›</span></button><button class="hubbtn aud" id="go_aud"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></svg></span><span><b>Audios</b><small>Listen to the audio tracks of every unit</small></span><span class="ch">›</span></button><button class="hubbtn wrd" id="go_wrd"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M8 8h8M8 12h5"/></svg></span><span><b>Word lists</b><small>Vocabulary and phrases of every reading text, with Uzbek</small></span><span class="ch">›</span></button></div></div>
  <div id="s_audio" class="hide zonepg"><button class="back" id="ab">← Back</button><div class="zone za"><span class="zst z1">🎧</span><span class="zst z2">🎵</span><small>LISTEN</small><h1>Audios</h1><p>Every audio track of every unit. Play, pause, jump to any moment and listen as many times as you like.</p></div><div id="aunits" class="vols"></div><div id="m_audio"></div></div>
+ <div id="s_words" class="hide zonepg"><button class="back" id="wb">← Back</button><div class="zone zw"><span class="zst z1">📖</span><span class="zst z2">✨</span><small>VOCABULARY</small><h1>Word lists</h1><p>Every reading text with its useful words and phrases: Uzbek, a synonym and a simple definition.</p></div><div id="wunits" class="vols"></div><div id="m_words"></div></div>
+ <div id="s_wread" class="hide"><button class="back" id="wb2">← All units</button><div id="wbody"></div></div>
  <div id="s_study" class="hide zonepg"><button class="back" id="sb">← Back</button><div class="zone zs"><span class="zst z1">🎬</span><span class="zst z2">💡</span><span class="zst z3">📖</span><small>LEARN</small><h1>Study area</h1><p>Watch the video lessons, one unit at a time. Pause, replay and learn at your own pace.</p></div><div id="sunits" class="vols"></div><div id="m_study"></div></div>
  <div id="s_exam" class="hide zonepg"><button class="back" id="eb">← Back</button><div class="zone ze"><span class="zst z1">🏆</span><span class="zst z2">🎯</span><span class="zst z3">📝</span><small>PROVE IT</small><h1>Exam area</h1><p>Your results, class ranking, explanations and essay feedback.</p></div><div id="units" class="vols"></div></div>
  <div id="s_unit" class="hide"><button class="back" id="ub">← All units</button><div id="ubody"></div></div>
@@ -126,13 +157,13 @@
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
 <div id="audv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="aclose">Close</button><span id="atitle"></span></div><div id="alist"></div></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 29</div>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 30</div>
 <script src="core.js?v=14"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
 var TOK = ls("nnt_phone_token"), ROSTER = [], pickId = 0, ME = null, CUR = null;
-function show(id){ ["s_login","s_home","s_sthub","s_study","s_audio","s_exam","s_unit"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); $("out").classList.toggle("hide", id === "s_login"); window.scrollTo(0,0); }
+function show(id){ ["s_login","s_home","s_sthub","s_study","s_audio","s_words","s_wread","s_exam","s_unit"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); document.querySelector(".wrap").classList.toggle("wide", id === "s_wread"); $("out").classList.toggle("hide", id === "s_login"); window.scrollTo(0,0); }
 function note(el, cls, txt){ $(el).innerHTML = txt ? '<div class="msg ' + cls + '">' + txt + '</div>' : ""; }
 function boot(){ if (TOK) home(); else loginScreen(); }
 function loginScreen(){
@@ -204,6 +235,61 @@ $("units").onclick = function(e){ var b = e.target.closest("button[data-u]"); if
 $("sunits").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b || b.disabled) return; openVideo(b.getAttribute("data-u"), b.getAttribute("data-t") || ""); };
 $("go_study").onclick = function(){ show("s_sthub"); }; $("go_vid").onclick = function(){ show("s_study"); }; $("go_aud").onclick = function(){ show("s_audio"); loadAudios(); }; $("hb2").onclick = function(){ show("s_home"); }; $("ab").onclick = function(){ show("s_sthub"); }; $("go_exam").onclick = function(){ show("s_exam"); };
 $("sb").onclick = function(){ show("s_sthub"); }; $("eb").onclick = function(){ show("s_home"); }; $("ub").onclick = function(){ show("s_exam"); };
+
+/* Word lists */
+var WD = null, WCUR = null;
+function loadWords(){
+  if (WD){ drawWords(); return; }
+  note("m_words","info","Loading…");
+  rpc("get_words", {tok: TOK}).then(function(r){
+    if (!r.ok) throw new Error("x");
+    return fetchDecrypt(r.path, r.key);
+  }).then(function(buf){ WD = JSON.parse(new TextDecoder().decode(buf)); note("m_words","",""); drawWords(); })
+  .catch(function(){ note("m_words","err","Could not load the word lists. Check your internet and try again."); });
+}
+function drawWords(){
+  var rec = videoUnit();
+  $("wunits").innerHTML = WD.units.slice().sort(function(a, b){ return b.no - a.no; }).map(function(u){
+    var n = 0; u.texts.forEach(function(t){ n += t.w.length + t.p.length; });
+    var rv = u.no === rec;
+    return '<button class="vol' + (rv ? " rec" : "") + '" data-n="' + u.no + '"><span class="sp">' + u.no + '</span><span class="bd"><b>' + esc(u.title.replace(/^Unit \d+ · /, "")) + '</b><small>Unit ' + u.no + ' · ' + u.texts.length + (u.texts.length === 1 ? " text" : " texts") + ' · ' + n + ' words and phrases</small></span>' + (rv ? '<em class="cr">★ Recommended today</em>' : '') + '</button>';
+  }).join("");
+}
+function wcards(t, tab){
+  if (tab === "p") return t.p.map(function(x){ return '<div class="wc ph" data-k="' + esc(x[0]) + '"><b>' + esc(x[0]) + '</b><div class="uz">' + esc(x[1]) + '</div><div class="df">' + esc(x[2]) + '</div><div class="ex">“' + esc(x[3]) + '”</div></div>'; }).join("");
+  return t.w.map(function(x){ return '<div class="wc" data-k="' + esc(x[0]) + '"><b>' + esc(x[0]) + '</b><i>' + esc(x[1]) + '</i><div class="uz">' + esc(x[2]) + '</div><div class="sy"><u>Synonym</u>' + esc(x[3]) + '</div><div class="df">' + esc(x[4]) + '</div></div>'; }).join("");
+}
+function openWordUnit(n){
+  var u = WD.units.filter(function(x){ return x.no === n; })[0]; if (!u) return;
+  $("wbody").innerHTML = '<div class="wtitle">Unit ' + u.no + ' · ' + esc(u.title.replace(/^Unit \d+ · /, "")) + '</div><p class="wsub">Tap a word to see where it is in the text.</p>' + u.texts.map(function(t, i){
+    return '<div class="wsplit" data-i="' + i + '"><div class="wtxt"><span class="trk">Multi-Level + IELTS · same text</span><div class="wp">' + t.html + '</div></div><div class="wvoc"><div class="wtabs"><button class="on" data-tab="w">Words (' + t.w.length + ')</button><button data-tab="p">Phrases (' + t.p.length + ')</button></div><div class="wlist">' + wcards(t, "w") + '</div></div></div>';
+  }).join("");
+  WCUR = u; show("s_wread");
+}
+function wstem(w){ w = w.toLowerCase().replace(/\(.*?\)/g, "").replace(/[^a-z\s'’-]/g, " ").trim(); return w.split(/\s+/).filter(function(x){ return x && !/^(a|an|the|to|of|in|on|for|with|up|out|off|over|into|at|by)$/.test(x); }).map(function(x){ return x.length > 5 ? x.slice(0, -2) : (x.length > 3 ? x.slice(0, -1) : x); }); }
+function wmark(box, key){
+  [].forEach.call(box.querySelectorAll("mark"), function(m){ var p = m.parentNode; p.replaceChild(document.createTextNode(m.textContent), m); p.normalize(); });
+  var st = wstem(key); if (!st.length) return;
+  var re = new RegExp("\\b" + st.map(function(x){ return x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "[a-z’'-]*"; }).join("\\W+"), "i"), first = null;
+  var walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT), nodes = [], n; while ((n = walker.nextNode())) nodes.push(n);
+  nodes.forEach(function(tn){
+    var m = re.exec(tn.nodeValue); if (!m) return;
+    var r = tn.splitText(m.index); r.splitText(m[0].length);
+    var mk = document.createElement("mark"); mk.textContent = r.nodeValue; r.parentNode.replaceChild(mk, r); if (!first) first = mk;
+  });
+  if (first && window.matchMedia("(min-width: 900px)").matches) first.scrollIntoView({block: "center", behavior: "smooth"});
+}
+$("go_wrd").onclick = function(){ show("s_words"); loadWords(); };
+$("wb").onclick = function(){ show("s_sthub"); }; $("wb2").onclick = function(){ show("s_words"); };
+$("wunits").onclick = function(e){ var b = e.target.closest("button[data-n]"); if (b && WD) openWordUnit(+b.getAttribute("data-n")); };
+$("wbody").onclick = function(e){
+  var sp = e.target.closest(".wsplit"); if (!sp || !WCUR) return;
+  var t = WCUR.texts[+sp.getAttribute("data-i")], tb = e.target.closest("button[data-tab]");
+  if (tb){ [].forEach.call(sp.querySelectorAll(".wtabs button"), function(x){ x.classList.toggle("on", x === tb); }); sp.querySelector(".wlist").innerHTML = wcards(t, tb.getAttribute("data-tab")); wmark(sp.querySelector(".wp"), ""); return; }
+  var c = e.target.closest(".wc"); if (!c) return;
+  [].forEach.call(sp.querySelectorAll(".wc.hot"), function(x){ x.classList.remove("hot"); }); c.classList.add("hot");
+  wmark(sp.querySelector(".wp"), c.getAttribute("data-k"));
+};
 
 /* Audios area */
 var AUD = null, AEL = null, ABLOB = {};
