@@ -126,7 +126,7 @@
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
 <div id="audv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="aclose">Close</button><span id="atitle"></span></div><div id="alist"></div></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 26</div>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 27</div>
 <script src="core.js?v=14"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
@@ -284,11 +284,15 @@ function unit(u){
   $("openpdf").onclick = function(){ openPdf(u, c.title); }; $("openfb").onclick = function(){ openFb(u); }; $("openprac").onclick = function(){ openPractice(u); };
   drawPractice(u);
   if (c.released){
-    var r = c.result || {}, rh = '<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div class="big">' + Math.round(r.pct) + '%</div><div>' + lvlPill(r.level) + '<div style="margin-top:6px;color:var(--mute)">' + r.score + ' / ' + r.total + '' + '</div></div></div>';
+    var r = c.result || {};
+    var drawRes = function(r){ var rh = '<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div class="big">' + Math.round(r.pct) + '%</div><div>' + lvlPill(r.level) + '<div style="margin-top:6px;color:var(--mute)">' + r.score + ' / ' + r.total + '' + '</div></div></div>';
     var wm = typeof r.ws === "number" ? r.ws : null;
     if (wm !== null) rh += '<div style="margin-top:16px;display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:14px;background:linear-gradient(135deg,#071733,#123f9c);color:#fff"><span style="font-size:26px">✍️</span><span style="flex:1;font-weight:700">Writing mark<br><small style="font-weight:500;color:#cfd9f5">Separate from your 100-question result</small></span><span style="font:700 32px var(--serif);color:#efdca8">' + wm + '<small style="font:700 16px system-ui;color:#cfd9f5"> / 10</small></span></div>';
+    if (wm !== null && r.wb && r.wb.length === 4){ var WN = ["Task achievement", "Coherence and cohesion", "Grammar", "Vocabulary"]; rh += '<h3 style="margin:18px 0 2px">My writing, criterion by criterion</h3><div class="ex">'; r.wb.forEach(function(v, i){ rh += '<div class="n">' + WN[i] + '</div><div class="v">' + v + ' / 10</div><div class="b"><i style="width:' + Math.min(100, Math.max(0, v * 10)) + '%"></i></div>'; }); rh += '</div>'; }
     if (r.tt && r.x){ rh += '<h3 style="margin:18px 0 2px">My exercises</h3><div class="ex">'; r.tt.forEach(function(t, i){ var p = r.y[i] ? Math.round(100 * r.x[i] / r.y[i]) : 0; rh += '<div class="n">' + (i + 1) + '. ' + esc(t) + '</div><div class="v">' + r.x[i] + ' / ' + r.y[i] + '</div><div class="b"><i style="width:' + p + '%"></i></div>'; }); rh += '</div>'; }
-    $("res").innerHTML = rh;
+    $("res").innerHTML = rh; };
+    drawRes(r);
+    rpc("unit_detail", {tok: TOK, u: u}).then(function(d){ if (d && d.ok && d.result){ var m = Object.assign({}, d.result, c.result); if (typeof m.ws === "number") drawRes(m); } }).catch(function(){});
     var loadLb = function(first){ rpc("leaderboard", {tok: TOK, u: u}).then(function(l){
       if (!l.ok){ $("lb").innerHTML = "<p>Ranking is not available yet.</p>"; return; }
       var msg = {alone:["mb-alone","First on the board!","You are the first one with a result so far. Set the standard!",["\u2B50","\uD83D\uDE80"]],
