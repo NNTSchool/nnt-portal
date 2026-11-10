@@ -683,7 +683,7 @@ function xfinish(){
 function xres(R, sc, wrong, secs){
   var pc = Math.round(sc / R.ord.length * 100), msg = pc >= 90 ? "Brilliant! You know this really well. 🌟" : pc >= 75 ? "Great work! Just a few things to polish. 👏" : pc >= 60 ? "Good job! You are on the right track. 👍" : pc >= 40 ? "A good start. The explanations below will help a lot. 💪" : "Every expert starts here. Read the explanations calmly, then try again. 🌱";
   var mm = Math.floor(secs / 60), ss2 = secs % 60, h = '<div class="xscore"><div class="big">' + sc + '<small> / ' + R.ord.length + '</small></div><p>' + msg + '</p><div class="row"><span>✓ ' + sc + ' correct</span><span>✗ ' + wrong.length + ' to review</span><span>⏱ ' + mm + ':' + (ss2 < 10 ? "0" : "") + ss2 + '</span></div></div>';
-  h += '<div class="xact"><button class="a1" id="xr_again">Try again</button><button class="a2" id="xr_back">All tests</button></div>';
+  if (!wrong.length) h += '<div class="xact"><button class="a1" id="xr_again">Try again</button><button class="a2" id="xr_back">All tests</button></div>';
   if (!wrong.length) h += '<div class="xdone"><b>🎉 Perfect score!</b>You answered every question correctly. Nothing to review here.</div>';
   else {
     h += '<h2 class="xh">Let’s learn from these ' + wrong.length + '</h2><p>Only the questions you missed are explained. Take your time. Each one is a small step forward.</p>';
