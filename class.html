@@ -68,7 +68,7 @@ $("code").onkeydown = function(e){ if (e.key === "Enter") $("go").click(); };
 $("out").onclick = function(){ if (TOK) rpc("logout", {tok: TOK}); TOK = null; pickId = 0; $("nq").value = ""; show("s_login"); drawList(); };
 /* Daily plan: one test per day, counted in Tashkent time. Day 0 = 5 Nov 2026 = Unit 14, then one unit per day except days off. */
 var REC = null, PLAN_START = Date.UTC(2026, 10, 5), PLAN_UNIT = 14;
-var OFFD = [3]; /* days off since 5 Nov 2026 (3 = Sunday 8 Nov). The server sends the real plan; this is only a fallback */
+var OFFD = [2, 3]; /* days off since 5 Nov 2026 (2 = Saturday 7 Nov, 3 = Sunday 8 Nov). The server sends the real plan; this is only a fallback */
 function testDays(n){ var c = 0; for (var i = 0; i < n; i++){ if (OFFD.indexOf(i) < 0) c++; } return c; }
 function todayUnit(){ var d = Math.floor((Date.now() + 5 * 3600e3 - PLAN_START) / 864e5); if (d < 0 || OFFD.indexOf(d) > -1) return 0; return PLAN_UNIT + testDays(d); }
 function loadTests(){

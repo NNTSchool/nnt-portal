@@ -198,9 +198,9 @@ var IC = {play:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d=
   redo:'<svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>'};
 /* Daily plan (same as the classroom page): Day 0 = 5 Nov 2026 = Unit 14, one unit per day, except days off, Tashkent time.
    The video to watch is the one for the NEXT day's test, so students watch it the evening before. */
-var OFFD = [3]; /* days off since 5 Nov 2026 (3 = Sunday 8 Nov). The server sends the real plan; this is only a fallback */
+var OFFD = [2, 3]; /* days off since 5 Nov 2026 (2 = Saturday 7 Nov, 3 = Sunday 8 Nov). The server sends the real plan; this is only a fallback */
 function testDays(n){ var c = 0; for (var i = 0; i < n; i++){ if (OFFD.indexOf(i) < 0) c++; } return c; }
-function videoUnit(){ if (typeof VREC === "number") return VREC; var d = Math.floor((Date.now() + 5 * 3600e3 - Date.UTC(2026, 10, 5)) / 864e5); return d < 0 ? 14 : 14 + testDays(d + 1); }
+function videoUnit(){ if (typeof VREC === "number") return VREC; var ms = Date.now() + 5 * 3600e3 - Date.UTC(2026, 10, 5), d = Math.floor(ms / 864e5), h = (ms % 864e5) / 3600e3; if (d < 0) return 14; var off = OFFD.indexOf(d) > -1; return 14 + testDays(d + 1) - (!off && h < 14 ? 1 : 0); } /* before 14:00 today's unit, from 14:00 the next one; the server sends the real value */
 function greet(){ var h = new Date().getHours(); return h < 5 ? "Good evening" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; }
 function home(){
   show("s_home"); note("m_home","info","Loading…");
