@@ -135,8 +135,8 @@
 .hubbtn.xtra{background:linear-gradient(135deg,#ff7a45 0%,#d63384 48%,#6f2dbd 100%);border-bottom:3px solid #ffd27a}
 .hubbtn.xtra .ic{border-color:rgba(255,255,255,.55);color:#fff}.hubbtn.xtra .ch{color:#fff}.hubbtn.xtra small{color:#ffe9f3}
 .zx{background:radial-gradient(120% 130% at 85% 0%,#a855f7 0%,#5b21b6 42%,#1e0a4a 100%);box-shadow:0 14px 30px -16px rgba(111,45,189,.8);border:1.5px solid rgba(255,210,122,.55)}.zx small{color:#ffd27a}.zx p{color:#efe3ff}
-.hub3 .hubbtn.xv{background:linear-gradient(145deg,#ff9a3c,#e5365f 65%,#a31b6b);border-bottom-color:#ffd27a}
-.hub3 .hubbtn.xg{background:linear-gradient(145deg,#22d3ee,#2563eb 60%,#4c1d95);border-bottom-color:#a7f3ff}
+.hub3 .hubbtn.xv{background:linear-gradient(145deg,#2dd4a7,#0f9d7a 55%,#0b5d57);border-bottom-color:#b7f5e1}
+.hub3 .hubbtn.xg{background:linear-gradient(145deg,#8b7bff,#5b3fd6 55%,#1e1450);border-bottom-color:#d4ccff}
 .hub3 .hubbtn .ic{border-color:rgba(255,255,255,.55);color:#fff}.hub3 .hubbtn .ch{color:#fff}.hub3 .hubbtn small{color:#fff;opacity:.92}
 .xgrid{display:grid;grid-template-columns:1fr;gap:14px}
 @media(min-width:640px){.xgrid{grid-template-columns:1fr 1fr}}@media(min-width:960px){.xgrid{grid-template-columns:1fr 1fr 1fr}}
@@ -189,6 +189,41 @@
 .xm .xe.en{background:#eff6ff;color:#1e3a8a}.xm .xe.uz{background:#fff8e6;color:#7a4b00}
 .xdone{text-align:center;padding:26px 14px;border-radius:20px;background:linear-gradient(135deg,#ecfdf3,#f0fdfa);border:1.5px solid #bbf7d0;margin-top:16px}.xdone b{font-size:22px;display:block;margin-bottom:6px}
 .xnote{margin:10px 0 0;font-size:13px;color:var(--mute);text-align:center}
+
+/* STUDY EXTRA — section themes */
+.xscore .big,.xscore .big small{color:#fff}
+/* themes (vocabulary = emerald paper, grammar = indigo night) */
+.zone.zv{background:radial-gradient(120% 140% at 90% 0%,#34d3a3 0%,#0f8f72 45%,#064e4a 100%);border:1.5px solid rgba(183,245,225,.6);box-shadow:0 14px 30px -16px rgba(15,143,114,.8)}.zone.zv small{color:#c9fbe9}.zone.zv p{color:#e6fff6}
+.zone.zg{background:radial-gradient(120% 140% at 90% 0%,#7c6cff 0%,#3b2aa8 45%,#150f3f 100%);border:1.5px solid rgba(212,204,255,.45);box-shadow:0 14px 30px -16px rgba(91,63,214,.9)}.zone.zg small{color:#d4ccff}.zone.zg p{color:#ece8ff}
+body.xvb{background:#eef8f3 radial-gradient(circle at 1px 1px,rgba(15,143,114,.13) 1.2px,transparent 1.6px) 0 0/22px 22px}
+html:has(body.xgb){background:#120f33}body.xgb{background:linear-gradient(180deg,#0f0c2b,#17133f 60%,#0f0c2b) #120f33}
+.xcard{background:#fff;color:var(--text);border:1.5px solid color-mix(in srgb,var(--c1) 22%,#fff);border-radius:18px;padding:12px 14px 12px 16px;min-height:0;flex-direction:row;align-items:center;gap:14px;box-shadow:0 8px 20px -16px var(--sh);position:relative}
+.xcard::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:5px;border-radius:0 6px 6px 0;background:var(--bg)}
+.xcard .nb{flex:none;width:52px;height:52px;border-radius:15px;background:var(--bg);color:#fff;display:flex;align-items:center;justify-content:center;font:800 24px Lexend,system-ui}
+.xcard .mid{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}.xcard .mid b{font-size:18px;color:var(--text)}
+.xcard .un{color:var(--mute);font-size:13px;font-weight:600;opacity:1}
+.xcard .st{margin:3px 0 0;gap:6px;font-size:12px}.xcard .st i{background:color-mix(in srgb,var(--c1) 12%,#fff);color:var(--c1);padding:2px 9px}
+.xcard .ring{flex:none;width:50px;height:50px;border-radius:50%;background:conic-gradient(var(--c1) calc(var(--p)*1%),color-mix(in srgb,var(--c1) 14%,#fff) 0);display:flex;align-items:center;justify-content:center}
+.xcard .ring em{font-style:normal;width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font:800 13px Lexend,system-ui;color:var(--c1)}
+.xcard:hover{transform:translateY(-2px)}
+body.xgb .xcard{background:#1c1850;border-color:rgba(160,146,255,.28);box-shadow:0 10px 24px -14px #000}
+body.xgb .xcard .mid b{color:#f1eeff}body.xgb .xcard .un{color:#b9b2ec}body.xgb .xcard .st i{background:rgba(160,146,255,.16);color:#d4ccff}
+body.xgb .xcard .ring{background:conic-gradient(#a99bff calc(var(--p)*1%),rgba(160,146,255,.18) 0)}body.xgb .xcard .ring em{background:#1c1850;color:#d4ccff}
+body.xgb .back,body.xgb .xlead,body.xgb .xnote{color:#cfc8ff}
+body.xvb .xq{border-color:color-mix(in srgb,var(--c1) 25%,#fff)}
+body.xgb .xq{background:#1c1850;border-color:rgba(160,146,255,.3);box-shadow:0 14px 30px -18px #000}
+body.xgb .xq h2{color:#f4f1ff}body.xgb .xq h2 .bl{color:#c4baff;border-color:#a99bff}
+body.xgb .xo{background:#241f60;border-color:rgba(160,146,255,.28);color:#f1eeff}body.xgb .xo:hover{background:#2c2670;border-color:#a99bff}
+body.xgb .xo .lt{background:rgba(160,146,255,.2);color:#d4ccff}body.xgb .xo.on{background:#3a2fa0;border-color:#c4baff}body.xgb .xo.on .lt{background:#c4baff;color:#1c1850}
+body.xgb .xdots button{background:#1c1850;border-color:rgba(160,146,255,.3);color:#b9b2ec}body.xgb .xdots button.dn{background:#3a2fa0;color:#fff;border-color:#a99bff}body.xgb .xdots button.cur{background:#c4baff;color:#1c1850;border-color:#c4baff}
+body.xgb .xnav .pv{background:#2a2470;color:#e6e1ff}body.xgb .xprog{background:rgba(255,255,255,.1)}body.xgb .xprog i{background:#a99bff}
+body.xgb .xh{color:#f4f1ff}body.xgb .xh+p{color:#cfc8ff}body.xgb .xact .a2{background:#2a2470;color:#e6e1ff}
+body.xgb .xnav .nx,body.xgb .xact .a1{background:linear-gradient(135deg,#7c6cff,#4a35c9)}
+body.xvb .xnav .nx,body.xvb .xact .a1{background:linear-gradient(135deg,#1fbf96,#0b7d67)}
+body.xvb .xq .ch,body.xvb .xbar{background:linear-gradient(135deg,#1fbf96,#0b7d67)}body.xgb .xq .ch,body.xgb .xbar{background:linear-gradient(135deg,#7c6cff,#3b2aa8)}
+body.xvb .xscore{background:linear-gradient(135deg,#1fbf96,#0b6f60)}body.xgb .xscore{background:linear-gradient(135deg,#7c6cff,#2d1f86)}
+body.xvb .xm .mh span{background:#0f9d7a}body.xgb .xm .mh span{background:#5b3fd6}
+@media(min-width:900px){.xcard{padding:14px 18px 14px 20px}.xcard .nb{width:58px;height:58px;font-size:27px}.xcard .ring{width:56px;height:56px}.xcard .ring em{width:43px;height:43px}}
 </style>
 </head><body>
 <div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small>Student portal</small></div><div class="sp"></div><button class="btn sm alt hide" id="out">Log out</button></div>
@@ -227,7 +262,7 @@
 import * as pdfjs from "./vendor/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
 var TOK = ls("nnt_phone_token"), ROSTER = [], pickId = 0, ME = null, CUR = null;
-function show(id){ ["s_login","s_home","s_sthub","s_study","s_audio","s_words","s_wread","s_exam","s_unit","s_xhub","s_xlist","s_xtest","s_xres"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); document.querySelector(".wrap").classList.toggle("wide", id === "s_wread"); $("out").classList.toggle("hide", id === "s_login"); window.scrollTo(0,0); }
+function show(id){ ["s_login","s_home","s_sthub","s_study","s_audio","s_words","s_wread","s_exam","s_unit","s_xhub","s_xlist","s_xtest","s_xres"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); document.querySelector(".wrap").classList.toggle("wide", id === "s_wread"); $("out").classList.toggle("hide", id === "s_login"); if (!/^s_x(list|test|res)$/.test(id)) document.body.classList.remove("xvb","xgb"); window.scrollTo(0,0); }
 function note(el, cls, txt){ $(el).innerHTML = txt ? '<div class="msg ' + cls + '">' + txt + '</div>' : ""; }
 function boot(){ if (TOK) home(); else loginScreen(); }
 function loginScreen(){
@@ -572,11 +607,12 @@ document.addEventListener("contextmenu", function(e){ if (e.target.closest("#pdf
 boot();
 /* ===== STUDY EXTRA ===== */
 var XD = null, XK = "v", XM = {}, XR = null;
-var XH = {v:[[350,20],[24,48],[40,64],[96,150],[150,178],[178,204],[206,232],[232,258],[268,294],[306,332]], g:[[6,34],[30,54],[50,76],[120,150],[164,190],[190,214],[218,244],[248,274],[288,314],[330,352]]};
+var XH = {v:[150,155,160,165,170,175,180,185,190,195].map(function(h){ return [h, h + 14]; }), g:[252,256,260,264,268,272,276,280,284,288].map(function(h){ return [h, h + 14]; })};
 var XE = {v:["🌱","📚","🧭","🚀","🧪","🎯","🏛️","🌍","💡","🏆"], g:["🧩","⏳","🔮","🔗","⚖️","🗝️","📐","🧠","🎓","👑"]};
 var XG = [[1,5],[1,5],[1,5],[6,10],[6,10],[6,10],[11,15],[11,15],[16,18],[16,18]], XP = [1,2,3,1,2,3,1,2,1,2];
-function xcol(k,i){ var h = XH[k][i], s = k === "v" ? 84 : 76, l1 = k === "v" ? 55 : 48, l2 = k === "v" ? 40 : 32; if (h[0] >= 34 && h[0] <= 110){ l1 -= 12; l2 -= 8; } return {bg:"linear-gradient(135deg,hsl("+h[0]+" "+s+"% "+l1+"%),hsl("+h[1]+" "+(s-4)+"% "+l2+"%))", c1:"hsl("+h[0]+" "+s+"% "+(l2+6)+"%)", sh:"hsl("+h[0]+" 70% 35% / .75)"}; }
-function xshow(id){ show(id); document.querySelector(".wrap").classList.toggle("wide", id !== "s_xhub"); }
+function xcol(k,i){ var h = XH[k][i]; return k === "v" ? {bg:"linear-gradient(135deg,hsl("+h[0]+" 66% 42%),hsl("+h[1]+" 72% 29%))", c1:"hsl("+h[0]+" 72% 30%)", sh:"hsl("+h[0]+" 70% 30% / .6)"} : {bg:"linear-gradient(135deg,hsl("+h[0]+" 80% 62%),hsl("+h[1]+" 62% 40%))", c1:"hsl("+h[0]+" 90% 78%)", sh:"hsl("+h[0]+" 70% 20% / .8)"}; }
+function xshow(id){ show(id); document.querySelector(".wrap").classList.toggle("wide", id !== "s_xhub"); xtheme(id === "s_xhub" ? "" : XK); }
+function xtheme(k){ document.body.classList.toggle("xvb", k === "v"); document.body.classList.toggle("xgb", k === "g"); }
 function xset(el, k, i){ var c = xcol(k,i); el.style.setProperty("--bg", c.bg); el.style.setProperty("--c1", c.c1); el.style.setProperty("--sh", c.sh); }
 function xshuf(a){ for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
 function xblank(s){ return esc(s).replace(/___/g, '<span class="bl">&nbsp;&nbsp;&nbsp;&nbsp;</span>'); }
@@ -588,7 +624,7 @@ function xload(){
 function xflush(){ var q; try{ q = JSON.parse(ls("nnt_xq") || "[]"); }catch(e){ q = []; } if (!q.length) return; ls("nnt_xq", null); q.forEach(function(a){ a.tok = TOK; rpc("extra_save", a).catch(function(){ var z; try{ z = JSON.parse(ls("nnt_xq") || "[]"); }catch(e){ z = []; } z.push(a); ls("nnt_xq", JSON.stringify(z.slice(-30))); }); }); }
 function xhub(){ xshow("s_xhub"); }
 function xlist(k){
-  XK = k; xshow("s_xlist"); $("xlt").textContent = k === "v" ? "Vocabulary tests" : "Grammar tests"; $("xle").textContent = k === "v" ? "📚" : "🧩";
+  XK = k; xshow("s_xlist"); $("s_xlist").querySelector(".zone").className = "zone " + (k === "v" ? "zv" : "zg"); $("xlt").textContent = k === "v" ? "Vocabulary tests" : "Grammar tests"; $("xle").textContent = k === "v" ? "📚" : "🧩";
   $("xlp").textContent = k === "v" ? "Words and phrases from Units 1–18. 30 questions in each test." : "Every grammar point from Units 1–18. 30 questions in each test.";
   $("xgrid").innerHTML = '<p class="xlead">Loading your tests…</p>'; $("xlm").textContent = "";
   xload().then(function(){ xdraw(); xflush(); }).catch(function(){ $("xgrid").innerHTML = '<p class="xlead">The tests could not load. Check your internet and try again.</p>'; });
@@ -598,7 +634,8 @@ function xdraw(){
   XD[k].forEach(function(t, i){
     var st = XM[k + t.no], g = XG[i], c = xcol(k, i);
     var s = st ? '<i>Best ' + st.best + '/30</i><i>' + st.n + (st.n === 1 ? ' try' : ' tries') + '</i>' + (st.best >= 27 ? '<i>🏅</i>' : "") : '<i>Not tried yet</i>';
-    h += '<button class="xcard" data-i="' + i + '" style="--bg:' + c.bg + ';--sh:' + c.sh + '"><span class="nn">' + t.no + '</span><span class="em">' + XE[k][i] + '</span><b>Test ' + t.no + '</b><span class="un">Units ' + g[0] + '–' + g[1] + ' · part ' + XP[i] + '</span><span class="st">' + s + '</span>' + (st ? '<span class="mb"><u style="width:' + Math.round(st.best / 30 * 100) + '%"></u></span>' : '') + '</button>';
+    var pc = st ? Math.round(st.best / 30 * 100) : 0;
+    h += '<button class="xcard" data-i="' + i + '" style="--bg:' + c.bg + ';--c1:' + c.c1 + ';--sh:' + c.sh + ';--p:' + pc + '"><span class="nb">' + t.no + '</span><span class="mid"><b>Test ' + t.no + '</b><span class="un">Units ' + g[0] + '–' + g[1] + ' · part ' + XP[i] + '</span><span class="st">' + s + '</span></span><span class="ring"><em>' + (st ? st.best : "–") + '</em></span></button>';
   });
   $("xgrid").innerHTML = h;
   $("xlm").textContent = "";
@@ -608,7 +645,7 @@ function xstart(k, i){
   var T = XD[k][i], d = null; try{ d = JSON.parse(ls("nnt_xd") || "null"); }catch(e){}
   if (d && d.k === k && d.i === i && Date.now() - d.at < 6 * 3600e3 && d.ord && d.ord.length === T.q.length) XR = {k: k, i: i, T: T, ord: d.ord, ops: d.ops, ans: d.ans, idx: d.idx, t0: d.t0};
   else { var ord = xshuf(T.q.map(function(_, n){ return n; })); XR = {k: k, i: i, T: T, ord: ord, ops: ord.map(function(){ return xshuf([0,1,2,3]); }), ans: ord.map(function(){ return null; }), idx: 0, t0: Date.now()}; }
-  xset($("s_xtest"), k, i); xshow("s_xtest"); xq();
+  XK = k; xset($("s_xtest"), k, i); xshow("s_xtest"); xq();
 }
 function xq(){
   var R = XR, n = R.ord.length, q = R.T.q[R.ord[R.idx]], op = R.ops[R.idx], a = R.ans[R.idx], last = R.idx === n - 1, done = R.ans.filter(function(x){ return x !== null; }).length, g = XG[R.i];
