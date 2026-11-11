@@ -20,7 +20,7 @@
   /* class tests: the score and the PASSED / FAILED screen are not shown; the student sees the result on the phone page */
   if (!PRAC){
     var hs = document.createElement("style");
-    hs.textContent = "#verdict,#rockline,#rpct,#rsections,#confetti,#results .score,#results .card .sub1{display:none!important}#nntdone{text-align:center;margin:2px 0 10px;font-family:system-ui,sans-serif}#nntdone .ck{width:74px;height:74px;margin:0 auto 10px;border-radius:50%;background:linear-gradient(145deg,#34d399,#059669);color:#fff;font-size:40px;line-height:74px;box-shadow:0 10px 24px rgba(5,150,105,.35)}#nntdone b{display:block;font-size:26px;line-height:1.25;color:#14213d}#nntdone span{display:block;font-size:16px;line-height:1.5;margin-top:6px;color:#475569;font-weight:600}";
+    hs.textContent = "#verdict,#rockline,#rpct,#rsections,#confetti,#results .score,#results .card .sub1{display:none!important}.codebox .codeh,#rcode,#copycode,#tgbtn,#pdfbtn,.tgwrap:has(#tgbtn),.tgwrap:has(#pdfbtn){display:none!important}.codebox{border:0!important;background:none!important;padding:0!important;box-shadow:none!important}#nntdone{text-align:center;margin:2px 0 10px;font-family:system-ui,sans-serif}#nntdone .ck{width:74px;height:74px;margin:0 auto 10px;border-radius:50%;background:linear-gradient(145deg,#34d399,#059669);color:#fff;font-size:40px;line-height:74px;box-shadow:0 10px 24px rgba(5,150,105,.35)}#nntdone b{display:block;font-size:26px;line-height:1.25;color:#14213d}#nntdone span{display:block;font-size:16px;line-height:1.5;margin-top:6px;color:#475569;font-weight:600}";
     document.head.appendChild(hs);
     var putMsg = function(){
       var c = document.querySelector("#results .card"); if (!c || document.getElementById("nntdone")) return;
