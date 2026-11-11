@@ -17,6 +17,19 @@
     d.innerHTML = "<div>" + msg + "<br><br><button style='font:700 18px system-ui;padding:12px 22px;border-radius:12px;border:0;cursor:pointer'>OK</button></div>";
     d.querySelector("button").onclick = function(){ d.remove(); }; document.body.appendChild(d);
   }
+  /* class tests: the score and the PASSED / FAILED screen are not shown; the student sees the result on the phone page */
+  if (!PRAC){
+    var hs = document.createElement("style");
+    hs.textContent = "#verdict,#rockline,#rpct,#rsections,#confetti,#results .score,#results .card .sub1{display:none!important}#nntdone{font:800 22px/1.4 system-ui,sans-serif;text-align:center;margin:8px 0 6px}#nntdone small{display:block;font:600 15px/1.5 system-ui,sans-serif;opacity:.8;margin-top:6px}";
+    document.head.appendChild(hs);
+    var putMsg = function(){
+      var c = document.querySelector("#results .card"); if (!c || document.getElementById("nntdone")) return;
+      var d = document.createElement("div"); d.id = "nntdone";
+      d.innerHTML = "\u2713 Your test is finished.<small>Your result has been sent to your teacher. You can look at it later on your phone.</small>";
+      c.insertBefore(d, c.firstChild);
+    };
+    document.addEventListener("DOMContentLoaded", putMsg); setTimeout(putMsg, 500);
+  }
   /* the name comes from the login, not from typing */
   function setName(){
     var n = document.getElementById("name"); if (!n) return;
