@@ -235,6 +235,14 @@ body.xcb .xq .ch,body.xcb .xbar{background:linear-gradient(135deg,#f2862a,#c53b1
 body.xcb .xscore{background:linear-gradient(135deg,#f2862a,#b8321a)}body.xcb .xm .mh span{background:#d2471a}
 body.xcb .xq{border-color:color-mix(in srgb,var(--c1) 30%,#fff);background:#fffdf9}
 body.xcb .xo.on{border-color:#d2471a;background:#fff0e4}body.xcb .xo.on .lt{background:#d2471a}
+.vol.lk{filter:saturate(.35);opacity:.78}.vol .lkb{display:block;font-style:normal;font-size:12.5px;font-weight:800;color:#8a5a00;background:#fff1c4;border:1px solid #e9c46a;border-radius:999px;padding:3px 10px;margin-top:6px;width:max-content;max-width:100%}
+#gatev{position:fixed;inset:0;z-index:80;background:rgba(8,16,40,.62);display:flex;align-items:center;justify-content:center;padding:16px}#gatev.hide{display:none}
+#gatev .gbox{background:#fff;color:#16203a;border-radius:20px;max-width:520px;width:100%;max-height:92vh;overflow:auto;padding:22px 20px;box-shadow:0 24px 60px rgba(0,0,0,.4)}
+#gatev h2{margin:0 0 6px;font-size:22px}#gatev p{margin:0 0 12px;font-size:15px;line-height:1.5;color:#46566e}
+#gatev .gu{font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#7a869f;margin:12px 0 6px}
+#gatev .gr{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:#f3f5fb;margin-bottom:6px;font-weight:700}
+#gatev .gr.ok{background:#e3f6ec;color:#0a6b47}#gatev .gr span{flex:1}#gatev .gr em{font-style:normal;font-size:13.5px;font-weight:800}
+#gatev .gb{display:flex;gap:10px;margin-top:14px}#gatev .gb button{flex:1}
 </style>
 </head><body>
 <div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small>Student portal</small></div><div class="sp"></div><button class="btn sm alt hide" id="out">Log out</button></div>
@@ -266,8 +274,9 @@ body.xcb .xo.on{border-color:#d2471a;background:#fff0e4}body.xcb .xo.on .lt{back
 <div id="pdfv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="pclose">Close</button><span id="ptitle"></span></div><div id="pages"></div></div>
 <div id="fbv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="fclose">Close</button><span>My essay and feedback</span></div><iframe id="fbf" sandbox="allow-same-origin"></iframe></div>
 <div id="audv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="aclose">Close</button><span id="atitle"></span></div><div id="alist"></div></div>
+<div id="gatev" class="hide"><div class="gbox"><h2 id="gt"></h2><p id="gp"></p><div id="gl"></div><div class="gb"><button class="btn alt" id="gclose">Close</button><button class="btn gold" id="ggo">Go to Learn extra</button></div></div></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 32</div>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 33</div>
 <script src="core.js?v=14"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
@@ -337,17 +346,51 @@ function home(){
       var e = SE[k], hv = !!VIDS[e.unit], sst = hv ? "Watch the video lessons" : "Coming soon", rv = hv && e.no === videoUnit(), tt = esc(e.title.replace(/^Unit \d+ · /, ""));
       sh += '<button class="vol ' + (hv ? "" : "dim") + (rv ? " rec" : "") + '" data-u="' + esc(e.unit) + '" data-t="' + esc(e.title) + '"' + (hv ? "" : " disabled") + '><span class="sp">' + e.no + '</span><span class="bd"><b>' + tt + '</b><small>Unit ' + e.no + ' · ' + sst + '</small></span>' + (rv ? '<em class="cr">★ Recommended today</em>' : '') + '</button>';
     });
-    $("units").innerHTML = h; $("sunits").innerHTML = sh;
+    $("units").innerHTML = h; $("sunits").innerHTML = sh; loadGate();
     var back = ss("nnt_back_unit"); if (back){ ss("nnt_back_unit", null); if (r.units.some(function(u){ return u.unit === back; })) unit(back); }
   }).catch(function(){ note("m_home","err","No internet connection."); });
 }
 $("units").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b) return; unit(b.getAttribute("data-u")); };
 $("sunits").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b || b.disabled) return; openVideo(b.getAttribute("data-u"), b.getAttribute("data-t") || ""); };
-$("go_study").onclick = function(){ show("s_sthub"); }; $("go_vid").onclick = function(){ show("s_study"); }; $("go_aud").onclick = function(){ show("s_audio"); loadAudios(); }; $("hb2").onclick = function(){ show("s_home"); }; $("ab").onclick = function(){ show("s_sthub"); }; $("go_exam").onclick = function(){ show("s_exam"); };
+$("go_study").onclick = function(){ show("s_sthub"); loadGate(); }; $("go_vid").onclick = function(){ show("s_study"); }; $("go_aud").onclick = function(){ show("s_audio"); loadAudios(); }; $("hb2").onclick = function(){ show("s_home"); }; $("ab").onclick = function(){ show("s_sthub"); }; $("go_exam").onclick = function(){ show("s_exam"); };
 $("sb").onclick = function(){ show("s_sthub"); }; $("eb").onclick = function(){ show("s_home"); }; $("ub").onclick = function(){ show("s_exam"); };
 
 /* Word lists */
 var WD = null, WCUR = null, WTXT = -1;
+/* ---- home tests unlock the next unit's materials ---- */
+var GATE = {};
+function loadGate(){ return rpc("gate_status", {tok: TOK}).then(function(r){ GATE = (r && r.ok && r.on) ? (r.units || {}) : {}; gatePaint(); }).catch(function(){}); }
+function gateLocked(no){ var g = GATE[no]; return !!(g && !g.open); }
+function gatePaint(){
+  ["sunits","aunits","wunits"].forEach(function(id){
+    var c = $(id); if (!c) return;
+    [].forEach.call(c.querySelectorAll("button.vol"), function(b){
+      var sp = b.querySelector(".sp"), no = sp ? parseInt(sp.textContent, 10) : 0, lk = gateLocked(no), tag = b.querySelector(".lkb");
+      b.classList.toggle("lk", lk);
+      if (lk && !tag){ var e = document.createElement("em"); e.className = "lkb"; e.textContent = "🔒 Locked · tap to see how to open"; (b.querySelector(".bd") || b).appendChild(e); }
+      if (!lk && tag) tag.remove();
+    });
+  });
+}
+function showGate(no){
+  var g = GATE[no]; if (!g) return;
+  var NM = {g:"Grammar", v:"Vocabulary", c:"Teacher's Chunks"}, h = "", cur = 0;
+  (g.need || []).forEach(function(x){
+    if (x.u !== cur){ cur = x.u; h += '<div class="gu">' + (x.u === no ? "For Unit " + no : "First, for Unit " + x.u) + '</div>'; }
+    h += '<div class="gr' + (x.ok ? " ok" : "") + '"><span>' + NM[x.k] + ' · Test ' + x.no + '</span><em>' + (x.ok ? "✓ " + x.best + "%" : x.best < 0 ? "not done yet" : "best " + x.best + "% · need 90%") + '</em></div>';
+  });
+  $("gt").textContent = "🔒 Unit " + no + " is locked";
+  $("gp").textContent = "Score 90% or more (27 of 30) in these home tests. Then the video lessons, audios and word lists of Unit " + no + " open by themselves. You can repeat a test as many times as you need.";
+  $("gl").innerHTML = h; $("gatev").classList.remove("hide");
+}
+function gateClick(e){
+  var b = e.target.closest && e.target.closest("button.vol"); if (!b) return;
+  var sp = b.querySelector(".sp"), no = sp ? parseInt(sp.textContent, 10) : 0;
+  if (gateLocked(no)){ e.preventDefault(); e.stopImmediatePropagation(); showGate(no); }
+}
+["sunits","aunits","wunits"].forEach(function(id){ $(id).addEventListener("click", gateClick, true); });
+$("gclose").onclick = function(){ $("gatev").classList.add("hide"); };
+$("ggo").onclick = function(){ $("gatev").classList.add("hide"); xhub(); };
 function loadWords(){
   if (WD){ drawWords(); return; }
   note("m_words","info","Loading…");
@@ -363,7 +406,7 @@ function drawWords(){
     var n = 0; u.texts.forEach(function(t){ n += t.w.length + t.p.length; });
     var rv = u.no === rec;
     return '<button class="vol' + (rv ? " rec" : "") + '" data-n="' + u.no + '"><span class="sp">' + u.no + '</span><span class="bd"><b>' + esc(u.title.replace(/^Unit \d+ · /, "")) + '</b><small>Unit ' + u.no + ' · ' + u.texts.length + (u.texts.length === 1 ? " text" : " texts") + ' · ' + n + ' words and phrases</small></span>' + (rv ? '<em class="cr">★ Recommended today</em>' : '') + '</button>';
-  }).join("");
+  }).join(""); gatePaint();
 }
 function wcards(t, tab){
   if (tab === "p") return t.p.map(function(x){ return '<div class="wc ph" data-k="' + esc(x[0]) + '"><b>' + esc(x[0]) + '</b><div class="uz">' + esc(x[1]) + '</div><div class="df">' + esc(x[2]) + '</div><div class="ex">“' + esc(x[3]) + '”</div></div>'; }).join("");
@@ -420,7 +463,7 @@ function loadAudios(){
     $("aunits").innerHTML = r.items.length ? r.items.map(function(u){
       var rv = u.no === videoUnit();
       return '<button class="vol' + (rv ? " rec" : "") + '" data-u="' + esc(u.unit) + '"><span class="sp">' + u.no + '</span><span class="bd"><b>' + esc(u.title.replace(/^Unit \d+ · /, "")) + '</b><small>Unit ' + u.no + ' · ' + u.tracks.length + (u.tracks.length === 1 ? " audio" : " audios") + '</small></span>' + (rv ? '<em class="cr">★ Recommended today</em>' : '') + '</button>';
-    }).join("") : '<div class="msg info">No audios yet.</div>';
+    }).join("") : '<div class="msg info">No audios yet.</div>'; gatePaint();
   }).catch(function(){ note("m_audio","err","No internet connection."); });
 }
 $("aunits").onclick = function(e){
@@ -525,7 +568,7 @@ function drawPractice(u){
 function openVideo(u, title){
   note("m_study","info","Opening…");
   rpc("get_videos", {tok: TOK, u: u}).then(function(r){
-    if (!r.ok){ note("m_study","err", r.err === "locked" ? "Locked until you finish this test in the classroom." : "The video lessons for this unit are not ready yet."); return; }
+    if (!r.ok){ note("m_study","err", r.err === "gate" ? "🔒 Locked. Finish your home tests in Learn extra with 90% or more to open this unit." : r.err === "locked" ? "Locked until you finish this test in the classroom." : "The video lessons for this unit are not ready yet."); if (r.err === "gate") loadGate(); return; }
     note("m_study","","");
     $("vtitle").textContent = title.replace(/^Unit \d+ · /, "");
     $("vf").src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + encodeURIComponent(r.playlist) + "&rel=0&modestbranding=1&fs=0";
@@ -641,11 +684,13 @@ function xlist(k){
   $("xgrid").innerHTML = '<p class="xlead">Loading your tests…</p>'; $("xlm").textContent = "";
   xload().then(function(){ xdraw(); xflush(); }).catch(function(){ $("xgrid").innerHTML = '<p class="xlead">The tests could not load. Check your internet and try again.</p>'; });
 }
+function gateKey(k, no){ var r = 0; Object.keys(GATE).map(Number).sort(function(a, b){ return a - b; }).forEach(function(u){ (GATE[u].need || []).forEach(function(x){ if (!r && !x.ok && x.k === k && x.no === no) r = x.u; }); }); return r; }
 function xdraw(){
   var k = XK, h = "";
   XD[k].forEach(function(t, i){
     var st = XM[k + t.no], g = k === "c" ? XCG[i] : XG[i], c = xcol(k, i), pt = k === "c" ? XCP[i] : XP[i];
     var s = st ? '<i>Best ' + st.best + '/30</i><i>' + st.n + (st.n === 1 ? ' try' : ' tries') + '</i>' + (st.best >= 27 ? '<i>🏅</i>' : "") : '<i>Not tried yet</i>';
+    var gk = gateKey(k, t.no); if (gk) s = '<i>🔑 opens Unit ' + gk + '</i>' + s;
     var pc = st ? Math.round(st.best / 30 * 100) : 0;
     h += '<button class="xcard" data-i="' + i + '" style="--bg:' + c.bg + ';--c1:' + c.c1 + ';--sh:' + c.sh + ';--p:' + pc + '"><span class="nb">' + t.no + '</span><span class="mid"><b>Test ' + t.no + '</b><span class="un">' + (g[0] === g[1] ? 'Unit ' + g[0] : 'Units ' + g[0] + '–' + g[1]) + (pt ? ' · part ' + pt : '') + '</span><span class="st">' + s + '</span></span><span class="ring"><em>' + (st ? st.best : "–") + '</em></span></button>';
   });
@@ -677,7 +722,7 @@ function xfinish(){
   R.ord.forEach(function(qi, p){ if (R.ans[p] === 0) sc++; else wrong.push({q: R.T.q[qi], a: R.ans[p]}); });
   ls("nnt_xd", null);
   var body = {tok: TOK, k: R.k, n: R.T.no, sc: sc, tot: R.ord.length, secs: Math.min(secs, 7200), wrong: wrong.map(function(w){ return w.q.id; })};
-  rpc("extra_save", body).then(function(r){ if (r && r.ok === false) throw new Error("x"); var m = XM[R.k + R.T.no] || {n: 0, best: 0}; m.n++; m.best = Math.max(m.best, sc); XM[R.k + R.T.no] = m; }).catch(function(){ var z; try{ z = JSON.parse(ls("nnt_xq") || "[]"); }catch(e){ z = []; } delete body.tok; z.push(body); ls("nnt_xq", JSON.stringify(z.slice(-30))); });
+  rpc("extra_save", body).then(function(r){ if (r && r.ok === false) throw new Error("x"); var m = XM[R.k + R.T.no] || {n: 0, best: 0}; m.n++; m.best = Math.max(m.best, sc); XM[R.k + R.T.no] = m; loadGate(); }).catch(function(){ var z; try{ z = JSON.parse(ls("nnt_xq") || "[]"); }catch(e){ z = []; } delete body.tok; z.push(body); ls("nnt_xq", JSON.stringify(z.slice(-30))); });
   xres(R, sc, wrong, secs);
 }
 function xres(R, sc, wrong, secs){
