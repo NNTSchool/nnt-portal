@@ -188,7 +188,7 @@ function draw(d){
       st = '<div class="pas ' + (ok ? "ok" : "no") + '">' + (ok ? "✓ " + t("pass") : "✕ " + t("fail")) + '</div>' +
            '<div class="res"><span class="big2">' + Math.round(u.pct) + '%</span><span class="lv" style="background:' + LVC[u.level] + '">' + t("lv")[u.level] + '</span></div>' +
            '<div class="pos">' + t("rank")(u.rank, u.n) + '</div>' +
-           (u.ws != null ? '<div class="wr">' + t("wr") + '<b>' + u.ws + ' / 10</b></div>' : '');
+           (u.ws != null ? '<div class="wr">' + t("wr") + '<b>' + (u.no >= 19 ? Math.min(9, u.ws) + ' / 9' : u.ws + ' / 10') + '</b></div>' : '');
     } else if (u.state === "wait"){ done++; st = '<div class="pst wait">' + t("wait") + '</div>'; }
     else if (u.state === "live"){ st = '<div class="pst liv">' + t("live") + '</div>'; }
     else st = '<div class="pst none">' + t("none") + '</div>';
