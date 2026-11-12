@@ -45,7 +45,7 @@
         if (m) named = norm(m[1]);
         Array.prototype.forEach.call(cs, function(c){
           var w = norm(c.getAttribute("data-w") || c.textContent), used = false;
-          if (!(again && (!named || w === named))) vals.forEach(function(v){ if (v === w) used = true; });
+          if (!(again && (!named || w === named))) vals.forEach(function(v){ if (v === w || v.indexOf(w + " ") === 0) used = true; });
           c.style.display = used ? "none" : "";
         });
       });
