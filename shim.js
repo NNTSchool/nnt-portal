@@ -30,6 +30,29 @@
     };
     document.addEventListener("DOMContentLoaded", putMsg); setTimeout(putMsg, 500);
   }
+  /* word boxes: a word leaves the box once it is used in an answer (comes back when cleared); only a word the exercise names ("'x' can be used more than once") stays */
+  (function(){
+    function norm(x){ return String(x||"").replace(/\s+/g," ").trim().toLowerCase(); }
+    function sync(){
+      var pg = document.getElementById("page") || document.body;
+      var vals = [];
+      Array.prototype.forEach.call(pg.querySelectorAll("input[type=text]"), function(i){ var v = norm(i.value); if (v) vals.push(v); });
+      Array.prototype.forEach.call(pg.querySelectorAll(".box"), function(bx){
+        var cs = bx.querySelectorAll(".chip"); if (!cs.length) return;
+        var txt = ""; var e = bx.previousElementSibling, n = 0;
+        while (e && n < 3){ txt += " " + e.textContent; e = e.previousElementSibling; n++; }
+        var again = /(more than once|more than one time|can be used again|can use .* again)/i.test(txt), named = "", m = /[\u2018'\u201c"]([^\u2019'\u201d"]+)[\u2019'\u201d"]\s+can be used/i.exec(txt);
+        if (m) named = norm(m[1]);
+        Array.prototype.forEach.call(cs, function(c){
+          var w = norm(c.getAttribute("data-w") || c.textContent), used = false;
+          if (!(again && (!named || w === named))) vals.forEach(function(v){ if (v === w) used = true; });
+          c.style.display = used ? "none" : "";
+        });
+      });
+    }
+    window.chipSync = sync;
+    setInterval(sync, 350);
+  })();
   /* the name comes from the login, not from typing */
   function setName(){
     var n = document.getElementById("name"); if (!n) return;
