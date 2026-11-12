@@ -567,7 +567,7 @@ function unit(u){
   if (!fin && c.retake) h += '<div class="card gilt"><h2>Retake allowed</h2><p>Your teacher allowed you to take this test again. Do it in the classroom. Your result, ranking and explanations open here again when you finish.</p></div>';
   else if (!fin) h += '<div class="card gilt"><h2>Not finished yet</h2><p>Finish this test in the classroom. Your result, ranking, video lessons and explanations open here straight after.</p></div>';
   else {
-    h += '<div class="card gilt"><h2 style="color:' + (c.passed ? "var(--ok)" : "var(--bad)") + '">' + (c.passed ? "✓ Passed" : "✕ Not passed this time") + '</h2>' + (c.released ? '<div id="res" style="margin-top:8px"></div>' : '<p>Your detailed result appears here when your teacher shares the results.</p>') + '</div>';
+    h += c.released ? '<div class="card gilt"><h2 style="color:' + (c.passed ? "var(--ok)" : "var(--bad)") + '">' + (c.passed ? "✓ Passed" : "✕ Not passed this time") + '</h2><div id="res" style="margin-top:8px"></div></div>' : '<div class="card gilt"><h2>✓ Finished</h2><p>Your result appears here when your teacher shares the results.</p></div>';
     if (c.released) h += '<div class="card"><h2>Class ranking</h2><div id="lb" style="margin-top:8px">Loading…</div></div>';
   }
   h += '<div class="sec">Explanations and feedback</div>';
