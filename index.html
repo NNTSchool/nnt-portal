@@ -561,7 +561,7 @@ function drawPractice(u){
   rpc("practice_list", {tok: TOK, u: u}).then(function(r){
     if (!r.ok || !r.rows.length){ $("plist2").innerHTML = ""; return; }
     var h = '<div class="card"><h3>My practice results</h3><p style="color:var(--mute);font-size:14px;margin:2px 0 6px">Only you can see these. They do not count for the class.</p>';
-    r.rows.forEach(function(x){ var d = new Date(x.at); h += '<div class="row"><span class="lvl" style="background:' + LVC[x.level] + '">' + LVN[x.level] + '</span><span style="color:var(--mute);font-size:14px">' + d.toLocaleDateString([], {day:"numeric", month:"short"}) + ' ' + d.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}) + '</span><span class="sc">' + Math.round(x.pct) + '%</span></div>'; });
+    r.rows.forEach(function(x){ var d = new Date(x.at); h += '<div class="row"><span class="lvl" style="background:' + LVC[x.level] + '">' + LVN[x.level] + '</span><span style="color:var(--mute);font-size:14px">' + d.toLocaleDateString("en-GB", {day:"numeric", month:"short"}) + ' ' + d.toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit"}) + '</span><span class="sc">' + Math.round(x.pct) + '%</span></div>'; });
     $("plist2").innerHTML = h + '</div>';
   }).catch(function(){});
 }
