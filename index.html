@@ -382,7 +382,7 @@ function home(){
     $("hb").style.width = Math.round(100 * done / Math.max(1, r.units.length)) + "%";
     var h = "", sh = "", SE = {}; r.units.forEach(function(u){
       var rib = "", st = "Not taken yet", fin = u.status === "finished";
-      if (fin){ rib = '<i class="rib go">›</i>'; st = '<b style="color:var(--mute)">Finished · tap to see your result</b>'; } /* the pass / not-passed status is shown only after the student opens the unit */
+      if (fin){ rib = ""; st = '<b style="color:var(--mute)">Finished</b>'; } /* the pass / not-passed status is shown only after the student opens the unit */
       else if (u.status === "started"){ rib = '<i class="rib go">…</i>'; st = "In progress"; }
       if (u.retake && !fin) st = u.status === "started" ? "Retake in progress" : "Retake allowed · do it in the classroom";
       var t = esc(u.title.replace(/^Unit \d+ · /, ""));
