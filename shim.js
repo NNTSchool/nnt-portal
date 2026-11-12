@@ -20,12 +20,12 @@
   /* class tests: the score and the PASSED / FAILED screen are not shown; the student sees the result on the phone page */
   if (!PRAC){
     var hs = document.createElement("style");
-    hs.textContent = "#verdict,#rockline,#rpct,#rsections,#confetti,#results .score,#results .card .sub1{display:none!important}.codebox .codeh,#rcode,#copycode,#tgbtn,#pdfbtn,.tgwrap:has(#tgbtn),.tgwrap:has(#pdfbtn){display:none!important}.codebox{border:0!important;background:none!important;padding:0!important;box-shadow:none!important}#nntdone{text-align:center;margin:2px 0 10px;font-family:system-ui,sans-serif}#nntdone .ck{width:74px;height:74px;margin:0 auto 10px;border-radius:50%;background:linear-gradient(145deg,#34d399,#059669);color:#fff;font-size:40px;line-height:74px;box-shadow:0 10px 24px rgba(5,150,105,.35)}#nntdone b{display:block;font-size:26px;line-height:1.25;color:#14213d}#nntdone span{display:block;font-size:16px;line-height:1.5;margin-top:6px;color:#475569;font-weight:600}";
+    hs.textContent = "#verdict,#rockline,#rpct,#rsections,#confetti,#results .score,#results .card .sub1{display:none!important}.codebox .codeh,#rcode,#copycode,#tgbtn,#pdfbtn,.tgwrap:has(#tgbtn),.tgwrap:has(#pdfbtn){display:none!important}.codebox{border:0!important;background:none!important;padding:0!important;box-shadow:none!important}#nntdone{text-align:center;margin:2px 0 10px;font-family:system-ui,sans-serif}#nntdone .ck{width:74px;height:74px;margin:0 auto 10px;border-radius:50%;background:linear-gradient(145deg,#64748b,#334155);color:#fff;font-size:36px;line-height:74px;box-shadow:0 10px 24px rgba(51,65,85,.3)}#nntdone b{display:block;font-size:26px;line-height:1.25;color:#14213d}#nntdone span{display:block;font-size:16px;line-height:1.5;margin-top:6px;color:#475569;font-weight:600}";
     document.head.appendChild(hs);
     var putMsg = function(){
       var c = document.querySelector("#results .card"); if (!c || document.getElementById("nntdone")) return;
       var d = document.createElement("div"); d.id = "nntdone";
-      d.innerHTML = "<div class=\"ck\">\u2713</div><b>Well done, test finished!</b><span>Your result will be waiting for you on your phone.</span>";
+      d.innerHTML = "<div class=\"ck\">\u2709</div><b>Test finished</b><span>Your answers have been sent to your teacher. You can check your result on your phone page after your teacher shares the results.</span>";
       c.insertBefore(d, c.firstChild);
     };
     document.addEventListener("DOMContentLoaded", putMsg); setTimeout(putMsg, 500);
