@@ -838,7 +838,9 @@ var SEATS = [], SEATSKEW = 0, SEATTOT = 80;
 function seatMin(r){ if (typeof r.rem === "number") return Math.round(r.rem / 60000); return Math.round(SEATTOT - (Date.now() + SEATSKEW - Date.parse(r.at)) / 60000); }
 function seatTxt(m){ return m <= 0 ? "any moment now" : "free in ~" + m + " min"; }
 function drawSeats(){
-  var by = {}; SEATS.forEach(function(r){ if (r.pc && SEATPOS[r.pc] && !by[r.pc]) by[r.pc] = r; });
+  var by = {}; SEATS.forEach(function(r){ if (!r.pc || !SEATPOS[r.pc]) return; var o = by[r.pc];
+    /* several students may have used one computer in the last 15 minutes: show the one taking the test now, otherwise the one seen most recently */
+    if (!o || (r.busy && !o.busy) || (!!r.busy === !!o.busy && (r.busy ? Date.parse(r.at) > Date.parse(o.at) : Date.parse(r.seen) > Date.parse(o.seen)))) by[r.pc] = r; });
   var keys = []; for (var i = 1; i <= 11; i++) keys.push(String(i)); keys.push("M1", "M2");
   var h = "", used = 0, nm = null, nk = null;
   keys.forEach(function(k){
