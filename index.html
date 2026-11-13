@@ -890,7 +890,7 @@ var SEATS = [], SEATSKEW = 0, SEATTOT = 80;
 function seatMin(r){ if (typeof r.rem === "number") return Math.round(r.rem / 60000); return Math.round(SEATTOT - (Date.now() + SEATSKEW - Date.parse(r.at)) / 60000); }
 function seatTxt(m){ return m <= 0 ? "any moment now" : "free in ~" + m + " min"; }
 function drawSeats(){
-  var by = {}; SEATS.forEach(function(r){ if (!r.pc || !SEATPOS[r.pc]) return; if (!r.busy && (Date.now() + SEATSKEW - Date.parse(r.seen)) > 180000) return; /* idle login that stopped pinging = computer is free (same rule as the teacher dashboard) */ var o = by[r.pc];
+  var by = {}; SEATS.forEach(function(r){ if (!r.pc || !SEATPOS[r.pc]) return; if (!r.busy && (r.done || (Date.now() + SEATSKEW - Date.parse(r.seen)) > 180000)) return; /* result already saved = seat is free */ /* idle login that stopped pinging = computer is free (same rule as the teacher dashboard) */ var o = by[r.pc];
     /* several students may have used one computer in the last 15 minutes: show the one taking the test now, otherwise the one seen most recently */
     if (!o || (r.busy && !o.busy) || (!!r.busy === !!o.busy && (r.busy ? Date.parse(r.at) > Date.parse(o.at) : Date.parse(r.seen) > Date.parse(o.seen)))) by[r.pc] = r; });
   var keys = []; for (var i = 1; i <= 11; i++) keys.push(String(i)); keys.push("M1", "M2");
