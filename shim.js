@@ -15,7 +15,7 @@
   /* New home test: the page saves its result through this */
   window.nvSave = function(trk, sc, tot, miss, ans){ return call("nv_save_test", {tok: P.tok, u: P.nvunit, trk: trk, sc: sc, tot: tot, miss: miss, ans: ans}).then(function(r){ if (!r || !r.ok) throw new Error((r && r.err) || "not saved"); return r; }); };
   window.nvSaveEssay = function(body, words, band){ return call("nv_save_essay", {tok: P.tok, u: P.nvunit, body: body, words: words, band: band}).then(function(r){ if (!r || !r.ok) throw new Error((r && r.err) || "not saved"); return r; }); };
-  window.nvSaveSpeaking = function(){ return call("nv_save_speaking", {tok: P.tok, u: P.nvunit}).then(function(r){ if (!r || !r.ok) throw new Error((r && r.err) || "not saved"); return r; }); };
+  window.nvSaveSpeaking = function(tasks, secs){ return call("nv_save_speaking", {tok: P.tok, u: P.nvunit, tasks: tasks, secs: secs}).then(function(r){ if (!r || !r.ok) throw new Error((r && r.err) || "not saved"); return r; }); };
   function banner(msg){
     var d = document.createElement("div"); d.style.cssText = "position:fixed;inset:0;z-index:99999;background:rgba(14,42,71,.92);color:#fff;display:flex;align-items:center;justify-content:center;font:600 22px system-ui,sans-serif;text-align:center;padding:30px";
     d.innerHTML = "<div>" + msg + "<br><br><button style='font:700 18px system-ui;padding:12px 22px;border-radius:12px;border:0;cursor:pointer'>OK</button></div>";
