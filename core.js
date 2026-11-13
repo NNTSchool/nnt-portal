@@ -11,7 +11,7 @@ function rpc(name, args, timeout){
     body: JSON.stringify(args || {}), signal: ctl ? ctl.signal : undefined
   }).then(function(r){
     if (t) clearTimeout(t);
-    return r.json().then(function(j){ if (!r.ok) throw new Error((j && (j.message || j.hint)) || ("HTTP " + r.status)); return j; });
+    return r.json().then(function(j){ if (!r.ok) throw new Error((j && (j.message || j.hint)) || ("HTTP " + r.status)); if (j && j.err === "unpaid") payWall(); return j; });
   });
 }
 function $(id){ return document.getElementById(id); }
@@ -45,4 +45,19 @@ function welcomeInit(){
   var Q = ["Every test you finish is a step closer to your goal.","Small steps every day make a big difference.","Mistakes are proof that you are trying. Keep going!","Your English is growing. Be proud of it.","Practise today, shine tomorrow.","Learn a little. Learn every day. Learn for life.","Believe in yourself. You are ready for this."];
   var q = document.getElementById("wq"); if (q) q.textContent = Q[Math.floor(Date.now() / 864e5) % Q.length];
   [].forEach.call(document.querySelectorAll(".pol .ph[data-src]"), function(p){ var im = new Image(); im.onload = function(){ p.style.backgroundImage = "url(" + im.src + ")"; p.className += " real"; }; im.src = p.getAttribute("data-src"); });
+}
+
+/* monthly payment wall: shown whenever the server says this student has not paid for the current period */
+function payWall(){
+  if (document.getElementById("paywall")) return;
+  var d = document.createElement("div"); d.id = "paywall";
+  d.setAttribute("style", "position:fixed;left:0;top:0;right:0;bottom:0;z-index:99999;background:rgba(7,23,51,.94);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif");
+  d.innerHTML = '<div style="background:#fff;border-radius:20px;max-width:440px;width:100%;padding:28px 22px;text-align:center;border-top:8px solid #c0213f">'
+    + '<div style="font-size:56px;line-height:1">\u26A0\uFE0F</div>'
+    + '<h1 style="font-size:26px;line-height:1.25;margin:12px 0 10px;color:#9c1a35">Oylik to\u2018lov qilinmagan</h1>'
+    + '<p style="font-size:19px;line-height:1.5;color:#0f1a33;margin:0 0 18px">Portaldan foydalanish uchun, iltimos, administrator <b>Maftuna Samadova</b> bilan bog\u2018laning.</p>'
+    + '<a href="tel:+998938900808" style="display:block;background:#0e6b4d;color:#fff;text-decoration:none;font-size:24px;font-weight:700;padding:16px;border-radius:14px">\uD83D\uDCDE +998 93 890 08 08</a>'
+    + '<button id="paywall_x" style="margin-top:16px;background:none;border:0;color:#5a6785;font-size:16px;text-decoration:underline;padding:10px">Yopish</button></div>';
+  document.body.appendChild(d);
+  document.getElementById("paywall_x").onclick = function(){ d.parentNode.removeChild(d); };
 }
