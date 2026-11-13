@@ -811,7 +811,7 @@ function xload(){
 }
 function xflush(){ var q; try{ q = JSON.parse(ls("nnt_xq") || "[]"); }catch(e){ q = []; } if (!q.length) return; ls("nnt_xq", null); q.forEach(function(a){ a.tok = TOK; rpc("extra_save", a).catch(function(){ var z; try{ z = JSON.parse(ls("nnt_xq") || "[]"); }catch(e){ z = []; } z.push(a); ls("nnt_xq", JSON.stringify(z.slice(-30))); }); }); }
 function xhub(){ xshow("s_xhub"); }
-function payStop(){ if (PAYM && PAYM.ok && PAYM.on && (!PAYM.has || !PAYM.paid)){ payWall(); return true; } return false; }
+function payStop(){ if (PAYM && PAYM.ok && PAYM.on && PAYM.has && !PAYM.paid){ payWall(); return true; } return false; }
 function xlist(k){
   if (payStop()) return;
   XK = k; xshow("s_xlist"); $("s_xlist").querySelector(".zone").className = "zone " + (k === "v" ? "zv" : k === "g" ? "zg" : "zc"); $("xlt").textContent = XC[k]; $("xle").textContent = k === "v" ? "📚" : k === "g" ? "🧩" : "💬";
