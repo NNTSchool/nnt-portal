@@ -120,15 +120,17 @@
     var nu = S.unit + 1;
     page('<div style="text-align:center;padding:18px 0 6px"><div class="nvkey" style="font-size:150px;line-height:1.05;filter:drop-shadow(0 8px 18px rgba(255,200,40,.55))">🔑</div>'
       + '<h2 style="margin:6px 0 4px">You earned the key!</h2><p class="sub">Unit ' + S.unit + ' is complete. Your class test for this unit is now open.</p>'
-      + '<button id="nvnext" type="button" style="margin-top:14px;width:100%;max-width:420px;padding:16px 18px;border:0;border-radius:14px;background:#16a34a;color:#fff;font:800 19px/1.2 inherit;font-family:inherit;box-shadow:0 5px 0 #0f7a37;cursor:pointer">Move on to Unit ' + nu + ' →</button></div>');
+      + '<button id="nvnext" type="button" style="margin-top:14px;width:100%;max-width:420px;padding:16px 18px;border:0;border-radius:14px;background:#16a34a;color:#fff;font:800 19px/1.2 inherit;font-family:inherit;box-shadow:0 5px 0 #0f7a37;cursor:pointer">Move on to Unit ' + nu + ' →</button>'
+      + '<button id="nvrev" type="button" style="margin-top:12px;width:100%;max-width:420px;padding:13px 18px;border:2px solid rgba(255,255,255,.35);border-radius:14px;background:transparent;color:inherit;font:700 17px/1.2 inherit;font-family:inherit;cursor:pointer">← Go back to Unit ' + S.unit + '</button></div>');
     var st = document.createElement("style"); st.textContent = "@keyframes nvk{0%{transform:scale(.3) rotate(-25deg);opacity:0}60%{transform:scale(1.15) rotate(8deg);opacity:1}100%{transform:scale(1) rotate(0)}}.nvkey{animation:nvk .9s ease-out}"; el("newv").appendChild(st);
-    el("nvnext").onclick = function(){ S.st = null; open(S.back); };
+    el("nvnext").onclick = function(){ S.st = null; S.review = false; open(S.back); };
+    el("nvrev").onclick = function(){ S.review = true; unitPage(); };
   }
   function unitPage(){
     rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){ S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); return rpc("nv_state", {tok: tok(), u: S.unit}); }).then(function(r){
       if (!r || !r.ok){ page('<h2>New</h2><p class="sub">Not available right now.</p>'); return; }
       S.vids = r.videos;
-      if (S.st && S.st.key){ keyScreen(); return; }
+      if (S.st && S.st.key && !S.review){ keyScreen(); return; }
       var done = S.vids.filter(function(v){ return v.done; }).length, all = done === S.vids.length;
       var h = '<h2>Unit ' + S.unit + ' · Home practice</h2><p class="sub">Do the steps in order. Each step opens after the one before it.</p>';
       h += '<div class="st"><div class="n">' + (all ? "✓" : "1") + '</div><div><b>Watch the videos</b><small>' + done + ' of ' + S.vids.length + ' finished</small></div></div>';
@@ -157,10 +159,12 @@
       else { h += '<div class="st off"><div class="n">4</div><div><b>Speaking</b><small>Opens after the writing</small></div></div>'; }
       if (S.teacher){ h += '<div class="st"><div class="n">👑</div><div><b>Teacher: open any step</b><small>Your time and results are still recorded. Nothing is blocked for you.</small></div></div>'
           + '<button class="go" id="nvtt" type="button">Home test</button> <button class="go" id="nvtw" type="button" style="margin-left:6px">Writing</button> <button class="go" id="nvts" type="button" style="margin-left:6px">Speaking</button>'; }
+      if (S.st && S.st.key && S.review) h += '<button class="go" id="nvmove" type="button" style="background:#16a34a;margin-top:12px;width:100%">Move on to Unit ' + (S.unit + 1) + ' →</button>';
       page(h);
       ["ml","ie"].forEach(function(t){ var b = el("nvt" + t); if (b) b.onclick = function(){ if (!confirm("Choose " + (t === "ie" ? "IELTS" : "Multi-level") + "? You cannot change this later without your teacher.")) return; rpc("nv_set_track", {tok: tok(), trk: t}).then(function(r){ if (r && (r.ok || r.err === "fixed")) unitPage(); }); }; });
       if (el("nvstarttest")) el("nvstarttest").onclick = function(){ startHome(this); };
       if (el("nvstartwrite")) el("nvstartwrite").onclick = function(){ startWrite(this); };
+      if (el("nvmove")) el("nvmove").onclick = function(){ S.st = null; S.review = false; open(S.back); };
       if (el("nvtt")) el("nvtt").onclick = function(){ if (!S.track){ alert("Choose a track first (the Multi-level / IELTS buttons)."); return; } startHome(this); };
       if (el("nvtw")) el("nvtw").onclick = function(){ startWrite(this); };
       if (el("nvts")) el("nvts").onclick = function(){ startSpeak(this); };
