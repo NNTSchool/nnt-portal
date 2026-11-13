@@ -145,6 +145,7 @@
         if (loc && loc.aid === AID) c = loc;
         if (srv && srv.aid === AID && (!c || (srv.ts || 0) > (c.ts || 0))) c = srv;
         if (!r.again) c = null;
+        var forced = (r.track === "ie" || r.track === "ml") ? document.getElementById(r.track === "ie" ? "trkie" : "trkml") : null; if (forced) b = forced;
         if (c && c.v === 1){ RES = c; window.graceUntil = Date.now() + 3000; var tb = c.tr ? document.getElementById(c.tr === "ie" ? "trkie" : "trkml") : null; (tb || b).click(); waitRestore(); }
         else { lsSet(null); b.click(); }
         startSaving(); setTimeout(ping, 4000);
