@@ -23,6 +23,7 @@
   + '#nvp .ov{position:fixed;inset:0;z-index:98;background:rgba(4,7,26,.94);display:none;align-items:center;justify-content:center;text-align:center;padding:24px}#nvp .ov.on{display:flex}#nvp .ov div{max-width:460px}#nvp .ov h3{font-size:28px;margin:8px 0}#nvp .ov p{color:#dfe6ff;font-size:18px;line-height:1.45;margin:6px 0 16px}'
   + '#nvp .ans{margin-top:14px;border-radius:16px;padding:14px;background:rgba(255,179,0,.14);border:2px solid #ffb300;display:none}#nvp .ans.on{display:block}#nvp .ans input{width:100%;box-sizing:border-box;margin:6px 0;padding:11px 12px;border-radius:10px;border:0;font:700 18px system-ui;text-transform:uppercase;letter-spacing:.08em}'
   + '@media(orientation:landscape) and (max-height:560px){#nvp .vw{max-width:calc(100vh * 1.7778)}}#nvp:fullscreen .vw,#nvp:-webkit-full-screen .vw{max-width:calc(100vh * 1.7778)}'
+  + '@media(orientation:landscape) and (pointer:coarse){#nvp .vw{max-width:calc(100vh * 1.7778)}}#nvp .vw{overflow:hidden;flex:none}#nvp .yw{position:absolute;inset:0}#nvp .vw iframe,#nvp .vw #nv_yt{transform-origin:0 0;transform:scale(var(--z,1)) translate(var(--tx,0px),var(--ty,0px))}#nvp .zo{position:absolute;inset:0;z-index:3;display:none;touch-action:none;cursor:grab}#nvp .zo.on{display:block}#nvp .zr{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0}'
   + '#nvp .hint{display:none;color:#ffd77a;font-size:14px;margin:6px 0}@media(orientation:portrait) and (max-width:700px){#nvp .hint{display:block}}';
   var S = {unit: 1, vids: [], cur: null, pl: null, hb: null, ack: 0, mack: null, fails: 0, back: null, ytReady: false, ytQ: [], word: 0, wordT: 0, hidden: false, ready: false, busy: false};
   function tok(){ return ls("nnt_phone_token"); }
@@ -33,16 +34,17 @@
     var st = document.createElement("style"); st.id = "nvcss"; st.textContent = CSS; document.head.appendChild(st);
     var d = document.createElement("div"); d.id = "nvp";
     d.innerHTML = '<div class="tb"><button class="q" id="nvb" type="button">← Back</button><b id="nvt"></b><button class="q" id="nvfs" type="button">⛶ Full screen</button></div>'
-      + '<div class="vw"><div id="nv_yt"></div></div>'
+      + '<div class="vw"><div class="yw" id="nvyw"><div id="nv_yt"></div></div><div class="zo" id="nvzo"></div></div>'
       + '<div class="wb" id="nvwb"><small id="nvwn"></small><b id="nvww"></b></div>'
       + '<div class="pn"><div class="hint">📱 Turn your phone sideways for a bigger picture.</div>'
+      + '<div class="zr"><span class="info">Zoom:</span><button class="q" id="nvzm" type="button">− Smaller</button><button class="q" id="nvzp" type="button">+ Bigger</button><button class="q" id="nvz0" type="button">Reset</button><span class="info" id="nvzi" style="margin-left:auto">When zoomed, drag the picture to move it.</span></div>'
       + '<div class="row"><span class="info">Speed:</span><button class="q" data-s="0.75" type="button">0.75×</button><button class="q on" data-s="1" type="button">1×</button><button class="q" data-s="1.25" type="button">1.25×</button><span class="info" style="margin-left:auto">Max speed 1.25×</span></div>'
       + '<div class="bar"><i id="nvbar" style="width:0%"></i></div><div class="info" id="nvinfo"></div>'
       + '<div class="info" id="nvstate" style="margin-top:6px"></div>'
       + '<div class="ans" id="nvans"><b style="font-size:18px">✅ You reached the target!</b><div class="info" style="margin:4px 0 8px">Type the 3 secret words, in the order they appeared.</div><input id="nva1" placeholder="Word 1" autocomplete="off"><input id="nva2" placeholder="Word 2" autocomplete="off"><input id="nva3" placeholder="Word 3" autocomplete="off"><button class="go" id="nvsend" type="button">Check the words</button><div class="info" id="nvam" style="margin-top:8px"></div></div></div>'
       + '<div class="ov" id="nvov"><div><div style="font-size:60px">👀</div><h3 id="nvoh"></h3><p id="nvop"></p><button class="go" id="nvok" type="button">OK, continue</button></div></div>';
     document.body.appendChild(d);
-    el("nvb").onclick = leave;
+    el("nvb").onclick = leave; zInit();
     el("nvfs").onclick = function(){ var e = el("nvp"); try{ if (document.fullscreenElement || document.webkitFullscreenElement){ (document.exitFullscreen || document.webkitExitFullscreen).call(document); } else { (e.requestFullscreen || e.webkitRequestFullscreen).call(e); } }catch(x){} };
     Array.prototype.forEach.call(d.querySelectorAll("[data-s]"), function(b){ b.onclick = function(){ setSpeed(+b.getAttribute("data-s")); }; });
     el("nvsend").onclick = sendWords;
@@ -54,10 +56,39 @@
     });
   }
   function showOv(h, p){ el("nvoh").textContent = h; el("nvop").textContent = p; el("nvov").classList.add("on"); }
+  /* zoom: buttons or two fingers; drag to move when zoomed */
+  var Z = {z: 1, x: 0, y: 0};
+  function zApply(){
+    var vw = el("nvp").querySelector(".vw"), W = vw.clientWidth, H = vw.clientHeight;
+    Z.z = Math.max(1, Math.min(4, Z.z));
+    Z.x = Math.min(0, Math.max(-(W - W / Z.z), Z.x)); Z.y = Math.min(0, Math.max(-(H - H / Z.z), Z.y));
+    vw.style.setProperty("--z", Z.z); vw.style.setProperty("--tx", Z.x + "px"); vw.style.setProperty("--ty", Z.y + "px");
+    el("nvzo").classList.toggle("on", Z.z > 1);
+  }
+  function zBy(f, cx, cy){
+    var vw = el("nvp").querySelector(".vw"), W = vw.clientWidth, H = vw.clientHeight, o = Z.z;
+    cx = cx == null ? W / 2 : cx; cy = cy == null ? H / 2 : cy;
+    var px = cx / o - Z.x * 1, py = cy / o - Z.y * 1;   // point under the finger in unscaled coordinates
+    Z.z = Math.max(1, Math.min(4, o * f)); Z.x = cx / Z.z - px; Z.y = cy / Z.z - py; zApply();
+  }
+  function zInit(){
+    el("nvzp").onclick = function(){ zBy(1.4); }; el("nvzm").onclick = function(){ zBy(1 / 1.4); }; el("nvz0").onclick = function(){ Z.z = 1; Z.x = 0; Z.y = 0; zApply(); };
+    var o = el("nvzo"), ptr = {}, last = null;
+    function dist(){ var k = Object.keys(ptr); if (k.length < 2) return 0; var a = ptr[k[0]], b = ptr[k[1]]; return Math.hypot(a.x - b.x, a.y - b.y); }
+    o.onpointerdown = function(e){ try{ o.setPointerCapture(e.pointerId); }catch(x){} ptr[e.pointerId] = {x: e.clientX, y: e.clientY}; last = dist(); };
+    o.onpointermove = function(e){
+      var p = ptr[e.pointerId]; if (!p) return; var n = Object.keys(ptr).length, r = o.getBoundingClientRect();
+      if (n >= 2){ ptr[e.pointerId] = {x: e.clientX, y: e.clientY}; var d = dist(); if (last && d){ var k = Object.keys(ptr), a = ptr[k[0]], b = ptr[k[1]]; zBy(d / last, (a.x + b.x) / 2 - r.left, (a.y + b.y) / 2 - r.top); } last = d; return; }
+      Z.x += (e.clientX - p.x) / Z.z; Z.y += (e.clientY - p.y) / Z.z; ptr[e.pointerId] = {x: e.clientX, y: e.clientY}; zApply();
+    };
+    o.onpointerup = o.onpointercancel = function(e){ delete ptr[e.pointerId]; last = dist(); };
+    o.ondblclick = function(){ Z.z = 1; Z.x = 0; Z.y = 0; zApply(); };
+    window.addEventListener("resize", function(){ setTimeout(zApply, 200); });
+  }
   /* sideways / full screen: the video takes the whole screen; the top bar sits above it (scroll up to reach it), the controls sit below it */
   function fitView(){
     var p = el("nvp"); if (!p || !p.classList.contains("on")) return;
-    var fs = document.fullscreenElement || document.webkitFullscreenElement, land = window.innerWidth > window.innerHeight && window.innerHeight <= 560;
+    var fs = document.fullscreenElement || document.webkitFullscreenElement, land = window.innerWidth > window.innerHeight && (window.innerHeight <= 560 || (window.matchMedia && matchMedia('(pointer:coarse)').matches));
     if (fs || land){ var tb = p.querySelector(".tb"); p.scrollTop = tb ? tb.offsetHeight : 0; }
   }
   window.addEventListener("resize", function(){ setTimeout(fitView, 200); });
@@ -143,6 +174,7 @@
   }
   /* ---------- player ---------- */
   function play(idx){
+    Z.z = 1; Z.x = 0; Z.y = 0; try{ zApply(); }catch(e){}
     setTimeout(fitView, 600);
     var v = S.vids.filter(function(x){ return x.idx === idx; })[0]; if (!v || !v.yt) return;
     S.cur = v; S.ack = v.wack || 0; S.mack = null; S.fails = 0; S.hidden = false; S.ready = false; S.lastPos = v.pos || 0;
@@ -150,7 +182,7 @@
     el("nvp").classList.add("on"); document.body.style.overflow = "hidden";
     paint(v.covered, v.target, v.wack || 0);
     loadYT(function(){
-      el("nvp").querySelector(".vw").innerHTML = '<div id="nv_yt"></div>';
+      el("nvyw").innerHTML = '<div id="nv_yt"></div>';
       S.pl = new YT.Player("nv_yt", {videoId: v.yt, host: "https://www.youtube-nocookie.com",
         playerVars: {rel: 0, modestbranding: 1, playsinline: 1, fs: 0, iv_load_policy: 3, start: Math.floor(v.pos || 0)},
         events: {onReady: function(){ setSpeed(1); }, onPlaybackRateChange: function(e){ if (e.data > 1.25) setSpeed(1.25); }}});
@@ -210,7 +242,7 @@
     setTimeout(function(){
       stopPlayer(); S.cur = null;
       try{ if (document.fullscreenElement || document.webkitFullscreenElement) (document.exitFullscreen || document.webkitExitFullscreen).call(document); }catch(e){}
-      el("nvp").classList.remove("on"); el("nvov").classList.remove("on"); el("nvp").querySelector(".vw").innerHTML = '<div id="nv_yt"></div>';
+      el("nvp").classList.remove("on"); el("nvov").classList.remove("on"); el("nvyw").innerHTML = '<div id="nv_yt"></div>';
       unitPage();
     }, 400);
   }
