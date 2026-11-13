@@ -56,7 +56,8 @@ function payWall(){
     + '<div style="font-size:56px;line-height:1">\u26A0\uFE0F</div>'
     + '<h1 style="font-size:26px;line-height:1.25;margin:12px 0 10px;color:#9c1a35">Oylik to\u2018lov qilinmagan</h1>'
     + '<p style="font-size:19px;line-height:1.5;color:#0f1a33;margin:0 0 18px">Portaldan foydalanish uchun, iltimos, administrator <b>Maftuna Samadova</b> bilan bog\u2018laning.</p>'
-    + '<a href="tel:+998938900808" style="display:block;background:#0e6b4d;color:#fff;text-decoration:none;font-size:24px;font-weight:700;padding:16px;border-radius:14px">\uD83D\uDCDE +998 93 890 08 08</a>'
+    + '<a href="tel:+998938900808" style="display:block;background:#0e6b4d;color:#fff;text-decoration:none;font-size:23px;font-weight:700;padding:15px 10px;border-radius:14px;white-space:nowrap">\uD83D\uDCDE +998 93 890 08 08</a>'
+    + '<a href="https://t.me/Malefisenta_Mafruza" target="_blank" rel="noopener" style="display:block;margin-top:12px;background:#229ed9;color:#fff;text-decoration:none;font-size:19px;font-weight:700;padding:15px 10px;border-radius:14px;overflow-wrap:anywhere">\u2708\uFE0F Telegram<br>@Malefisenta_Mafruza</a>'
     + '<button id="paywall_x" style="margin-top:16px;background:none;border:0;color:#5a6785;font-size:16px;text-decoration:underline;padding:10px">Yopish</button></div>';
   document.body.appendChild(d);
   document.getElementById("paywall_x").onclick = function(){ d.parentNode.removeChild(d); };

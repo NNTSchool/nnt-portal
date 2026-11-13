@@ -304,7 +304,7 @@ body.xcb .xo.on{border-color:#d2471a;background:#fff0e4}body.xcb .xo.on .lt{back
 #paywin .st big{display:block;font-size:26px;font-weight:700;line-height:1.2}#paywin .st span{display:block;font-size:17px;margin-top:6px}
 #paywin .row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:16px}#paywin .row b{font-weight:600}
 #paywin h3{font-size:18px;margin:16px 0 6px}#paywin .msg{background:var(--gold3);border-left:4px solid var(--gold);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:16px}#paywin .msg small{display:block;color:var(--mute);font-size:13px;margin-bottom:3px}
-#paywin .call{display:block;background:#0e6b4d;color:#fff;text-decoration:none;text-align:center;font-weight:700;font-size:20px;padding:15px;border-radius:14px;margin-top:14px}
+#paywin .call.tg{background:#229ed9;font-size:19px;margin-top:10px;white-space:normal;line-height:1.35}#paywin .call{display:block;white-space:nowrap;background:#0e6b4d;color:#fff;text-decoration:none;text-align:center;font-weight:700;font-size:20px;padding:15px;border-radius:14px;margin-top:14px}
 </style>
 </head><body>
 <div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small>Student portal</small></div><div class="sp"></div><div class="rt"><button class="btn sm alt hide" id="out">Log out</button><button class="paybtn hide" id="paybtn" type="button"><span class="pi">💳</span><b>Monthly payments</b><small id="pbs"></small><em id="pbn" class="hide"></em></button></div></div>
@@ -341,7 +341,7 @@ body.xcb .xo.on{border-color:#d2471a;background:#fff0e4}body.xcb .xo.on .lt{back
 <div id="gatev" class="hide"><div class="gbox"><h2 id="gt"></h2><p id="gp"></p><div id="gl"></div><div class="gb"><button class="btn alt" id="gclose">Close</button><button class="btn gold" id="ggo">Go to Learn extra</button></div></div></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
 <div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 33</div>
-<script src="core.js?v=15"></script>
+<script src="core.js?v=16"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
@@ -409,7 +409,7 @@ function payOpen(){
   if (m.has) h += '<div class="row"><span>Joriy davr</span><b>' + uzd(m.start) + ' \u2013 ' + uzd(m.end) + '</b></div><div class="row"><span>Oxirgi kun</span><b>' + uzd(m.end) + '</b></div>';
   if (m.periods && m.periods.length > 1){ h += '<h3>Oldingi davrlar</h3>'; m.periods.slice(1).forEach(function(p){ h += '<div class="row"><span>' + uzd(p.start) + ' \u2013 ' + uzd(p.end) + '</span><b style="color:' + (p.paid ? '#0e6b4d' : '#9c2442') + '">' + (p.paid ? "To\u2018langan" : "To\u2018lanmagan") + '</b></div>'; }); }
   if (m.msgs && m.msgs.length){ h += '<h3>Xabarlar</h3>'; m.msgs.forEach(function(x){ var d = new Date(x.at); h += '<div class="msg"><small>' + ("0" + d.getDate()).slice(-2) + "." + ("0" + (d.getMonth() + 1)).slice(-2) + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + '</small>' + esc(x.body) + '</div>'; }); }
-  h += '<p style="margin:16px 0 0;font-size:16px">To\u2018lov bo\u2018yicha administrator: <b>' + esc(m.admin || "Maftuna Samadova") + '</b></p><a class="call" href="tel:' + esc((m.phone || "+998938900808").replace(/\s/g, "")) + '">\uD83D\uDCDE ' + esc("+998 93 890 08 08") + '</a></div>';
+  h += '<p style="margin:16px 0 0;font-size:16px">To\u2018lov bo\u2018yicha administrator: <b>' + esc(m.admin || "Maftuna Samadova") + '</b></p><a class="call" href="tel:' + esc((m.phone || "+998938900808").replace(/\s/g, "")) + '">\uD83D\uDCDE ' + esc("+998 93 890 08 08") + '</a><a class="call tg" href="https://t.me/Malefisenta_Mafruza" target="_blank" rel="noopener">\u2708\uFE0F Telegram<br>@Malefisenta_Mafruza</a></div>';
   var w = document.createElement("div"); w.id = "paywin"; w.innerHTML = h; document.body.appendChild(w);
   var close = function(){ w.parentNode && w.parentNode.removeChild(w); };
   w.onclick = function(e){ if (e.target === w) close(); }; $("payx").onclick = close;
