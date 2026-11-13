@@ -70,14 +70,17 @@
     page('<h2>Loading…</h2>');
     rpc("nv_units", {tok: tok()}).then(function(r){
       if (!r || !r.ok){ page('<h2>New</h2><p class="sub">' + (r && r.err === "unpaid" ? "" : "New is not open for you yet.") + '</p>'); return; }
+      if (r.all_done){ page('<h2>All done for now ✅</h2><p class="sub">You have finished every unit that is open.' + (r.more ? ' The next unit opens soon.' : '') + '</p>'); return; }
       var u = r.units && r.units[0]; if (!u){ page('<h2>New</h2><p class="sub">Your units will appear here soon.</p>'); return; }
       S.unit = u.unit; unitPage();
     }).catch(function(){ page('<h2>New</h2><p class="sub">No internet connection. Please try again.</p>'); });
   }
   function unitPage(){
-    rpc("nv_state", {tok: tok(), u: S.unit}).then(function(r){
+    rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){ S.st = x && x.ok ? x.st : null; return rpc("nv_state", {tok: tok(), u: S.unit}); }).then(function(r){
       if (!r || !r.ok){ page('<h2>New</h2><p class="sub">Not available right now.</p>'); return; }
-      S.vids = r.videos; var done = S.vids.filter(function(v){ return v.done; }).length, all = done === S.vids.length;
+      S.vids = r.videos;
+      if (S.st && S.st.key){ var nu = S.unit + 1; page('<h2>Unit ' + S.unit + ' complete ✅</h2><p class="sub">You finished every step. Your class test for this unit is now open.</p><button class="go" id="nvnext" type="button">Move on to Unit ' + nu + ' →</button>'); el("nvnext").onclick = function(){ S.st = null; open(S.back); }; return; }
+      var done = S.vids.filter(function(v){ return v.done; }).length, all = done === S.vids.length;
       var h = '<h2>Unit ' + S.unit + ' · Home practice</h2><p class="sub">Do the steps in order. Each step opens after the one before it.</p>';
       h += '<div class="st"><div class="n">' + (all ? "✓" : "1") + '</div><div><b>Watch the videos</b><small>' + done + ' of ' + S.vids.length + ' finished</small></div></div>';
       S.vids.forEach(function(v){
