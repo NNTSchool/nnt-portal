@@ -34,10 +34,9 @@
     var st = document.createElement("style"); st.id = "nvcss"; st.textContent = CSS; document.head.appendChild(st);
     var d = document.createElement("div"); d.id = "nvp";
     d.innerHTML = '<div class="tb"><button class="q" id="nvb" type="button">← Back</button><b id="nvt"></b><button class="q" id="nvfs" type="button">⛶ Full screen</button></div>'
-      + '<div class="vw"><div class="yw" id="nvyw"><div id="nv_yt"></div></div><div class="zo" id="nvzo"></div></div>'
+      + '<div class="vw"><div class="yw" id="nvyw"><div id="nv_yt"></div></div></div>'
       + '<div class="wb" id="nvwb"><small id="nvwn"></small><b id="nvww"></b></div>'
       + '<div class="pn"><div class="hint">📱 Turn your phone sideways for a bigger picture.</div>'
-      + '<div class="zr"><span class="info">Zoom:</span><button class="q" id="nvzm" type="button">− Smaller</button><button class="q" id="nvzp" type="button">+ Bigger</button><button class="q" id="nvz0" type="button">Reset</button><span class="info" id="nvzi" style="margin-left:auto">When zoomed, drag the picture to move it.</span></div>'
       + '<div class="row"><span class="info">Speed:</span><button class="q" data-s="0.75" type="button">0.75×</button><button class="q on" data-s="1" type="button">1×</button><button class="q" data-s="1.25" type="button">1.25×</button><span class="info" style="margin-left:auto">Max speed 1.25×</span></div>'
       + '<div class="bar"><i id="nvbar" style="width:0%"></i></div><div class="info" id="nvinfo"></div>'
       + '<div class="info" id="nvstate" style="margin-top:6px"></div>'
@@ -63,7 +62,7 @@
     Z.z = Math.max(1, Math.min(4, Z.z));
     Z.x = Math.min(0, Math.max(-(W - W / Z.z), Z.x)); Z.y = Math.min(0, Math.max(-(H - H / Z.z), Z.y));
     vw.style.setProperty("--z", Z.z); vw.style.setProperty("--tx", Z.x + "px"); vw.style.setProperty("--ty", Z.y + "px");
-    el("nvzo").classList.toggle("on", Z.z > 1);
+    
   }
   function zBy(f, cx, cy){
     var vw = el("nvp").querySelector(".vw"), W = vw.clientWidth, H = vw.clientHeight, o = Z.z;
@@ -71,7 +70,7 @@
     var px = cx / o - Z.x * 1, py = cy / o - Z.y * 1;   // point under the finger in unscaled coordinates
     Z.z = Math.max(1, Math.min(4, o * f)); Z.x = cx / Z.z - px; Z.y = cy / Z.z - py; zApply();
   }
-  function zInit(){
+  function zInit(){ return;
     el("nvzp").onclick = function(){ zBy(1.4); }; el("nvzm").onclick = function(){ zBy(1 / 1.4); }; el("nvz0").onclick = function(){ Z.z = 1; Z.x = 0; Z.y = 0; zApply(); };
     var o = el("nvzo"), ptr = {}, last = null;
     function dist(){ var k = Object.keys(ptr); if (k.length < 2) return 0; var a = ptr[k[0]], b = ptr[k[1]]; return Math.hypot(a.x - b.x, a.y - b.y); }
