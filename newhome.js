@@ -75,11 +75,19 @@
       S.unit = u.unit; unitPage();
     }).catch(function(){ page('<h2>New</h2><p class="sub">No internet connection. Please try again.</p>'); });
   }
+  function keyScreen(){
+    var nu = S.unit + 1;
+    page('<div style="text-align:center;padding:18px 0 6px"><div class="nvkey" style="font-size:150px;line-height:1.05;filter:drop-shadow(0 8px 18px rgba(255,200,40,.55))">🔑</div>'
+      + '<h2 style="margin:6px 0 4px">You earned the key!</h2><p class="sub">Unit ' + S.unit + ' is complete. Your class test for this unit is now open.</p>'
+      + '<button id="nvnext" type="button" style="margin-top:14px;width:100%;max-width:420px;padding:16px 18px;border:0;border-radius:14px;background:#16a34a;color:#fff;font:800 19px/1.2 inherit;font-family:inherit;box-shadow:0 5px 0 #0f7a37;cursor:pointer">Move on to Unit ' + nu + ' →</button></div>');
+    var st = document.createElement("style"); st.textContent = "@keyframes nvk{0%{transform:scale(.3) rotate(-25deg);opacity:0}60%{transform:scale(1.15) rotate(8deg);opacity:1}100%{transform:scale(1) rotate(0)}}.nvkey{animation:nvk .9s ease-out}"; el("newv").appendChild(st);
+    el("nvnext").onclick = function(){ S.st = null; open(S.back); };
+  }
   function unitPage(){
     rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){ S.st = x && x.ok ? x.st : null; return rpc("nv_state", {tok: tok(), u: S.unit}); }).then(function(r){
       if (!r || !r.ok){ page('<h2>New</h2><p class="sub">Not available right now.</p>'); return; }
       S.vids = r.videos;
-      if (S.st && S.st.key){ var nu = S.unit + 1; page('<h2>Unit ' + S.unit + ' complete ✅</h2><p class="sub">You finished every step. Your class test for this unit is now open.</p><button class="go" id="nvnext" type="button">Move on to Unit ' + nu + ' →</button>'); el("nvnext").onclick = function(){ S.st = null; open(S.back); }; return; }
+      if (S.st && S.st.key){ keyScreen(); return; }
       var done = S.vids.filter(function(v){ return v.done; }).length, all = done === S.vids.length;
       var h = '<h2>Unit ' + S.unit + ' · Home practice</h2><p class="sub">Do the steps in order. Each step opens after the one before it.</p>';
       h += '<div class="st"><div class="n">' + (all ? "✓" : "1") + '</div><div><b>Watch the videos</b><small>' + done + ' of ' + S.vids.length + ' finished</small></div></div>';
