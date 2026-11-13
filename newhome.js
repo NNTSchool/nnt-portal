@@ -84,24 +84,51 @@
     el("nvnext").onclick = function(){ S.st = null; open(S.back); };
   }
   function unitPage(){
-    rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){ S.st = x && x.ok ? x.st : null; return rpc("nv_state", {tok: tok(), u: S.unit}); }).then(function(r){
+    rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){ S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; return rpc("nv_state", {tok: tok(), u: S.unit}); }).then(function(r){
       if (!r || !r.ok){ page('<h2>New</h2><p class="sub">Not available right now.</p>'); return; }
       S.vids = r.videos;
       if (S.st && S.st.key){ keyScreen(); return; }
       var done = S.vids.filter(function(v){ return v.done; }).length, all = done === S.vids.length;
       var h = '<h2>Unit ' + S.unit + ' · Home practice</h2><p class="sub">Do the steps in order. Each step opens after the one before it.</p>';
       h += '<div class="st"><div class="n">' + (all ? "✓" : "1") + '</div><div><b>Watch the videos</b><small>' + done + ' of ' + S.vids.length + ' finished</small></div></div>';
-      S.vids.forEach(function(v){
+      if (!all) S.vids.forEach(function(v){
         var pc = Math.min(100, Math.round(v.covered / v.target * 100)), lab = v.done ? "✅ Finished" : v.locked ? "🔒 Locked" : v.covered >= v.target ? "Type the secret words" : v.covered ? "Continue" : "Start";
         h += '<div class="vc"><div class="t">🎬 ' + esc(v.title) + '<span>' + fmt(v.len) + '</span></div><div class="bar"><i style="width:' + (v.done ? 100 : pc) + '%"></i></div><small>Watch at least ' + fmt(v.target) + ' (90%). ' + (v.done ? "Done." : fmt(Math.min(v.covered, v.target)) + " watched.") + (v.redo ? ' Restarts: ' + v.redo + '.' : '') + '</small><br>'
           + '<button class="go" data-i="' + v.idx + '"' + (v.locked || v.done ? " disabled" : "") + ' type="button">' + lab + '</button></div>';
       });
-      h += '<div class="st off"><div class="n">2</div><div><b>Home test</b><small>Opens after the videos · coming soon</small></div></div>'
-        + '<div class="st off"><div class="n">3</div><div><b>Writing</b><small>Coming soon</small></div></div>'
-        + '<div class="st off"><div class="n">4</div><div><b>Speaking</b><small>Coming soon</small></div></div>';
+      var st = S.st || {}, tn = S.track === "ie" ? "IELTS" : "Multi-level";
+      if (!all){ h += '<div class="st off"><div class="n">2</div><div><b>Home test</b><small>Opens after the videos</small></div></div>'; }
+      else if (st.test){ h += '<div class="st"><div class="n">✓</div><div><b>Home test</b><small>Done · ' + Math.round(st.pct) + '%</small></div></div>'; }
+      else if (!S.track){
+        h += '<div class="st"><div class="n">2</div><div><b>Choose your track</b><small>You choose once. Only your teacher can change it later.</small></div></div>'
+          + '<button class="go" id="nvtml" type="button">Multi-level</button> <button class="go" id="nvtie" type="button" style="margin-left:8px">IELTS</button>';
+      } else {
+        h += '<div class="st"><div class="n">2</div><div><b>Home test</b><small>91 questions · about 1 hour · ' + tn + '. Listening needs headphones. Do it in one go.</small></div></div>'
+          + '<button class="go" id="nvstarttest" type="button" style="background:#16a34a">Start the home test</button>';
+      }
+      h += '<div class="st off"><div class="n">3</div><div><b>Writing</b><small>' + (st.essay ? "Done" : "Opens after the home test · coming soon") + '</small></div></div>'
+        + '<div class="st off"><div class="n">4</div><div><b>Speaking</b><small>' + (st.speak ? "Done" : "Opens after the writing · coming soon") + '</small></div></div>';
       page(h);
+      ["ml","ie"].forEach(function(t){ var b = el("nvt" + t); if (b) b.onclick = function(){ if (!confirm("Choose " + (t === "ie" ? "IELTS" : "Multi-level") + "? You cannot change this later without your teacher.")) return; rpc("nv_set_track", {tok: tok(), trk: t}).then(function(r){ if (r && (r.ok || r.err === "fixed")) unitPage(); }); }; });
+      if (el("nvstarttest")) el("nvstarttest").onclick = function(){ startHome(this); };
       Array.prototype.forEach.call(el("newv").querySelectorAll(".go[data-i]"), function(b){ b.onclick = function(){ play(+b.getAttribute("data-i")); }; });
     }).catch(function(){ page('<h2>New</h2><p class="sub">No internet connection. Please try again.</p>'); });
+  }
+  /* ---------- home test ---------- */
+  function startHome(btn){
+    btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
+    rpc("nv_test", {tok: tok(), u: S.unit}).then(function(r){
+      if (!r || !r.ok){ btn.disabled = false; btn.textContent = "Start the home test"; if (r && r.err === "done") unitPage(); else alert(r && r.err === "videos" ? "Finish all the videos first." : "The home test is not ready. Tell your teacher."); return; }
+      return fetchDecrypt(r.path, r.key).then(function(buf){
+        var html = new TextDecoder("utf-8").decode(buf);
+        return fetch("shim.js", {cache: "no-store"}).then(function(x){ return x.text(); }).then(function(shim){
+          var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, name: r.name, mode: "home", track: r.track, pass: r.pass}) + ";";
+          var tag = "<script>" + cfg + "\n" + shim.replace(/<\/script/gi, "<\\/script") + "<\/script>";
+          var m = html.match(/<head[^>]*>/i); html = m ? html.replace(m[0], m[0] + tag) : tag + html;
+          document.open(); document.write(html); document.close();
+        });
+      });
+    }).catch(function(e){ btn.disabled = false; btn.textContent = "Start the home test"; alert("Could not open the test. Check the internet and try again."); });
   }
   /* ---------- player ---------- */
   function play(idx){

@@ -365,7 +365,7 @@ body.xcb .xo.on{border-color:#d2471a;background:#fff0e4}body.xcb .xo.on .lt{back
 <div id="newv" class="hide"><div style="font-size:56px">🚀</div><h2>New</h2><p>Your new learning area is almost ready. Your units will appear here.</p><div style="height:18px"></div><button class="btn alt" id="newback" type="button">← Back</button></div>
 <div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 35</div>
 <script src="core.js?v=16"></script>
-<script src="newhome.js?v=3"></script>
+<script src="newhome.js?v=5"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
@@ -460,7 +460,7 @@ function home(){
     var r = x[0];
     if (!r.ok){ ls("nnt_phone_token", null); TOK = null; loginScreen(); note("m_login","err","Your login has ended. Please log in again with a new code from your teacher."); return; }
     VIDS = {}; var VI = []; if (x[1] && x[1].ok){ x[1].units.forEach(function(u){ VIDS[u] = 1; }); VI = x[1].items || []; VREC = typeof x[1].rec === "number" ? x[1].rec : null; }
-    ME = r; note("m_home","",""); if (!window.ENTRY_DONE){ window.ENTRY_DONE = true; entryOpen(); }
+    ME = r; note("m_home","",""); if (!window.ENTRY_DONE){ window.ENTRY_DONE = true; entryOpen(); } try{ if (sessionStorage.getItem("nnt_back_nv") === "1"){ sessionStorage.removeItem("nnt_back_nv"); setTimeout(function(){ $("e_new").onclick(); }, 80); } }catch(e){}
     $("hg").textContent = greet(); $("hi").textContent = r.name.split(" ")[0];
     var done = r.units.filter(function(u){ return u.status === "finished"; }).length;
     $("hp").textContent = done ? done + " of " + r.units.length + " units finished" : "Watch the video lessons any time. Finish a test in class to unlock its explanations.";

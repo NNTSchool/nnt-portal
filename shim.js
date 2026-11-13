@@ -1,7 +1,7 @@
 /* Runs inside a test opened from the classroom library: connects it to the teacher's system */
 (function(){
   var P = window.__PORTAL__; if (!P) return;
-  var of = window.fetch.bind(window), started = false, pinged = null, PRAC = P.mode === "practice";
+  var of = window.fetch.bind(window), started = false, pinged = null, HOME = P.mode === "home", PRAC = P.mode === "practice" || HOME;
   function call(name, args){
     return of(P.url + "/rest/v1/rpc/" + name, {method:"POST", headers:{"Content-Type":"application/json","apikey":P.key,"Authorization":"Bearer " + P.key}, body: JSON.stringify(args)})
       .then(function(r){ return r.json().then(function(j){ if (!r.ok) throw new Error((j && j.message) || r.status); return j; }); });
@@ -12,6 +12,8 @@
     call("ping", a).catch(function(){ if (a.prog) call("ping", {tok: P.tok}).catch(function(){}); });
   }
   if (!PRAC) pinged = setInterval(ping, 15000);
+  /* New home test: the page saves its result through this */
+  window.nvSave = function(trk, sc, tot, miss, ans){ return call("nv_save_test", {tok: P.tok, u: P.nvunit, trk: trk, sc: sc, tot: tot, miss: miss, ans: ans}).then(function(r){ if (!r || !r.ok) throw new Error((r && r.err) || "not saved"); return r; }); };
   function banner(msg){
     var d = document.createElement("div"); d.style.cssText = "position:fixed;inset:0;z-index:99999;background:rgba(14,42,71,.92);color:#fff;display:flex;align-items:center;justify-content:center;font:600 22px system-ui,sans-serif;text-align:center;padding:30px";
     d.innerHTML = "<div>" + msg + "<br><br><button style='font:700 18px system-ui;padding:12px 22px;border-radius:12px;border:0;cursor:pointer'>OK</button></div>";
