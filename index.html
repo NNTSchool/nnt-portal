@@ -291,12 +291,11 @@ body.xcb .xo.on{border-color:#d2471a;background:#fff0e4}body.xcb .xo.on .lt{back
 #seatfs .sfn{display:block;margin:auto 0 0;font-size:9px;opacity:.7;text-align:center}#seatfs .sfn.err{opacity:1;background:#ffe6e1;color:#b3261e;border-radius:8px;padding:4px}
 #seatfs .smroom{padding:36px 40px 8px 8px}
 
-.rt{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-.paybtn{position:relative;width:104px;height:104px;border:0;border-radius:18px;color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px;font-family:inherit;box-shadow:0 8px 18px -8px rgba(0,0,0,.6);border-bottom:4px solid rgba(255,255,255,.55)}
-.paybtn .pi{font-size:28px;line-height:1}.paybtn b{font-size:13px;line-height:1.15;display:block;text-align:center;letter-spacing:0;color:#fff;font-family:inherit}.paybtn small{font-size:12px;line-height:1.15;color:#fff;font-weight:700;margin:0;letter-spacing:0}
-.paybtn.g{background:linear-gradient(150deg,#12a56f,#0a6b4a)}.paybtn.a{background:linear-gradient(150deg,#f4a30c,#c86a00);animation:pbp 1.6s infinite}.paybtn.r{background:linear-gradient(150deg,#e5365f,#9c1a35);animation:pbp 1.1s infinite}
-@keyframes pbp{50%{transform:scale(1.06)}}
-.paybtn em{position:absolute;right:-6px;top:-6px;background:#fff;color:#c0213f;font-style:normal;font-weight:800;font-size:14px;min-width:26px;height:26px;border-radius:13px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.rt{display:flex;flex-direction:column;align-items:flex-end;gap:8px}.rr{display:flex;gap:8px}
+.paybtn{position:relative;border:0;border-radius:99px;color:#fff;cursor:pointer;display:flex;align-items:center;gap:7px;padding:5px 12px 5px 9px;font-family:inherit;box-shadow:0 0 0 2px rgba(255,255,255,.75),0 3px 8px -2px rgba(0,0,0,.55);text-align:left}
+.paybtn .pi{font-size:18px;line-height:1}.paybtn .pt{display:flex;flex-direction:column;line-height:1.1}.paybtn b{font-size:12px;display:block;letter-spacing:0;color:#fff;font-family:inherit;white-space:nowrap}.paybtn small{font-size:11px;color:#fff;font-weight:800;margin:0;letter-spacing:0;white-space:nowrap}
+.paybtn.g{background:linear-gradient(150deg,#12a56f,#0a6b4a)}.paybtn.a{background:linear-gradient(150deg,#f4a30c,#c86a00)}.paybtn.r{background:linear-gradient(150deg,#e5365f,#9c1a35)}
+.paybtn em{position:absolute;right:-5px;top:-7px;background:#fff;color:#c0213f;font-style:normal;font-weight:800;font-size:11px;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.4)}
 #paywin{position:fixed;inset:0;z-index:9000;background:rgba(7,23,51,.75);display:flex;align-items:flex-end;justify-content:center}
 #paywin .pw{background:#fff;width:100%;max-width:520px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:20px 18px 26px}
 @media(min-width:600px){#paywin{align-items:center}#paywin .pw{border-radius:22px}}
@@ -305,9 +304,27 @@ body.xcb .xo.on{border-color:#d2471a;background:#fff0e4}body.xcb .xo.on .lt{back
 #paywin .row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:16px}#paywin .row b{font-weight:600}
 #paywin h3{font-size:18px;margin:16px 0 6px}#paywin .msg{background:var(--gold3);border-left:4px solid var(--gold);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:16px}#paywin .msg small{display:block;color:var(--mute);font-size:13px;margin-bottom:3px}
 #paywin .call.tg{background:#229ed9;font-size:19px;margin-top:10px;white-space:normal;line-height:1.35}#paywin .call{display:block;white-space:nowrap;background:#0e6b4d;color:#fff;text-decoration:none;text-align:center;font-weight:700;font-size:20px;padding:15px;border-radius:14px;margin-top:14px}
+
+#entry{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:18px;background:radial-gradient(ellipse at center,rgba(6,10,32,.84) 0%,rgba(6,10,32,.6) 60%,rgba(6,10,32,.4) 100%);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);overflow:auto}
+#entry.hide{display:none}
+#entry .bl{position:absolute;border-radius:50%;filter:blur(60px);opacity:.75;pointer-events:none}
+#entry .b1{width:340px;height:340px;left:4%;top:6%;background:#ff3d81}#entry .b2{width:380px;height:380px;right:2%;top:2%;background:#00c2ff}#entry .b3{width:320px;height:320px;left:30%;bottom:-4%;background:#ffb300}#entry .b4{width:240px;height:240px;right:14%;bottom:8%;background:#7c4dff}
+#entry .ec{position:relative;width:100%;max-width:720px;background:rgba(8,14,40,.82);border:1.5px solid rgba(255,255,255,.35);border-radius:28px;padding:28px 24px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.55);color:#fff}
+#entry h2{font-size:32px;letter-spacing:-.025em;margin:0;color:#fff}#entry .eq{color:#dfe6ff;margin:6px 0 22px;font-size:17px}
+#entry .ep{display:flex;gap:16px}#entry .ek{flex:1;border-radius:22px;padding:22px 18px;font-weight:800;font-size:26px;position:relative;text-align:left;border:0;color:#fff;font-family:inherit;cursor:pointer;line-height:1.1}
+#entry .ek small{display:block;font-weight:600;font-size:14.5px;margin-top:7px;line-height:1.35}#entry .ek .ic{font-size:32px;display:block;margin-bottom:8px}
+#entry .ec1{background:linear-gradient(135deg,#123f9c,#0a2a6e);border:2.5px solid #efdca8}#entry .ec1 small{color:#fbf4df}
+#entry .en{background:linear-gradient(135deg,#ff2d6f,#ff7a00 60%,#ffb300);box-shadow:0 10px 36px rgba(255,80,60,.55);text-shadow:0 1px 6px rgba(120,20,0,.45)}
+#entry .en .tag{position:absolute;right:12px;top:10px;background:#fff;color:#e0215e;font-size:12px;letter-spacing:.12em;border-radius:20px;padding:2px 10px;text-shadow:none}
+#entry .en.lock{background:linear-gradient(135deg,#3a4468,#2a3152);box-shadow:none;text-shadow:none}#entry .en.lock .tag{background:#fff;color:#2a3152}
+#entry .en.shake{animation:esh .45s}@keyframes esh{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+#entry .elock{margin-top:16px;background:#fff;color:#111;border-radius:14px;padding:12px 14px;font-weight:700;font-size:16px}
+#newv{position:fixed;inset:0;z-index:85;background:#0a0f2c;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+#newv.hide{display:none}#newv h2{font-size:34px;margin:8px 0}#newv p{color:#dfe6ff;max-width:520px;font-size:18px;line-height:1.45}
+@media(max-width:640px){#entry .ep{flex-direction:column}#entry h2{font-size:26px}}
 </style>
 </head><body>
-<div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small>Student portal</small></div><div class="sp"></div><div class="rt"><button class="btn sm alt hide" id="out">Log out</button><button class="paybtn hide" id="paybtn" type="button"><span class="pi">💳</span><b>Monthly payments</b><small id="pbs"></small><em id="pbn" class="hide"></em></button></div></div>
+<div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small>Student portal</small></div><div class="sp"></div><div class="rt"><div class="rr"><button class="btn sm alt hide" id="swbtn" type="button">⇄ Switch</button><button class="btn sm alt hide" id="out">Log out</button></div><button class="paybtn hide" id="paybtn" type="button"><span class="pi">💳</span><span class="pt"><b>Monthly payments</b><small id="pbs"></small></span><em id="pbn" class="hide"></em></button></div></div>
 <div class="wrap">
  <div id="s_login" class="hide"><div class="wel"><span class="stk s1">🎓</span><span class="stk s2">⭐</span><span class="stk s3">✏️</span><span class="stk s4">🚀</span>
    <img class="crest" src="logo.jpg" alt=""><div class="uz">Xush kelibsiz!</div><h1>Welcome to <em>NNT School</em></h1><p class="tag" id="wq">Every test you finish is a step closer to your goal.</p>
@@ -340,16 +357,34 @@ body.xcb .xo.on{border-color:#d2471a;background:#fff0e4}body.xcb .xo.on .lt{back
 <div id="audv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="aclose">Close</button><span id="atitle"></span></div><div id="alist"></div></div>
 <div id="gatev" class="hide"><div class="gbox"><h2 id="gt"></h2><p id="gp"></p><div id="gl"></div><div class="gb"><button class="btn alt" id="gclose">Close</button><button class="btn gold" id="ggo">Go to Learn extra</button></div></div></div>
 <div id="vidv" class="sheet hide"><div class="bar2"><button class="btn sm alt" id="vclose">Close</button><span id="vtitle"></span><span style="flex:1"></span><button class="btn sm gold" id="vfull">Full screen</button></div><div id="vbox"><button id="vexit" aria-label="Exit full screen" title="Exit full screen">✕</button><iframe id="vf" allow="fullscreen; picture-in-picture; encrypted-media; autoplay" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><p id="vhint">Turn your phone sideways for a bigger picture.</p></div>
-<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 33</div>
+<div id="entry" class="hide"><i class="bl b1"></i><i class="bl b2"></i><i class="bl b3"></i><i class="bl b4"></i>
+ <div class="ec"><h2>Welcome back, <span id="e_name"></span> 👋</h2><p class="eq">Where do you want to go today?</p>
+  <div class="ep"><button class="ek ec1" id="e_classic" type="button"><span class="ic">🏛️</span>Classic<small>Your tests, explanations and results</small></button>
+  <button class="ek en" id="e_new" type="button"><span class="tag">NEW</span><span class="ic" id="e_ni">🚀</span>New<small>The new learning experience</small></button></div>
+  <div id="e_msg"></div></div></div>
+<div id="newv" class="hide"><div style="font-size:56px">🚀</div><h2>New</h2><p>Your new learning area is almost ready. Your units will appear here.</p><div style="height:18px"></div><button class="btn alt" id="newback" type="button">← Back</button></div>
+<div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 34</div>
 <script src="core.js?v=16"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
 var TOK = ls("nnt_phone_token"), ROSTER = [], pickId = 0, ME = null, CUR = null;
-function show(id){ ["s_login","s_home","s_sthub","s_study","s_audio","s_words","s_wread","s_ehub","s_seats","s_exam","s_unit","s_xhub","s_xlist","s_xtest","s_xres"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); document.querySelector(".wrap").classList.toggle("wide", id === "s_wread" || id === "s_seats"); if (id !== "s_seats") { clearInterval(window.seatH); document.body.style.overflow = ""; } $("out").classList.toggle("hide", id === "s_login"); if (id === "s_login") $("paybtn").classList.add("hide"); if (!/^s_x(list|test|res)$/.test(id)) document.body.classList.remove("xvb","xgb","xcb"); window.scrollTo(0,0); }
+function show(id){ ["s_login","s_home","s_sthub","s_study","s_audio","s_words","s_wread","s_ehub","s_seats","s_exam","s_unit","s_xhub","s_xlist","s_xtest","s_xres"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); document.querySelector(".wrap").classList.toggle("wide", id === "s_wread" || id === "s_seats"); if (id !== "s_seats") { clearInterval(window.seatH); document.body.style.overflow = ""; } $("out").classList.toggle("hide", id === "s_login"); $("swbtn").classList.toggle("hide", id === "s_login"); if (id === "s_login") $("paybtn").classList.add("hide"); if (!/^s_x(list|test|res)$/.test(id)) document.body.classList.remove("xvb","xgb","xcb"); window.scrollTo(0,0); }
 function note(el, cls, txt){ $(el).innerHTML = txt ? '<div class="msg ' + cls + '">' + txt + '</div>' : ""; }
+
+function entryOpen(){ $("e_name").textContent = ME && ME.name ? ME.name.split(" ")[0] : ""; var ok = !!(ME && ME.new_ok); $("e_new").classList.toggle("lock", !ok); $("e_ni").textContent = ok ? "🚀" : "🔒"; $("e_msg").innerHTML = ""; $("entry").classList.remove("hide"); document.body.style.overflow = "hidden"; }
+function entryClose(){ $("entry").classList.add("hide"); document.body.style.overflow = ""; }
+$("e_classic").onclick = function(){ entryClose(); show("s_home"); };
+$("e_new").onclick = function(){
+  if (ME && ME.new_ok){ entryClose(); $("newv").classList.remove("hide"); document.body.style.overflow = "hidden"; return; }
+  var b = $("e_new"); b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake");
+  $("e_msg").innerHTML = '<div class="elock">🔒 New is not open for you yet. Your teacher will open it for you soon. Until then, Classic works as always.</div>';
+};
+$("newback").onclick = function(){ $("newv").classList.add("hide"); document.body.style.overflow = ""; entryOpen(); };
+$("swbtn").onclick = function(){ $("newv").classList.add("hide"); entryOpen(); };
 function boot(){ if (TOK) home(); else loginScreen(); }
-function loginScreen(){
+window.ENTRY_DONE = false;
+function loginScreen(){ window.ENTRY_DONE = false; entryClose(); $("newv").classList.add("hide");
   show("s_login"); welcomeInit(); note("m_login","info","Loading the class list…");
   rpc("roster").then(function(r){ ROSTER = r; note("m_login","",""); drawList(); }).catch(function(){ note("m_login","err","No internet connection. Please try again."); });
 }
@@ -393,7 +428,7 @@ function payRefresh(){
   if (!TOK){ $("paybtn").classList.add("hide"); return Promise.resolve(); }
   return rpc("pay_me", {tok: TOK}).then(function(m){
     PAYM = m; var b = $("paybtn");
-    if (!m || !m.ok || !m.on){ b.classList.add("hide"); return; }
+    if (!m || !m.ok || !m.on || !m.has){ b.classList.add("hide"); return; }
     var c = payCls(m); b.className = "paybtn " + c;
     $("pbs").textContent = !m.has ? "To\u2018lanmagan" : !m.paid ? "To\u2018lanmagan" : (m.left <= 0 ? "Bugun tugaydi" : m.left + " kun qoldi");
     var n = $("pbn"); n.textContent = m.unread; n.classList.toggle("hide", !m.unread);
@@ -424,7 +459,7 @@ function home(){
     var r = x[0];
     if (!r.ok){ ls("nnt_phone_token", null); TOK = null; loginScreen(); note("m_login","err","Your login has ended. Please log in again with a new code from your teacher."); return; }
     VIDS = {}; var VI = []; if (x[1] && x[1].ok){ x[1].units.forEach(function(u){ VIDS[u] = 1; }); VI = x[1].items || []; VREC = typeof x[1].rec === "number" ? x[1].rec : null; }
-    ME = r; note("m_home","","");
+    ME = r; note("m_home","",""); if (!window.ENTRY_DONE){ window.ENTRY_DONE = true; entryOpen(); }
     $("hg").textContent = greet(); $("hi").textContent = r.name.split(" ")[0];
     var done = r.units.filter(function(u){ return u.status === "finished"; }).length;
     $("hp").textContent = done ? done + " of " + r.units.length + " units finished" : "Watch the video lessons any time. Finish a test in class to unlock its explanations.";
