@@ -147,13 +147,33 @@
         h += '<div class="st"><div class="n">2</div><div><b>Home test</b><small>91 questions · about 1 hour · ' + tn + '. Listening needs headphones. Do it in one go.</small></div></div>'
           + '<button class="go" id="nvstarttest" type="button" style="background:#16a34a">Start the home test</button>';
       }
-      h += '<div class="st off"><div class="n">3</div><div><b>Writing</b><small>' + (st.essay ? "Done" : "Opens after the home test · coming soon") + '</small></div></div>'
-        + '<div class="st off"><div class="n">4</div><div><b>Speaking</b><small>' + (st.speak ? "Done" : "Opens after the writing · coming soon") + '</small></div></div>';
+      if (st.essay){ h += '<div class="st"><div class="n">✓</div><div><b>Writing</b><small>Done</small></div></div>'; }
+      else if (st.test){ h += '<div class="st"><div class="n">3</div><div><b>Writing</b><small>' + (S.track === "ie" ? "40 minutes · at least 250 words" : "30 minutes · at least 180 words") + '. Do it in one go.</small></div></div>'
+          + '<button class="go" id="nvstartwrite" type="button" style="background:#16a34a">Start the writing</button>'; }
+      else { h += '<div class="st off"><div class="n">3</div><div><b>Writing</b><small>Opens after the home test</small></div></div>'; }
+      h += '<div class="st off"><div class="n">4</div><div><b>Speaking</b><small>' + (st.speak ? "Done" : "Opens after the writing · coming soon") + '</small></div></div>';
       page(h);
       ["ml","ie"].forEach(function(t){ var b = el("nvt" + t); if (b) b.onclick = function(){ if (!confirm("Choose " + (t === "ie" ? "IELTS" : "Multi-level") + "? You cannot change this later without your teacher.")) return; rpc("nv_set_track", {tok: tok(), trk: t}).then(function(r){ if (r && (r.ok || r.err === "fixed")) unitPage(); }); }; });
       if (el("nvstarttest")) el("nvstarttest").onclick = function(){ startHome(this); };
+      if (el("nvstartwrite")) el("nvstartwrite").onclick = function(){ startWrite(this); };
       Array.prototype.forEach.call(el("newv").querySelectorAll(".go[data-i]"), function(b){ b.onclick = function(){ play(+b.getAttribute("data-i")); }; });
     }).catch(function(){ page('<h2>New</h2><p class="sub">No internet connection. Please try again.</p>'); });
+  }
+  /* ---------- writing ---------- */
+  function startWrite(btn){
+    btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
+    rpc("nv_write", {tok: tok(), u: S.unit}).then(function(r){
+      if (!r || !r.ok){ btn.disabled = false; btn.textContent = "Start the writing"; if (r && r.err === "done") unitPage(); else alert("The writing is not ready. Tell your teacher."); return; }
+      return fetchDecrypt(r.path, r.key).then(function(buf){
+        var html = new TextDecoder("utf-8").decode(buf);
+        return fetch("shim.js", {cache: "no-store"}).then(function(x){ return x.text(); }).then(function(shim){
+          var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, name: r.name, mode: "write", track: r.track}) + ";";
+          var tag = "<script>" + cfg + "\n" + shim.replace(/<\/script/gi, "<\\/script") + "<\/script>";
+          var m = html.match(/<head[^>]*>/i); html = m ? html.replace(m[0], m[0] + tag) : tag + html;
+          document.open(); document.write(html); document.close();
+        });
+      });
+    }).catch(function(e){ btn.disabled = false; btn.textContent = "Start the writing"; alert("Could not open the writing. Check the internet and try again."); });
   }
   /* ---------- home test ---------- */
   function startHome(btn){
