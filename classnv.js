@@ -140,15 +140,16 @@
     };
   }
   function listeningDone(){
-    page('<div class="hero"><h1>Listening done ✔</h1><p class="sub">Great focus. Now take a break.</p></div><div class="card ok"><h2>Take a 10-minute break</h2><p>Stand up, drink some water, get some fresh air. Then come back for the reading.</p></div>'
-      + '<button class="go" id="cbk">I am back →</button>');
-    el("cbk").onclick = function(){ page(top() + '<div class="card"><h2>Reading is next</h2><p>The reading part of this unit is being prepared. Please ask your teacher.</p></div>'); el("cb").onclick = home; };
+    page('<div class="hero"><h1>Listening done ✔</h1><p class="sub">Great focus. Now take a break.</p></div><div class="card ok"><h2>Take a 10-minute break</h2><p>Stand up, step outside, drink some water. You will focus better. If you feel full of energy, you can skip it.</p></div>'
+      + '<button class="go" id="cbk">I am back →</button> <button class="pill" id="cign" style="margin-left:6px">Ignore the break, keep going</button>');
+    function nextStage(){ page(top() + '<div class="card"><h2>Reading is next</h2><p>The reading part of this unit is being prepared. Please ask your teacher.</p></div>'); el("cb").onclick = home; }
+    el("cbk").onclick = nextStage; el("cign").onclick = nextStage;
   }
   /* shown after listening, reading and writing are all complete */
   function unitDone(){
     R("nv_class_done", {tok: O.tok, u: S.unit}).then(function(r){
       page('<div class="hero"><div class="nk" style="width:200px;max-width:60%;margin:0 auto">' + keySvg() + '</div><h1>Well done!</h1><p class="sub">Unit ' + S.unit + ' is now fully completed.' + (r && r.ok ? ' Your class key is earned.' : '') + '</p></div>'
-        + '<div class="card ok"><p>Go home, rest, and carry on with your Learning Flow. The next unit is waiting for you.</p></div><button class="go" id="cfin">Finish</button>');
+        + '<div class="card ok"><p>Your class key is in your pocket. Your next unit is waiting in the Learning Flow. Keep this energy up!</p></div><button class="go" id="cfin">Finish</button>');
       el("cfin").onclick = close;
     });
   }
