@@ -112,6 +112,18 @@
   + '#cnv .vh{font-weight:800;letter-spacing:.14em;font-size:13px;color:#b25400;margin:18px 0 0;text-transform:uppercase}'
   + '#cnv .acard{padding:14px 16px;border-radius:16px;background:#fff;border:2px solid #c9d6ee;margin-bottom:12px;display:flex;gap:14px}#cnv .acard.gd{border-color:#2bb59b;background:#eefaf6}#cnv .acard.bd{border-color:#e0607f;background:#fff1f4}#cnv .acard .qn{flex:0 0 40px;height:40px}#cnv .acard.gd .qn{background:#0c9c84}#cnv .acard.bd .qn{background:#d6395f}#cnv .acard p{margin:0 0 4px;color:#1b2a52;font-size:15.5px;line-height:1.5}#cnv .acard .ky{display:inline-block;padding:3px 12px;border-radius:99px;background:#0c9c84;color:#fff;font-weight:800;margin:2px 6px 4px 0}#cnv .acard .yr{display:inline-block;padding:3px 12px;border-radius:99px;background:#fde3e9;color:#b2334f;font-weight:800;margin:2px 6px 4px 0;text-decoration:line-through}'
   + '@media(max-width:980px){#cnv .rsp{grid-template-columns:1fr}#cnv .rpn{height:auto;max-height:60vh}}';
+
+  /* green highlighter: select text inside any .hlz area to highlight it, click a highlight to remove it */
+  CSS += '#cnv .hlg{background:#3fcf60;color:#04210d;border-radius:3px;box-shadow:0 0 0 1px #2fb350;cursor:pointer;padding:0 1px}#cnv .hlg:hover{background:#68dd83}#cnv .hlz ::selection,#cnv .hlz::selection{background:#9be9ae}#cnv .hltip{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:99px;background:#e5f9ea;border:2px solid #3fcf60;color:#0b5a22;font-weight:700;font-size:13px}#cnv .hltip i{font-style:normal;background:#3fcf60;color:#04210d;border-radius:5px;padding:0 6px;font-weight:800}';
+
+  CSS += '#cnv .rtabs{display:flex;gap:8px;margin:0 0 10px;flex-wrap:wrap}#cnv .rtab{padding:9px 18px;border-radius:12px;border:2px solid #9fb2dc;background:#fff;color:#2d3f73;font-weight:800;font-size:15px;cursor:pointer}#cnv .rtab.sel{background:#3e63d8;border-color:#3e63d8;color:#fff;box-shadow:0 4px 0 #27409b}#cnv .rtab small{opacity:.8}'
+  + '#cnv select.rsel{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:12px;border:2px solid #8fa6d6;background:#fff;color:#10204a;font:700 16px system-ui;outline:none}#cnv select.rsel:focus{border-color:#3e63d8;box-shadow:0 0 0 4px rgba(62,99,216,.2)}'
+  + '#cnv .annc{display:flex;gap:12px;padding:10px 12px;border-radius:14px;background:#fff;border:2px solid #d3dcf0;margin-bottom:9px}#cnv .annc>b{flex:0 0 34px;height:34px;border-radius:10px;background:#8a5cf0;color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px}#cnv .annc strong{display:block;font-size:15.5px;color:#10204a}#cnv .annc p{margin:2px 0 0;font:16px/1.5 Georgia,serif;color:#1b2a52}'
+  + '#cnv .hdl{display:grid;gap:6px}#cnv .hdl div{display:flex;gap:10px;align-items:center;padding:7px 10px;border-radius:10px;background:#fff;border:2px solid #d3dcf0}#cnv .hdl b{flex:0 0 28px;height:28px;border-radius:8px;background:#8a5cf0;color:#fff;display:flex;align-items:center;justify-content:center}#cnv .hdl span{font-weight:600;color:#10204a;font-size:15px}'
+  + '#cnv .pn{display:inline-block;min-width:30px;text-align:center;padding:1px 8px;margin-right:6px;border-radius:8px;background:#8a5cf0;color:#fff;font:800 14px system-ui}#cnv .gapw{display:inline-block;white-space:nowrap}#cnv .gdn{color:#0b7a66}';
+
+  CSS += '#cnv .rsp.rfull{grid-template-columns:minmax(0,1100px);justify-content:center}#cnv .rsp.rfull #rdq{display:none}#cnv .rsp.rfull .rpn{height:calc(100vh - 275px)}#cnv .rsp.rfull .rpn p.rp,#cnv .rsp.rfull .rpn>p:not(.rpi){font:20px/2.1 Georgia,serif;color:#1b2a52;margin:0 0 16px}#cnv .rbfix{position:sticky;bottom:0;max-width:1100px;margin:10px auto 0;padding:10px 14px;border-radius:14px;background:rgba(246,249,255,.96);border:2px solid #c9d6ee}'
+  + '#cnv .rsp:not(.rfull)+.rbfix{max-width:none}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
   function page(h){ stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
@@ -286,7 +298,7 @@
     var inputs = ex.items.map(function(_, k){ return ex.long ? '<div class="it"><span>' + (k + 1) + '</span><textarea class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>'
       : '<div class="it"><span>' + (k + 1) + '</span><input class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off" style="max-width:' + Math.min(36, Math.max(8, ex.items[k].length + 4)) + 'ch"></div>'; }).join("");
     page(top("Exit") + dots() + '<h2 style="margin:8px 0 0">' + esc(ex.id + " · " + ex.name) + '</h2>'
-      + '<div class="ins"><span class="ii">' + (ex.long ? "✍️" : "🎧") + '</span><div><small>WHAT TO DO</small><strong>' + esc(ex.say) + '</strong></div></div>' + player(ex) + '<div id="cin" class="' + (gc ? "gr " + gc : "") + (ex.id === "1.05" ? " num" : "") + '">' + inputs + '</div><button class="go" id="cchk" style="margin-top:6px">Check my answers</button><div id="cout"></div>');
+      + '<div class="ins hlz"><span class="ii">' + (ex.long ? "✍️" : "🎧") + '</span><div><small>WHAT TO DO</small><strong>' + esc(ex.say) + '</strong></div></div>' + player(ex) + '<div id="cin" class="' + (gc ? "gr " + gc : "") + (ex.id === "1.05" ? " num" : "") + '">' + inputs + '</div><button class="go" id="cchk" style="margin-top:6px">Check my answers</button><div id="cout"></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; wirePlayer(ex);
     el("cchk").onclick = function(){ checkEx(ex); };
   }
@@ -357,17 +369,39 @@
     el("cbk3").onclick = hub;
   }
 
+
+  /* highlighter */
+  function hlWire(){
+    if (window._nvhl) return; window._nvhl = 1;
+    document.addEventListener("mouseup", function(e){
+      var r0 = el("cnv"); if (!r0) return;
+      var sel = window.getSelection(); if (!sel || sel.isCollapsed || !sel.rangeCount) return;
+      var rg = sel.getRangeAt(0), a = rg.commonAncestorContainer, host = a.nodeType === 1 ? a : a.parentNode;
+      var z = host && host.closest ? host.closest(".hlz") : null; if (!z || !r0.contains(z)) return;
+      if (host.closest("input,textarea,button")) return;
+      var tn = [], w = document.createTreeWalker(rg.commonAncestorContainer.nodeType === 3 ? rg.commonAncestorContainer.parentNode : rg.commonAncestorContainer, NodeFilter.SHOW_TEXT, null);
+      while (w.nextNode()){ var n = w.currentNode; if (rg.intersectsNode(n) && n.nodeValue.trim() && !(n.parentNode.closest && n.parentNode.closest("input,textarea,button,.hlg"))) tn.push(n); }
+      if (a.nodeType === 3 && !tn.length && !(a.parentNode.closest && a.parentNode.closest(".hlg"))) tn.push(a);
+      tn.forEach(function(n){ var s0 = n === rg.startContainer ? rg.startOffset : 0, e0 = n === rg.endContainer ? rg.endOffset : n.nodeValue.length; if (e0 <= s0) return;
+        var rr = document.createRange(); rr.setStart(n, s0); rr.setEnd(n, e0); if (!rr.toString().trim()) return; var sp = document.createElement("span"); sp.className = "hlg"; try { rr.surroundContents(sp); } catch (x) {} });
+      sel.removeAllRanges();
+    });
+    document.addEventListener("click", function(e){ var t = e.target; if (t && t.classList && t.classList.contains("hlg") && el("cnv") && el("cnv").contains(t)){ var p = t.parentNode; while (t.firstChild) p.insertBefore(t.firstChild, t); p.removeChild(t); p.normalize(); } });
+  }
+  function hlTip(){ return '<span class="hltip"><i>🖍</i> Select text to highlight it · click a highlight to remove it</span>'; }
   /* ---------- reading drilling (split screen) ---------- */
   function wide(on){ var w = document.querySelector("#cnv .w"); if (w) w.classList.toggle("rdw", !!on); }
   function rdJudge(q, said){
     said = String(said || "").trim(); if (!said) return false;
-    if (q.t === "tf") return said.toUpperCase() === q.a[0];
+    if (q.t === "tf" || q.t === "sel") return said.toUpperCase() === q.a[0];
     var n = norm(said).replace(/-/g, " "); return q.a.some(function(a){ return norm(a).replace(/-/g, " ") === n; });
   }
-  function rdAll(D){ return D.q.concat(D.t); }
+  function rdAll(D){ if (D.parts){ var o = []; D.parts.forEach(function(p){ o = o.concat(p.qs); }); return o; } return D.q.concat(D.t); }
   function startReading(){
     page(top() + '<div class="hero"><h2>Loading the reading…</h2></div>'); el("cb").onclick = hub;
-    getFile("c" + S.unit + "_read", "read" + S.unit + ".json").then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }).then(function(D){
+    Promise.resolve(R("nv_stage", {tok: O.tok, u: S.unit})).then(function(r){ return r && r.track === "ml" ? "ml" : "ie"; }, function(){ return "ie"; }).then(function(tr){
+      return getFile("c" + S.unit + (tr === "ml" ? "_readm" : "_read"), (tr === "ml" ? "readm" : "read") + S.unit + ".json");
+    }).then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }).then(function(D){
       S.R = {D: D, ans: {}, first: null, second: null, t0: Date.now(), phase: 0}; rdTest(false);
     }).catch(function(){ page(top() + '<div class="card warn"><h2>The reading is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
   }
@@ -376,7 +410,7 @@
     return '<div class="rds">' + L.map(function(t, i){ return '<span class="' + (i < cur ? "dn" : i === cur ? "cu" : "") + '">' + (i < cur ? "✔ " : "") + t + '</span>'; }).join("") + '</div>';
   }
   function rdPassage(){
-    var D = S.R.D; return '<div class="rpn' + (S.R.hl ? " hl" : "") + '" id="rdp"><h1 class="rpt">' + esc(D.title).toUpperCase() + '</h1><p class="rpi">' + esc(D.sub) + '</p>'
+    var D = S.R.D; return '<div class="rpn hlz' + (S.R.hl ? " hl" : "") + '" id="rdp"><h1 class="rpt">' + esc(D.title).toUpperCase() + '</h1><p class="rpi">' + esc(D.sub) + '</p>'
       + D.p.map(function(p, i){ return '<p class="rp"><span class="pl">' + String.fromCharCode(65 + i) + '</span>' + p + '</p>'; }).join("") + '</div>';
   }
   function rdTimer(){
@@ -387,6 +421,7 @@
     tk(); S.bt = setInterval(tk, 500);
   }
   function rdTest(retake){
+    if (S.R.D.parts) return rdTestML(retake);
     var R_ = S.R, D = R_.D, wrongSet = retake ? R_.first.bad : null;
     function on(n){ return !wrongSet || wrongSet.indexOf(n) >= 0; }
     var h = '';
@@ -404,8 +439,8 @@
         return '<tr><td>' + r.name + '</td><td>' + r.date + '</td><td>' + cell(r.feat) + '</td><td>' + cell(r.note) + '</td></tr>'; }).join("") + '</table>';
       h += '<div class="qg"><div class="qgh"><span class="qi">🧩</span><div><b>Questions 9–13 · Table completion</b><small>Complete the table. Choose <b>ONE WORD AND/OR A NUMBER</b> from the passage for each answer.</small></div></div>' + tb + '</div>'; }
     var need = [].concat(tfs, ws, ts).map(function(q){ return q.n; });
-    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 3 : 0) + '<div class="rtm" id="rtm">⏱</div></div>'
-      + '<div class="rsp">' + rdPassage() + '<div class="rpn q" id="rdq">' + h + '<div class="rbar"><button class="go" id="rck" disabled>Check my answers</button><small id="rhint"></small></div></div></div>');
+    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 3 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
+      + '<div class="rsp">' + rdPassage() + '<div class="rpn q hlz" id="rdq">' + h + '<div class="rbar"><button class="go" id="rck" disabled>Check my answers</button><small id="rhint"></small></div></div></div>');
     wide(true); rdTimer();
     el("cb").onclick = function(){ if (S.bt) clearInterval(S.bt); wide(false); hub(); };
     var need_n = need.length, minFill = Math.max(1, Math.ceil(need_n * 0.7));
@@ -424,8 +459,45 @@
       else { R_.second = {bad: bad, good: good, ans: JSON.parse(JSON.stringify(R_.ans))}; rdAnswers(); }
     };
   }
+
+  /* multi-level reading: tabs for the three parts, each with its own left panel and question list */
+  function rdTestML(retake){
+    var R_ = S.R, D = R_.D, wrongSet = retake ? R_.first.bad : null;
+    function on(n){ return !wrongSet || wrongSet.indexOf(n) >= 0; }
+    var need = [], tabs = "", lefts = "", rights = "", firstP = -1, fullP = {};
+    D.parts.forEach(function(p, pi){
+      var qs = p.qs.filter(function(q){ return on(q.n); }); if (!qs.length) return; if (firstP < 0) firstP = pi;
+      qs.forEach(function(q){ need.push(q.n); });
+      if (p.qs[0].t === "gap") fullP[pi] = 1;
+      tabs += '<button type="button" class="rtab" data-p="' + pi + '">' + p.ic + ' ' + p.tab + ' <small>(' + qs.length + ')</small></button>';
+      var lf = p.left.replace(/<span class="gapw">.*?data-n="(\d+)"><\/span>/g, function(m, n){ n = +n; if (on(n)) return m; var q = p.qs.filter(function(x){ return x.n === n; })[0]; return '<span class="tqn gd">' + n + '</span> <b class="gdn">' + esc(q.a[0]) + '</b>'; });
+      lefts += '<div class="rpn hlz' + (R_.hl ? " hl" : "") + ' rpart" data-p="' + pi + '">' + (retake ? "" : "") + '<h1 class="rpt" style="font-size:30px">' + esc(p.head) + '</h1><p class="rpi">' + esc(p.instr) + '</p>' + lf + '</div>';
+      var rr = '<div class="rpart" data-p="' + pi + '"><div class="qgh"><span class="qi">' + p.ic + '</span><div><b>' + esc(p.head) + '</b><small>Questions ' + p.qs[0].n + '–' + p.qs[p.qs.length - 1].n + '</small></div></div>' + (p.legend ? '<div class="qd" style="display:block">' + p.legend + '</div>' : "");
+      if (p.qs[0].t === "gap") rr += '<p class="sub" style="text-align:left">Type the missing words into the gaps in the text on the left.</p>';
+      else rr += qs.map(function(q){ return '<div class="qr" data-n="' + q.n + '"><div class="qn">' + q.n + '</div><div class="qb"><div class="qt">' + esc(q.q) + '</div><select class="rsel" data-n="' + q.n + '"><option value="">Choose…</option>' + q.opts.map(function(o){ return '<option>' + o + '</option>'; }).join("") + '</select></div></div>'; }).join("");
+      rights += rr + '</div>';
+    });
+    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 3 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
+      + '<div class="rtabs">' + tabs + '</div><div class="rsp"><div id="rdp">' + lefts + '</div><div class="rpn q hlz" id="rdq">' + rights + '</div></div><div class="rbar rbfix"><button class="go" id="rck" disabled>Check my answers</button><small id="rhint"></small></div>');
+    wide(true); rdTimer();
+    el("cb").onclick = function(){ if (S.bt) clearInterval(S.bt); wide(false); hub(); };
+    function show(pi){ var sp = document.querySelector(".rsp"); if (sp) sp.classList.toggle("rfull", !!fullP[pi]); [].forEach.call(document.querySelectorAll(".rpart"), function(e){ e.style.display = +e.getAttribute("data-p") === pi ? "" : "none"; }); [].forEach.call(document.querySelectorAll(".rtab"), function(b){ b.classList.toggle("sel", +b.getAttribute("data-p") === pi); }); var rp = el("rdp"); }
+    [].forEach.call(document.querySelectorAll(".rtab"), function(b){ b.onclick = function(){ show(+b.getAttribute("data-p")); }; }); show(firstP);
+    var need_n = need.length, minFill = Math.max(1, Math.ceil(need_n * 0.7));
+    function filled(){ return need.filter(function(n){ return (R_.ans[n] || "").trim(); }).length; }
+    function upd(){ var f = filled(), ok = f >= minFill, b = el("rck"); if (!b) return; b.disabled = !ok; el("rhint").textContent = ok ? "Ready. You can still change answers." : "Answer " + (minFill - f) + " more to unlock the check (" + f + "/" + need_n + ")."; }
+    [].forEach.call(document.querySelectorAll("#rdp input.rin"), function(i){ var n = +i.getAttribute("data-n"); i.oninput = function(){ R_.ans[n] = i.value; upd(); }; i.onpaste = function(e){ e.preventDefault(); }; i.oncontextmenu = function(e){ e.preventDefault(); }; });
+    [].forEach.call(document.querySelectorAll("#rdq select.rsel"), function(c){ var n = +c.getAttribute("data-n"); c.onchange = function(){ R_.ans[n] = c.value; c.closest(".qr").classList.toggle("fld", !!c.value); upd(); }; });
+    upd();
+    el("rck").onclick = function(){
+      var all = rdAll(D), bad = [], good = [];
+      need.forEach(function(n){ var q = all.filter(function(x){ return x.n === n; })[0]; (rdJudge(q, R_.ans[n]) ? good : bad).push(n); });
+      if (!retake){ R_.first = {bad: bad, good: good, ans: JSON.parse(JSON.stringify(R_.ans))}; rdResults(); }
+      else { R_.second = {bad: bad, good: good, ans: JSON.parse(JSON.stringify(R_.ans))}; rdAnswers(); }
+    };
+  }
   function rdResults(){
-    var R_ = S.R, D = R_.D, r = R_.first, g = r.good.length, tot = D.q.length + D.t.length, pct = Math.round(100 * g / tot), col = pct >= 85 ? "#0c9c84" : pct >= 60 ? "#e0953c" : "#d6395f";
+    var R_ = S.R, D = R_.D, r = R_.first, g = r.good.length, tot = rdAll(D).length, pct = Math.round(100 * g / tot), col = pct >= 85 ? "#0c9c84" : pct >= 60 ? "#e0953c" : "#d6395f";
     var msg = pct >= 85 ? "Superb reading! Look at that accuracy." : pct >= 60 ? "Solid start. A few traps got you, and we will fix them." : "Good effort. This passage hides tricks, and you are about to learn them.";
     var chips = ""; for (var i = 1; i <= tot; i++) chips += '<i class="' + (r.good.indexOf(i) >= 0 ? "g" : "b") + '" style="animation-delay:' + (i * 0.05).toFixed(2) + 's">' + i + '</i>';
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · results</h2>' + rdSteps(1) + '</div><div class="brk" style="padding-top:6px">'
@@ -454,7 +526,7 @@
       return '<div class="acard ' + cls + '"><div class="qn">' + q.n + '</div><div><p>' + (q.q ? '<b>' + esc(q.q) + '</b>' : "") + '</p>'
         + (ok2 ? '' : '<span class="yr">' + esc(ya || "no answer") + '</span>') + '<span class="ky">' + esc(q.a[0].toUpperCase() === q.a[0] ? q.a[0] : q.a[0]) + (q.a.length > 1 ? ' <small style="font-weight:600">(also: ' + esc(q.a.slice(1).join(", ")) + ')</small>' : "") + '</span>'
         + '<p>' + esc(q.ex) + '</p>' + (ok1 ? '' : ok2 ? '<p style="color:#0b7a66;font-weight:700">✔ Fixed in the retake. Nice!</p>' : '') + '</div></div>'; }).join("");
-    D.t.forEach(function(q){ var m = D.tb.filter(function(r){ return (r.feat + r.note).indexOf("{" + q.n + "}") >= 0; })[0]; if (m) q.q = m.name + ": " + (m.feat + " / " + m.note).replace(/<br>/g, " / ").replace(/<[^>]+>/g, "").replace(/\{(\d+)\}/g, "(" + "$1" + ") ____"); });
+    (D.t || []).forEach(function(q){ var m = D.tb.filter(function(r){ return (r.feat + r.note).indexOf("{" + q.n + "}") >= 0; })[0]; if (m) q.q = m.name + ": " + (m.feat + " / " + m.note).replace(/<br>/g, " / ").replace(/<[^>]+>/g, "").replace(/\{(\d+)\}/g, "(" + "$1" + ") ____"); });
     cards = all.map(function(q){ var ok1 = f.good.indexOf(q.n) >= 0, ok2 = fin[q.n], ya = (s2.ans && s2.ans[q.n]) || f.ans[q.n] || "", cls = ok2 ? "gd" : "bd";
       return '<div class="acard ' + cls + '"><div class="qn">' + q.n + '</div><div><p><b>' + esc(q.q || "") + '</b></p>'
         + (ok2 ? '' : '<span class="yr">' + esc(ya || "no answer") + '</span>') + '<span class="ky">' + esc(q.a[0]) + '</span>' + (q.a.length > 1 ? '<small style="color:#3d4f80;font-weight:600">also accepted: ' + esc(q.a.slice(1).join(", ")) + '</small>' : "")
@@ -507,7 +579,7 @@
   }
 
   window.CNV = {
-    open: function(o){ O = o; R = o.rpc; css(); home(); },
+    open: function(o){ O = o; R = o.rpc; css(); hlWire(); home(); },
     _unitDone: function(){ unitDone(); }
   };
 })();
