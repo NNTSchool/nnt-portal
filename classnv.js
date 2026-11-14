@@ -74,7 +74,7 @@
   + '#cnv .brk{text-align:center;padding:26px 0 40px}#cnv .bh{font-size:56px;line-height:1.05;letter-spacing:-.03em;margin:0 0 8px;font-weight:800;color:#fff}#cnv .bring{position:relative;width:300px;height:300px;margin:22px auto 10px;filter:drop-shadow(0 0 30px rgba(122,162,255,.35))}#cnv .bring svg{width:100%;height:100%}#cnv .bc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}#cnv .bc small{font-size:13px;font-weight:800;letter-spacing:.2em;color:#9fb4ff}#cnv .bc b{font-size:78px;line-height:1.05;font-weight:800;background:linear-gradient(160deg,#fff,#9fd0ff 60%,#c58bff);-webkit-background-clip:text;background-clip:text;color:transparent}#cnv .bc em{font-style:normal;font-size:15px;font-weight:700;color:#bfe9ff}'
   + '#cnv .bring.late{animation:lshk 1s ease-in-out infinite;filter:drop-shadow(0 0 40px rgba(255,90,90,.6))}#cnv .bring.late #barc{stroke:#ff5a6e}#cnv .bring.late .bc b{background:linear-gradient(160deg,#fff,#ff9db3 60%,#ff5a6e);-webkit-background-clip:text;background-clip:text}#cnv .bring.late .bc b{font-size:64px}#cnv .bring.late .bc small,#cnv .bring.late .bc em{color:#ff9db3}@keyframes lshk{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}'
   + '#cnv .chips{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px}#cnv .chips span{padding:9px 16px;border-radius:99px;font-weight:700;font-size:15px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.18)}#cnv .chips span:nth-child(1){border-color:#5df2d6}#cnv .chips span:nth-child(2){border-color:#7aa2ff}#cnv .chips span:nth-child(3){border-color:#c58bff}#cnv .chips span:nth-child(4){border-color:#ffd23f}'
-  + '#cnv .bk .be{font-size:92px;line-height:1;animation:rpop .8s cubic-bezier(.2,1.5,.4,1) both}#cnv .bk.lt .bh{color:#ffb3c1}#cnv .bk.ok .bh{color:#baffef}#cnv .bk .fst{display:flex;gap:14px;justify-content:center;margin:20px auto 0}';
+  + '#cnv .bk .be{font-size:92px;line-height:1;animation:rpop .8s cubic-bezier(.2,1.5,.4,1) both}#cnv .bk.lt .bh{color:#ffb3c1}#cnv .bk.good .bh{color:#baffef}#cnv .bk .fst{display:flex;gap:14px;justify-content:center;margin:20px auto 0}';
   /* soft, readable light theme (own palette: sky, lilac, mint, coral) */
   CSS += '#cnv{color:#10204a;background:#dbe7f5}#cnv .bg{background:radial-gradient(900px 520px at 85% -10%,#f6dcc9 0,transparent 60%),radial-gradient(800px 500px at -10% 105%,#b9e8e1 0,transparent 60%),linear-gradient(#d3e3f6,#e3e7f8)}'
   + '#cnv h1,#cnv h2,#cnv b{color:#10204a}#cnv .sub,#cnv .hmp{color:#3d4f80}#cnv .pill{border-color:#8fa6d6;background:rgba(255,255,255,.75);color:#10204a}'
@@ -88,7 +88,7 @@
   + '#cnv .fc{color:#3d4f80;background:linear-gradient(160deg,#cdd9ee,#bccbe6);box-shadow:0 14px 0 #9fb3d9,0 22px 36px rgba(40,60,120,.18)}#cnv .fc b{color:#10204a}#cnv .fc .fb{background:rgba(16,32,74,.12)}#cnv .fc em{background:rgba(255,255,255,.6)}#cnv .fc.on{box-shadow:0 14px 0 #3b4fa8,0 26px 50px rgba(62,99,216,.35)}#cnv .fl{color:#5a70b5}#cnv .fl span{background:#fff;border-color:#b9c9e6;color:#3d4f80}'
   + '#cnv .hnt{color:#10204a;background:rgba(255,255,255,.8);border-color:#b9c9e6}'
   + '#cnv .bh,#cnv .fh{color:#10204a}#cnv .fn{color:#3d4f80}#cnv .bring svg circle:nth-of-type(1){stroke:rgba(16,32,74,.12)}#cnv .bc small{color:#4d5f93}#cnv .bc em{color:#3d4f80}#cnv .bc b{background:linear-gradient(160deg,#10204a,#3e63d8 70%,#8a5cf0);-webkit-background-clip:text;background-clip:text}#cnv .bring.late .bc b{background:linear-gradient(160deg,#7a1230,#d6395f);-webkit-background-clip:text;background-clip:text}#cnv .bring.late .bc small,#cnv .bring.late .bc em{color:#b2334f}#cnv .bring.late #barc{stroke:#e0405f}'
-  + '#cnv .chips span{background:#fff;color:#10204a}#cnv .fst div{background:#f6f9ff;border-color:#b9c9e6}#cnv .fst span{color:#3d4f80}#cnv .fst b{color:#d98b00}#cnv .bk.lt .bh{color:#b2334f}#cnv .bk.ok .bh{color:#0b7a66}'
+  + '#cnv .chips span{background:#fff;color:#10204a}#cnv .fst div{background:#f6f9ff;border-color:#b9c9e6}#cnv .fst span{color:#3d4f80}#cnv .fst b{color:#d98b00}#cnv .bk.lt .bh{color:#b2334f}#cnv .bk.good .bh{color:#0b7a66}'
   + '#cnv .hmh{color:#10204a}#cnv .hmt{color:#b25400}#cnv .hmc span{background:#fff;border-color:#b9c9e6;color:#10204a}#cnv .hmc span b{color:#10204a}#cnv .sp5.on{background:#3e63d8;border-color:#3e63d8;color:#fff}#cnv .spk i{opacity:1}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
@@ -173,7 +173,7 @@
     function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
     function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
     page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Unit ' + S.unit + '</h2><p class="sub">Your path today: three drillings, with a break between them</p></div>'
-      + '<div class="fch">' + card("hl", "🎧", "Listening drilling", "Start here", "about 60 min", true, 1) + link()
+      + '<div class="fch">' + card("hl", "🎧", "Listening drilling", (S.lisDone && S.lisDone[S.unit]) ? "Done ✔ · you can redo it" : "Start here", "about 60 min", true, 1) + link()
       + card("hr", "📖", "Reading drilling", "Opens soon", "after your break", false, 2) + link()
       + card("hw", "✍️", "Writing drilling", "Opens soon", "after your break", false, 3) + '</div>');
     el("cb").onclick = path; el("hl").onclick = startPart;
@@ -324,7 +324,14 @@
   }
   var BRK = 600;
   function mmss(t){ t = Math.max(0, Math.floor(t)); return ("0" + Math.floor(t / 60)).slice(-2) + ":" + ("0" + t % 60).slice(-2); }
-  function nextStage(info){ unitDone(); }
+  /* until reading and writing exist, a finished listening part ends on its own screen (no class key yet) */
+  function nextStage(){
+    S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true;
+    if (O.finale) return unitDone();
+    page('<div class="brk"><div class="bk good"><div class="be">🎧</div><h1 class="bh">Listening complete!</h1><p class="sub">Your listening drilling for Unit ' + S.unit + ' is saved. Reading and writing for this unit are being prepared. Your class key arrives when all three are done.</p>'
+      + '<div class="fst" style="opacity:1;animation:none"><div><b style="color:#0c9c84">✔</b><span>Listening</span></div><div><b style="color:#8a98c4">…</b><span>Reading, soon</span></div><div><b style="color:#8a98c4">…</b><span>Writing, soon</span></div></div></div><button class="go" id="cbk3" style="margin-top:20px">Back to my unit →</button></div>');
+    el("cbk3").onclick = hub;
+  }
   /* one break screen for every stage: listening, reading, writing... */
   function listeningDone(){ stageBreak("LISTENING DONE ✔", nextStage); }
   function readingDone(){ stageBreak("READING DONE ✔", nextStage); }
@@ -345,7 +352,7 @@
   function backScreen(away, onNext){
     var late = away > BRK ? away - BRK : 0, h;
     if (away < 0) h = '<div class="bk skip"><div class="be">🔥</div><h1 class="bh">No break, full power!</h1><p class="sub">You skipped the break. Stay sharp and keep the energy.</p></div>';
-    else h = '<div class="bk ' + (late ? "lt" : "ok") + '"><div class="be">' + (late ? "⏰" : "🎉") + '</div><h1 class="bh">' + (late ? "Welcome back, a bit late" : "Welcome back, right on time") + '</h1><p class="sub">' + (late ? "The break was 10 minutes. Next time, be back a little sooner." : "You used your break well. Time to continue.") + '</p>'
+    else h = '<div class="bk ' + (late ? "lt" : "good") + '"><div class="be">' + (late ? "⏰" : "🎉") + '</div><h1 class="bh">' + (late ? "Welcome back, a bit late" : "Welcome back, right on time") + '</h1><p class="sub">' + (late ? "The break was 10 minutes. Next time, be back a little sooner." : "You used your break well. Time to continue.") + '</p>'
       + '<div class="fst" style="opacity:1;animation:none"><div><b style="color:#3e63d8">10:00</b><span>break time</span></div><div><b style="color:#0c9c84">' + mmss(away) + '</b><span>you were away</span></div><div><b style="color:' + (late ? "#d6395f" : "#d98b00") + '">' + (late ? "+" + mmss(late) : "0:00") + '</b><span>' + (late ? "late" : "late. Perfect!") + '</span></div></div></div>';
     page('<div class="brk">' + h + '<button class="go" id="cbk2" style="margin-top:20px">Continue →</button></div>');
     el("cbk2").onclick = onNext;
