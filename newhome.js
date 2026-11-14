@@ -184,12 +184,12 @@
       });
       var st = S.st || {}, tn = S.track === "ie" ? "IELTS" : "Multi-level";
       if (!all && !S.teacher){ h += '<div class="st off"><div class="n">2</div><div><b>Home test</b><small>Opens after the videos</small></div></div>'; }
-      else if (st.test){ h += '<div class="st"><div class="n">' + (st.cancelled ? "✕" : "✓") + '</div><div><b>Home test</b><small>' + (st.cancelled ? 'Cancelled: you left the test window 3 times · 0%' : 'Done · ' + Math.round(st.pct) + '%') + '</small></div></div>'; }
+      else if (st.test){ h += '<div class="st"><div class="n">' + (st.cancelled ? "✕" : "✓") + '</div><div><b>Home test</b><small>' + 'Done · ' + Math.round(st.pct) + '%' + '</small></div></div>'; }
       else if (!S.track){
         h += '<div class="st"><div class="n">2</div><div><b>Choose your track</b><small>You choose once. Only your teacher can change it later.</small></div></div>'
           + '<button class="go" id="nvtml" type="button">Multi-level</button> <button class="go" id="nvtie" type="button" style="margin-left:8px">IELTS</button>';
       } else {
-        h += '<div class="st"><div class="n">2</div><div><b>Home test</b><small>91 questions · about 1 hour · ' + tn + '. Listening needs headphones. Do it in one go.</small></div></div>'
+        h += '<div class="st"><div class="n">2</div><div><b>Home test</b><small>91 questions · about 1 hour · ' + tn + '. Listening needs headphones. Do it in one go.</small>' + (st.cancels ? '<small style="color:#ffe27a;font-weight:700;margin-top:6px">⚠ Your last try was cancelled (you left the test window 3 times). You must take the test again.</small>' : '') + '</div></div>'
           + '<button class="go" id="nvstarttest" type="button" style="background:#16a34a">Start the home test</button>';
       }
       if (st.essay){ h += '<div class="st"><div class="n">✓</div><div><b>Writing</b><small>Done</small></div></div>'; }
