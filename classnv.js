@@ -47,6 +47,13 @@
   + '#cnv .sk{position:absolute;border-radius:50%;background:#fff;opacity:0;animation:hmk 4s ease-in-out infinite}@keyframes hmk{50%{opacity:.9;transform:scale(1.8)}}';
   CSS += '#cnv .cld{background:none!important;overflow:hidden;left:-200px!important;right:-200px!important}#cnv .cli{-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 58%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 58%,transparent 100%);position:absolute;height:auto;max-width:none;animation:cdr 9s ease-in-out infinite alternate;filter:drop-shadow(0 12px 26px rgba(120,140,255,.35))}@keyframes cdr{from{transform:translateX(-14px)}to{transform:translateX(14px)}}'
   + '#cnv .hnt{position:absolute;transform:translateX(-50%);white-space:nowrap;font-weight:700;font-size:18px;color:#bfe9ff;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);border-radius:99px;padding:8px 18px}';
+  CSS += '#cnv .fin{text-align:center;padding:36px 0 60px;position:relative;overflow:hidden;min-height:90vh}#cnv .kdrop{width:210px;margin:30px auto 0;animation:kdrop 1.5s cubic-bezier(.3,1.4,.5,1) both,kglow 2.6s 1.5s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(255,194,26,.7))}'
+  + '@keyframes kdrop{0%{transform:translateY(-110vh) rotate(-40deg) scale(.6)}70%{transform:translateY(18px) rotate(10deg) scale(1.05)}100%{transform:none}}@keyframes kglow{50%{transform:translateY(-8px) rotate(3deg);filter:drop-shadow(0 0 56px rgba(255,210,63,.95))}}'
+  + '#cnv .flash{position:absolute;inset:0;background:radial-gradient(circle at 50% 38%,#fff,rgba(255,226,122,.6) 30%,transparent 60%);opacity:0;animation:flsh 1.1s 1.1s ease-out both;pointer-events:none}@keyframes flsh{0%{opacity:.95}100%{opacity:0}}'
+  + '#cnv .spk i{position:absolute;top:-30px;border-radius:2px;opacity:0;animation:fall linear infinite;animation-fill-mode:both}@keyframes fall{0%{transform:translateY(0) rotate(0);opacity:0}8%{opacity:1}100%{transform:translateY(105vh) rotate(540deg);opacity:.9}}'
+  + '#cnv .fh{font-size:58px;line-height:1.05;letter-spacing:-.03em;margin:26px 0 6px;font-weight:800;color:#fff;opacity:0;animation:fup .8s 1.5s both}#cnv .fn{font-size:20px;color:#bfe9ff;margin:0 0 26px;opacity:0;animation:fup .8s 1.8s both}@keyframes fup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}'
+  + '#cnv .fst{display:flex;gap:14px;justify-content:center;margin:0 auto 28px;opacity:0;animation:fup .8s 2.1s both}#cnv .fst div{min-width:150px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.16);border-radius:18px;padding:16px 12px}#cnv .fst b{display:block;font-size:40px;font-weight:800;color:#ffd23f}#cnv .fst span{font-size:13px;color:#bcd0ff}#cnv .fin .go{opacity:0;animation:fup .8s 2.5s both}'
+  + '#cnv .nd.pop,#cnv .nd.cur.pop{animation:ppop 1.1s cubic-bezier(.2,1.5,.4,1) both}@keyframes ppop{0%{transform:translate(-50%,-50%) scale(0);filter:brightness(3) drop-shadow(0 0 40px #fff)}100%{transform:translate(-50%,-50%) scale(1);filter:none}}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
   function page(h){ stopAudio(); root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
@@ -84,19 +91,19 @@
     page(top() + '<div id="cnbody"><p class="sub" id="cnsub" style="text-align:center">Opening…</p></div>'); el("cb").onclick = home;
     R("nv_nav", {tok: O.tok}).then(function(n){
       if (!n || !n.ok){ el("cnsub").textContent = "Please try again in a moment."; return; }
-      S.nav = n; var open = (n.open || []).map(Number).filter(function(u){ return u <= 6; }), ck = (n.ckeys || []).map(Number), cur = null;
+      S.nav = n; var ck = (n.ckeys || []).map(Number), lim = 6 + ck.filter(function(u){ return u <= 6 + ck.length; }).length, open = (n.open || []).map(Number).filter(function(u){ return u <= lim; }), cur = null;
       for (var i = 0; i < open.length; i++) if (ck.indexOf(open[i]) < 0){ cur = open[i]; break; }
       var hint = cur === null ? "Everything open is complete. Well done!" : "Tap your stage to begin";
       var H = 170, tot = open.length * H + 330, h = '<div class="pth" style="height:' + tot + 'px">';
       var pts = open.map(function(u, k){ return [ZZ[k % 8], tot - 110 - k * H]; });
-      open.forEach(function(u, k){ var st = ck.indexOf(u) >= 0 ? "done" : u === cur ? "cur" : "idle";
+      open.forEach(function(u, k){ var st = ck.indexOf(u) >= 0 ? "done" : u === cur ? "cur" : "idle"; if (S.pop === u) st += " pop";
         h += '<button class="nd ' + st + '" data-u="' + u + '" style="left:' + pts[k][0] + '%;top:' + pts[k][1] + 'px">' + '<b class="nn">' + u + '</b>' + (st === "done" ? '<u>✔</u>' : '') + (st === "cur" ? '<em>START</em>' : '') + '</button>'; });
       h += '<div class="hnt" style="left:' + pts[0][0] + '%;top:' + (pts[0][1] + 92) + 'px">' + hint + '</div>';
       /* only clouds above the last open stage: nothing else is drawn there */
       var top6 = pts[pts.length - 1][1] - 90, cw = 760, ch = cw * 0.376, step = 95, n = Math.ceil((top6 - ch * 0.5) / step) + 1, cs = "";
       for (var q = 0; q < n; q++){ var ty = Math.min(q * step, Math.max(0, top6 - ch + 30)); cs += '<img class="cli" src="' + (O.cloud || "cloud.png") + '" alt="" style="left:' + (q % 2 ? 18 : 6) + '%;top:' + ty + 'px;width:' + (cw - (q % 3) * 70) + 'px;animation-delay:-' + (q * 2.1) + 's">'; }
       h += '<div class="cld" style="height:' + top6 + 'px">' + cs + '</div></div>';
-      el("cnbody").innerHTML = h;
+      el("cnbody").innerHTML = h; S.pop = null;
       [].forEach.call(document.querySelectorAll(".nd"), function(b){ b.onclick = function(){ S.unit = +b.getAttribute("data-u"); keyCheck(); }; });
       var c = document.querySelector(".nd.cur") || document.querySelector(".nd"); if (c && c.scrollIntoView) c.scrollIntoView({block: "center"});
     }).catch(function(){ el("cnsub").textContent = "No internet connection. Please try again."; });
@@ -132,7 +139,7 @@
   function startPart(){
     page(top() + '<div class="hero"><h2>Loading Part ' + S.unit + '…</h2></div>');
     fetch(O.base + "part" + S.unit + ".json", {cache: "no-store"}).then(function(r){ if (!r.ok) throw 0; return r.json(); }).then(function(P){
-      S.P = P; S.ei = 0; S.res = {}; runEx();
+      S.P = P; S.ei = 0; S.res = {}; if (!S.t0) S.t0 = Date.now(); runEx();
     }).catch(function(){ page(top() + '<div class="card warn"><h2>This part is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
   }
   function dots(){ return '<div class="dots">' + S.P.exercises.map(function(e, i){ return '<i class="' + (i < S.ei ? "on" : i === S.ei ? "cur" : "") + '"></i>'; }).join("") + '</div>'; }
@@ -198,16 +205,23 @@
   function listeningDone(){
     page('<div class="hero"><h1>Listening done ✔</h1><p class="sub">Great focus. Now take a break.</p></div><div class="card ok"><h2>Take a 10-minute break</h2><p>Stand up, step outside, drink some water. You will focus better. If you feel full of energy, you can skip it.</p></div>'
       + '<button class="go" id="cbk">I am back →</button> <button class="pill" id="cign" style="margin-left:6px">Ignore the break, keep going</button>');
-    function nextStage(){ page(top() + '<div class="card"><h2>Reading is next</h2><p>The reading part of this unit is being prepared. Please ask your teacher.</p></div>'); el("cb").onclick = hub; }
+    function nextStage(){ unitDone(); }
     el("cbk").onclick = nextStage; el("cign").onclick = nextStage;
   }
   /* shown after listening, reading and writing are all complete */
+  function goldKey(){ return keySvg().replace(/#5df2d6/g, "#fff3b0").replace(/#7aa2ff/g, "#ffc21a").replace(/#c58bff/g, "#d97a00"); }
   function unitDone(){
-    R("nv_class_done", {tok: O.tok, u: S.unit}).then(function(r){
-      page('<div class="hero"><div class="nk" style="width:200px;max-width:60%;margin:0 auto">' + keySvg() + '</div><h1>Well done!</h1><p class="sub">Unit ' + S.unit + ' is now fully completed.' + (r && r.ok ? ' Your class key is earned.' : '') + '</p></div>'
-        + '<div class="card ok"><p>Your class key is in your pocket. Your next unit is waiting in the Learning Flow. Keep this energy up!</p></div><button class="go" id="cfin">Finish</button>');
-      el("cfin").onclick = close;
-    });
+    var g = 0, n = 0, ex = 0, secs = Math.max(1, Math.round((Date.now() - (S.t0 || Date.now())) / 1000));
+    if (S.P) S.P.exercises.forEach(function(e){ var r = S.res && S.res[e.id]; if (r){ g += r.good; n += r.n; ex++; } });
+    var pct = n ? Math.round(100 * g / n) : 100, fx = S.fix ? S.fix.length : 0, mins = Math.max(1, Math.round(secs / 60)), u = S.unit, nx = u + 1, sp = "";
+    R("nv_class_done", {tok: O.tok, u: u});
+    for (var q = 0; q < 46; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 3.5).toFixed(2) + 's;animation-duration:' + (2.6 + Math.random() * 2.4).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#fff"][q % 5] + ';width:' + (5 + Math.random() * 7).toFixed(1) + 'px;height:' + (8 + Math.random() * 12).toFixed(1) + 'px"></i>';
+    page('<div class="fin"><div class="spk">' + sp + '</div><div class="flash"></div><div class="kdrop">' + goldKey() + '</div>'
+      + '<h1 class="fh">Unit ' + u + ' conquered</h1><p class="fn">' + esc(O.name || "") + ', your class key is yours.</p>'
+      + '<div class="fst"><div><b data-n="' + pct + '" data-s="%">0</b><span>accuracy</span></div><div><b data-n="' + ex + '">0</b><span>exercises</span></div><div><b data-n="' + mins + '" data-s=" min">0</b><span>on task</span></div><div><b data-n="' + fx + '">0</b><span>fixed in the fix round</span></div></div>'
+      + '<button class="go" id="cfin">Show me my next stage →</button></div>');
+    setTimeout(function(){ [].forEach.call(document.querySelectorAll(".fst b"), function(b){ var t = +b.getAttribute("data-n"), c = 0, sf = b.getAttribute("data-s") || "", iv = setInterval(function(){ c += Math.max(1, Math.ceil(t / 24)); if (c >= t){ c = t; clearInterval(iv); } b.textContent = c + sf; }, 40); }); }, 1700);
+    el("cfin").onclick = function(){ S.pop = nx; path(); };
   }
 
   window.CNV = {
