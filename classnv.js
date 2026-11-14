@@ -61,6 +61,13 @@
   CSS += '#cnv .gr{display:grid;gap:12px 22px;margin:14px 0}#cnv .gr.g4{grid-template-columns:repeat(4,1fr)}#cnv .gr.g3{grid-template-columns:repeat(3,1fr)}#cnv .gr.g2{grid-template-columns:repeat(2,1fr)}#cnv .gr .it{display:flex;align-items:center;gap:10px;margin:0}#cnv .gr .it span{flex:0 0 30px;height:30px;border-radius:50%;background:rgba(122,162,255,.2);color:#bcd0ff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}#cnv .gr input.a{padding:9px 12px;font-size:18px}'
   + '#cnv .num input.a{font-size:24px;letter-spacing:.08em;font-weight:700;color:#ffd23f;padding:11px 14px}#cnv .seek{flex:1;accent-color:#7aa2ff;height:6px;cursor:pointer}#cnv .spd{display:flex;align-items:center;gap:8px;margin-top:10px}#cnv .sp5{padding:7px 13px;font-size:14px}#cnv .sp5.on{background:#7aa2ff;color:#0b1130;border-color:#7aa2ff}';
   CSS += '#cnv .ins{display:flex;align-items:center;gap:18px;margin:16px 0 8px;padding:18px 22px;border-radius:20px;background:linear-gradient(120deg,rgba(93,242,214,.2),rgba(122,162,255,.22) 55%,rgba(197,139,255,.22));border:2px solid rgba(160,190,255,.55);box-shadow:0 0 34px rgba(122,162,255,.22)}#cnv .ins .ii{flex:0 0 58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#5df2d6,#7aa2ff);display:flex;align-items:center;justify-content:center;font-size:30px}#cnv .ins small{display:block;font-size:12px;font-weight:800;letter-spacing:.2em;color:#ffd23f;margin-bottom:4px}#cnv .ins strong{font-size:24px;line-height:1.3;font-weight:700;color:#fff}';
+  CSS += '#cnv .stp{display:flex;align-items:flex-start;justify-content:space-between;margin:6px 0 10px}#cnv .stp u{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.14);margin-top:23px;min-width:10px}#cnv .stp u.f{background:linear-gradient(90deg,#5df2d6,#7aa2ff)}'
+  + '#cnv .sn{width:92px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;opacity:.55}#cnv .sn .sb{width:50px;height:50px;border-radius:50%;background:#262e4d;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 5px 0 #151a31}#cnv .sn small{font-size:12px;font-weight:700;color:#cfd8ff}#cnv .sn em{font-style:normal;font-size:11px;font-weight:700;color:#8fa0e0;min-height:13px}'
+  + '#cnv .sn.dn{opacity:1}#cnv .sn.dn .sb{background:linear-gradient(135deg,#5df2d6,#2fb3a0);color:#06203a;font-weight:800;box-shadow:0 5px 0 #17766a}#cnv .sn.dn em{color:#5df2d6}#cnv .sn.cu{opacity:1}#cnv .sn.cu .sb{background:linear-gradient(135deg,#7aa2ff,#c58bff);box-shadow:0 5px 0 #4b3fa8,0 0 26px rgba(160,140,255,.8);animation:snp 1.8s ease-in-out infinite}#cnv .sn.cu small{color:#fff}#cnv .sn.cu em{color:#ffd23f}@keyframes snp{50%{transform:scale(1.12)}}'
+  + '#cnv .fbk{position:relative;text-align:center;margin:18px 0 8px;padding:6px 0}#cnv .ring{width:190px;height:190px;border-radius:50%;margin:0 auto;background:conic-gradient(var(--c) var(--a),rgba(255,255,255,.12) 0);display:flex;align-items:center;justify-content:center;animation:rpop .8s cubic-bezier(.2,1.5,.4,1) both;box-shadow:0 0 40px rgba(255,255,255,.08)}#cnv .ring>div{width:156px;height:156px;border-radius:50%;background:#0b1130;display:flex;flex-direction:column;align-items:center;justify-content:center}#cnv .ring b{font-size:46px;line-height:1;color:var(--c)}#cnv .ring small{font-size:13px;color:#bcd0ff;margin-top:4px}@keyframes rpop{from{transform:scale(.4) rotate(-90deg);opacity:0}to{transform:none;opacity:1}}'
+  + '#cnv .verd{font-size:30px;font-weight:800;letter-spacing:.06em;margin-top:12px;animation:fup .7s .5s both}#cout{position:relative}#cnv .fbk .spk{position:absolute;inset:0;overflow:hidden;pointer-events:none}'
+  + '#cnv .fr{margin:16px 0}#cnv .fr.rl{display:flex;flex-direction:column;gap:10px}#cnv .rc{display:flex;align-items:center;gap:10px;border-radius:14px;padding:10px 12px;animation:rcp .5s cubic-bezier(.2,1.4,.4,1) both}#cnv .rc>div{flex:1;min-width:0}#cnv .rc.g{background:linear-gradient(120deg,rgba(93,242,214,.22),rgba(93,242,214,.06));border:1.5px solid rgba(93,242,214,.55)}#cnv .rc.b{background:linear-gradient(120deg,rgba(255,122,154,.22),rgba(255,122,154,.06));border:1.5px solid rgba(255,122,154,.55)}'
+  + '#cnv .rc .rn{flex:0 0 28px;height:28px;border-radius:50%;background:rgba(255,255,255,.14);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}#cnv .rc b{font-size:19px;color:#e9fff9}#cnv .rc s{display:block;font-size:15px;color:#ff9db3;opacity:.9}#cnv .rc strong{display:block;font-size:19px;color:#ffd23f}#cnv .rc small{display:block;font-size:13px;color:#ffc0cf;margin-top:2px}#cnv .rc i{font-style:normal;font-weight:800;font-size:20px}#cnv .rc.g i{color:#5df2d6}#cnv .rc.b i{color:#ff7a9a}@keyframes rcp{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
   function page(h){ stopAudio(); root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
@@ -182,13 +189,19 @@
       S.P = P; S.ei = 0; S.res = {}; if (!S.t0) S.t0 = Date.now(); runEx();
     }).catch(function(){ page(top() + '<div class="card warn"><h2>This part is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
   }
-  function dots(){ return '<div class="dots">' + S.P.exercises.map(function(e, i){ return '<i class="' + (i < S.ei ? "on" : i === S.ei ? "cur" : "") + '"></i>'; }).join("") + '</div>'; }
+  var ICO = {"01": "🔤", "02": "📝", "03": "🕒", "04": "🏠", "05": "🔢", "06": "👤", "07": "🌍", "08": "⭐"};
+  function dots(){
+    var h = '<div class="stp">';
+    S.P.exercises.forEach(function(e, i){ var r = S.res && S.res[e.id], st = i < S.ei ? "dn" : i === S.ei ? "cu" : "", sc = r ? r.good + "/" + r.n : "";
+      h += (i ? '<u class="' + (i <= S.ei ? "f" : "") + '"></u>' : '') + '<div class="sn ' + st + '"><span class="sb">' + (i < S.ei ? "✔" : (ICO[e.id.slice(-2)] || (i + 1))) + '</span><small>' + esc(e.name) + '</small><em>' + (sc || (i === S.ei ? "you are here" : "")) + '</em></div>'; });
+    return h + '</div>';
+  }
   function player(ex){
-    if (ex.long) return '<div class="card"><div class="pl"><button class="go" id="cplay">▶ Play</button><input type="range" id="cseek" min="0" max="1000" value="0" class="seek"><span id="ctm" class="sub">0:00</span></div>'
+    if (ex.long) return '<div class="card" id="cpc"><div class="pl"><button class="go" id="cplay">▶ Play</button><input type="range" id="cseek" min="0" max="1000" value="0" class="seek"><span id="ctm" class="sub">0:00</span></div>'
       + '<div class="spd"><span class="sub">Speed</span><button class="pill sp5" data-s="0.6">0.6×</button><button class="pill sp5" data-s="0.8">0.8×</button><button class="pill sp5 on" data-s="1">1×</button><button class="pill sp5" data-s="1.25">1.25×</button></div>'
       + '<p class="sub" style="margin:8px 0 0">Dictation: you can pause, move around the recording and change the speed. Take your time.</p></div>';
-    return '<div class="card"><div class="pl"><button class="go" id="cplay">▶ Play</button><div class="bar"><b id="cbar"></b></div><span id="ctm" class="sub">0:00</span></div>'
-      + '<p class="sub" style="margin:8px 0 0">You cannot skip or rewind. Once it starts, listen to the end. You can play it again afterwards.</p></div>';
+    return '<div class="card" id="cpc"><div class="pl"><button class="go" id="cplay">▶ Play</button><div class="bar"><b id="cbar"></b></div><span id="ctm" class="sub">0:00</span></div>'
+      + '<p class="sub" style="margin:8px 0 0">You cannot skip or rewind. Once it starts, listen to the end. ' + (S.inFix ? "You get one more play to check what you missed." : "You can play it twice.") + '</p></div>';
   }
   function wireFull(ex){
     var b = el("cplay"), sk = el("cseek"), tm = el("ctm"), spd = 1, drag = false;
@@ -205,36 +218,51 @@
   }
   function wirePlayer(ex){
     if (ex.long) return wireFull(ex);
-    var b = el("cplay"), bar = el("cbar"), tm = el("ctm");
+    var b = el("cplay"), bar = el("cbar"), tm = el("ctm"), key = ex.audio + (S.inFix ? "f" : ""), lim = S.inFix ? 1 : 2; S.pl = S.pl || {};
+    function left(){ return lim - (S.pl[key] || 0); }
+    function label(){ var l = left(); b.disabled = l <= 0; b.textContent = l <= 0 ? "✔ Played" : S.pl[key] ? "▶ Play again (" + l + " left)" : "▶ Play (" + lim + (lim > 1 ? " plays" : " play") + ")"; }
+    label();
     b.onclick = function(){
-      stopAudio(); b.disabled = true; b.textContent = "Loading…";
+      if (left() <= 0) return;
+      stopAudio(); S.pl[key] = (S.pl[key] || 0) + 1; b.disabled = true; b.textContent = "Loading…";
       audioUrl(ex).then(function(url){ A = new Audio(url); b.textContent = "Playing…";
-      A.ontimeupdate = function(){ if (A && A.duration){ bar.style.width = (100 * A.currentTime / A.duration) + "%"; var t = Math.floor(A.currentTime); tm.textContent = Math.floor(t / 60) + ":" + ("0" + t % 60).slice(-2); } };
-      A.onended = function(){ b.disabled = false; b.textContent = "▶ Play again"; bar.style.width = "0"; };
-      A.onerror = function(){ b.disabled = false; b.textContent = "▶ Try again"; };
-      var p = A.play(); if (p && p.catch) p.catch(function(){ b.disabled = false; b.textContent = "▶ Play"; });
-      }).catch(function(){ b.disabled = false; b.textContent = "▶ Try again"; });
+        A.ontimeupdate = function(){ if (A && A.duration){ bar.style.width = (100 * A.currentTime / A.duration) + "%"; var t = Math.floor(A.currentTime); tm.textContent = Math.floor(t / 60) + ":" + ("0" + t % 60).slice(-2); } };
+        A.onended = function(){ bar.style.width = "0"; label(); };
+        A.onerror = function(){ S.pl[key]--; label(); };
+        var p = A.play(); if (p && p.catch) p.catch(function(){ S.pl[key]--; label(); });
+      }).catch(function(){ S.pl[key]--; label(); });
     };
   }
   function runEx(){
-    var ex = S.P.exercises[S.ei]; S.checked = false;
+    var ex = S.P.exercises[S.ei]; S.checked = false; S.inFix = false;
     var ml = Math.max.apply(null, ex.items.map(function(t){ return t.length; })), gc = ex.long ? "" : ml <= 13 ? "g4" : ml <= 22 ? "g3" : "g2", w = Math.min(34, Math.max(9, ml + 3));
     var inputs = ex.items.map(function(_, k){ return ex.long ? '<div class="it"><span>' + (k + 1) + '</span><textarea class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>'
       : '<div class="it"><span>' + (k + 1) + '</span><input class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off" style="max-width:' + Math.min(36, Math.max(8, ex.items[k].length + 4)) + 'ch"></div>'; }).join("");
-    page(top("Exit") + '<p class="sub" style="margin:0">Exercise ' + ex.id + ' · ' + (S.ei + 1) + ' of ' + S.P.exercises.length + '</p><h2>' + esc(ex.name) + '</h2>' + dots()
+    page(top("Exit") + dots() + '<h2 style="margin:8px 0 0">' + esc(ex.id + " · " + ex.name) + '</h2>'
       + '<div class="ins"><span class="ii">' + (ex.long ? "✍️" : "🎧") + '</span><div><small>WHAT TO DO</small><strong>' + esc(ex.say) + '</strong></div></div>' + player(ex) + '<div id="cin" class="' + (gc ? "gr " + gc : "") + (ex.id === "1.05" ? " num" : "") + '">' + inputs + '</div><button class="go" id="cchk" style="margin-top:6px">Check my answers</button><div id="cout"></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; wirePlayer(ex);
     el("cchk").onclick = function(){ checkEx(ex); };
   }
+  function layoutCls(ex){ var ml = Math.max.apply(null, ex.items.map(function(t){ return t.length; })); return ex.long ? "" : ml <= 13 ? "g4" : ml <= 22 ? "g3" : "g2"; }
+  function tier(pct){ return pct === 100 ? ["PERFECT", "✨", "#ffd23f"] : pct >= 85 ? ["EXCELLENT", "🔥", "#5df2d6"] : pct >= 65 ? ["GOOD JOB", "👏", "#7aa2ff"] : pct >= 40 ? ["KEEP GOING", "💪", "#ff9f43"] : ["LET'S FIX IT", "🎯", "#ff7a9a"]; }
+  /* rows: [{k, said, ok, pct}] */
+  function feedback(ex, rows, good, total, what){
+    var pct = total ? Math.round(100 * good / total) : 100, t = tier(pct), ang = Math.round(3.6 * pct), sp = "";
+    if (pct >= 90) for (var q = 0; q < 34; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 2.5).toFixed(2) + 's;animation-duration:' + (2.4 + Math.random() * 2).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#fff"][q % 5] + ';width:' + (5 + Math.random() * 6).toFixed(1) + 'px;height:' + (8 + Math.random() * 10).toFixed(1) + 'px"></i>';
+    var h = '<div class="fbk"><div class="spk">' + sp + '</div><div class="ring" style="--c:' + t[2] + ';--a:' + ang + 'deg"><div><b>' + pct + '%</b><small>' + good + ' of ' + total + ' ' + what + '</small></div></div>'
+      + '<div class="verd" style="color:' + t[2] + '">' + t[1] + ' ' + t[0] + '</div></div>'
+      + '<div class="' + (ex.long ? "rl" : "gr " + layoutCls(ex)) + ' fr">';
+    rows.forEach(function(r, n){ h += '<div class="rc ' + (r.ok ? "g" : "b") + '" style="animation-delay:' + (0.35 + n * 0.06).toFixed(2) + 's"><span class="rn">' + (r.k + 1) + '</span><div>'
+      + (r.ok ? '<b>' + esc(r.said) + '</b>' : '<s>' + esc(r.said || "(empty)") + '</s><strong>' + esc(ex.items[r.k]) + '</strong>' + (ex.long && r.pct != null ? '<small>' + r.pct + '% of the words</small>' : '')) + '</div><i>' + (r.ok ? "✔" : "✖") + '</i></div>'; });
+    return h + '</div>';
+  }
   function checkEx(ex){
-    var ins = [].slice.call(document.querySelectorAll("#cin .a")), good = 0, h = "";
+    var ins = [].slice.call(document.querySelectorAll("#cin .a")), good = 0, rows = [];
     stopAudio();
-    ins.forEach(function(x, k){ var j = judge(ex, k, x.value), said = x.value.trim(); if (j.ok) good++;
-      h += '<div class="r ' + (j.ok ? "g" : "b") + '"><b>' + (k + 1) + '.</b> ' + (j.ok ? "✔ " : "✖ ") + esc(said || "(empty)") + (j.ok ? "" : '<small>Correct: ' + esc(ex.items[k]) + (ex.long ? " (" + j.pct + "% of the words)" : "") + '</small>') + '</div>';
-    });
-    S.res[ex.id] = {good: good, n: ex.items.length, miss: ins.map(function(x, k){ return judge(ex, k, x.value).ok ? -1 : k; }).filter(function(k){ return k >= 0; })};
-    el("cchk").remove(); el("cin").style.display = "none";
-    el("cout").innerHTML = '<div class="card"><b>' + good + ' of ' + ex.items.length + ' correct</b></div>' + h + '<button class="go" id="cnext" style="margin-top:8px">' + (S.ei + 1 < S.P.exercises.length ? "Next exercise →" : "See my results →") + '</button>';
+    ins.forEach(function(x, k){ var j = judge(ex, k, x.value); if (j.ok) good++; rows.push({k: k, said: x.value.trim(), ok: j.ok, pct: j.pct}); });
+    S.res[ex.id] = {good: good, n: ex.items.length, miss: rows.filter(function(r){ return !r.ok; }).map(function(r){ return r.k; })};
+    el("cchk").remove(); el("cin").style.display = "none"; if (el("cpc")) el("cpc").remove();
+    el("cout").innerHTML = feedback(ex, rows, good, ex.items.length, "correct") + '<button class="go" id="cnext" style="margin-top:14px">' + (S.ei + 1 < S.P.exercises.length ? "Next exercise →" : "See my results →") + '</button>';
     el("cnext").onclick = function(){ S.ei++; if (S.ei < S.P.exercises.length) runEx(); else summary(); };
     el("cout").scrollIntoView && el("cout").scrollIntoView({behavior: "smooth"});
   }
@@ -249,16 +277,15 @@
   }
   function fixEx(){
     if (S.fi >= S.fix.length) return listeningDone();
-    var ex = S.fix[S.fi], miss = S.res[ex.id].miss;
+    S.inFix = true; var ex = S.fix[S.fi], miss = S.res[ex.id].miss;
     var inputs = miss.map(function(k){ return ex.long ? '<div class="it"><span>' + (k + 1) + '</span><textarea class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>'
       : '<div class="it"><span>' + (k + 1) + '</span><input class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off"></div>'; }).join("");
     page(top("Exit") + '<p class="sub" style="margin:0">Fix it · ' + (S.fi + 1) + ' of ' + S.fix.length + '</p><h2>' + esc(ex.id + " " + ex.name) + '</h2><p>Listen again. Write only the items you missed. The answers are hidden until you check.</p>' + player(ex)
       + '<div id="cin">' + inputs + '</div><button class="go" id="cchk">Check</button><div id="cout"></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; wirePlayer(ex);
     el("cchk").onclick = function(){
-      stopAudio(); var h = "", fixed = 0; [].forEach.call(document.querySelectorAll("#cin .a"), function(x){ var k = +x.getAttribute("data-k"), j = judge(ex, k, x.value); if (j.ok) fixed++;
-        h += '<div class="r ' + (j.ok ? "g" : "b") + '"><b>' + (k + 1) + '.</b> ' + (j.ok ? "✔ " : "✖ ") + esc(x.value.trim() || "(empty)") + (j.ok ? "" : '<small>Correct: ' + esc(ex.items[k]) + '</small>') + '</div>'; });
-      el("cchk").remove(); el("cin").style.display = "none"; el("cout").innerHTML = '<div class="card"><b>' + fixed + ' of ' + miss.length + ' fixed</b></div>' + h + '<button class="go" id="cnx" style="margin-top:8px">Continue →</button>';
+      stopAudio(); var rows = [], fixed = 0; [].forEach.call(document.querySelectorAll("#cin .a"), function(x){ var k = +x.getAttribute("data-k"), j = judge(ex, k, x.value); if (j.ok) fixed++; rows.push({k: k, said: x.value.trim(), ok: j.ok, pct: j.pct}); });
+      el("cchk").remove(); el("cin").style.display = "none"; if (el("cpc")) el("cpc").remove(); el("cout").innerHTML = feedback(ex, rows, fixed, miss.length, "fixed") + '<button class="go" id="cnx" style="margin-top:14px">Continue →</button>';
       el("cnx").onclick = function(){ S.fi++; fixEx(); };
     };
   }
