@@ -90,6 +90,28 @@
   + '#cnv .bh,#cnv .fh{color:#10204a}#cnv .fn{color:#3d4f80}#cnv .bring svg circle:nth-of-type(1){stroke:rgba(16,32,74,.12)}#cnv .bc small{color:#4d5f93}#cnv .bc em{color:#3d4f80}#cnv .bc b{background:linear-gradient(160deg,#10204a,#3e63d8 70%,#8a5cf0);-webkit-background-clip:text;background-clip:text}#cnv .bring.late .bc b{background:linear-gradient(160deg,#7a1230,#d6395f);-webkit-background-clip:text;background-clip:text}#cnv .bring.late .bc small,#cnv .bring.late .bc em{color:#b2334f}#cnv .bring.late #barc{stroke:#e0405f}'
   + '#cnv .chips span{background:#fff;color:#10204a}#cnv .fst div{background:#f6f9ff;border-color:#b9c9e6}#cnv .fst span{color:#3d4f80}#cnv .fst b{color:#d98b00}#cnv .bk.lt .bh{color:#b2334f}#cnv .bk.good .bh{color:#0b7a66}'
   + '#cnv .hmh{color:#10204a}#cnv .hmt{color:#b25400}#cnv .hmc span{background:#fff;border-color:#b9c9e6;color:#10204a}#cnv .hmc span b{color:#10204a}#cnv .sp5.on{background:#3e63d8;border-color:#3e63d8;color:#fff}#cnv .spk i{opacity:1}';
+
+  /* ---------- reading: split screen ---------- */
+  CSS += '#cnv .w.rdw{max-width:1700px;padding:12px 18px 24px}#cnv .rdh{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:4px 0 10px}#cnv .rdh h2{margin:0;font-size:26px;letter-spacing:-.02em}'
+  + '#cnv .rds{display:flex;gap:6px;align-items:center;flex-wrap:wrap}#cnv .rds span{padding:6px 12px;border-radius:99px;font-weight:800;font-size:13px;background:#fff;border:2px solid #b9c9e6;color:#4d5f93}#cnv .rds span.cu{background:#3e63d8;border-color:#3e63d8;color:#fff;animation:fpl 2.2s ease-in-out infinite}#cnv .rds span.dn{background:#d9f5ee;border-color:#2bb59b;color:#0b6a58}'
+  + '#cnv .rtm{margin-left:auto;font-weight:800;font-size:18px;padding:6px 14px;border-radius:12px;background:#fff;border:2px solid #b9c9e6;color:#10204a;font-variant-numeric:tabular-nums}#cnv .rtm.late{background:#fde3e9;border-color:#e0607f;color:#b2334f}'
+  + '#cnv .rsp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}#cnv .rpn{background:#fffdf7;border:2px solid #c9d6ee;border-radius:18px;box-shadow:0 8px 24px rgba(40,60,120,.1);height:calc(100vh - 150px);min-height:420px;overflow-y:auto;padding:22px 28px 30px;scroll-behavior:smooth}'
+  + '#cnv .rpn.q{background:#f6f9ff;padding:18px 22px 24px}#cnv .rpt{font:800 38px/1.05 Georgia,serif;letter-spacing:-.02em;margin:0 0 6px;color:#10204a}#cnv .rpi{font:italic 16px/1.5 Georgia,serif;color:#3d4f80;margin:0 0 16px;padding-bottom:14px;border-bottom:2px dashed #c9d6ee}'
+  + '#cnv .rpn p.rp{font:19px/1.75 Georgia,serif;color:#1b2a52;margin:0 0 16px;text-align:left;position:relative}#cnv .rpn p.rp .pl{position:absolute;left:-24px;top:3px;font:800 11px system-ui;color:#9fb0d8}'
+  + '#cnv .qg{margin:0 0 18px}#cnv .qgh{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:linear-gradient(120deg,#d7f5ef,#d9e6ff 55%,#eadcff);border:2px solid #7f9de0;margin-bottom:12px}#cnv .qgh b{font-size:17px;display:block}#cnv .qgh small{display:block;font-size:14.5px;line-height:1.45;color:#2d3f73;margin-top:3px}#cnv .qgh .qi{font-size:26px;line-height:1}'
+  + '#cnv .qd{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 10px;font-size:13.5px;color:#3d4f80}#cnv .qd b{color:#10204a}'
+  + '#cnv .qr{display:flex;gap:12px;padding:12px 14px;border-radius:14px;background:#fff;border:2px solid #d3dcf0;margin-bottom:10px;transition:border-color .15s,background .15s}#cnv .qr.fld{background:#f1fbf8;border-color:#7fd6c3}#cnv .qr.gd{background:#e3f8f1;border-color:#2bb59b}#cnv .qr.bd{background:#fde8ed;border-color:#e0607f}#cnv .qr.lk{opacity:.55}'
+  + '#cnv .qn{flex:0 0 34px;height:34px;border-radius:10px;background:#3e63d8;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}#cnv .qr.gd .qn{background:#0c9c84}#cnv .qr.bd .qn{background:#d6395f}#cnv .qb{flex:1;min-width:0}#cnv .qt{font-size:16.5px;line-height:1.45;color:#10204a;font-weight:600;margin:3px 0 9px}'
+  + '#cnv .tf{display:flex;gap:8px;flex-wrap:wrap}#cnv .tf button{flex:1;min-width:96px;padding:10px 8px;border-radius:12px;border:2px solid #9fb2dc;background:#fff;color:#2d3f73;font-weight:800;font-size:14px;cursor:pointer;letter-spacing:.02em;transition:transform .1s}#cnv .tf button:hover{transform:translateY(-2px)}#cnv .tf button.sel{background:#3e63d8;border-color:#3e63d8;color:#fff;box-shadow:0 4px 0 #27409b}#cnv .tf button:disabled{cursor:default;transform:none}'
+  + '#cnv input.rin{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:12px;border:2px solid #8fa6d6;background:#fff;color:#10204a;font:700 17px system-ui;outline:none}#cnv input.rin:focus{border-color:#3e63d8;box-shadow:0 0 0 4px rgba(62,99,216,.2)}#cnv input.rin.rt{width:150px;padding:6px 8px;font-size:15px;display:inline-block;margin:2px 4px}'
+  + '#cnv table.rtb{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5;color:#1b2a52;border:2px solid #b9c9e6;border-radius:14px;overflow:hidden;background:#fff}#cnv .rtb th{background:#dfe8fb;text-align:left;padding:9px 10px;font-weight:800;color:#10204a}#cnv .rtb td{padding:10px;border-top:1px solid #d3dcf0;vertical-align:top}#cnv .rtb td:first-child{font-weight:800;font-style:italic}#cnv .rtb td+td{border-left:1px solid #e1e8f7}'
+  + '#cnv .tqn{display:inline-block;min-width:22px;text-align:center;padding:1px 6px;margin-right:2px;border-radius:7px;background:#3e63d8;color:#fff;font-weight:800;font-size:13px}#cnv .tqn.gd{background:#0c9c84}#cnv .tqn.bd{background:#d6395f}#cnv .tw{display:inline-block;white-space:nowrap}'
+  + '#cnv .rbar{position:sticky;bottom:0;display:flex;align-items:center;gap:14px;padding:12px 4px 2px;background:linear-gradient(transparent,#f6f9ff 30%)}#cnv .rbar .go{margin:0}#cnv .rbar small{font-weight:700;color:#3d4f80}#cnv .go:disabled{opacity:.45;cursor:not-allowed;animation:none;filter:grayscale(.4)}'
+  + '#cnv .rsc{display:flex;gap:22px;align-items:center;flex-wrap:wrap;justify-content:center;margin:14px 0}#cnv .rsc .ring{width:190px;height:190px}#cnv .qchips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:620px;margin:8px auto 0}#cnv .qchips i{font-style:normal;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;color:#fff;animation:rpop .5s cubic-bezier(.2,1.5,.4,1) both}#cnv .qchips i.g{background:#0c9c84}#cnv .qchips i.b{background:#d6395f}'
+  + '#cnv .vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin:12px 0}#cnv .vc{padding:12px 14px;border-radius:14px;background:#fff;border:2px solid #c9d6ee;border-left:8px solid #3e63d8}#cnv .vc.c{border-left-color:#8a5cf0}#cnv .vc b{font-size:19px;display:block}#cnv .vc span{display:block;color:#3d4f80;font-size:15px;margin-top:2px}#cnv .vc em{display:block;font-style:normal;color:#b25400;font-weight:700;font-size:15px;margin-top:3px}'
+  + '#cnv .vh{font-weight:800;letter-spacing:.14em;font-size:13px;color:#b25400;margin:18px 0 0;text-transform:uppercase}'
+  + '#cnv .acard{padding:14px 16px;border-radius:16px;background:#fff;border:2px solid #c9d6ee;margin-bottom:12px;display:flex;gap:14px}#cnv .acard.gd{border-color:#2bb59b;background:#eefaf6}#cnv .acard.bd{border-color:#e0607f;background:#fff1f4}#cnv .acard .qn{flex:0 0 40px;height:40px}#cnv .acard.gd .qn{background:#0c9c84}#cnv .acard.bd .qn{background:#d6395f}#cnv .acard p{margin:0 0 4px;color:#1b2a52;font-size:15.5px;line-height:1.5}#cnv .acard .ky{display:inline-block;padding:3px 12px;border-radius:99px;background:#0c9c84;color:#fff;font-weight:800;margin:2px 6px 4px 0}#cnv .acard .yr{display:inline-block;padding:3px 12px;border-radius:99px;background:#fde3e9;color:#b2334f;font-weight:800;margin:2px 6px 4px 0;text-decoration:line-through}'
+  + '@media(max-width:980px){#cnv .rsp{grid-template-columns:1fr}#cnv .rpn{height:auto;max-height:60vh}}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
   function page(h){ stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
@@ -174,10 +196,11 @@
     function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
     page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Unit ' + S.unit + '</h2><p class="sub">Your path today: three drillings, with a break between them</p></div>'
       + '<div class="fch">' + card("hl", "🎧", "Listening drilling", (S.lisDone && S.lisDone[S.unit]) ? "Done ✔ · you can redo it" : "Start here", "about 60 min", true, 1) + link()
-      + card("hr", "📖", "Reading drilling", "Opens soon", "after your break", false, 2) + link()
+      + card("hr", "📖", "Reading drilling", (S.rdDone && S.rdDone[S.unit]) ? "Done ✔ · you can redo it" : "Passage + 13 questions", "about 20 min", S.unit === 1, 2) + link()
       + card("hw", "✍️", "Writing drilling", "Opens soon", "after your break", false, 3) + '</div>');
     el("cb").onclick = path; el("hl").onclick = startPart;
-    el("hr").onclick = el("hw").onclick = function(){ this.classList.add("shk"); var t = this; setTimeout(function(){ t.classList.remove("shk"); }, 400); };
+    el("hr").onclick = S.unit === 1 ? startReading : function(){ this.classList.add("shk"); var t0_ = this; setTimeout(function(){ t0_.classList.remove("shk"); }, 400); };
+    el("hw").onclick = function(){ this.classList.add("shk"); var t = this; setTimeout(function(){ t.classList.remove("shk"); }, 400); };
   }
 
   /* ---------- Part runner (listening) ---------- */
@@ -326,15 +349,125 @@
   function mmss(t){ t = Math.max(0, Math.floor(t)); return ("0" + Math.floor(t / 60)).slice(-2) + ":" + ("0" + t % 60).slice(-2); }
   /* until reading and writing exist, a finished listening part ends on its own screen (no class key yet) */
   function nextStage(){
-    S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true;
-    if (O.finale) return unitDone();
-    page('<div class="brk"><div class="bk good"><div class="be">🎧</div><h1 class="bh">Listening complete!</h1><p class="sub">Your listening drilling for Unit ' + S.unit + ' is saved. Reading and writing for this unit are being prepared. Your class key arrives when all three are done.</p>'
-      + '<div class="fst" style="opacity:1;animation:none"><div><b style="color:#0c9c84">✔</b><span>Listening</span></div><div><b style="color:#8a98c4">…</b><span>Reading, soon</span></div><div><b style="color:#8a98c4">…</b><span>Writing, soon</span></div></div></div><button class="go" id="cbk3" style="margin-top:20px">Back to my unit →</button></div>');
+    S.lisDone = S.lisDone || {}; var rd = S.nextKind === "read"; if (!rd) S.lisDone[S.unit] = true;
+    if (O.finale && !rd) return unitDone();
+    var ld = !!(S.lisDone && S.lisDone[S.unit]), rr = !!(S.rdDone && S.rdDone[S.unit]);
+    page('<div class="brk"><div class="bk good"><div class="be">' + (rd ? "📖" : "🎧") + '</div><h1 class="bh">' + (rd ? "Reading complete!" : "Listening complete!") + '</h1><p class="sub">Your ' + (rd ? "reading" : "listening") + ' drilling for Unit ' + S.unit + ' is saved. ' + (rd ? "Writing for this unit is being prepared. " : "") + 'Your class key arrives when all three are done.</p>'
+      + '<div class="fst" style="opacity:1;animation:none"><div><b style="color:' + (ld ? "#0c9c84" : "#8a98c4") + '">' + (ld ? "✔" : "…") + '</b><span>Listening</span></div><div><b style="color:' + (rr ? "#0c9c84" : "#8a98c4") + '">' + (rr ? "✔" : "…") + '</b><span>Reading</span></div><div><b style="color:#8a98c4">…</b><span>Writing, soon</span></div></div></div><button class="go" id="cbk3" style="margin-top:20px">Back to my unit →</button></div>');
     el("cbk3").onclick = hub;
   }
+
+  /* ---------- reading drilling (split screen) ---------- */
+  function wide(on){ var w = document.querySelector("#cnv .w"); if (w) w.classList.toggle("rdw", !!on); }
+  function rdJudge(q, said){
+    said = String(said || "").trim(); if (!said) return false;
+    if (q.t === "tf") return said.toUpperCase() === q.a[0];
+    var n = norm(said).replace(/-/g, " "); return q.a.some(function(a){ return norm(a).replace(/-/g, " ") === n; });
+  }
+  function rdAll(D){ return D.q.concat(D.t); }
+  function startReading(){
+    page(top() + '<div class="hero"><h2>Loading the reading…</h2></div>'); el("cb").onclick = hub;
+    getFile("c" + S.unit + "_read", "read" + S.unit + ".json").then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }).then(function(D){
+      S.R = {D: D, ans: {}, first: null, second: null, t0: Date.now(), phase: 0}; rdTest(false);
+    }).catch(function(){ page(top() + '<div class="card warn"><h2>The reading is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
+  }
+  function rdSteps(cur){
+    var L = ["1 · Test", "2 · Results", "3 · Vocabulary", "4 · Retake", "5 · Answers"];
+    return '<div class="rds">' + L.map(function(t, i){ return '<span class="' + (i < cur ? "dn" : i === cur ? "cu" : "") + '">' + (i < cur ? "✔ " : "") + t + '</span>'; }).join("") + '</div>';
+  }
+  function rdPassage(){
+    var D = S.R.D; return '<div class="rpn" id="rdp"><h1 class="rpt">' + esc(D.title).toUpperCase() + '</h1><p class="rpi">' + esc(D.sub) + '</p>'
+      + D.p.map(function(p, i){ return '<p class="rp"><span class="pl">' + String.fromCharCode(65 + i) + '</span>' + p + '</p>'; }).join("") + '</div>';
+  }
+  function rdTimer(){
+    if (S.bt) clearInterval(S.bt);
+    var t0 = S.R.t0, lim = S.R.D.mins * 60;
+    function tk(){ var e = el("rtm"); if (!e){ clearInterval(S.bt); return; } var s = (Date.now() - t0) / 1000, left = lim - s;
+      if (left >= 0){ e.textContent = "⏱ " + mmss(left); e.classList.remove("late"); } else { e.textContent = "⏱ +" + mmss(-left); e.classList.add("late"); } }
+    tk(); S.bt = setInterval(tk, 500);
+  }
+  function rdTest(retake){
+    var R_ = S.R, D = R_.D, wrongSet = retake ? R_.first.bad : null;
+    function on(n){ return !wrongSet || wrongSet.indexOf(n) >= 0; }
+    var h = '';
+    var tfs = D.q.filter(function(q){ return q.t === "tf" && on(q.n); }), ws = D.q.filter(function(q){ return q.t === "w" && on(q.n); }), ts = D.t.filter(function(q){ return on(q.n); });
+    function qrow(q){ return '<div class="qr" data-n="' + q.n + '"><div class="qn">' + q.n + '</div><div class="qb"><div class="qt">' + esc(q.q) + '</div>'
+      + (q.t === "tf" ? '<div class="tf">' + ["TRUE", "FALSE", "NOT GIVEN"].map(function(v){ return '<button type="button" data-v="' + v + '">' + v + '</button>'; }).join("") + '</div>' : '<input class="rin" type="text" autocomplete="off" spellcheck="false" placeholder="Your answer" data-n="' + q.n + '">') + '</div></div>'; }
+    if (retake) h += '<div class="qgh"><span class="qi">🔁</span><div><b>Retake: only the questions you missed</b><small>You have seen the vocabulary now. Read the passage again and fix your answers. The answers will be shown after this round.</small></div></div>';
+    if (tfs.length) h += '<div class="qg"><div class="qgh"><span class="qi">🧭</span><div><b>Questions 1–5 · True / False / Not Given</b><small>Do the statements agree with the information in the passage?</small></div></div>'
+      + '<div class="qd"><span><b>TRUE</b> = agrees with the passage</span><span><b>FALSE</b> = contradicts the passage</span><span><b>NOT GIVEN</b> = no information on this</span></div>' + tfs.map(qrow).join("") + '</div>';
+    if (ws.length) h += '<div class="qg"><div class="qgh"><span class="qi">✏️</span><div><b>Questions 6–8 · Short answers</b><small>Choose <b>ONE WORD ONLY</b> from the passage for each answer.</small></div></div>' + ws.map(qrow).join("") + '</div>';
+    if (ts.length){
+      var tb = '<table class="rtb"><tr><th>Stepwell</th><th>Date</th><th>Features</th><th>Other notes</th></tr>' + D.tb.map(function(r){
+        function cell(t){ return t.replace(/\{(\d+)\}/g, function(m, n){ n = +n; if (!on(n)) return '<span class="tqn gd">' + n + '</span> <b>' + esc(D.t.filter(function(x){ return x.n === n; })[0].a[0]) + '</b>';
+          return '<span class="tw"><span class="tqn" data-t="' + n + '">' + n + '</span><input class="rin rt" type="text" autocomplete="off" spellcheck="false" data-n="' + n + '"></span>'; }); }
+        return '<tr><td>' + r.name + '</td><td>' + r.date + '</td><td>' + cell(r.feat) + '</td><td>' + cell(r.note) + '</td></tr>'; }).join("") + '</table>';
+      h += '<div class="qg"><div class="qgh"><span class="qi">🧩</span><div><b>Questions 9–13 · Table completion</b><small>Complete the table. Choose <b>ONE WORD AND/OR A NUMBER</b> from the passage for each answer.</small></div></div>' + tb + '</div>'; }
+    var need = [].concat(tfs, ws, ts).map(function(q){ return q.n; });
+    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 3 : 0) + '<div class="rtm" id="rtm">⏱</div></div>'
+      + '<div class="rsp">' + rdPassage() + '<div class="rpn q" id="rdq">' + h + '<div class="rbar"><button class="go" id="rck" disabled>Check my answers</button><small id="rhint"></small></div></div></div>');
+    wide(true); rdTimer();
+    el("cb").onclick = function(){ if (S.bt) clearInterval(S.bt); wide(false); hub(); };
+    var need_n = need.length, minFill = Math.max(1, Math.ceil(need_n * 0.7));
+    function filled(){ return need.filter(function(n){ return (R_.ans[n] || "").trim(); }).length; }
+    function upd(){ var f = filled(), ok = f >= minFill, b = el("rck"); if (!b) return; b.disabled = !ok; el("rhint").textContent = ok ? "Ready. You can still change answers." : "Answer " + (minFill - f) + " more to unlock the check (" + f + "/" + need_n + ")."; }
+    [].forEach.call(document.querySelectorAll("#rdq .tf"), function(g){ var n = +g.parentNode.parentNode.getAttribute("data-n");
+      [].forEach.call(g.children, function(b){ b.onclick = function(){ R_.ans[n] = b.getAttribute("data-v"); [].forEach.call(g.children, function(x){ x.classList.toggle("sel", x === b); }); g.parentNode.parentNode.classList.add("fld"); upd(); }; }); });
+    [].forEach.call(document.querySelectorAll("#rdq input.rin"), function(i){ var n = +i.getAttribute("data-n");
+      i.oninput = function(){ R_.ans[n] = i.value; var r = i.closest(".qr"); if (r) r.classList.toggle("fld", !!i.value.trim()); upd(); };
+      i.onpaste = function(e){ e.preventDefault(); }; i.oncontextmenu = function(e){ e.preventDefault(); }; });
+    upd();
+    el("rck").onclick = function(){
+      var all = rdAll(D), bad = [], good = [];
+      need.forEach(function(n){ var q = all.filter(function(x){ return x.n === n; })[0]; (rdJudge(q, R_.ans[n]) ? good : bad).push(n); });
+      if (!retake){ R_.first = {bad: bad, good: good, ans: JSON.parse(JSON.stringify(R_.ans))}; rdResults(); }
+      else { R_.second = {bad: bad, good: good, ans: JSON.parse(JSON.stringify(R_.ans))}; rdAnswers(); }
+    };
+  }
+  function rdResults(){
+    var R_ = S.R, D = R_.D, r = R_.first, g = r.good.length, tot = D.q.length + D.t.length, pct = Math.round(100 * g / tot), col = pct >= 85 ? "#0c9c84" : pct >= 60 ? "#e0953c" : "#d6395f";
+    var msg = pct >= 85 ? "Superb reading! Look at that accuracy." : pct >= 60 ? "Solid start. A few traps got you, and we will fix them." : "Good effort. This passage hides tricks, and you are about to learn them.";
+    var chips = ""; for (var i = 1; i <= tot; i++) chips += '<i class="' + (r.good.indexOf(i) >= 0 ? "g" : "b") + '" style="animation-delay:' + (i * 0.05).toFixed(2) + 's">' + i + '</i>';
+    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · results</h2>' + rdSteps(1) + '</div><div class="brk" style="padding-top:6px">'
+      + '<div class="rsc"><div class="ring" style="--c:' + col + ';--a:' + pct + '%"><div><b style="font-size:46px;color:' + col + '">' + g + '/' + tot + '</b><small>' + pct + '% correct</small></div></div></div>'
+      + '<h1 class="bh" style="font-size:40px">' + msg + '</h1><p class="sub">Green = correct, red = needs another look. The answers stay hidden until you have studied the vocabulary and tried again.</p>'
+      + '<div class="qchips">' + chips + '</div>'
+      + '<div style="margin-top:22px"><button class="go" id="rvo">' + (r.bad.length ? "Study the vocabulary →" : "Perfect! See the explanations →") + '</button></div></div>');
+    wide(false); el("cb").onclick = hub;
+    el("rvo").onclick = function(){ if (r.bad.length) rdVocab(); else { R_.second = {bad: [], good: r.good, ans: r.ans}; rdAnswers(); } };
+  }
+  function rdVocab(){
+    var D = S.R.D, r = S.R.first;
+    function card(x, c){ return '<div class="vc ' + c + '"><b>' + esc(x[0]) + '</b><span>' + esc(x[1]) + '</span><em>' + esc(x[2]) + '</em></div>'; }
+    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · vocabulary</h2>' + rdSteps(2) + '</div>'
+      + '<p class="sub" style="text-align:left;margin:4px 0">Study these, then read the passage again. They unlock the questions you missed.</p>'
+      + '<div class="vh">Words from the passage</div><div class="vgrid">' + D.v.map(function(x){ return card(x, ""); }).join("") + '</div>'
+      + '<div class="vh">Unit ' + S.unit + ' power chunks · Growing Up</div><div class="vgrid">' + D.c.map(function(x){ return card(x, "c"); }).join("") + '</div>'
+      + '<div style="text-align:center;margin:22px 0 10px"><button class="go" id="rrt">Retake the ' + r.bad.length + ' question' + (r.bad.length > 1 ? "s" : "") + ' I missed →</button></div>');
+    wide(false); el("cb").onclick = rdResults; el("rrt").onclick = function(){ S.R.t0 = Date.now(); rdTest(true); };
+  }
+  function rdAnswers(){
+    var R_ = S.R, D = R_.D, all = rdAll(D), f = R_.first, s2 = R_.second, tot = all.length;
+    var fin = {}; all.forEach(function(q){ fin[q.n] = s2.good.indexOf(q.n) >= 0 || f.good.indexOf(q.n) >= 0; });
+    var g1 = f.good.length, g2 = Object.keys(fin).filter(function(k){ return fin[k]; }).length;
+    var cards = all.map(function(q){ var ok1 = f.good.indexOf(q.n) >= 0, ok2 = fin[q.n], ya = (s2.ans && s2.ans[q.n]) || f.ans[q.n] || "", cls = ok2 ? "gd" : "bd";
+      return '<div class="acard ' + cls + '"><div class="qn">' + q.n + '</div><div><p>' + (q.q ? '<b>' + esc(q.q) + '</b>' : "") + '</p>'
+        + (ok2 ? '' : '<span class="yr">' + esc(ya || "no answer") + '</span>') + '<span class="ky">' + esc(q.a[0].toUpperCase() === q.a[0] ? q.a[0] : q.a[0]) + (q.a.length > 1 ? ' <small style="font-weight:600">(also: ' + esc(q.a.slice(1).join(", ")) + ')</small>' : "") + '</span>'
+        + '<p>' + esc(q.ex) + '</p>' + (ok1 ? '' : ok2 ? '<p style="color:#0b7a66;font-weight:700">✔ Fixed in the retake. Nice!</p>' : '') + '</div></div>'; }).join("");
+    D.t.forEach(function(q){ var m = D.tb.filter(function(r){ return (r.feat + r.note).indexOf("{" + q.n + "}") >= 0; })[0]; if (m) q.q = m.name + ": " + (m.feat + " / " + m.note).replace(/<br>/g, " / ").replace(/<[^>]+>/g, "").replace(/\{(\d+)\}/g, "(" + "$1" + ") ____"); });
+    cards = all.map(function(q){ var ok1 = f.good.indexOf(q.n) >= 0, ok2 = fin[q.n], ya = (s2.ans && s2.ans[q.n]) || f.ans[q.n] || "", cls = ok2 ? "gd" : "bd";
+      return '<div class="acard ' + cls + '"><div class="qn">' + q.n + '</div><div><p><b>' + esc(q.q || "") + '</b></p>'
+        + (ok2 ? '' : '<span class="yr">' + esc(ya || "no answer") + '</span>') + '<span class="ky">' + esc(q.a[0]) + '</span>' + (q.a.length > 1 ? '<small style="color:#3d4f80;font-weight:600">also accepted: ' + esc(q.a.slice(1).join(", ")) + '</small>' : "")
+        + '<p>' + esc(q.ex) + '</p>' + (!ok1 && ok2 ? '<p style="color:#0b7a66;font-weight:700">✔ Fixed in the retake. Nice!</p>' : '') + '</div></div>'; }).join("");
+    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · answers & explanations</h2>' + rdSteps(4) + '</div>'
+      + '<div class="brk" style="padding:4px 0 8px"><div class="fst" style="opacity:1;animation:none"><div><b>' + g1 + '/' + tot + '</b><span>first try</span></div><div><b style="color:#0c9c84">' + g2 + '/' + tot + '</b><span>after the retake</span></div><div><b>' + (g2 - g1 >= 0 ? "+" + (g2 - g1) : g2 - g1) + '</b><span>improvement</span></div></div></div>'
+      + cards + '<div style="text-align:center;margin:20px 0 30px"><button class="go" id="rfin">Finish the reading →</button></div>');
+    wide(false); el("cb").onclick = hub;
+    el("rfin").onclick = function(){ S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.rdRes = S.rdRes || {}; S.rdRes[S.unit] = {first: g1, final: g2, total: tot, secs: Math.round((Date.now() - R_.t0) / 1000)}; readingDone(); };
+  }
   /* one break screen for every stage: listening, reading, writing... */
-  function listeningDone(){ stageBreak("LISTENING DONE ✔", nextStage); }
-  function readingDone(){ stageBreak("READING DONE ✔", nextStage); }
+  function listeningDone(){ S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
+  function readingDone(){ S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
   function stageBreak(label, onNext){
     var t0 = Date.now(), C = 2 * Math.PI * 130;
     page('<div class="brk"><small class="wu">' + label + '</small><h1 class="bh">Break time!</h1><p class="sub" id="bsub">Great focus. Recharge for ten minutes. We will keep the clock for you.</p>'
