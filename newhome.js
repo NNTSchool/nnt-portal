@@ -49,7 +49,8 @@
   + '#newv .nd.now .bx{background:linear-gradient(160deg,rgba(70,240,196,.16),rgba(124,92,255,.14));border:1.5px solid rgba(70,240,196,.6);box-shadow:0 14px 44px -14px rgba(70,240,196,.5),inset 0 0 0 1px rgba(255,255,255,.04)}'
   + '#newv .go{color:#2a0a1e;box-shadow:0 8px 26px -8px rgba(255,111,145,.6);transition:transform .15s,box-shadow .15s,filter .15s}#newv .go:hover{filter:brightness(1.06)}#newv .go:active{transform:translateY(1px) scale(.99)}#newv .go.ghost{background:transparent;color:#f2f0ff;border:1.5px solid rgba(185,176,255,.45);box-shadow:none}'
   + '#newv h2{letter-spacing:-.02em}#newv .hb h2{background:linear-gradient(90deg,#fff,#c9c2ff 60%,#9dfbe3);-webkit-background-clip:text;background-clip:text;color:transparent}'
-  + '#newv .nw{padding-bottom:20px}#newv .nvnav{position:sticky;bottom:0;z-index:20;display:flex;gap:10px;margin:22px -16px 0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(8,10,34,0),rgba(8,10,34,.88) 30%,rgba(8,10,34,.96));}'
+  + '#newv .nd .dot.kkd{width:64px;height:64px;background:radial-gradient(circle at 35% 30%,#ffe98a 0,#f2b01e 55%,#b87300 100%);border:2px solid #fff4b8;box-shadow:0 0 28px rgba(255,200,40,.55);overflow:hidden}#newv .nd .dot.kkd .kk{display:block;width:100%;transform:rotate(-45deg) scale(1.18)}#newv .nd .dot.kkd svg{width:100%;height:auto;display:block;filter:drop-shadow(0 2px 3px rgba(90,50,0,.55))}'
+  + '#newv .nvnav .pr.lk:disabled{border:2px solid #ffc24a;background:rgba(255,194,74,.12);color:#ffd98a}#newv .nvnav .pr.lk:disabled b{color:#ffe7a8}#newv .nvnav .pr.lk small{color:#ffd98a;font-weight:700}#newv .nw{padding-bottom:20px}#newv .nvnav{position:sticky;bottom:0;z-index:20;display:flex;gap:10px;margin:22px -16px 0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(8,10,34,0),rgba(8,10,34,.88) 30%,rgba(8,10,34,.96));}'
   + '#newv .nvnav button{flex:1;border-radius:16px;padding:12px 10px;cursor:pointer;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;text-align:center;min-height:56px;transition:transform .15s,filter .15s}#newv .nvnav button b{display:block;font-size:17px;font-weight:800}#newv .nvnav button small{display:block;font-size:12px;margin-top:2px;opacity:.85}'
   + '#newv .nvnav .pr{border:0;color:#2a0a1e;background:linear-gradient(135deg,#ffb86b 0%,#ff7a8a 55%,#ff5fa8 100%);box-shadow:0 10px 30px -10px rgba(255,111,145,.7)}#newv .nvnav .gb{color:#f2f0ff;background:rgba(255,255,255,.07);border:1.5px solid rgba(185,176,255,.4)}'
   + '#newv .nvnav button:disabled{cursor:default;box-shadow:none;background:rgba(255,255,255,.05);color:#8f8bb8;border:1.5px dashed rgba(185,176,255,.22)}#newv .nvnav button:not(:disabled):active{transform:scale(.98)}'
@@ -243,7 +244,7 @@
     var pv = nvPrev(), nx = nvNext(), can = nvCanNext();
     var ph = nx === null ? (S.nav.more ? "The next unit opens soon" : "You are at the last unit") : can ? "Unit " + nx : nvDone(S.unit) ? "Finish the class test first" : "Finish Unit " + S.unit + " first";
     return '<div class="nvnav"><button type="button" class="gb" id="nvgb"' + (pv === null ? " disabled" : "") + '><b>← Go back</b><small>' + (pv === null ? "This is the first unit" : "Unit " + pv) + '</small></button>'
-      + '<button type="button" class="pr" id="nvpr"' + (can ? "" : " disabled") + '><b>Proceed →</b><small>' + ph + '</small></button></div>'
+      + '<button type="button" class="pr' + (!can && nx !== null ? " lk" : "") + '" id="nvpr"' + (can ? "" : " disabled") + '><b>' + (!can && nx !== null ? "🔒 Locked" : "Proceed →") + '</b><small>' + (!can && nx !== null && nvDone(S.unit) ? "Do your class test in the classroom to open Unit " + nx : ph) + '</small></button></div>'
 ;
   }
   function wireNav(){
@@ -402,7 +403,7 @@
       var st = S.st || {}, tn = S.track === "ie" ? "IELTS" : S.track === "ml" ? "Multi-level" : "", cta = "background:linear-gradient(135deg,#ffb86b 0%,#ff7a8a 55%,#ff5fa8 100%)";
       var tOK = !!st.test, wOK = !!st.essay, sOK = !!st.speak, key = !!st.key, oks = [all, tOK, wOK, sOK], nd = oks.filter(function(q){ return q; }).length;
       var cur = -1; for (var ci = 0; ci < 4; ci++) if (!oks[ci]){ cur = ci; break; }
-      function node(kind, dot, body){ return '<div class="nd ' + kind + '"><div class="dot">' + dot + '</div><div class="bx">' + body + '</div></div>'; }
+      function node(kind, dot, body){ return '<div class="nd ' + kind + '"><div class="dot' + (dot.indexOf('class="kk"') > -1 ? ' kkd' : '') + '">' + dot + '</div><div class="bx">' + body + '</div></div>'; }
       var h = '<div class="hb"><div class="hero"><div class="ring">' + ringSvg(key ? 1 : nd / 4) + '<div class="c"><small>Unit</small><b>' + S.unit + '</b></div></div>'
         + '<div><h2>Unit ' + S.unit + ' · Learning Flow</h2><p class="sub">' + (key ? "Unit " + S.unit + " complete. The key is yours." : nd === 0 ? "Your adventure begins here." : nd + " of 4 steps done. Keep going.") + '</p>'
         + (tn ? '<span class="chip">Track · ' + tn + '</span>' : '<span class="chip">Track · you choose after the videos</span>') + '<span class="chip">Unit ' + S.unit + ' of 20</span></div></div><div class="path">';
@@ -437,7 +438,7 @@
       else b4 = '<b>Speaking</b><small>Opens after the writing · use your own voice</small>';
       h += node(k4, sOK ? "✓" : "4", b4);
       /* the key */
-      h += key ? node("done", "★", '<b>Key earned</b><small>Your class test for Unit ' + S.unit + ' is open.</small>') : node("wait", '<span class="kd">' + keySvg() + '</span>', '<b>The key</b><small>Finish all four steps and it opens your class test for Unit ' + S.unit + '.</small>');
+      h += key ? node("done", '<span class="kk">' + keySvg() + '</span>', '<b>Key earned</b><small>Your class test for Unit ' + S.unit + ' is open.' + (S.nav && !nvCDone(S.unit) && nvNext() !== null && !S.nav.vip ? ' <b style="color:#ffd23f">Finish it in the classroom to unlock Unit ' + nvNext() + '.</b>' : '') + '</small>') : node("wait", '<span class="kd">' + keySvg() + '</span>', '<b>The key</b><small>Finish all four steps and it opens your class test for Unit ' + S.unit + '.</small>');
       h += '</div></div>';
       if (S.teacher){ h += '<div class="st"><div class="n">👑</div><div><b>Teacher: open any step</b><small>Your time and results are still recorded. Nothing is blocked for you.</small></div></div>'
           + '<button class="go" id="nvtt" type="button">Home test</button> <button class="go" id="nvtw" type="button" style="margin-left:6px">Writing</button> <button class="go" id="nvts" type="button" style="margin-left:6px">Speaking</button>'; }
