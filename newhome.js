@@ -62,7 +62,10 @@
   + '#newv .hmring .ring{width:min(46vw,200px);height:min(46vw,200px);position:relative;margin:0 auto}#newv .hmring .ring svg{width:100%;height:100%}#newv .hmring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}#newv .hmring .c small{font:700 13px system-ui;letter-spacing:.18em;text-transform:uppercase;color:#b9b0ff}#newv .hmring .c b{font:800 64px/1 system-ui;color:#fff;letter-spacing:-.03em}'
   + '#newv .hmlvl{margin:16px 0 4px}#newv .hmq{margin:26px auto 30px;max-width:620px;padding:22px 26px;border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(185,176,255,.22);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}#newv .hmq p{margin:0;font:600 clamp(19px,2.6vw,25px)/1.4 Georgia,serif;font-style:italic;color:#f2f0ff}#newv .hmq cite{display:block;margin-top:10px;font:700 14px system-ui;font-style:normal;color:#b9b0ff;letter-spacing:.04em}'
   + '#newv .hmgo{width:min(480px,100%);padding:22px 28px;font-size:23px;border-radius:20px;letter-spacing:.01em;box-shadow:0 18px 50px -12px rgba(255,111,145,.75);animation:nvglow 2.6s ease-in-out infinite}@keyframes nvglow{50%{box-shadow:0 18px 64px -6px rgba(255,111,145,.95)}}@media (prefers-reduced-motion:reduce){#newv .hmgo{animation:none}}'
-  + '#newv .nw:has(.hm){max-width:1000px}#newv .nvdbg{text-align:center;font:600 11px system-ui;color:#8f8bb8;padding:0 0 8px;margin-top:-6px;position:sticky;bottom:0;background:rgba(8,10,34,.96)}';
+  + '#newv .nw:has(.hm){max-width:1000px}#newv .nvdbg{text-align:center;font:600 11px system-ui;color:#8f8bb8;padding:0 0 8px;margin-top:-6px;position:sticky;bottom:0;background:rgba(8,10,34,.96)}'
+
+  + '#newv .nd.wait .dot{background:#12102e;border-color:rgba(185,176,255,.35);color:#b9b0ff}#newv .nd.wait .bx{opacity:.88}#newv .nd.open .dot{background:#12102e;border-color:rgba(185,176,255,.5);color:#f2f0ff}'
+  + '#newv .nd .bx .vc{margin:10px 0 0}#newv .nd .bx .go{margin-top:12px}#newv .nd .dot .kd svg{width:30px;height:auto;display:block}#newv .hero h2{margin:0 0 4px}';
   var S = {unit: 1, vids: [], cur: null, pl: null, hb: null, ack: 0, mack: null, fails: 0, back: null, ytReady: false, ytQ: [], word: 0, wordT: 0, hidden: false, ready: false, busy: false};
   function tok(){ return ls("nnt_phone_token"); }
   function fmt(s){ s = Math.max(0, Math.round(s)); var h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return (h ? h + ":" + (m < 10 ? "0" : "") : "") + m + ":" + (x < 10 ? "0" : "") + x; }
@@ -210,44 +213,6 @@
     rpc("nv_stage", {tok: tok(), u: fu}).then(function(x){ var t = x && x.ok ? x.track : null, c = el("hmtrk"); if (c && t){ c.textContent = "Track · " + (t === "ie" ? "IELTS" : "Multi-level"); c.style.display = ""; } }).catch(function(){});
   }
 
-  /* the Novel home: where you are, what is next, and a hint of what waits in class */
-  function hubPage(){
-    S.sub = false; var reqU = S.unit;
-    rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){
-      if (!x || !x.ok){ S.sub = true; unitPage(); return; }
-      var st = x.st || {}, track = x.track, tn = track === "ie" ? "IELTS" : track === "ml" ? "Multi-level" : "";
-      var vOK = !!st.jumped || (st.vtotal > 0 && st.vdone >= st.vtotal), tOK = !!st.test, wOK = !!st.essay, sOK = !!st.speak;
-      var steps = [
-        {k: "Watch the videos", ok: vOK, d: st.jumped ? "Skipped with the jump test" : (st.vdone || 0) + " of " + (st.vtotal || 0) + " finished", w: "Short videos with secret words to catch."},
-        {k: "Home test", ok: tOK, d: tOK ? Math.round(st.pct || 0) + "%" : "Listening, grammar, vocabulary", w: "91 questions, about 1 hour."},
-        {k: "Writing", ok: wOK, d: wOK ? "Done" : "Put the unit on paper", w: "Do it in one go."},
-        {k: "Speaking", ok: sOK, d: sOK ? "Done" : "Use your own voice", w: "About 20 minutes."}];
-      var cur = -1; for (var i = 0; i < steps.length; i++) if (!steps[i].ok){ cur = i; break; }
-      var nd = steps.filter(function(q){ return q.ok; }).length, key = !!st.key;
-      var pb = document.getElementById("paybtn"), hasPay = pb && !pb.classList.contains("hide");
-      var h = '<div class="hb"><div class="hbar"><button id="nvhome" type="button">⌂ Home</button></div><div class="hero"><div class="ring">' + ringSvg(key ? 1 : nd / 4) + '<div class="c"><small>Unit</small><b>' + S.unit + '</b></div></div>'
-        + '<div><h2>Learning Flow</h2><p class="sub">' + "Practised at home · " + (key ? "Unit " + S.unit + " complete. The key is yours." : nd === 0 ? "your adventure begins here." : nd + " of 4 steps done. Keep going.") + '</p>'
-        + (tn ? '<span class="chip">Track · ' + tn + '</span>' : '<span class="chip">Track · you choose after the videos</span>') + '<span class="chip">Unit ' + S.unit + ' of 20</span></div></div>';
-      h += '<div class="path">';
-      var mi = 0;
-      steps.forEach(function(q, i){
-        if (q.ok) h += '<div class="nd done"><div class="dot">✓</div><div class="bx"><b>' + q.k + '</b><small>' + q.d + '</small></div></div>';
-        else if (i === cur) h += '<div class="nd now"><div class="dot">' + (i + 1) + '</div><div class="bx"><b>' + q.k + '</b><small>Your next step · ' + q.w + '</small><button class="go" id="nvhgo" type="button">' + (i === 0 && !(st.vdone > 0) ? "Begin" : "Continue") + ' →</button></div></div>';
-        else { mi++; h += '<div class="nd mist m' + Math.min(mi, 3) + '"><div class="dot">' + (i + 1) + '</div><div class="bx"><div class="in"><b>' + q.k + '</b><small>' + q.w + '</small></div><span class="tag">Do ' + steps[i - 1].k + ' to unlock</span></div></div>'; }
-      });
-      if (key) h += '<div class="nd done"><div class="dot">★</div><div class="bx"><b>Key earned</b><small>Your class test is open.</small></div></div>';
-      else { mi++; h += '<div class="nd mist m3"><div class="dot kd">'+keySvg()+'</div><div class="bx"><div class="in"><b>The key</b><small>Something opens for you</small></div><span class="tag">Do ' + steps[3].k + ' to unlock</span></div></div>'; }
-      h += '</div>';
-      if (key) h += '<div class="kgot">' + keySvg() + '</div><button class="go ghost" id="nvhrev" type="button" style="width:100%;margin-top:6px">Review Unit ' + S.unit + '</button>';
-      else h += '<div class="rw"><div class="kk">' + keySvg() + '<div><h3>Waiting for you in class</h3><p>Finish this unit and the key is yours. It opens your class test for Unit ' + S.unit + '.</p></div></div>'
-        + '<div class="ch"><span>Unit ' + S.unit + ' class test</span><span class="bl">Something extra</span><span class="bl">More to discover</span></div></div>';
-      h += '</div>';
-      page(h, true);
-      el("nvhome").onclick = function(){ homePage(); };
-      if (el("nvhgo")) el("nvhgo").onclick = function(){ S.sub = true; unitPage(); };
-      if (el("nvhrev")) el("nvhrev").onclick = function(){ S.review = true; S.sub = true; unitPage(); };
-    }).catch(function(){ page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>'); });
-  }
   /* ---------- unit page ---------- */
   /* ---------- the unit map: ONE source of truth for Proceed / Go back ---------- */
   function navLoad(){
@@ -283,14 +248,14 @@
     if (p) p.onclick = function(){ p.disabled = true; moveOn(p); };
   }
   function goUnit(u){
-    S.unit = u; S.st = null; S.chose = null; S.review = false; S.sub = false;
+    S.unit = u; S.st = null; S.chose = null; S.review = false; S.sub = true;
     try{ sessionStorage.setItem("nvcur", String(u)); }catch(e){}
-    hubPage();
+    unitPage();
   }
   function page(html, nav){
-    var top = S.sub ? '<button class="nbk" id="nvback" type="button">← Overview</button>' : (S.back && nav === "exit" ? '<button class="nbk" id="nvback" type="button">← Back</button>' : '');
+    var top = S.sub ? '<button class="nbk" id="nvback" type="button">⌂ Home</button>' : (S.back && nav === "exit" ? '<button class="nbk" id="nvback" type="button">← Back</button>' : '');
     el("newv").innerHTML = '<div class="nw">' + top + html + (nav === true ? navBar() : '') + '</div>';
-    var b = el("nvback"); if (b) b.onclick = function(){ if (S.sub){ S.review = false; S.chose = null; hubPage(); } else if (S.back) S.back(); };
+    var b = el("nvback"); if (b) b.onclick = function(){ if (S.sub){ S.review = false; S.chose = null; homePage(); } else if (S.back) S.back(); };
     if (nav === true) wireNav();
     try{ el("newv").scrollTop = 0; }catch(e){}
   }
@@ -317,7 +282,7 @@
       var nx = nvNext();
       if (nx !== null && nvCanNext()){ goUnit(nx); return; }
       if (btn){ btn.innerHTML = old; }
-      S.sub = false; hubPage();
+      S.sub = true; unitPage();
       nvNote(nx === null ? "The next unit opens soon." : "Finish all four steps of Unit " + cur + " to earn the key. Then Proceed opens.");
     }).catch(function(){ if (btn){ btn.disabled = false; btn.innerHTML = old; } nvNote("No internet connection. Please try again."); });
   }
@@ -364,7 +329,7 @@
     if (!S.track){
       h += '<div class="st"><div class="n">1</div><div><b>Choose your track</b><small>You choose once. Only your teacher can change it later.</small></div></div>'
         + '<button class="go" id="nvtml" type="button">Multi-level</button> <button class="go" id="nvtie" type="button" style="margin-left:8px">IELTS</button>';
-      page(h);
+      page(h, true);
       ["ml","ie"].forEach(function(t){ var b = el("nvt" + t); if (b) b.onclick = function(){ nvAsk("Choose " + (t === "ie" ? "IELTS" : "Multi-level") + "?", "You cannot change this later without your teacher.", "Yes, choose it", function(){ rpc("nv_set_track", {tok: tok(), trk: t}).then(function(r){ if (r && (r.ok || r.err === "fixed")) unitPage(); }); }); }; });
       return;
     }
@@ -387,34 +352,50 @@
       var kseen = false, ret = false; try{ kseen = sessionStorage.getItem("nvks" + S.unit) === "1"; ret = sessionStorage.getItem("nnt_ret") === "1"; sessionStorage.removeItem("nnt_ret"); }catch(e){}
       /* coming back from the home test or the writing: stay on the steps; the key screen is only for finishing the last step */
       if (ret && !(S.st && S.st.speak)) kseen = true;
-      if (S.st && S.st.key && !S.review && !kseen){ keyScreen(); return; }
+      /* the key screen is the celebration right after finishing the last step, not something to see again when moving between units */
+      if (S.st && S.st.key && ret && S.st.speak && !kseen){ keyScreen(); return; }
       if (S.jump && S.chose !== S.unit){ choiceScreen(); return; }
       var done = S.vids.filter(function(v){ return v.done; }).length, jumped = !!(S.st && S.st.jumped), all = jumped || done === S.vids.length;
-      var h = '<h2>Unit ' + S.unit + ' · Learning Flow</h2><p class="sub">Do the steps in order. Each step opens after the one before it.</p>' + (S.vids.length && !(S.st && S.st.jumped) ? '<p class="sub" style="font-size:14px">🔑 While you watch, 3 secret words pop up at random moments. Remember them: you type them at the end of each video.</p>' : '');
-      h += '<div class="st"><div class="n">' + (all ? "✓" : "1") + '</div><div><b>Watch the videos</b><small>' + (jumped ? "⏭ Skipped: you passed the jump test" : done + ' of ' + S.vids.length + ' finished') + '</small></div></div>';
-      if (!all) S.vids.forEach(function(v){
-        var pc = Math.min(100, Math.round(v.covered / v.target * 100)), lab = v.done ? "✅ Finished" : v.locked ? "🔒 Locked" : v.covered >= v.target ? "Type the secret words" : v.covered ? "Continue" : "Start";
-        h += '<div class="vc"><div class="t">🎬 ' + esc(v.title) + '<span>' + fmt(v.len) + '</span></div><div class="bar"><i style="width:' + (v.done ? 100 : pc) + '%"></i></div><small>Watch at least ' + fmt(v.target) + ' (90%). ' + (v.done ? "Done." : fmt(Math.min(v.covered, v.target)) + " watched.") + (v.redo ? ' Restarts: ' + v.redo + '.' : '') + '</small><br>'
-          + '<button class="go" data-i="' + v.idx + '"' + (v.locked || v.done ? " disabled" : "") + ' type="button">' + lab + '</button></div>';
-      });
-      var st = S.st || {}, tn = S.track === "ie" ? "IELTS" : "Multi-level";
-      if (!all && !S.teacher){ h += '<div class="st off"><div class="n">2</div><div><b>Home test</b><small>Opens after the videos</small></div></div>'; }
-      else if (st.test){ h += '<div class="st"><div class="n">' + (st.cancelled ? "✕" : "✓") + '</div><div><b>Home test</b><small>' + 'Done · ' + Math.round(st.pct) + '%' + '</small></div></div>'; }
-      else if (!S.track){
-        h += '<div class="st"><div class="n">2</div><div><b>Choose your track</b><small>You choose once. Only your teacher can change it later.</small></div></div>'
-          + '<button class="go" id="nvtml" type="button">Multi-level</button> <button class="go" id="nvtie" type="button" style="margin-left:8px">IELTS</button>';
-      } else {
-        h += '<div class="st"><div class="n">2</div><div><b>Home test</b><small>91 questions · about 1 hour · ' + tn + '. Listening needs headphones. Do it in one go.</small>' + (st.cancels ? '<small style="color:#ffe27a;font-weight:700;margin-top:6px">⚠ Your last try was cancelled (you left the test window 3 times). You must take the test again.</small>' : '') + '</div></div>'
-          + '<button class="go" id="nvstarttest" type="button" style="background:linear-gradient(135deg,#ffb86b 0%,#ff7a8a 55%,#ff5fa8 100%)">Start the home test</button>';
+      var st = S.st || {}, tn = S.track === "ie" ? "IELTS" : S.track === "ml" ? "Multi-level" : "", cta = "background:linear-gradient(135deg,#ffb86b 0%,#ff7a8a 55%,#ff5fa8 100%)";
+      var tOK = !!st.test, wOK = !!st.essay, sOK = !!st.speak, key = !!st.key, oks = [all, tOK, wOK, sOK], nd = oks.filter(function(q){ return q; }).length;
+      var cur = -1; for (var ci = 0; ci < 4; ci++) if (!oks[ci]){ cur = ci; break; }
+      function node(kind, dot, body){ return '<div class="nd ' + kind + '"><div class="dot">' + dot + '</div><div class="bx">' + body + '</div></div>'; }
+      var h = '<div class="hb"><div class="hero"><div class="ring">' + ringSvg(key ? 1 : nd / 4) + '<div class="c"><small>Unit</small><b>' + S.unit + '</b></div></div>'
+        + '<div><h2>Unit ' + S.unit + ' · Learning Flow</h2><p class="sub">' + (key ? "Unit " + S.unit + " complete. The key is yours." : nd === 0 ? "Your adventure begins here." : nd + " of 4 steps done. Keep going.") + '</p>'
+        + (tn ? '<span class="chip">Track · ' + tn + '</span>' : '<span class="chip">Track · you choose after the videos</span>') + '<span class="chip">Unit ' + S.unit + ' of 20</span></div></div><div class="path">';
+      /* 1 videos */
+      var b1 = '<b>Watch the videos</b><small>' + (jumped ? "⏭ Skipped: you passed the jump test" : done + ' of ' + S.vids.length + ' finished') + '</small>';
+      if (!all){
+        if (S.vids.length) b1 += '<small style="margin-top:8px">🔑 While you watch, 3 secret words pop up at random moments. Remember them: you type them at the end of each video.</small>';
+        S.vids.forEach(function(v){
+          var pc = Math.min(100, Math.round(v.covered / v.target * 100)), lab = v.done ? "✅ Finished" : v.locked ? "🔒 Locked" : v.covered >= v.target ? "Type the secret words" : v.covered ? "Continue" : "Start";
+          b1 += '<div class="vc"><div class="t">🎬 ' + esc(v.title) + '<span>' + fmt(v.len) + '</span></div><div class="bar"><i style="width:' + (v.done ? 100 : pc) + '%"></i></div><small>Watch at least ' + fmt(v.target) + ' (90%). ' + (v.done ? "Done." : fmt(Math.min(v.covered, v.target)) + " watched.") + (v.redo ? ' Restarts: ' + v.redo + '.' : '') + '</small><br>'
+            + '<button class="go" data-i="' + v.idx + '"' + (v.locked || v.done ? " disabled" : "") + ' type="button">' + lab + '</button></div>';
+        });
       }
-      if (st.essay){ h += '<div class="st"><div class="n">✓</div><div><b>Writing</b><small>Done</small></div></div>'; }
-      else if (st.test){ h += '<div class="st"><div class="n">3</div><div><b>Writing</b><small>' + (S.track === "ie" ? "40 minutes · at least 250 words" : "30 minutes · at least 180 words") + '. Do it in one go.</small></div></div>'
-          + '<button class="go" id="nvstartwrite" type="button" style="background:linear-gradient(135deg,#ffb86b 0%,#ff7a8a 55%,#ff5fa8 100%)">Start the writing</button>'; }
-      else { h += '<div class="st off"><div class="n">3</div><div><b>Writing</b><small>Opens after the home test</small></div></div>'; }
-      if (st.speak){ h += '<div class="st"><div class="n">✓</div><div><b>Speaking</b><small>Done</small></div></div>'; }
-      else if (st.essay){ h += '<div class="st"><div class="n">4</div><div><b>Speaking</b><small>About 20 minutes. You record your voice on this device. Nobody marks it. Allow the microphone.</small></div></div>'
-          + '<button class="go" id="nvstartspeak" type="button" style="background:linear-gradient(135deg,#ffb86b 0%,#ff7a8a 55%,#ff5fa8 100%)">Start the speaking</button>'; }
-      else { h += '<div class="st off"><div class="n">4</div><div><b>Speaking</b><small>Opens after the writing</small></div></div>'; }
+      h += node(all ? "done" : "now", all ? "✓" : "1", b1);
+      /* 2 home test */
+      var k2 = tOK ? "done" : cur === 1 ? "now" : (!all && !S.teacher) ? "wait" : "open", b2;
+      if (tOK) b2 = '<b>Home test</b><small>Done · ' + Math.round(st.pct || 0) + '%</small>';
+      else if (!all && !S.teacher) b2 = '<b>Home test</b><small>Opens after the videos · 91 questions, about 1 hour</small>';
+      else if (!S.track) b2 = '<b>Choose your track</b><small>You choose once. Only your teacher can change it later.</small><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="go" id="nvtml" type="button">Multi-level</button><button class="go" id="nvtie" type="button">IELTS</button></div>';
+      else b2 = '<b>Home test</b><small>91 questions · about 1 hour · ' + tn + '. Listening needs headphones. Do it in one go.</small>' + (st.cancels ? '<small style="color:#ffe27a;font-weight:700;margin-top:6px">⚠ Your last try was cancelled (you left the test window 3 times). You must take the test again.</small>' : '') + '<button class="go" id="nvstarttest" type="button" style="' + cta + '">Start the home test</button>';
+      h += node(k2, tOK ? (st.cancelled ? "✕" : "✓") : "2", b2);
+      /* 3 writing */
+      var k3 = wOK ? "done" : tOK ? "now" : "wait", b3;
+      if (wOK) b3 = '<b>Writing</b><small>Done</small>';
+      else if (tOK) b3 = '<b>Writing</b><small>' + (S.track === "ie" ? "40 minutes · at least 250 words" : "30 minutes · at least 180 words") + '. Do it in one go.</small><button class="go" id="nvstartwrite" type="button" style="' + cta + '">Start the writing</button>';
+      else b3 = '<b>Writing</b><small>Opens after the home test · put the unit on paper</small>';
+      h += node(k3, wOK ? "✓" : "3", b3);
+      /* 4 speaking */
+      var k4 = sOK ? "done" : wOK ? "now" : "wait", b4;
+      if (sOK) b4 = '<b>Speaking</b><small>Done</small>';
+      else if (wOK) b4 = '<b>Speaking</b><small>About 20 minutes. You record your voice on this device. Nobody marks it. Allow the microphone.</small><button class="go" id="nvstartspeak" type="button" style="' + cta + '">Start the speaking</button>';
+      else b4 = '<b>Speaking</b><small>Opens after the writing · use your own voice</small>';
+      h += node(k4, sOK ? "✓" : "4", b4);
+      /* the key */
+      h += key ? node("done", "★", '<b>Key earned</b><small>Your class test for Unit ' + S.unit + ' is open.</small>') : node("wait", '<span class="kd">' + keySvg() + '</span>', '<b>The key</b><small>Finish all four steps and it opens your class test for Unit ' + S.unit + '.</small>');
+      h += '</div></div>';
       if (S.teacher){ h += '<div class="st"><div class="n">👑</div><div><b>Teacher: open any step</b><small>Your time and results are still recorded. Nothing is blocked for you.</small></div></div>'
           + '<button class="go" id="nvtt" type="button">Home test</button> <button class="go" id="nvtw" type="button" style="margin-left:6px">Writing</button> <button class="go" id="nvts" type="button" style="margin-left:6px">Speaking</button>'; }
       page(h, true);
