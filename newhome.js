@@ -169,7 +169,7 @@
     };
   }
   function unitPage(){
-    rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){ S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); S.jump = !!(x && x.ok && x.jump); S.jpct = x && x.ok ? x.jpct : 80; return rpc("nv_state", {tok: tok(), u: S.unit}); }).then(function(r){
+    rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){ S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); S.jump = !!(x && x.ok && x.jump); S.testacct = !!(x && x.ok && x.testacct); S.jpct = x && x.ok ? x.jpct : 80; return rpc("nv_state", {tok: tok(), u: S.unit}); }).then(function(r){
       if (!r || !r.ok){ page('<h2>Unit ' + S.unit + '</h2><p class="sub">' + (r && r.err === "closed" ? "This unit is not open yet. Your teacher will open it soon." : r && r.err === "locked" ? "Finish the earlier unit first." : "Not available right now.") + ' <small style="opacity:.6">(' + esc((r && r.err) || "error") + ')</small></p>'); return; }
       S.vids = r.videos;
       if (S.st && S.st.key && !S.review){ keyScreen(); return; }
@@ -239,7 +239,7 @@
       return fetchDecrypt(r.path, r.key).then(function(buf){
         var html = new TextDecoder("utf-8").decode(buf);
         return fetch("shim.js", {cache: "no-store"}).then(function(x){ return x.text(); }).then(function(shim){
-          var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, teacher: !!S.teacher, name: r.name, mode: "speak", track: r.track}) + ";";
+          var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, teacher: !!S.teacher || !!S.testacct, name: r.name, mode: "speak", track: r.track}) + ";";
           var tag = "<script>" + cfg + "\n" + shim.replace(/<\/script/gi, "<\\/script") + "<\/script>";
           var m = html.match(/<head[^>]*>/i); html = m ? html.replace(m[0], m[0] + tag) : tag + html;
           document.open(); document.write(html); document.close();
