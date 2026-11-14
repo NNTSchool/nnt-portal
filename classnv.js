@@ -124,6 +124,9 @@
 
   CSS += '#cnv .rsp.rfull{grid-template-columns:minmax(0,1100px);justify-content:center}#cnv .rsp.rfull #rdq{display:none}#cnv .rsp.rfull .rpn{height:calc(100vh - 275px)}#cnv .rsp.rfull .rpn p.rp,#cnv .rsp.rfull .rpn>p:not(.rpi){font:20px/2.1 Georgia,serif;color:#1b2a52;margin:0 0 16px}#cnv .rbfix{position:sticky;bottom:0;max-width:1100px;margin:10px auto 0;padding:10px 14px;border-radius:14px;background:rgba(246,249,255,.96);border:2px solid #c9d6ee}'
   + '#cnv .rsp:not(.rfull)+.rbfix{max-width:none}';
+
+  CSS += '#cnv .nd.done{background:radial-gradient(ellipse at 35% 25%,#fff0a8,#ffc21a 60%,#f09a00);--d:#b36b00;box-shadow:0 14px 0 var(--d),0 22px 40px rgba(255,170,0,.55),inset 0 4px 10px rgba(255,255,255,.7)}#cnv .nd .gtk{width:118px;height:118px;filter:drop-shadow(0 6px 8px rgba(120,70,0,.45));animation:gtp 2.6s ease-in-out infinite}@keyframes gtp{50%{transform:scale(1.06) rotate(-3deg)}}'
+  + '#cnv .nd .gsp{transform-origin:100px 29px;animation:gsp 1.8s ease-in-out infinite}@keyframes gsp{0%,100%{opacity:0;transform:scale(.3)}50%{opacity:1;transform:scale(1.1)}}#cnv .nd .ndn{position:absolute;right:6px;bottom:2px;min-width:30px;height:30px;border-radius:50%;background:#fff;color:#a05d00;font:800 16px/30px system-ui;text-align:center;box-shadow:0 3px 0 rgba(0,0,0,.25)}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
   function page(h){ stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
@@ -171,6 +174,15 @@
   }
   var FLAG = '<svg viewBox="0 0 64 64" width="52" height="52"><path d="M16 8v50" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M20 12c10-6 16 6 28 0v24c-12 6-18-6-28 0z" fill="#fff"/></svg>', STAR = '<svg viewBox="0 0 64 64" width="52" height="52"><path d="M32 6l7.6 16.4 17.9 2.1-13.2 12.3 3.5 17.7L32 45.2 16.2 54.5l3.5-17.7L6.5 24.5l17.9-2.1z" fill="#fff"/></svg>';
   var ZZ = [50, 66, 74, 66, 50, 34, 26, 34];
+
+  var GT = 0;
+  function goldTick(){ var g = "gt" + (++GT);
+    return '<svg class="gtk" viewBox="0 0 120 120" aria-label="Done"><defs><linearGradient id="' + g + 'a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffbe0"/><stop offset=".45" stop-color="#ffe066"/><stop offset="1" stop-color="#f2a900"/></linearGradient>'
+      + '<linearGradient id="' + g + 'b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#ffd23f"/></linearGradient></defs>'
+      + '<circle cx="60" cy="64" r="50" fill="#a86400"/><circle cx="60" cy="60" r="50" fill="url(#' + g + 'a)" stroke="#fff" stroke-opacity=".9" stroke-width="3"/><circle cx="60" cy="60" r="40" fill="none" stroke="#c47a00" stroke-opacity=".45" stroke-width="2.5"/>'
+      + '<path d="M31 62l20 20 39-43" fill="none" stroke="#7a4600" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 4)"/>'
+      + '<path d="M31 62l20 20 39-43" fill="none" stroke="#fff" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>'
+      + '<path d="M22 38a44 44 0 0 1 30-24" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="5" stroke-linecap="round"/><path class="gsp" d="M96 22l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#fff"/></svg>'; }
   function path(){
     page(top() + '<div id="cnbody"><p class="sub" id="cnsub" style="text-align:center">Opening…</p></div>'); el("cb").onclick = home;
     R("nv_nav", {tok: O.tok}).then(function(n){
@@ -181,7 +193,7 @@
       var H = 170, tot = open.length * H + 330, h = '<div class="pth" style="height:' + tot + 'px">';
       var pts = open.map(function(u, k){ return [ZZ[k % 8], tot - 110 - k * H]; });
       open.forEach(function(u, k){ var st = ck.indexOf(u) >= 0 ? "done" : u === cur ? "cur" : "idle"; if (S.pop === u) st += " pop";
-        h += '<button class="nd ' + st + '" data-u="' + u + '" style="left:' + pts[k][0] + '%;top:' + pts[k][1] + 'px">' + '<b class="nn">' + u + '</b>' + (st === "done" ? '<u>✔</u>' : '') + (st === "cur" ? '<em>START</em>' : '') + '</button>'; });
+        h += '<button class="nd ' + st + '" data-u="' + u + '" style="left:' + pts[k][0] + '%;top:' + pts[k][1] + 'px">' + (st === "done" ? goldTick() + '<small class="ndn">' + u + '</small>' : '<b class="nn">' + u + '</b>') + (st === "cur" ? '<em>START</em>' : '') + '</button>'; });
       h += '<div class="hnt" style="left:' + pts[0][0] + '%;top:' + (pts[0][1] + 92) + 'px">' + hint + '</div>';
       /* only clouds above the last open stage: nothing else is drawn there */
       var top6 = pts[pts.length - 1][1] - 90, cw = 760, ch = cw * 0.376, step = 95, n = Math.ceil((top6 - ch * 0.5) / step) + 1, cs = "";
