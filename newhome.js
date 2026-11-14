@@ -116,6 +116,15 @@
       S.unit = u.unit; unitPage();
     }).catch(function(){ page('<h2>New</h2><p class="sub">No internet connection. Please try again.</p>'); });
   }
+  /* go to the next unit: ask the server which unit is next; if it still says this one, go to the next number anyway (the server then says if it is closed or locked) */
+  function moveOn(btn){
+    var cur = S.unit; if (btn){ btn.disabled = true; btn.textContent = "Opening Unit " + (cur + 1) + "…"; }
+    rpc("nv_units", {tok: tok()}).then(function(r){
+      if (r && r.ok && r.all_done){ S.st = null; S.review = false; page('<h2>All done for now ✅</h2><p class="sub">You have finished every unit that is open.' + (r.more ? ' The next unit opens soon.' : '') + '</p>'); return; }
+      var nu = r && r.ok && r.units && r.units[0] ? r.units[0].unit : cur + 1;
+      S.unit = nu > cur ? nu : cur + 1; S.st = null; S.review = false; S.chose = null; unitPage();
+    }).catch(function(){ if (btn){ btn.disabled = false; btn.textContent = "Move on to Unit " + (cur + 1) + " →"; } alert("No internet connection. Please try again."); });
+  }
   function keyScreen(){
     var nu = S.unit + 1;
     page('<div style="text-align:center;padding:18px 0 6px"><div class="nvkey" style="font-size:150px;line-height:1.05;filter:drop-shadow(0 8px 18px rgba(255,200,40,.55))">🔑</div>'
@@ -123,7 +132,7 @@
       + '<button id="nvnext" type="button" style="margin-top:14px;width:100%;max-width:420px;padding:16px 18px;border:0;border-radius:14px;background:#16a34a;color:#fff;font:800 19px/1.2 inherit;font-family:inherit;box-shadow:0 5px 0 #0f7a37;cursor:pointer">Move on to Unit ' + nu + ' →</button>'
       + '<button id="nvrev" type="button" style="margin-top:12px;width:100%;max-width:420px;padding:13px 18px;border:2px solid rgba(255,255,255,.35);border-radius:14px;background:transparent;color:inherit;font:700 17px/1.2 inherit;font-family:inherit;cursor:pointer">← Go back to Unit ' + S.unit + '</button></div>');
     var st = document.createElement("style"); st.textContent = "@keyframes nvk{0%{transform:scale(.3) rotate(-25deg);opacity:0}60%{transform:scale(1.15) rotate(8deg);opacity:1}100%{transform:scale(1) rotate(0)}}.nvkey{animation:nvk .9s ease-out}"; el("newv").appendChild(st);
-    el("nvnext").onclick = function(){ S.st = null; S.review = false; open(S.back); };
+    el("nvnext").onclick = function(){ moveOn(this); };
     el("nvrev").onclick = function(){ S.review = true; unitPage(); };
   }
   function choiceScreen(){
@@ -148,7 +157,7 @@
   }
   function unitPage(){
     rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){ S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); S.jump = !!(x && x.ok && x.jump); S.jpct = x && x.ok ? x.jpct : 80; return rpc("nv_state", {tok: tok(), u: S.unit}); }).then(function(r){
-      if (!r || !r.ok){ page('<h2>New</h2><p class="sub">Not available right now.</p>'); return; }
+      if (!r || !r.ok){ page('<h2>Unit ' + S.unit + '</h2><p class="sub">' + (r && r.err === "closed" ? "This unit is not open yet. Your teacher will open it soon." : r && r.err === "locked" ? "Finish the earlier unit first." : "Not available right now.") + ' <small style="opacity:.6">(' + esc((r && r.err) || "error") + ')</small></p>'); return; }
       S.vids = r.videos;
       if (S.st && S.st.key && !S.review){ keyScreen(); return; }
       if (S.jump && S.chose !== S.unit){ choiceScreen(); return; }
@@ -185,7 +194,7 @@
       ["ml","ie"].forEach(function(t){ var b = el("nvt" + t); if (b) b.onclick = function(){ if (!confirm("Choose " + (t === "ie" ? "IELTS" : "Multi-level") + "? You cannot change this later without your teacher.")) return; rpc("nv_set_track", {tok: tok(), trk: t}).then(function(r){ if (r && (r.ok || r.err === "fixed")) unitPage(); }); }; });
       if (el("nvstarttest")) el("nvstarttest").onclick = function(){ startHome(this); };
       if (el("nvstartwrite")) el("nvstartwrite").onclick = function(){ startWrite(this); };
-      if (el("nvmove")) el("nvmove").onclick = function(){ S.st = null; S.review = false; open(S.back); };
+      if (el("nvmove")) el("nvmove").onclick = function(){ moveOn(this); };
       if (el("nvtt")) el("nvtt").onclick = function(){ if (!S.track){ alert("Choose a track first (the Multi-level / IELTS buttons)."); return; } startHome(this); };
       if (el("nvtw")) el("nvtw").onclick = function(){ startWrite(this); };
       if (el("nvts")) el("nvts").onclick = function(){ startSpeak(this); };

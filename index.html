@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#1558b0"><title>NNT School · My page</title>
+<meta name="theme-color" content="#1558b0"><script>try{if(sessionStorage.getItem("nnt_back_nv")==="1"){document.write('<style id="nvcov">body::before{content:"";position:fixed;inset:0;z-index:99999;background:#5b1fff}</style>');setTimeout(function(){var c=document.getElementById("nvcov");if(c)c.remove();},6000);}}catch(e){}</script>
+<title>NNT School · My page</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css?v=15">
@@ -365,7 +366,7 @@ body.xcb .xo.on{border-color:#d2471a;background:#fff0e4}body.xcb .xo.on .lt{back
 <div id="newv" class="hide"><div style="font-size:56px">🚀</div><h2>New</h2><p>Your new learning area is almost ready. Your units will appear here.</p><div style="height:18px"></div><button class="btn alt" id="newback" type="button">← Back</button></div>
 <div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 35</div>
 <script src="core.js?v=16"></script>
-<script src="newhome.js?v=16"></script>
+<script src="newhome.js?v=17"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
@@ -460,7 +461,9 @@ function home(){
     var r = x[0];
     if (!r.ok){ ls("nnt_phone_token", null); TOK = null; loginScreen(); note("m_login","err","Your login has ended. Please log in again with a new code from your teacher."); return; }
     VIDS = {}; var VI = []; if (x[1] && x[1].ok){ x[1].units.forEach(function(u){ VIDS[u] = 1; }); VI = x[1].items || []; VREC = typeof x[1].rec === "number" ? x[1].rec : null; }
-    ME = r; note("m_home","",""); if (!window.ENTRY_DONE){ window.ENTRY_DONE = true; entryOpen(); } try{ if (sessionStorage.getItem("nnt_back_nv") === "1"){ sessionStorage.removeItem("nnt_back_nv"); setTimeout(function(){ $("e_new").onclick(); }, 80); } }catch(e){}
+    ME = r; note("m_home","",""); var backNv = false; try{ backNv = sessionStorage.getItem("nnt_back_nv") === "1"; if (backNv) sessionStorage.removeItem("nnt_back_nv"); }catch(e){}
+    if (backNv && ME && ME.new_ok){ window.ENTRY_DONE = true; $("e_new").onclick(); var cv = document.getElementById("nvcov"); if (cv) setTimeout(function(){ cv.remove(); }, 60); }
+    else { var cv2 = document.getElementById("nvcov"); if (cv2) cv2.remove(); if (!window.ENTRY_DONE){ window.ENTRY_DONE = true; entryOpen(); } }
     $("hg").textContent = greet(); $("hi").textContent = r.name.split(" ")[0];
     var done = r.units.filter(function(u){ return u.status === "finished"; }).length;
     $("hp").textContent = done ? done + " of " + r.units.length + " units finished" : "Watch the video lessons any time. Finish a test in class to unlock its explanations.";
