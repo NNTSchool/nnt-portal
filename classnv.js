@@ -256,16 +256,17 @@
       if (ch && !S.cur && el("hl")) hub();
     }, function(){}); } catch (x) {}
   }
+  var RW = {1: 1, 2: 1};
   function hub(){ S.cur = null; statusSync();
     function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
     function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
     page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Unit ' + S.unit + '</h2><p class="sub">Your path today: three drillings, with a break between them</p></div>'
       + '<div class="fch">' + card("hl", "🎧", "Listening drilling", (S.lisDone && S.lisDone[S.unit]) ? "Done ✔ · you can redo it" : "Start here", "about 60 min", true, 1) + link()
-      + card("hr", "📖", "Reading drilling", (S.rdDone && S.rdDone[S.unit]) ? "Done ✔ · you can redo it" : "Passage + questions", "about 30 min", S.unit === 1 && opn("read"), 2) + link()
-      + card("hw", "✍️", "Writing drilling", (S.wrDone && S.wrDone[S.unit]) ? "Done ✔ · you can redo it" : "Write · feedback · rewrite", "about 40 min", S.unit === 1 && opn("write"), 3) + '</div><p class="sub" id="hlk" style="text-align:center;margin-top:14px;min-height:22px"></p>');
+      + card("hr", "📖", "Reading drilling", (S.rdDone && S.rdDone[S.unit]) ? "Done ✔ · you can redo it" : "Passage + questions", "about 30 min", RW[S.unit] && opn("read"), 2) + link()
+      + card("hw", "✍️", "Writing drilling", (S.wrDone && S.wrDone[S.unit]) ? "Done ✔ · you can redo it" : "Write · feedback · rewrite", "about 40 min", RW[S.unit] && opn("write"), 3) + '</div><p class="sub" id="hlk" style="text-align:center;margin-top:14px;min-height:22px"></p>');
     el("cb").onclick = path; el("hl").onclick = S.unit > 1 ? startPart4 : startPart;
-    el("hr").onclick = S.unit === 1 && opn("read") ? startReading : function(){ lockMsg(this, S.unit === 1 ? "🔒 Finish the listening drilling first." : ""); };
-    el("hw").onclick = S.unit === 1 && opn("write") ? startWriting : function(){ lockMsg(this, S.unit === 1 ? "🔒 Finish the reading drilling first." : ""); };
+    el("hr").onclick = RW[S.unit] && opn("read") ? startReading : function(){ lockMsg(this, RW[S.unit] ? "🔒 Finish the listening drilling first." : ""); };
+    el("hw").onclick = RW[S.unit] && opn("write") ? startWriting : function(){ lockMsg(this, RW[S.unit] ? "🔒 Finish the reading drilling first." : ""); };
   }
 
   /* ---------- Part runner (listening) ---------- */
@@ -682,15 +683,18 @@
     function qrow(q){ return '<div class="qr" data-n="' + q.n + '"><div class="qn">' + q.n + '</div><div class="qb"><div class="qt">' + esc(q.q) + '</div>'
       + (q.t === "tf" ? '<div class="tf">' + ["TRUE", "FALSE", "NOT GIVEN"].map(function(v){ return '<button type="button" data-v="' + v + '">' + v + '</button>'; }).join("") + '</div>' : '<input class="rin" type="text" autocomplete="off" spellcheck="false" placeholder="Your answer" data-n="' + q.n + '">') + '</div></div>'; }
     if (retake) h += '<div class="qgh"><span class="qi">🔁</span><div><b>Retake: only the questions you missed</b><small>You have seen the vocabulary now. Read the passage again and fix your answers. The answers will be shown after this round.</small></div></div>';
-    if (tfs.length) h += '<div class="qg"><div class="qgh"><span class="qi">🧭</span><div><b>Questions 1–5 · True / False / Not Given</b><small>Do the statements agree with the information in the passage?</small></div></div>'
-      + '<div class="qd"><span><b>TRUE</b> = agrees with the passage</span><span><b>FALSE</b> = contradicts the passage</span><span><b>NOT GIVEN</b> = no information on this</span></div>' + tfs.map(qrow).join("") + '</div>';
-    if (ws.length) h += '<div class="qg"><div class="qgh"><span class="qi">✏️</span><div><b>Questions 6–8 · Short answers</b><small>Choose <b>ONE WORD ONLY</b> from the passage for each answer.</small></div></div>' + ws.map(qrow).join("") + '</div>';
+    function rg(list){ var ns = list.map(function(q){ return q.n; }); return ns.length > 1 ? Math.min.apply(null, ns) + "–" + Math.max.apply(null, ns) : String(ns[0]); }
+    var gtf = tfs.length ? '<div class="qg"><div class="qgh"><span class="qi">🧭</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "tf"; })) + ' · True / False / Not Given</b><small>Do the statements agree with the information in the passage?</small></div></div>'
+      + '<div class="qd"><span><b>TRUE</b> = agrees with the passage</span><span><b>FALSE</b> = contradicts the passage</span><span><b>NOT GIVEN</b> = no information on this</span></div>' + tfs.map(qrow).join("") + '</div>' : "";
+    var gws = ws.length ? '<div class="qg"><div class="qgh"><span class="qi">✏️</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "w"; })) + ' · Short answers</b><small>Choose <b>' + (D.wl || "ONE WORD ONLY") + '</b> from the passage for each answer.</small></div></div>' + ws.map(qrow).join("") + '</div>' : "";
+    var gts = "";
     if (ts.length){
       var tb = '<table class="rtb"><tr>' + D.th.map(function(x){ return '<th>' + x + '</th>'; }).join('') + '</tr>' + D.tb.map(function(r){
         function cell(t){ return t.replace(/\{(\d+)\}/g, function(m, n){ n = +n; if (!on(n)) return '<span class="tqn gd">' + n + '</span> <b>' + esc(D.t.filter(function(x){ return x.n === n; })[0].a[0]) + '</b>';
           return '<span class="tw"><span class="tqn" data-t="' + n + '">' + n + '</span><input class="rin rt" type="text" autocomplete="off" spellcheck="false" data-n="' + n + '"></span>'; }); }
         return '<tr><td>' + r.name + '</td><td>' + r.date + '</td><td>' + cell(r.feat) + '</td><td>' + cell(r.note) + '</td></tr>'; }).join("") + '</table>';
-      h += '<div class="qg"><div class="qgh"><span class="qi">🧩</span><div><b>Questions 9–13 · Table completion</b><small>Complete the table. Choose <b>ONE WORD AND/OR A NUMBER</b> from the passage for each answer.</small></div></div>' + tb + '</div>'; }
+      gts = '<div class="qg"><div class="qgh"><span class="qi">🧩</span><div><b>Questions ' + rg(D.t) + ' · Table completion</b><small>Complete the table. Choose <b>' + (D.tl || "ONE WORD AND/OR A NUMBER") + '</b> from the passage for each answer.</small></div></div>' + tb + '</div>'; }
+    var GR = {tf: gtf, w: gws, tb: gts}; (D.order || ["tf", "w", "tb"]).forEach(function(k){ h += GR[k]; });
     var need = [].concat(tfs, ws, ts).map(function(q){ return q.n; });
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 3 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
       + '<div class="rsp">' + rdPassage() + '<div class="rpn q hlz" id="rdq">' + h + '<div class="rbar"><button class="go" id="rck" disabled>Check my answers</button><small id="rhint"></small></div></div></div>');
@@ -774,7 +778,7 @@
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · vocabulary</h2>' + rdSteps(2) + '</div>'
       + '<p class="sub" style="text-align:left;margin:4px 0">Every word and chunk below is used in the passage. Study them, then read the passage again: they will be highlighted for you.</p>'
       + '<div class="vh">Vocabulary from your Unit ' + S.unit + ' book</div><div class="vgrid">' + D.v.map(function(x){ return card(x, ""); }).join("") + '</div>'
-      + '<div class="vh">Unit ' + S.unit + ' power chunks · Growing Up</div><div class="vgrid">' + D.c.map(function(x){ return card(x, "c"); }).join("") + '</div>'
+      + '<div class="vh">Unit ' + S.unit + ' power chunks' + (D.topic || S.unit === 1 ? ' · ' + esc(D.topic || 'Growing Up') : '') + '</div><div class="vgrid">' + D.c.map(function(x){ return card(x, "c"); }).join("") + '</div>'
       + '<div style="text-align:center;margin:22px 0 10px"><button class="go" id="rrt">Retake the ' + r.bad.length + ' question' + (r.bad.length > 1 ? "s" : "") + ' I missed →</button></div>');
     wide(false); el("cb").onclick = rdResults; el("rrt").onclick = function(){ S.R.t0 = Date.now(); S.R.hl = true; rdTest(true); };
   }
@@ -850,7 +854,7 @@
     function side(k, lab, cls){ var h = '<div class="wrsd">' + lab + '</div>'; [k, k + 1].forEach(function(i){ h += '<button type="button" class="widea ' + cls + '" data-i="' + i + '" data-s="' + (k / 2) + '"><b>Idea ' + (i + 1) + '</b>' + esc(P.ideas[i].t) + '</button>'; });
       return h + '<button type="button" class="widea own ' + cls + '" data-i="' + (4 + k / 2) + '" data-s="' + (k / 2) + '"><b>✏️ Your own idea</b>Write your own idea here</button><input type="text" class="rin wown" id="own' + (k / 2) + '" maxlength="140" placeholder="Type your idea in one short sentence…" style="display:none" spellcheck="false" autocomplete="off">'; }
     var left = '<h1 class="rpt" style="font-size:30px">' + esc(P.title) + '</h1><div class="qgh"><span class="qi">📝</span><div><b>' + esc(P.q) + '</b><small>' + esc(P.how) + '</small></div></div>'
-      + '<div class="vh">Pick one idea from each side</div>' + side(0, "👍 One side", "s1") + side(2, "👎 The other side", "s2")
+      + '<div class="vh">' + esc(P.sh || "Pick one idea from each side") + '</div>' + side(0, (P.sl || ["👍 One side", "👎 The other side"])[0], "s1") + side(2, (P.sl || ["👍 One side", "👎 The other side"])[1], "s2")
       + '<div class="vh">Useful phrases</div><div class="wpb">' + FB.PHRASES.concat(P.handy ? [{h: "Handy phrases for this topic", l: P.handy}] : []).map(function(g){ return '<div><h4>' + esc(g.h) + '</h4><ul>' + g.l.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>'; }).join("") + '</div>'
       + '<div class="vh">Unit ' + S.unit + ' words and chunks · they turn green when you use them</div><div class="wch">' + FB.CHUNKS.map(function(c){ return '<span data-c="' + esc(c[0]) + '">' + esc(c[0]) + '</span>'; }).join("") + '</div>';
     wrEditor(left, W.text);
