@@ -54,6 +54,10 @@
   + '#cnv .fh{font-size:58px;line-height:1.05;letter-spacing:-.03em;margin:26px 0 6px;font-weight:800;color:#fff;opacity:0;animation:fup .8s 1.5s both}#cnv .fn{font-size:20px;color:#bfe9ff;margin:0 0 26px;opacity:0;animation:fup .8s 1.8s both}@keyframes fup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}'
   + '#cnv .fst{display:flex;gap:14px;justify-content:center;margin:0 auto 28px;opacity:0;animation:fup .8s 2.1s both}#cnv .fst div{min-width:150px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.16);border-radius:18px;padding:16px 12px}#cnv .fst b{display:block;font-size:40px;font-weight:800;color:#ffd23f}#cnv .fst span{font-size:13px;color:#bcd0ff}#cnv .fin .go{opacity:0;animation:fup .8s 2.5s both}'
   + '#cnv .nd.pop,#cnv .nd.cur.pop{animation:ppop 1.1s cubic-bezier(.2,1.5,.4,1) both}@keyframes ppop{0%{transform:translate(-50%,-50%) scale(0);filter:brightness(3) drop-shadow(0 0 40px #fff)}100%{transform:translate(-50%,-50%) scale(1);filter:none}}';
+  CSS += '#cnv .fch{display:flex;align-items:center;justify-content:center;gap:0;margin:80px auto 0;max-width:1400px}#cnv .fc{position:relative;flex:1 1 0;min-width:0;height:440px;border:0;border-radius:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-family:inherit;color:#c3cdf5;background:linear-gradient(160deg,#2c3454,#232a47);box-shadow:0 14px 0 #161b33,0 22px 40px rgba(0,0,0,.35);cursor:pointer;touch-action:manipulation}'
+  + '#cnv .fc .fi{font-size:84px;line-height:1}#cnv .fc b{font-size:30px;font-weight:800;line-height:1.1}#cnv .fc small{font-size:18px;font-weight:700;opacity:.8}#cnv .fc em{font-style:normal;font-size:14px;font-weight:700;padding:5px 14px;border-radius:99px;background:rgba(255,255,255,.1)}#cnv .fc .fb{position:absolute;top:16px;left:18px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.14);font-style:normal;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center}'
+  + '#cnv .fc.on{color:#0b1130;background:linear-gradient(135deg,#5df2d6,#7aa2ff 55%,#c58bff);box-shadow:0 14px 0 #3b4fa8,0 26px 50px rgba(122,162,255,.45);animation:fpl 2.4s ease-in-out infinite}#cnv .fc.on b{color:#0b1130}#cnv .fc.on em{background:rgba(255,255,255,.55)}#cnv .fc.on .fb{background:rgba(255,255,255,.6)}@keyframes fpl{50%{transform:translateY(-6px)}}'
+  + '#cnv .fl{flex:0 0 170px;display:flex;flex-direction:column;align-items:center;gap:8px;color:#7d8fd6}#cnv .fl svg{width:130px;height:26px}#cnv .fl span{font-size:14px;font-weight:700;color:#9fb4ff;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.16);border-radius:99px;padding:5px 12px;white-space:nowrap}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
   function page(h){ stopAudio(); root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
@@ -134,10 +138,12 @@
     }).catch(function(){ page(top() + '<div class="card warn"><h2>No internet connection</h2></div>'); el("cb").onclick = path; });
   }
   function hub(){
-    page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Unit ' + S.unit + '</h2><p class="sub">Choose your drilling</p></div>'
-      + '<button class="big" id="hl" style="margin-top:12px">🎧 Listening drilling<small>Start here</small></button>'
-      + '<button class="big dim" id="hr" style="margin-top:12px">📖 Reading drilling<small>Opens soon</small></button>'
-      + '<button class="big dim" id="hw" style="margin-top:12px">✍️ Writing drilling<small>Opens soon</small></button>');
+    function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
+    function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
+    page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Unit ' + S.unit + '</h2><p class="sub">Your path today: three drillings, with a break between them</p></div>'
+      + '<div class="fch">' + card("hl", "🎧", "Listening drilling", "Start here", "about 60 min", true, 1) + link()
+      + card("hr", "📖", "Reading drilling", "Opens soon", "after your break", false, 2) + link()
+      + card("hw", "✍️", "Writing drilling", "Opens soon", "after your break", false, 3) + '</div>');
     el("cb").onclick = path; el("hl").onclick = startPart;
     el("hr").onclick = el("hw").onclick = function(){ this.classList.add("shk"); var t = this; setTimeout(function(){ t.classList.remove("shk"); }, 400); };
   }
