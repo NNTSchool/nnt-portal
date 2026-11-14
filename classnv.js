@@ -692,6 +692,8 @@
   function trk(){
     if (S.trkOn) return; S.trkOn = true; S.tm = {}; S.srv = {}; S.act = Date.now(); S.pend = {};
     ["mousemove", "keydown", "mousedown", "touchstart", "scroll"].forEach(function(ev){ document.addEventListener(ev, function(){ S.act = Date.now(); }, true); });
+    function ping(){ if (document.visibilityState !== "visible" || !O.tok) return; try { Promise.resolve(R("nv_class_ping", {tok: O.tok, u: S.unit || 0, cur: S.cur || "hub"})).catch(function(){}); } catch (x) {} }
+    setInterval(ping, 45000); setTimeout(ping, 2500);
     setInterval(function(){
       if (!S.cur || document.visibilityState !== "visible" || Date.now() - S.act > 120000) return;
       var k = S.unit + ":" + S.cur; S.tm[k] = (S.tm[k] || 0) + 1; S.pend[k] = (S.pend[k] || 0) + 1;
