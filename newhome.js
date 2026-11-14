@@ -12,7 +12,7 @@
   + '#newv .bar{height:10px;border-radius:9px;background:rgba(255,255,255,.18);margin:10px 0 6px;overflow:hidden}#newv .bar i{display:block;height:100%;background:linear-gradient(90deg,#19e6c1,#2f9bff);border-radius:9px}'
   + '#newv .vc small{color:#f0e9ff;font-size:14px}#newv .go{margin-top:10px;border:0;border-radius:12px;padding:11px 20px;font:800 16px system-ui;color:#04121f;background:linear-gradient(135deg,#19e6c1,#2f9bff);cursor:pointer}#newv .go:disabled{background:#3a4470;color:#9aa5cc;cursor:default}'
 
-  + '#newv .hbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 0}#newv .hbar button{border-radius:99px;padding:7px 14px;font:700 14px system-ui;cursor:pointer;color:#eaf6ff;background:rgba(255,255,255,.07);border:1px solid rgba(143,216,255,.3)}#newv .hbar button.paybtn{border:0;padding:5px 12px 5px 9px;color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.85),0 4px 16px rgba(0,0,0,.35)}#newv .hbar button.paybtn.g{background:linear-gradient(150deg,#16c784,#0a7a55)}#newv .hbar button.paybtn.a{background:linear-gradient(150deg,#ffb020,#d06e00)}#newv .hbar button.paybtn.r{background:linear-gradient(150deg,#ff4d73,#b01c3a)}#newv .hbar button.paybtn b{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35)}#newv .hb{position:relative}#newv .hero{display:flex;align-items:center;gap:18px;margin:14px 0 6px}#newv .ring{flex:none;position:relative;width:118px;height:118px}#newv .ring svg{width:118px;height:118px;transform:rotate(-90deg)}#newv .ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}#newv .ring .c small{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8fd8ff}#newv .ring .c b{font-size:38px;color:#eaf6ff}'
+  + '#newv .hbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 0}#newv .hbar button{border-radius:99px;padding:7px 14px;font:700 14px system-ui;cursor:pointer;color:#eaf6ff;background:rgba(255,255,255,.07);border:1px solid rgba(143,216,255,.3)}#newv .hbar button.paybtn{border:0;padding:5px 12px 5px 9px;color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.85),0 4px 16px rgba(0,0,0,.35)}#newv .hbar button.paybtn.g{background:linear-gradient(150deg,#16c784,#0a7a55)}#newv .hbar button.paybtn.a{background:linear-gradient(150deg,#ffb020,#d06e00)}#newv .hbar button.paybtn.r{background:linear-gradient(150deg,#ff4d73,#b01c3a)}#newv .hbar button.paybtn b{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35)}#newv .earl{margin:18px 0 4px}#newv .earl small{display:block;color:#a9c6dc;font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}#newv .earl div{display:flex;flex-wrap:wrap;gap:8px}#newv .eu{border-radius:99px;padding:8px 14px;font:700 14px system-ui;cursor:pointer;color:#8cffe6;background:rgba(77,255,216,.1);border:1px solid rgba(77,255,216,.4)}#newv .hb{position:relative}#newv .hero{display:flex;align-items:center;gap:18px;margin:14px 0 6px}#newv .ring{flex:none;position:relative;width:118px;height:118px}#newv .ring svg{width:118px;height:118px;transform:rotate(-90deg)}#newv .ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}#newv .ring .c small{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8fd8ff}#newv .ring .c b{font-size:38px;color:#eaf6ff}'
   + '#newv .chip{display:inline-block;border-radius:99px;padding:5px 12px;font:700 13px system-ui;background:rgba(77,255,216,.12);border:1px solid rgba(77,255,216,.4);color:#8cffe6;margin:0 6px 6px 0}'
   + '#newv .hb h2{margin:0 0 6px;font-size:27px;color:#eaf6ff}#newv .hb p.sub{margin:0 0 8px;color:#a9c6dc;font-size:15px}'
   + '#newv .path{position:relative;margin:18px 0 8px;padding-left:0}#newv .path:before{content:"";position:absolute;left:25px;top:24px;bottom:30px;width:3px;border-radius:3px;background:linear-gradient(180deg,#4dffd8 0%,#2f9bff 38%,rgba(47,155,255,.0) 80%)}'
@@ -175,7 +175,9 @@
       else h += '<div class="rw"><div class="kk">' + keySvg() + '<div><h3>Waiting for you in class</h3><p>Finish this unit and the key is yours. It opens your class test for Unit ' + S.unit + '.</p></div></div>'
         + '<div class="ch"><span>Unit ' + S.unit + ' class test</span><span class="bl">Something extra</span><span class="bl">More to discover</span></div></div>';
       h += '</div>';
+      if (S.unit > 1){ h += '<div class="earl"><small>Earlier units</small><div>'; for (var k = 1; k < S.unit; k++) h += '<button type="button" class="eu" data-u="' + k + '">✓ Unit ' + k + '</button>'; h += '</div></div>'; }
       page(h);
+      Array.prototype.forEach.call(el("newv").querySelectorAll(".eu"), function(b){ b.onclick = function(){ S.front = S.unit; S.unit = +b.getAttribute("data-u"); S.review = true; S.chose = S.unit; unitPage(); }; });
       var bk = el("nvback"); if (bk) bk.style.display = "none";
       S.hubOk = true;
       el("nvhsw").onclick = function(){ var b = document.getElementById("swbtn"); if (b) b.click(); };
@@ -187,7 +189,7 @@
     }).catch(function(){ page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>'); });
   }
   /* ---------- unit page ---------- */
-  function page(html){ el("newv").innerHTML = '<div class="nw"><button class="nbk" id="nvback" type="button">← Back</button>' + html + '</div>'; el("nvback").onclick = function(){ if (S.sub && S.hubOk){ S.review = false; hubPage(); } else if (S.back) S.back(); }; }
+  function page(html){ el("newv").innerHTML = '<div class="nw"><button class="nbk" id="nvback" type="button">← Back</button>' + html + '</div>'; el("nvback").onclick = function(){ if (S.sub && S.hubOk){ S.review = false; S.chose = null; if (S.front) S.unit = S.front; hubPage(); } else if (S.back) S.back(); }; }
   function open(back){
     inject(); S.back = back || null;
     page('<h2>Loading…</h2>');
@@ -195,7 +197,7 @@
       if (!r || !r.ok){ page('<h2>Novel</h2><p class="sub">' + (r && r.err === "unpaid" ? "" : "Novel is not open for you yet.") + '</p>'); return; }
       if (r.all_done){ page('<h2>All done for now ✅</h2><p class="sub">You have finished every unit that is open.' + (r.more ? ' The next unit opens soon.' : '') + '</p>'); return; }
       var u = r.units && r.units[0]; if (!u){ page('<h2>Novel</h2><p class="sub">Your units will appear here soon.</p>'); return; }
-      S.unit = u.unit; S.hubOk = false; var ret = false; try{ ret = sessionStorage.getItem("nnt_ret") === "1"; }catch(e){} if (ret){ S.sub = true; unitPage(); } else hubPage();
+      S.unit = u.unit; S.front = u.unit; S.hubOk = false; var ret = false; try{ ret = sessionStorage.getItem("nnt_ret") === "1"; }catch(e){} if (ret){ S.sub = true; unitPage(); } else hubPage();
     }).catch(function(){ page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>'); });
   }
   /* go to the next unit: ask the server which unit is next; if it still says this one, go to the next number anyway (the server then says if it is closed or locked) */
@@ -204,7 +206,7 @@
     rpc("nv_units", {tok: tok()}).then(function(r){
       if (r && r.ok && r.all_done){ S.st = null; S.review = false; page('<h2>All done for now ✅</h2><p class="sub">You have finished every unit that is open.' + (r.more ? ' The next unit opens soon.' : '') + '</p>'); return; }
       var nu = r && r.ok && r.units && r.units[0] ? r.units[0].unit : cur + 1;
-      S.unit = nu > cur ? nu : cur + 1; S.st = null; S.review = false; S.chose = null; hubPage();
+      S.unit = nu > cur ? nu : cur + 1; S.front = S.unit; S.st = null; S.review = false; S.chose = null; hubPage();
     }).catch(function(){ if (btn){ btn.disabled = false; btn.textContent = "Move on to Unit " + (cur + 1) + " →"; } nvNote("No internet connection. Please try again."); });
   }
   /* our own message boxes (instead of the small grey browser pop-ups) */
