@@ -96,7 +96,7 @@
   + '#cnv .rds{display:flex;gap:6px;align-items:center;flex-wrap:wrap}#cnv .rds span{padding:6px 12px;border-radius:99px;font-weight:800;font-size:13px;background:#fff;border:2px solid #b9c9e6;color:#4d5f93}#cnv .rds span.cu{background:#3e63d8;border-color:#3e63d8;color:#fff;animation:fpl 2.2s ease-in-out infinite}#cnv .rds span.dn{background:#d9f5ee;border-color:#2bb59b;color:#0b6a58}'
   + '#cnv .rtm{margin-left:auto;font-weight:800;font-size:18px;padding:6px 14px;border-radius:12px;background:#fff;border:2px solid #b9c9e6;color:#10204a;font-variant-numeric:tabular-nums}#cnv .rtm.late{background:#fde3e9;border-color:#e0607f;color:#b2334f}'
   + '#cnv .rsp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}#cnv .rpn{background:#fffdf7;border:2px solid #c9d6ee;border-radius:18px;box-shadow:0 8px 24px rgba(40,60,120,.1);height:calc(100vh - 150px);min-height:420px;overflow-y:auto;padding:22px 28px 30px;scroll-behavior:smooth}'
-  + '#cnv .rpn.q{background:#f6f9ff;padding:18px 22px 24px}#cnv .rpt{font:800 38px/1.05 Georgia,serif;letter-spacing:-.02em;margin:0 0 6px;color:#10204a}#cnv .rpi{font:italic 16px/1.5 Georgia,serif;color:#3d4f80;margin:0 0 16px;padding-bottom:14px;border-bottom:2px dashed #c9d6ee}'
+  + '#cnv .rpn.q{background:#f6f9ff;padding:18px 22px 24px}#cnv mark.vk{background:none;color:inherit}#cnv .rpn.hl mark.vk{background:linear-gradient(transparent 55%,#ffe08a 55%);border-radius:3px;font-weight:600}#cnv .rpt{font:800 38px/1.05 Georgia,serif;letter-spacing:-.02em;margin:0 0 6px;color:#10204a}#cnv .rpi{font:italic 16px/1.5 Georgia,serif;color:#3d4f80;margin:0 0 16px;padding-bottom:14px;border-bottom:2px dashed #c9d6ee}'
   + '#cnv .rpn p.rp{font:19px/1.75 Georgia,serif;color:#1b2a52;margin:0 0 16px;text-align:left;position:relative}#cnv .rpn p.rp .pl{position:absolute;left:-24px;top:3px;font:800 11px system-ui;color:#9fb0d8}'
   + '#cnv .qg{margin:0 0 18px}#cnv .qgh{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:linear-gradient(120deg,#d7f5ef,#d9e6ff 55%,#eadcff);border:2px solid #7f9de0;margin-bottom:12px}#cnv .qgh b{font-size:17px;display:block}#cnv .qgh small{display:block;font-size:14.5px;line-height:1.45;color:#2d3f73;margin-top:3px}#cnv .qgh .qi{font-size:26px;line-height:1}'
   + '#cnv .qd{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 10px;font-size:13.5px;color:#3d4f80}#cnv .qd b{color:#10204a}'
@@ -376,7 +376,7 @@
     return '<div class="rds">' + L.map(function(t, i){ return '<span class="' + (i < cur ? "dn" : i === cur ? "cu" : "") + '">' + (i < cur ? "✔ " : "") + t + '</span>'; }).join("") + '</div>';
   }
   function rdPassage(){
-    var D = S.R.D; return '<div class="rpn" id="rdp"><h1 class="rpt">' + esc(D.title).toUpperCase() + '</h1><p class="rpi">' + esc(D.sub) + '</p>'
+    var D = S.R.D; return '<div class="rpn' + (S.R.hl ? " hl" : "") + '" id="rdp"><h1 class="rpt">' + esc(D.title).toUpperCase() + '</h1><p class="rpi">' + esc(D.sub) + '</p>'
       + D.p.map(function(p, i){ return '<p class="rp"><span class="pl">' + String.fromCharCode(65 + i) + '</span>' + p + '</p>'; }).join("") + '</div>';
   }
   function rdTimer(){
@@ -398,7 +398,7 @@
       + '<div class="qd"><span><b>TRUE</b> = agrees with the passage</span><span><b>FALSE</b> = contradicts the passage</span><span><b>NOT GIVEN</b> = no information on this</span></div>' + tfs.map(qrow).join("") + '</div>';
     if (ws.length) h += '<div class="qg"><div class="qgh"><span class="qi">✏️</span><div><b>Questions 6–8 · Short answers</b><small>Choose <b>ONE WORD ONLY</b> from the passage for each answer.</small></div></div>' + ws.map(qrow).join("") + '</div>';
     if (ts.length){
-      var tb = '<table class="rtb"><tr><th>Stepwell</th><th>Date</th><th>Features</th><th>Other notes</th></tr>' + D.tb.map(function(r){
+      var tb = '<table class="rtb"><tr>' + D.th.map(function(x){ return '<th>' + x + '</th>'; }).join('') + '</tr>' + D.tb.map(function(r){
         function cell(t){ return t.replace(/\{(\d+)\}/g, function(m, n){ n = +n; if (!on(n)) return '<span class="tqn gd">' + n + '</span> <b>' + esc(D.t.filter(function(x){ return x.n === n; })[0].a[0]) + '</b>';
           return '<span class="tw"><span class="tqn" data-t="' + n + '">' + n + '</span><input class="rin rt" type="text" autocomplete="off" spellcheck="false" data-n="' + n + '"></span>'; }); }
         return '<tr><td>' + r.name + '</td><td>' + r.date + '</td><td>' + cell(r.feat) + '</td><td>' + cell(r.note) + '</td></tr>'; }).join("") + '</table>';
@@ -440,11 +440,11 @@
     var D = S.R.D, r = S.R.first;
     function card(x, c){ return '<div class="vc ' + c + '"><b>' + esc(x[0]) + '</b><span>' + esc(x[1]) + '</span><em>' + esc(x[2]) + '</em></div>'; }
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · vocabulary</h2>' + rdSteps(2) + '</div>'
-      + '<p class="sub" style="text-align:left;margin:4px 0">Study these, then read the passage again. They unlock the questions you missed.</p>'
-      + '<div class="vh">Words from the passage</div><div class="vgrid">' + D.v.map(function(x){ return card(x, ""); }).join("") + '</div>'
+      + '<p class="sub" style="text-align:left;margin:4px 0">Every word and chunk below is used in the passage. Study them, then read the passage again: they will be highlighted for you.</p>'
+      + '<div class="vh">Vocabulary from your Unit ' + S.unit + ' book</div><div class="vgrid">' + D.v.map(function(x){ return card(x, ""); }).join("") + '</div>'
       + '<div class="vh">Unit ' + S.unit + ' power chunks · Growing Up</div><div class="vgrid">' + D.c.map(function(x){ return card(x, "c"); }).join("") + '</div>'
       + '<div style="text-align:center;margin:22px 0 10px"><button class="go" id="rrt">Retake the ' + r.bad.length + ' question' + (r.bad.length > 1 ? "s" : "") + ' I missed →</button></div>');
-    wide(false); el("cb").onclick = rdResults; el("rrt").onclick = function(){ S.R.t0 = Date.now(); rdTest(true); };
+    wide(false); el("cb").onclick = rdResults; el("rrt").onclick = function(){ S.R.t0 = Date.now(); S.R.hl = true; rdTest(true); };
   }
   function rdAnswers(){
     var R_ = S.R, D = R_.D, all = rdAll(D), f = R_.first, s2 = R_.second, tot = all.length;
