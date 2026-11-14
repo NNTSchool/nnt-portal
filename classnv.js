@@ -140,6 +140,7 @@
   + '#cnv .wlg{font:13px/1.4 system-ui;color:#46566e;margin:2px 0 6px}#cnv .wlg u{text-decoration:underline solid #d62828;text-decoration-thickness:2px}#cnv .wlg span{color:#0a8f3c;font-weight:700}'
   + '#cnv .wess{white-space:pre-wrap;background:#fffdf8;border:1px solid #c9d6ee;border-radius:12px;padding:10px 14px;font:17px/1.85 Georgia,serif}#cnv .wess u.err{text-decoration:underline solid #d62828;text-decoration-thickness:2px;text-underline-offset:3px;color:#b00020}#cnv .wess u.chk{text-decoration:underline dotted #d98a00;text-decoration-thickness:2px;text-underline-offset:3px}#cnv .wess u.sty{text-decoration:underline dotted #2b6cb0;text-decoration-thickness:2px;text-underline-offset:3px}#cnv .wess .okfx{color:#0a8f3c;font:700 15.5px system-ui;white-space:normal}#cnv .wess .okfx.q{color:#a06a00}#cnv .wess .okfx.s{color:#2b6cb0}#cnv .wess mark.okw{background:#d6f3e3;border-radius:5px;padding:0 3px}'
   + '@media(max-width:980px){#cnv .wgg{grid-template-columns:1fr}}';
+  CSS += '#cnv .drw{max-width:820px;margin:10px auto 100px}#cnv .drb{height:10px;border-radius:99px;background:rgba(120,140,200,.3);margin-bottom:14px;overflow:hidden}#cnv .drp{height:100%;background:linear-gradient(90deg,#2bd5b3,#ffc21a);transition:width .4s}#cnv .drc{background:#fffdf8;border:2px solid #c9d6ee;border-radius:18px;padding:18px 22px;color:#10204a}#cnv .dri{font:800 12.5px system-ui;letter-spacing:.09em;text-transform:uppercase;color:#46566e;margin:6px 0}#cnv .drs{font:21px/1.6 Georgia,serif;background:#fff1f1;border-left:5px solid #d62828;border-radius:8px;padding:10px 14px;margin-bottom:12px}#cnv textarea.drta{height:110px;min-height:90px}#cnv .drx{background:#fff6dd;border:1.5px solid #f0c24a;border-radius:12px;padding:10px 14px;margin:10px 0;font:15.5px/1.5 system-ui}#cnv .drg{font:21px/1.6 Georgia,serif;color:#0a6d33;margin:8px 0}#cnv .drg.bad{color:#b00020}#cnv #drk{margin-top:12px}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
   function page(h){ stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
@@ -228,7 +229,7 @@
       el("cb").onclick = path; el("cgo").onclick = hub;
     }).catch(function(){ page(top() + '<div class="card warn"><h2>No internet connection</h2></div>'); el("cb").onclick = path; });
   }
-  function hub(){
+  function hub(){ S.cur = null;
     function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
     function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
     page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Unit ' + S.unit + '</h2><p class="sub">Your path today: three drillings, with a break between them</p></div>'
@@ -268,7 +269,7 @@
   function startPart(){
     page(top() + '<div class="hero"><h2>Loading Part ' + S.unit + '…</h2></div>');
     getFile("c" + S.unit + "_part", "part" + S.unit + ".json").then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }).then(function(P){
-      S.P = P; S.ei = 0; S.res = {}; if (!S.t0) S.t0 = Date.now(); runEx();
+      S.cur = "lis"; S.P = P; S.ei = 0; S.res = {}; if (!S.t0) S.t0 = Date.now(); runEx();
     }).catch(function(){ page(top() + '<div class="card warn"><h2>This part is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
   }
   var ICO = {"01": "🔤", "02": "📝", "03": "🕒", "04": "🏠", "05": "🔢", "06": "👤", "07": "🌍", "08": "⭐"};
@@ -423,7 +424,7 @@
     var n = norm(said).replace(/-/g, " "); return q.a.some(function(a){ return norm(a).replace(/-/g, " ") === n; });
   }
   function rdAll(D){ if (D.parts){ var o = []; D.parts.forEach(function(p){ o = o.concat(p.qs); }); return o; } return D.q.concat(D.t); }
-  function startReading(){
+  function startReading(){ S.cur = "read";
     page(top() + '<div class="hero"><h2>Loading the reading…</h2></div>'); el("cb").onclick = hub;
     Promise.resolve(R("nv_stage", {tok: O.tok, u: S.unit})).then(function(r){ return r && r.track === "ml" ? "ml" : "ie"; }, function(){ return "ie"; }).then(function(tr){
       return getFile("c" + S.unit + (tr === "ml" ? "_readm" : "_read"), (tr === "ml" ? "readm" : "read") + S.unit + ".json");
@@ -580,7 +581,7 @@
   function wrTrack(){ if (S.trk) return Promise.resolve(S.trk); return Promise.resolve(R("nv_stage", {tok: O.tok, u: S.unit})).then(function(r){ return (S.trk = r && r.track === "ml" ? "ml" : "ie"); }, function(){ return (S.trk = "ie"); }); }
   function wrScore(W, tr){ return tr === "ml" ? W.m75.total : W.total; }
   function wrSan(tr, x){ return tr === "ml" ? String(x).replace(/band\s*\d+(\.\d)?\+?/ig, "the top mark").replace(/\bband\b/ig, "mark") : x; }
-  function startWriting(){
+  function startWriting(){ S.cur = "write";
     page(top() + '<div class="hero"><h2>Loading the writing…</h2></div>'); el("cb").onclick = hub;
     Promise.all([wrLoad(), wrTrack()]).then(function(r){
       var FB = r[0], tr = r[1], P = FB.ESSAY[tr];
@@ -668,17 +669,112 @@
       + '<div class="hlz" id="rdp" style="max-width:1100px;margin:0 auto">' + wrDetail(a) + '</div>'
       + '<div class="rbar rbfix"><button class="go fixgo" id="wrw">↻ Rewrite my essay</button><button class="pill" id="wfin"' + (A.length < 2 ? ' disabled style="opacity:.5;cursor:not-allowed"' : '') + '>Finish writing ✓</button><small>' + (A.length < 2 ? "Finish unlocks after one rewrite." : "You can finish, or rewrite again to push your mark higher.") + '</small></div>');
     wide(false); el("cb").onclick = hub;
-    el("wrw").onclick = wrRewrite; el("wfin").onclick = function(){ if (S.W.att.length >= 2) writingDone(); };
+    el("wrw").onclick = wrRewrite; el("wfin").onclick = function(){ if (S.W.att.length >= 2) startDrill(); };
   }
   function wrRewrite(){
     var Wd = S.W, a = Wd.att[Wd.att.length - 1]; Wd.mode = "rw";
     wrEditor('<h1 class="rpt" style="font-size:26px">Your feedback</h1><p class="rpi">Use it while you rewrite. Fix every red word, then press Check.</p>' + wrDetail(a), a.text);
   }
-  function writingDone(){ S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
+  function writingDone(){ if (!floorOk("write", wrFeedback)) return; S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
+
+  /* ---------- supervision: active time per stage, minimum floors ---------- */
+  var FLOOR = {lis: 3000, read: 1200, write: 1200}, SNAME = {lis: "listening", read: "reading", write: "writing"};
+  function trk(){
+    if (S.trkOn) return; S.trkOn = true; S.tm = {}; S.srv = {}; S.act = Date.now(); S.pend = {};
+    ["mousemove", "keydown", "mousedown", "touchstart", "scroll"].forEach(function(ev){ document.addEventListener(ev, function(){ S.act = Date.now(); }, true); });
+    setInterval(function(){
+      if (!S.cur || document.visibilityState !== "visible" || Date.now() - S.act > 120000) return;
+      var k = S.unit + ":" + S.cur; S.tm[k] = (S.tm[k] || 0) + 1; S.pend[k] = (S.pend[k] || 0) + 1;
+      if (S.pend[k] >= 30) flushLog(S.cur);
+    }, 1000);
+  }
+  function flushLog(st, detail){
+    var k = S.unit + ":" + st, a = S.pend[k] || 0; if (!a && !detail) return; S.pend[k] = 0;
+    try { Promise.resolve(R("nv_class_log", {tok: O.tok, u: S.unit, stage: st, add_secs: a, detail: detail || null})).then(function(r){ if (r && r.secs != null) S.srv[k] = r.secs; }, function(){ S.pend[k] = (S.pend[k] || 0) + a; }); } catch (x) {}
+  }
+  function stageSecs(st){ var k = S.unit + ":" + st; return Math.max(S.tm[k] || 0, S.srv[k] || 0); }
+  /* true = may finish. Otherwise shows the "keep going" screen */
+  function floorOk(st, back){
+    flushLog(st);
+    if (O.nofloor) return true;
+    var have = stageSecs(st), need = FLOOR[st];
+    if (have >= need) return true;
+    var left = Math.ceil((need - have) / 60);
+    page(top() + '<div class="brk"><div class="bk"><div class="be">⏳</div><h1 class="bh">Not so fast!</h1><p class="sub">Your ' + SNAME[st] + ' needs at least ' + Math.round(need / 60) + ' minutes of real work. You have done ' + Math.floor(have / 60) + '. Use the next ' + left + ' minute' + (left > 1 ? "s" : "") + ' to go back over your mistakes and do it better.</p></div><button class="go" id="fkb" style="margin-top:20px">Go back and keep working →</button></div>');
+    el("cb").onclick = hub; el("fkb").onclick = back || hub; return false;
+  }
+
+  /* ---------- writing: mistake drill ---------- */
+  function drItems(){
+    var W = S.W, seen = {}, out = [];
+    W.att.forEach(function(a){
+      var re = /<u class="err">([^<]+)<\/u>\s*<span class="okfx">\(([^)]*)\)<\/span>/g, m, txt = a.text || "";
+      var sents = txt.replace(/\s+/g, " ").match(/[^.!?]+[.!?]*/g) || [];
+      while ((m = re.exec(a.W.html))){
+        var bad = m[1].replace(/&amp;/g, "&").trim(), fix = m[2].replace(/&amp;/g, "&").trim(), key = bad.toLowerCase();
+        if (seen[key]) continue;
+        var sn = sents.filter(function(x){ return x.toLowerCase().indexOf(key) > -1; })[0]; if (!sn) continue;
+        sn = sn.trim(); var i = sn.toLowerCase().indexOf(key);
+        var good = sn.slice(0, i) + fix + sn.slice(i + bad.length);
+        var info = null; ["gvG", "gvV"].forEach(function(g){ var G = a.W[g]; if (G && G.fix) G.fix.forEach(function(f){ if (!info && (f.bad && f.bad.toLowerCase() === key || f.extra && f.extra.bad && f.extra.bad.toLowerCase() === key)) info = f; }); });
+        seen[key] = 1; out.push({sn: sn, bad: bad, fix: fix, good: good, cat: info ? info.cat : "Correct form", why: info ? info.why : "", fails: 0, ok: false});
+      }
+    });
+    out.forEach(function(it){
+      var g = it.sn;
+      out.filter(function(o){ return o.sn === it.sn; }).forEach(function(o){ var i = g.toLowerCase().indexOf(o.bad.toLowerCase()); if (i > -1) g = g.slice(0, i) + o.fix + g.slice(i + o.bad.length); });
+      it.good = g; it.all = out.filter(function(o){ return o.sn === it.sn; }); it.nm = it.all.length;
+    });
+    out = out.filter(function(it, i){ return out.findIndex(function(o){ return o.sn === it.sn; }) === i; });
+    return out.slice(0, 10);
+  }
+  function drExp(it){ return (it.all || [it]).map(function(o){ return '<div class="drl"><b>' + esc(o.cat) + '</b>' + (o.why ? ' · ' + esc(o.why) : '') + '<br><span class="wbd">' + esc(o.bad) + '</span> → <span class="wfx">' + esc(o.fix) + '</span></div>'; }).join(""); }
+  function drNorm(x){ return String(x).toLowerCase().replace(/[“”"']/g, "").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim(); }
+  function drJudge(it, ans){
+    var a = drNorm(ans), g = drNorm(it.good);
+    if (a === g) return true;
+    return (it.all || [it]).every(function(o){ var b = drNorm(o.bad), f = drNorm(o.fix); return a.indexOf(f) > -1 && (f.indexOf(b) > -1 || a.indexOf(b) < 0); }) && Math.abs(a.split(" ").length - g.split(" ").length) <= 2;
+  }
+  function startDrill(){
+    var W = S.W; W.dr = {q: drItems(), t0: Date.now()};
+    if (!W.dr.q.length){ return drFinish(); }
+    drAsk();
+  }
+  function drNext(){ var q = S.W.dr.q.filter(function(x){ return !x.ok; }); if (!q.length) return null; var cur = S.W.dr.last; return q.filter(function(x){ return x !== cur; })[0] || q[0]; }
+  function drAsk(){
+    var D = S.W.dr, it = drNext(); if (!it) return drFinish(); D.last = it;
+    var total = D.q.length, done = D.q.filter(function(x){ return x.ok; }).length;
+    page(top("← Unit") + '<div class="rdh"><h2>🔧 Fix your own mistakes</h2><div class="rds"><span class="dn">✓ Write</span><span class="dn">✓ Rewrite</span><span class="cu">3 · Mistake drill ' + done + ' / ' + total + '</span></div></div>'
+      + '<div class="drw"><div class="drb"><div class="drp" style="width:' + Math.round(100 * done / total) + '%"></div></div>'
+      + '<div class="drc"><div class="dri">Here is a sentence you wrote. It has ' + (it.nm > 1 ? it.nm + " mistakes" : "a mistake") + '.</div><div class="drs">' + esc(it.sn) + '</div>'
+      + '<div class="dri">Write the whole sentence again, correctly.</div><textarea id="dra" class="wrta drta" spellcheck="false" autocomplete="off"></textarea>'
+      + (it.fails ? '<div class="drx">' + drExp(it) + '</div>' : '')
+      + '<div id="drm"></div><button class="go" id="drk">Check</button></div></div>');
+    wide(false); el("cb").onclick = hub; var ta = el("dra"); ta.onpaste = function(e){ e.preventDefault(); }; ta.ondrop = ta.onpaste; ta.focus();
+    el("drk").onclick = function(){
+      var v = ta.value.trim(); if (v.split(/\s+/).length < 3) return;
+      if (drJudge(it, v)){ it.ok = true; drOk(it); }
+      else { it.fails++; drBad(it, v); }
+    };
+  }
+  function drOk(it){
+    page(top("← Unit") + '<div class="brk"><div class="bk good"><div class="be">✅</div><h1 class="bh">Correct!</h1><p class="drg">' + esc(it.good) + '</p><p class="sub">' + (it.fails ? "You fixed it after the explanation. It will stick now." : "Well done.") + '</p></div><button class="go" id="drn" style="margin-top:20px">Next →</button></div>');
+    el("cb").onclick = hub; el("drn").onclick = drAsk;
+  }
+  function drBad(it, v){
+    page(top("← Unit") + '<div class="brk"><div class="bk"><div class="be">🤔</div><h1 class="bh">Not quite</h1><p class="sub">You wrote:</p><p class="drg bad">' + esc(v) + '</p><div class="drx" style="text-align:left">' + drExp(it) + '</div><p class="sub">The correct sentence is:</p><p class="drg">' + esc(it.good) + '</p></div><button class="go" id="drn" style="margin-top:20px">Try it again →</button></div>');
+    el("cb").onclick = hub; el("drn").onclick = drAsk;
+  }
+  function drFinish(){
+    var D = S.W.dr, n = D ? D.q.length : 0, fails = D ? D.q.reduce(function(a, x){ return a + x.fails; }, 0) : 0;
+    flushLog("write", {ok: true, tries: S.W.att.length, sc: S.W.att[S.W.att.length - 1].sc, drill: n, fails: fails});
+    page(top() + '<div class="brk"><div class="bk good"><div class="be">🏅</div><h1 class="bh">' + (n ? "All mistakes mastered!" : "No mistakes to drill!") + '</h1><p class="sub">' + (n ? "You corrected " + n + " of your own sentence" + (n > 1 ? "s" : "") + "." : "Your writing had no marked mistakes. Great work.") + '</p></div><button class="go" id="drd" style="margin-top:20px">Finish writing →</button></div>');
+    el("cb").onclick = hub; el("drd").onclick = function(){ S.W.drDone = true; writingDone(); };
+  }
   /* one break screen for every stage: listening, reading, writing... */
-  function listeningDone(){ S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
-  function readingDone(){ S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
-  function stageBreak(label, onNext){
+  function listeningDone(){ if (!floorOk("lis")) return; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
+  function readingDone(){ if (!floorOk("read")) return; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
+  function stageBreak(label, onNext){ S.cur = null;
     var t0 = Date.now(), C = 2 * Math.PI * 130;
     page('<div class="brk"><small class="wu">' + label + '</small><h1 class="bh">Break time!</h1><p class="sub" id="bsub">Great focus. Recharge for ten minutes. We will keep the clock for you.</p>'
       + '<div class="bring" id="bring"><svg viewBox="0 0 300 300"><defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5df2d6"/><stop offset="1" stop-color="#c58bff"/></linearGradient></defs><circle cx="150" cy="150" r="130" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="16"/><circle id="barc" cx="150" cy="150" r="130" fill="none" stroke="url(#bg1)" stroke-width="16" stroke-linecap="round" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="0" transform="rotate(-90 150 150)"/></svg>'
@@ -703,10 +799,20 @@
   /* shown after listening, reading and writing are all complete */
   function goldKey(){ return keySvg().replace(/#5df2d6/g, "#fff3b0").replace(/#7aa2ff/g, "#ffc21a").replace(/#c58bff/g, "#d97a00"); }
   function unitDone(){
+    S.cur = null;
+    var go = function(){ unitShow(); };
+    try { Promise.resolve(R("nv_class_done", {tok: O.tok, u: S.unit})).then(function(r){
+      if (r && r.err === "notready"){
+        var nm = (r.need || []).map(function(k){ return SNAME[k] || k; }).join(", ");
+        page(top() + '<div class="brk"><div class="bk"><div class="be">⏳</div><h1 class="bh">Almost there</h1><p class="sub">Your class key is waiting for more work on: <b>' + esc(nm) + '</b>. Go back and spend more time on it, then finish again.</p></div><button class="go" id="nrb" style="margin-top:20px">Back to my unit →</button></div>');
+        el("cb").onclick = hub; el("nrb").onclick = hub;
+      } else go();
+    }, go); } catch (x) { go(); }
+  }
+  function unitShow(){
     var g = 0, n = 0, ex = 0, secs = Math.max(1, Math.round((Date.now() - (S.t0 || Date.now())) / 1000));
     if (S.P) S.P.exercises.forEach(function(e){ var r = S.res && S.res[e.id]; if (r){ g += r.good; n += r.n; ex++; } });
     var pct = n ? Math.round(100 * g / n) : 100, fx = S.fix ? S.fix.length : 0, mins = Math.max(1, Math.round(secs / 60)), u = S.unit, nx = u + 1, sp = "";
-    R("nv_class_done", {tok: O.tok, u: u});
     for (var q = 0; q < 46; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 3.5).toFixed(2) + 's;animation-duration:' + (2.6 + Math.random() * 2.4).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#ff9f43"][q % 5] + ';width:' + (5 + Math.random() * 7).toFixed(1) + 'px;height:' + (8 + Math.random() * 12).toFixed(1) + 'px"></i>';
     page('<div class="fin"><div class="spk">' + sp + '</div><div class="flash"></div><div class="kdrop">' + keySvg() + '</div>'
       + '<h1 class="fh">Unit ' + u + ' conquered</h1><p class="fn">' + esc(O.name || "") + ', your class key is yours.</p>'
@@ -717,7 +823,7 @@
   }
 
   window.CNV = {
-    open: function(o){ O = o; R = o.rpc; css(); hlWire(); home(); },
+    open: function(o){ O = o; R = o.rpc; css(); hlWire(); trk(); home(); },
     _unitDone: function(){ unitDone(); }
   };
 })();
