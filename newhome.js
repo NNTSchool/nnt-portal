@@ -126,14 +126,35 @@
     el("nvnext").onclick = function(){ S.st = null; S.review = false; open(S.back); };
     el("nvrev").onclick = function(){ S.review = true; unitPage(); };
   }
+  function choiceScreen(){
+    var h = '<h2>Unit ' + S.unit + '</h2><p class="sub">How do you want to start this unit?</p>';
+    if (!S.track){
+      h += '<div class="st"><div class="n">1</div><div><b>Choose your track</b><small>You choose once. Only your teacher can change it later.</small></div></div>'
+        + '<button class="go" id="nvtml" type="button">Multi-level</button> <button class="go" id="nvtie" type="button" style="margin-left:8px">IELTS</button>';
+      page(h);
+      ["ml","ie"].forEach(function(t){ var b = el("nvt" + t); if (b) b.onclick = function(){ if (!confirm("Choose " + (t === "ie" ? "IELTS" : "Multi-level") + "? You cannot change this later without your teacher.")) return; rpc("nv_set_track", {tok: tok(), trk: t}).then(function(r){ if (r && (r.ok || r.err === "fixed")) unitPage(); }); }; });
+      return;
+    }
+    h += '<div class="st"><div class="n">📚</div><div><b>Study deeply</b><small>Videos, then the home test, writing and speaking. The full way. Best if this unit is new for you.</small></div></div>'
+      + '<button class="go" id="nvdeep" type="button" style="background:#16a34a;width:100%">Study deeply</button>'
+      + '<div class="st" style="margin-top:18px"><div class="n">⚡</div><div><b>Jump to the test</b><small>Skip the videos and take the home test now. You need at least ' + S.jpct + '% to go on. You can jump only <b>once</b> for this unit. If you do not reach ' + S.jpct + '%, you will start from the videos. If you leave the test window 3 times, the test is cancelled.</small></div></div>'
+      + '<button class="go" id="nvjump" type="button" style="width:100%">Jump to the test</button>';
+    page(h);
+    el("nvdeep").onclick = function(){ S.chose = S.unit; unitPage(); };
+    el("nvjump").onclick = function(){
+      if (!confirm("Jump to the test?\n\n• You skip the videos.\n• You need at least " + S.jpct + "%.\n• You can do this only once for this unit. It starts now and cannot be paused.\n• If you leave the test window 3 times, it is cancelled.\n• If you do not reach " + S.jpct + "%, you start from the videos.")) return;
+      startHome(this, true);
+    };
+  }
   function unitPage(){
-    rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){ S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); return rpc("nv_state", {tok: tok(), u: S.unit}); }).then(function(r){
+    rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){ S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); S.jump = !!(x && x.ok && x.jump); S.jpct = x && x.ok ? x.jpct : 80; return rpc("nv_state", {tok: tok(), u: S.unit}); }).then(function(r){
       if (!r || !r.ok){ page('<h2>New</h2><p class="sub">Not available right now.</p>'); return; }
       S.vids = r.videos;
       if (S.st && S.st.key && !S.review){ keyScreen(); return; }
-      var done = S.vids.filter(function(v){ return v.done; }).length, all = done === S.vids.length;
+      if (S.jump && S.chose !== S.unit){ choiceScreen(); return; }
+      var done = S.vids.filter(function(v){ return v.done; }).length, jumped = !!(S.st && S.st.jumped), all = jumped || done === S.vids.length;
       var h = '<h2>Unit ' + S.unit + ' · Home practice</h2><p class="sub">Do the steps in order. Each step opens after the one before it.</p>';
-      h += '<div class="st"><div class="n">' + (all ? "✓" : "1") + '</div><div><b>Watch the videos</b><small>' + done + ' of ' + S.vids.length + ' finished</small></div></div>';
+      h += '<div class="st"><div class="n">' + (all ? "✓" : "1") + '</div><div><b>Watch the videos</b><small>' + (jumped ? "⏭ Skipped: you passed the jump test" : done + ' of ' + S.vids.length + ' finished') + '</small></div></div>';
       if (!all) S.vids.forEach(function(v){
         var pc = Math.min(100, Math.round(v.covered / v.target * 100)), lab = v.done ? "✅ Finished" : v.locked ? "🔒 Locked" : v.covered >= v.target ? "Type the secret words" : v.covered ? "Continue" : "Start";
         h += '<div class="vc"><div class="t">🎬 ' + esc(v.title) + '<span>' + fmt(v.len) + '</span></div><div class="bar"><i style="width:' + (v.done ? 100 : pc) + '%"></i></div><small>Watch at least ' + fmt(v.target) + ' (90%). ' + (v.done ? "Done." : fmt(Math.min(v.covered, v.target)) + " watched.") + (v.redo ? ' Restarts: ' + v.redo + '.' : '') + '</small><br>'
@@ -141,7 +162,7 @@
       });
       var st = S.st || {}, tn = S.track === "ie" ? "IELTS" : "Multi-level";
       if (!all && !S.teacher){ h += '<div class="st off"><div class="n">2</div><div><b>Home test</b><small>Opens after the videos</small></div></div>'; }
-      else if (st.test){ h += '<div class="st"><div class="n">✓</div><div><b>Home test</b><small>Done · ' + Math.round(st.pct) + '%</small></div></div>'; }
+      else if (st.test){ h += '<div class="st"><div class="n">' + (st.cancelled ? "✕" : "✓") + '</div><div><b>Home test</b><small>' + (st.cancelled ? 'Cancelled: you left the test window 3 times · 0%' : 'Done · ' + Math.round(st.pct) + '%') + '</small></div></div>'; }
       else if (!S.track){
         h += '<div class="st"><div class="n">2</div><div><b>Choose your track</b><small>You choose once. Only your teacher can change it later.</small></div></div>'
           + '<button class="go" id="nvtml" type="button">Multi-level</button> <button class="go" id="nvtie" type="button" style="margin-left:8px">IELTS</button>';
@@ -205,20 +226,21 @@
     }).catch(function(e){ btn.disabled = false; btn.textContent = "Start the speaking"; alert("Could not open the speaking. Check the internet and try again."); });
   }
   /* ---------- home test ---------- */
-  function startHome(btn){
+  function startHome(btn, jump){
+    var lab0 = btn.textContent;
     btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
-    rpc("nv_test", {tok: tok(), u: S.unit}).then(function(r){
-      if (!r || !r.ok){ btn.disabled = false; btn.textContent = "Start the home test"; if (r && r.err === "done") unitPage(); else alert(r && r.err === "videos" ? "Finish all the videos first." : "The home test is not ready. Tell your teacher."); return; }
+    rpc(jump ? "nv_jump_start" : "nv_test", {tok: tok(), u: S.unit}).then(function(r){
+      if (!r || !r.ok){ btn.disabled = false; btn.textContent = jump ? lab0 : "Start the home test"; if (jump && r && r.err === "nojump"){ S.chose = S.unit; unitPage(); } else if (r && r.err === "done") unitPage(); else alert(r && r.err === "videos" ? "Finish all the videos first." : "The home test is not ready. Tell your teacher."); return; }
       return fetchDecrypt(r.path, r.key).then(function(buf){
         var html = new TextDecoder("utf-8").decode(buf);
         return fetch("shim.js", {cache: "no-store"}).then(function(x){ return x.text(); }).then(function(shim){
-          var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, teacher: !!S.teacher, name: r.name, mode: "home", track: r.track, pass: r.pass}) + ";";
+          var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, teacher: !!S.teacher, name: r.name, mode: "home", track: r.track, pass: r.pass, jump: !!jump, jpct: r.jpct}) + ";";
           var tag = "<script>" + cfg + "\n" + shim.replace(/<\/script/gi, "<\\/script") + "<\/script>";
           var m = html.match(/<head[^>]*>/i); html = m ? html.replace(m[0], m[0] + tag) : tag + html;
           document.open(); document.write(html); document.close();
         });
       });
-    }).catch(function(e){ btn.disabled = false; btn.textContent = "Start the home test"; alert("Could not open the test. Check the internet and try again."); });
+    }).catch(function(e){ btn.disabled = false; btn.textContent = lab0; alert("Could not open the test. Check the internet and try again."); });
   }
   /* ---------- player ---------- */
   function play(idx){
