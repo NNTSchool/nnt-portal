@@ -48,7 +48,7 @@
   <button class="ek en lock" id="e_new" type="button"><span class="tag">NEW</span><span class="ic">🔒</span>Novel<small>The new learning experience</small></button></div>
   <div id="e_msg"></div><button class="eo" id="e_out" type="button">Log out</button></div></div>
 <script src="core.js?v=16"></script>
-<script src="classnv.js?v=4"></script>
+<script src="classnv.js?v=6"></script>
 <script>
 var TOK = null, NAME = "", SID = 0, ROSTER = [], pickId = 0;
 function show(id){ ["s_setup","s_login","s_lib","s_load"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); $("out").classList.toggle("hide", id !== "s_lib"); }
@@ -93,10 +93,12 @@ var OFFD = [2, 3]; /* days off since 5 Nov 2026 (2 = Saturday 7 Nov, 3 = Sunday 
 function testDays(n){ var c = 0; for (var i = 0; i < n; i++){ if (OFFD.indexOf(i) < 0 && i % 7 !== 3) c++; } return c; } /* every Sunday is a day off (day 3 = Sun 8 Nov) */
 function todayUnit(){ var d = Math.floor((Date.now() + 5 * 3600e3 - PLAN_START) / 864e5); if (d < 0 || OFFD.indexOf(d) > -1) return 0; return PLAN_UNIT + testDays(d); }
 /* the two doors, like the portal: Classic (the class tests) and Novel (closed here for now) */
-function entryOpen(){ $("e_name").textContent = NAME ? String(NAME).split(" ")[0] : ""; $("e_msg").innerHTML = ""; $("entry").classList.remove("hide"); document.body.style.overflow = "hidden"; }
+var NVOK = false;
+function nvLook(){ var b = $("e_new"); b.classList.add("lock"); b.querySelector(".ic").textContent = "🔒"; NVOK = false; if (!TOK) return; rpc("nv_class_access", {tok: TOK}).then(function(r){ if (r && r.ok && r.allowed){ NVOK = true; b.classList.remove("lock"); b.querySelector(".ic").textContent = "🚀"; } }).catch(function(){}); }
+function entryOpen(){ nvLook(); $("e_name").textContent = NAME ? String(NAME).split(" ")[0] : ""; $("e_msg").innerHTML = ""; $("entry").classList.remove("hide"); document.body.style.overflow = "hidden"; }
 function entryClose(){ $("entry").classList.add("hide"); document.body.style.overflow = ""; }
 $("e_classic").onclick = function(){ entryClose(); loadTests(); };
-$("e_new").onclick = function(){ if (/[?&]preview=1/.test(location.search) && window.CNV){ entryClose(); CNV.open({tok: TOK, rpc: rpc, base: "classdata/", onExit: entryOpen}); return; } var b = $("e_new"); b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake"); $("e_msg").innerHTML = '<div class="elock">🔒 Novel is not open in the classroom yet. Please use Classic.</div>'; };
+$("e_new").onclick = function(){ if ((NVOK || /[?&]preview=1/.test(location.search)) && window.CNV){ entryClose(); CNV.open({tok: TOK, rpc: rpc, base: "classdata/", onExit: entryOpen}); return; } var b = $("e_new"); b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake"); $("e_msg").innerHTML = '<div class="elock">🔒 Novel is not open in the classroom yet. Please use Classic.</div>'; };
 $("e_out").onclick = function(){ entryClose(); $("out").click(); };
 $("swbtn").onclick = function(){ entryOpen(); };
 function loadTests(){

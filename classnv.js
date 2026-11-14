@@ -77,6 +77,7 @@
   function keyCheck(){
     page(top() + '<div class="hero"><h2>Checking your key…</h2></div>'); el("cb").onclick = path;
     R("nv_class_check", {tok: O.tok, u: S.unit}).then(function(r){
+      if (r && r.err === "classlocked"){ page(top() + '<div class="card warn"><h2>Novel is not open for you yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = path; return; }
       if (!r || !r.ok){ page(top() + '<div class="card warn"><h2>Please try again</h2><p>We could not check your key.</p></div>'); el("cb").onclick = path; return; }
       if (!r.earned){
         page(top() + '<div class="card warn"><h2>Your key has not been earned yet</h2><p>You need the key of Unit ' + S.unit + ' on the student portal first. Go earn it, then come back.</p></div>'); el("cb").onclick = path; return; }
