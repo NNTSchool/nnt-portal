@@ -313,6 +313,20 @@
       if (t < 3200) requestAnimationFrame(tick); else c.remove();
     })();
   }
+
+  /* right after a step is finished, the next one starts by itself (a few seconds to get ready, and a way to say "not now") */
+  function autoNext(name, btnId, starter){
+    var n = 5, tm = null;
+    function stop(){ if (tm){ clearInterval(tm); tm = null; } }
+    nvBox("Well done! Next: " + name, '<span id="nvcd">' + name + ' starts in ' + n + '…</span><br><small style="opacity:.8">Take a breath. You can also start it later from this page.</small>', [
+      {t: "Not now", f: stop}, {t: "Start now", ok: 1, f: function(){ stop(); var b = el(btnId); if (b) starter(b); }}]);
+    tm = setInterval(function(){
+      n--; var c = el("nvcd");
+      if (!c){ stop(); return; }
+      if (n <= 0){ stop(); var o = el("nvbox"); if (o) o.remove(); var b = el(btnId); if (b) starter(b); return; }
+      c.textContent = name + " starts in " + n + "…";
+    }, 1000);
+  }
   function keyScreen(){
     var nu = nvNext(); try{ sessionStorage.setItem("nvks" + S.unit, "1"); }catch(e){}
     page('<div style="text-align:center;padding:18px 0 6px"><div class="nvkey" style="width:260px;max-width:78%;margin:0 auto;filter:drop-shadow(0 14px 26px rgba(255,196,40,.5))">'+keySvg()+'</div>'
@@ -349,7 +363,7 @@
     rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){ S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); S.jump = !!(x && x.ok && x.jump); S.testacct = !!(x && x.ok && x.testacct); S.jpct = x && x.ok ? x.jpct : 80; return rpc("nv_state", {tok: tok(), u: S.unit}); }).then(function(r){
       if (!r || !r.ok){ page('<h2>Unit ' + S.unit + '</h2><p class="sub">' + (r && r.err === "closed" ? "This unit is not open yet. Your teacher will open it soon." : r && r.err === "locked" ? "Finish the earlier unit first." : "Not available right now.") + ' <small style="opacity:.6">(' + esc((r && r.err) || "error") + ')</small></p>', true); return; }
       S.vids = r.videos;
-      var kseen = false, ret = false; try{ kseen = sessionStorage.getItem("nvks" + S.unit) === "1"; ret = sessionStorage.getItem("nnt_ret") === "1"; sessionStorage.removeItem("nnt_ret"); }catch(e){}
+      var kseen = false, ret = false, auto = ""; try{ kseen = sessionStorage.getItem("nvks" + S.unit) === "1"; ret = sessionStorage.getItem("nnt_ret") === "1"; sessionStorage.removeItem("nnt_ret"); auto = sessionStorage.getItem("nvauto") || ""; sessionStorage.removeItem("nvauto"); }catch(e){}
       /* coming back from the home test or the writing: stay on the steps; the key screen is only for finishing the last step */
       if (ret && !(S.st && S.st.speak)) kseen = true;
       /* the key screen is the celebration right after finishing the last step, not something to see again when moving between units */
@@ -407,10 +421,13 @@
       if (el("nvts")) el("nvts").onclick = function(){ startSpeak(this); };
       if (el("nvstartspeak")) el("nvstartspeak").onclick = function(){ startSpeak(this); };
       Array.prototype.forEach.call(el("newv").querySelectorAll(".go[data-i]"), function(b){ b.onclick = function(){ play(+b.getAttribute("data-i")); }; });
+      if (ret && auto === "write" && st.test && !st.essay && el("nvstartwrite")) autoNext("Writing", "nvstartwrite", startWrite);
+      else if (ret && auto === "speak" && st.essay && !st.speak && el("nvstartspeak")) autoNext("Speaking", "nvstartspeak", startSpeak);
     }).catch(function(){ page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>', true); });
   }
   /* ---------- writing ---------- */
   function startWrite(btn){
+    try{ sessionStorage.setItem("nvauto", "speak"); }catch(e){}
     btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
     rpc("nv_write", {tok: tok(), u: S.unit}).then(function(r){
       if (!r || !r.ok){ btn.disabled = false; btn.textContent = "Start the writing"; if (r && r.err === "done") unitPage(); else nvNote("The writing is not ready. Tell your teacher."); return; }
@@ -443,6 +460,7 @@
   }
   /* ---------- home test ---------- */
   function startHome(btn, jump){
+    try{ sessionStorage.setItem("nvauto", "write"); }catch(e){}
     var lab0 = btn.textContent;
     btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
     rpc(jump ? "nv_jump_start" : "nv_test", {tok: tok(), u: S.unit}).then(function(r){
