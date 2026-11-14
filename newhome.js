@@ -53,7 +53,16 @@
   + '#newv .nvnav button{flex:1;border-radius:16px;padding:12px 10px;cursor:pointer;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;text-align:center;min-height:56px;transition:transform .15s,filter .15s}#newv .nvnav button b{display:block;font-size:17px;font-weight:800}#newv .nvnav button small{display:block;font-size:12px;margin-top:2px;opacity:.85}'
   + '#newv .nvnav .pr{border:0;color:#2a0a1e;background:linear-gradient(135deg,#ffb86b 0%,#ff7a8a 55%,#ff5fa8 100%);box-shadow:0 10px 30px -10px rgba(255,111,145,.7)}#newv .nvnav .gb{color:#f2f0ff;background:rgba(255,255,255,.07);border:1.5px solid rgba(185,176,255,.4)}'
   + '#newv .nvnav button:disabled{cursor:default;box-shadow:none;background:rgba(255,255,255,.05);color:#8f8bb8;border:1.5px dashed rgba(185,176,255,.22)}#newv .nvnav button:not(:disabled):active{transform:scale(.98)}'
-  + '#newv .nbk{border-color:rgba(185,176,255,.5)}';
+  + '#newv .nbk{border-color:rgba(185,176,255,.5)}'
+
+  + '#newv .hm{min-height:calc(100vh - 36px);display:flex;flex-direction:column;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}#newv .hmtop{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:4px 0 0}'
+  + '#newv .hmbrand{font:800 19px system-ui;letter-spacing:-.01em;color:#f2f0ff}#newv .hmbrand span{font-weight:600;color:#b9b0ff}'
+  + '#newv .hmbtns{display:flex;gap:8px;align-items:center;flex-wrap:wrap}#newv .hmbtns button{border-radius:99px;padding:8px 16px;font:700 14px system-ui;cursor:pointer;color:#f2f0ff;background:rgba(255,255,255,.07);border:1px solid rgba(185,176,255,.35);transition:background .15s}#newv .hmbtns button:hover{background:rgba(255,255,255,.14)}#newv .hmbtns button.paybtn{border:0;padding:5px 14px 5px 10px;color:#fff}'
+  + '#newv .hmc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px 0 40px}#newv .hmgreet{font:700 16px system-ui;letter-spacing:.14em;text-transform:uppercase;color:#9dfbe3;margin-bottom:18px}'
+  + '#newv .hmring .ring{width:min(46vw,200px);height:min(46vw,200px);position:relative;margin:0 auto}#newv .hmring .ring svg{width:100%;height:100%}#newv .hmring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}#newv .hmring .c small{font:700 13px system-ui;letter-spacing:.18em;text-transform:uppercase;color:#b9b0ff}#newv .hmring .c b{font:800 64px/1 system-ui;color:#fff;letter-spacing:-.03em}'
+  + '#newv .hmlvl{margin:16px 0 4px}#newv .hmq{margin:26px auto 30px;max-width:620px;padding:22px 26px;border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(185,176,255,.22);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}#newv .hmq p{margin:0;font:600 clamp(19px,2.6vw,25px)/1.4 Georgia,serif;font-style:italic;color:#f2f0ff}#newv .hmq cite{display:block;margin-top:10px;font:700 14px system-ui;font-style:normal;color:#b9b0ff;letter-spacing:.04em}'
+  + '#newv .hmgo{width:min(480px,100%);padding:22px 28px;font-size:23px;border-radius:20px;letter-spacing:.01em;box-shadow:0 18px 50px -12px rgba(255,111,145,.75);animation:nvglow 2.6s ease-in-out infinite}@keyframes nvglow{50%{box-shadow:0 18px 64px -6px rgba(255,111,145,.95)}}@media (prefers-reduced-motion:reduce){#newv .hmgo{animation:none}}'
+  + '#newv .nw:has(.hm){max-width:1000px}#newv .nvdbg{text-align:center;font:600 11px system-ui;color:#8f8bb8;padding:0 0 8px;margin-top:-6px;position:sticky;bottom:0;background:rgba(8,10,34,.96)}';
   var S = {unit: 1, vids: [], cur: null, pl: null, hb: null, ack: 0, mack: null, fails: 0, back: null, ytReady: false, ytQ: [], word: 0, wordT: 0, hidden: false, ready: false, busy: false};
   function tok(){ return ls("nnt_phone_token"); }
   function fmt(s){ s = Math.max(0, Math.round(s)); var h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return (h ? h + ":" + (m < 10 ? "0" : "") : "") + m + ":" + (x < 10 ? "0" : "") + x; }
@@ -154,6 +163,53 @@
       + '<circle cx="60" cy="60" r="50" fill="none" stroke="rgba(185,176,255,.16)" stroke-width="9"/>'
       + '<circle cx="60" cy="60" r="50" fill="none" stroke="url(#nvrg)" stroke-width="9" stroke-linecap="round" stroke-dasharray="' + (C * frac).toFixed(1) + ' ' + C.toFixed(1) + '"/></svg>';
   }
+
+  /* ---------- the home page: where you are, one quote, one big button ---------- */
+  var QUOTES = [
+    ["The expert in anything was once a beginner.", "Helen Hayes"], ["It always seems impossible until it is done.", "Nelson Mandela"],
+    ["A journey of a thousand miles begins with a single step.", "Lao Tzu"], ["Learning never exhausts the mind.", "Leonardo da Vinci"],
+    ["You don’t have to be great to start, but you have to start to be great.", "Zig Ziglar"], ["Success is the sum of small efforts, repeated day in and day out.", "Robert Collier"],
+    ["The limits of my language mean the limits of my world.", "Ludwig Wittgenstein"], ["Fall seven times, stand up eight.", "Japanese proverb"],
+    ["The beautiful thing about learning is that nobody can take it away from you.", "B. B. King"], ["Education is the most powerful weapon which you can use to change the world.", "Nelson Mandela"],
+    ["Don’t watch the clock; do what it does. Keep going.", "Sam Levenson"], ["Well begun is half done.", "Proverb"],
+    ["Learn as if you were to live forever.", "Mahatma Gandhi"], ["The more that you read, the more things you will know.", "Dr. Seuss"],
+    ["One language sets you in a corridor for life. Two languages open every door along the way.", "Frank Smith"], ["Mistakes are proof that you are trying.", ""],
+    ["Do something today that your future self will thank you for.", ""], ["Little by little, a little becomes a lot.", "Proverb"],
+    ["Language is the road map of a culture.", "Rita Mae Brown"], ["Practice makes progress, not perfection.", ""],
+    ["The secret of getting ahead is getting started.", "Mark Twain"], ["Every word you learn is a new door.", ""],
+    ["Your future is created by what you do today, not tomorrow.", "Robert Kiyosaki"], ["Energy and persistence conquer all things.", "Benjamin Franklin"]
+  ];
+  function pickQuote(){
+    var i = Math.floor(Math.random() * QUOTES.length), last = -1;
+    try{ last = +localStorage.getItem("nvq"); }catch(e){}
+    if (i === last) i = (i + 1) % QUOTES.length;
+    try{ localStorage.setItem("nvq", String(i)); }catch(e){}
+    return QUOTES[i];
+  }
+  function frontUnit(){
+    var o = (S.nav && S.nav.open) || [];
+    for (var i = 0; i < o.length; i++) if (!nvDone(o[i])) return o[i];
+    return o.length ? o[o.length - 1] : 1;
+  }
+  function homePage(){
+    S.sub = false; S.chose = null; S.review = false;
+    var fu = frontUnit(), fn = ""; try{ if (typeof ME !== "undefined" && ME && ME.name) fn = String(ME.name).split(" ")[0]; }catch(e){}
+    var pb = document.getElementById("paybtn"), hasPay = pb && !pb.classList.contains("hide"), q = pickQuote();
+    var h = '<div class="hm"><div class="hmtop"><div class="hmbrand">NNT <span>School Academy</span></div><div class="hmbtns"><button id="nvhsw" type="button">⇄ Switch</button>'
+      + (hasPay ? '<button id="nvhpay" type="button" class="' + pb.className.replace(/\bhide\b/, '') + '">' + pb.innerHTML + '</button>' : '') + '<button id="nvhout" type="button">Log out</button></div></div>'
+      + '<div class="hmc"><div class="hmgreet">' + (fn ? 'Welcome back, ' + esc(fn) : 'Welcome back') + '</div>'
+      + '<div class="hmring"><div class="ring">' + ringSvg(Math.min(1, ((S.nav ? S.nav.keys.length : 0)) / 20)) + '<div class="c"><small>Unit</small><b>' + fu + '</b></div></div></div>'
+      + '<div class="hmlvl"><span class="chip">Unit ' + fu + ' of 20</span><span class="chip" id="hmtrk" style="display:none"></span></div>'
+      + '<blockquote class="hmq"><p>“' + esc(q[0]) + '”</p>' + (q[1] ? '<cite>— ' + esc(q[1]) + '</cite>' : '') + '</blockquote>'
+      + '<button type="button" class="go hmgo" id="nvbegin">Begin Learning →</button></div></div>';
+    page(h);
+    el("nvbegin").onclick = function(){ this.disabled = true; goUnit(frontUnit()); };
+    el("nvhsw").onclick = function(){ var b = document.getElementById("swbtn"); if (b) b.click(); };
+    if (el("nvhpay")) el("nvhpay").onclick = function(){ pb.click(); };
+    el("nvhout").onclick = function(){ nvAsk("Log out?", "You will need a new code from your teacher to log in again.", "Log out", function(){ if (window.NNT_OUT) window.NNT_OUT(); }); };
+    rpc("nv_stage", {tok: tok(), u: fu}).then(function(x){ var t = x && x.ok ? x.track : null, c = el("hmtrk"); if (c && t){ c.textContent = "Track · " + (t === "ie" ? "IELTS" : "Multi-level"); c.style.display = ""; } }).catch(function(){});
+  }
+
   /* the Novel home: where you are, what is next, and a hint of what waits in class */
   function hubPage(){
     S.sub = false; var reqU = S.unit;
@@ -169,7 +225,7 @@
       var cur = -1; for (var i = 0; i < steps.length; i++) if (!steps[i].ok){ cur = i; break; }
       var nd = steps.filter(function(q){ return q.ok; }).length, key = !!st.key;
       var pb = document.getElementById("paybtn"), hasPay = pb && !pb.classList.contains("hide");
-      var h = '<div class="hb"><div class="hbar"><button id="nvhsw" type="button">⇄ Switch</button>' + (hasPay ? '<button id="nvhpay" type="button" class="' + pb.className.replace(/\bhide\b/, '') + '">' + pb.innerHTML + '</button>' : '') + '<button id="nvhout" type="button">Log out</button></div><div class="hero"><div class="ring">' + ringSvg(key ? 1 : nd / 4) + '<div class="c"><small>Unit</small><b>' + S.unit + '</b></div></div>'
+      var h = '<div class="hb"><div class="hbar"><button id="nvhome" type="button">⌂ Home</button></div><div class="hero"><div class="ring">' + ringSvg(key ? 1 : nd / 4) + '<div class="c"><small>Unit</small><b>' + S.unit + '</b></div></div>'
         + '<div><h2>Learning Flow</h2><p class="sub">' + "Practised at home · " + (key ? "Unit " + S.unit + " complete. The key is yours." : nd === 0 ? "your adventure begins here." : nd + " of 4 steps done. Keep going.") + '</p>'
         + (tn ? '<span class="chip">Track · ' + tn + '</span>' : '<span class="chip">Track · you choose after the videos</span>') + '<span class="chip">Unit ' + S.unit + ' of 20</span></div></div>';
       h += '<div class="path">';
@@ -187,9 +243,7 @@
         + '<div class="ch"><span>Unit ' + S.unit + ' class test</span><span class="bl">Something extra</span><span class="bl">More to discover</span></div></div>';
       h += '</div>';
       page(h, true);
-      el("nvhsw").onclick = function(){ var b = document.getElementById("swbtn"); if (b) b.click(); };
-      if (el("nvhpay")) el("nvhpay").onclick = function(){ pb.click(); };
-      el("nvhout").onclick = function(){ nvAsk("Log out?", "You will need a new code from your teacher to log in again.", "Log out", function(){ if (window.NNT_OUT) window.NNT_OUT(); }); };
+      el("nvhome").onclick = function(){ homePage(); };
       if (el("nvhgo")) el("nvhgo").onclick = function(){ S.sub = true; unitPage(); };
       if (el("nvhrev")) el("nvhrev").onclick = function(){ S.review = true; S.sub = true; unitPage(); };
     }).catch(function(){ page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>'); });
@@ -202,11 +256,11 @@
         if (r && r.ok === false && r.err) return {err: r.err};
         var cur = r && r.ok && r.units && r.units[0] ? r.units[0].unit : (r && r.all_done ? (r.last || 1) : 1), o = [], k = [];
         for (var i = 1; i <= cur; i++){ o.push(i); if (i < cur || (r && r.all_done)) k.push(i); }
-        S.nav = {open: o, keys: k, vip: false, more: !!(r && r.more)}; return S.nav;
+        S.nav = {open: o, keys: k, vip: false, more: !!(r && r.more), src: "old"}; return S.nav;
       });
     }
     return rpc("nv_nav", {tok: tok()}).then(function(r){
-      if (r && r.ok){ S.nav = {open: (r.open || []).map(Number), keys: (r.keys || []).map(Number), vip: !!r.vip, more: !!r.more}; return S.nav; }
+      if (r && r.ok){ S.nav = {open: (r.open || []).map(Number), keys: (r.keys || []).map(Number), vip: !!r.vip, more: !!r.more, src: "map"}; return S.nav; }
       if (r && r.ok === false && r.err) return {err: r.err};
       return fb();
     }, fb);
@@ -220,7 +274,8 @@
     var pv = nvPrev(), nx = nvNext(), can = nvCanNext();
     var ph = nx === null ? (S.nav.more ? "The next unit opens soon" : "You are at the last unit") : can ? "Unit " + nx : "Finish Unit " + S.unit + " first";
     return '<div class="nvnav"><button type="button" class="gb" id="nvgb"' + (pv === null ? " disabled" : "") + '><b>← Go back</b><small>' + (pv === null ? "This is the first unit" : "Unit " + pv) + '</small></button>'
-      + '<button type="button" class="pr" id="nvpr"' + (can ? "" : " disabled") + '><b>Proceed →</b><small>' + ph + '</small></button></div>';
+      + '<button type="button" class="pr" id="nvpr"' + (can ? "" : " disabled") + '><b>Proceed →</b><small>' + ph + '</small></button></div>'
+      + (S.nav.vip || S.nav.src === "old" ? '<div class="nvdbg">Open units: ' + (S.nav.open.join(", ") || "none") + (S.nav.src === "old" ? " · old map (run the latest NNT update)" : "") + '</div>' : '');
   }
   function wireNav(){
     var g = el("nvgb"), p = el("nvpr");
@@ -249,7 +304,7 @@
       var ret = false, cur = 0; try{ ret = sessionStorage.getItem("nnt_ret") === "1"; cur = +sessionStorage.getItem("nvcur") || 0; }catch(e){}
       S.unit = (ret && o.indexOf(cur) >= 0) ? cur : (f !== null ? f : o[o.length - 1]);
       try{ sessionStorage.setItem("nvcur", String(S.unit)); }catch(e){}
-      if (ret){ S.sub = true; unitPage(); } else hubPage();
+      if (ret){ S.sub = true; unitPage(); } else homePage();
     }).catch(function(){ page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>', "exit"); });
   }
   /* Proceed: refresh the map from the server, then open the next unit */
