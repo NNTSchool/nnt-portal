@@ -136,9 +136,26 @@
   function judge(ex, k, said){ if (ex.long){ var c = words(ex.items[k]), g = words(said); var l = lcs(c, g); return {ok: c.length > 0 && l / Math.max(c.length, g.length) >= 0.9, pct: Math.round(100 * l / c.length)}; }
     return {ok: norm(said) === norm(ex.items[k]) || norm(said).replace(/[ -]/g, "") === norm(ex.items[k]).replace(/[ -]/g, "")}; }
 
+  /* encrypted files: the server releases the key only to an allowed student who holds the unit's home key */
+  function hex2b(h){ var a = new Uint8Array(h.length / 2); for (var i = 0; i < a.length; i++) a[i] = parseInt(h.substr(i * 2, 2), 16); return a; }
+  function getFile(fid, plain){
+    if (!O.enc) return fetch(O.base + plain, {cache: "no-store"}).then(function(r){ if (!r.ok) throw 0; return r.arrayBuffer(); });
+    return R("class_file", {tok: O.tok, fid: fid}).then(function(r){
+      if (!r || !r.ok) throw 0;
+      return fetch(r.path, {cache: "no-store"}).then(function(x){ if (!x.ok) throw 0; return x.arrayBuffer(); }).then(function(buf){
+        var u = new Uint8Array(buf);
+        return crypto.subtle.importKey("raw", hex2b(r.key), "AES-GCM", false, ["decrypt"]).then(function(k){ return crypto.subtle.decrypt({name: "AES-GCM", iv: u.slice(0, 12)}, k, u.slice(12)); });
+      });
+    });
+  }
+  function audioUrl(ex){
+    S.au = S.au || {}; if (S.au[ex.audio]) return Promise.resolve(S.au[ex.audio]);
+    var m = /(\d+)-(\d+)$/.exec(ex.audio) || [0, S.unit, "01"];
+    return getFile("c" + m[1] + "_" + m[2], ex.audio + ".mp3").then(function(b){ return (S.au[ex.audio] = URL.createObjectURL(new Blob([b], {type: "audio/mpeg"}))); });
+  }
   function startPart(){
     page(top() + '<div class="hero"><h2>Loading Part ' + S.unit + '…</h2></div>');
-    fetch(O.base + "part" + S.unit + ".json", {cache: "no-store"}).then(function(r){ if (!r.ok) throw 0; return r.json(); }).then(function(P){
+    getFile("c" + S.unit + "_part", "part" + S.unit + ".json").then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }).then(function(P){
       S.P = P; S.ei = 0; S.res = {}; if (!S.t0) S.t0 = Date.now(); runEx();
     }).catch(function(){ page(top() + '<div class="card warn"><h2>This part is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
   }
@@ -150,11 +167,13 @@
   function wirePlayer(ex){
     var b = el("cplay"), bar = el("cbar"), tm = el("ctm");
     b.onclick = function(){
-      stopAudio(); A = new Audio(O.base + ex.audio + ".mp3"); b.disabled = true; b.textContent = "Playing…";
+      stopAudio(); b.disabled = true; b.textContent = "Loading…";
+      audioUrl(ex).then(function(url){ A = new Audio(url); b.textContent = "Playing…";
       A.ontimeupdate = function(){ if (A && A.duration){ bar.style.width = (100 * A.currentTime / A.duration) + "%"; var t = Math.floor(A.currentTime); tm.textContent = Math.floor(t / 60) + ":" + ("0" + t % 60).slice(-2); } };
       A.onended = function(){ b.disabled = false; b.textContent = "▶ Play again"; bar.style.width = "0"; };
       A.onerror = function(){ b.disabled = false; b.textContent = "▶ Try again"; };
       var p = A.play(); if (p && p.catch) p.catch(function(){ b.disabled = false; b.textContent = "▶ Play"; });
+      }).catch(function(){ b.disabled = false; b.textContent = "▶ Try again"; });
     };
   }
   function runEx(){
