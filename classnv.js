@@ -45,6 +45,8 @@
   + '#cnv .core small{font-weight:800;letter-spacing:.24em;font-size:13px;color:#9fb4ff}#cnv .core b{font-size:128px;line-height:1;font-weight:800;background:linear-gradient(160deg,#fff,#9fd0ff 60%,#c58bff);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 6px 0 rgba(0,0,0,.25))}'
   + '#cnv .orb i{position:absolute;border-radius:50%;background:#fff;box-shadow:0 0 18px 6px rgba(255,255,255,.6)}#cnv .o1{width:16px;height:16px;left:50%;top:-8px;animation:hmo 7s linear infinite;transform-origin:0 208px}#cnv .o2{width:11px;height:11px;left:50%;top:-5px;background:#5df2d6;transform-origin:0 205px;animation:hmo 11s linear infinite reverse}#cnv .o3{width:9px;height:9px;left:50%;top:-4px;background:#ff7ad9;transform-origin:0 204px;animation:hmo 15s linear infinite}@keyframes hmo{to{transform:rotate(360deg)}}'
   + '#cnv .sk{position:absolute;border-radius:50%;background:#fff;opacity:0;animation:hmk 4s ease-in-out infinite}@keyframes hmk{50%{opacity:.9;transform:scale(1.8)}}';
+  CSS += '#cnv .cld{background:none!important;overflow:hidden;left:-200px!important;right:-200px!important}#cnv .cli{-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 58%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 58%,transparent 100%);position:absolute;height:auto;max-width:none;animation:cdr 9s ease-in-out infinite alternate;filter:drop-shadow(0 12px 26px rgba(120,140,255,.35))}@keyframes cdr{from{transform:translateX(-14px)}to{transform:translateX(14px)}}'
+  + '#cnv .hnt{position:absolute;transform:translateX(-50%);white-space:nowrap;font-weight:700;font-size:18px;color:#bfe9ff;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);border-radius:99px;padding:8px 18px}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
   function page(h){ stopAudio(); root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
@@ -79,18 +81,21 @@
   var FLAG = '<svg viewBox="0 0 64 64" width="52" height="52"><path d="M16 8v50" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M20 12c10-6 16 6 28 0v24c-12 6-18-6-28 0z" fill="#fff"/></svg>', STAR = '<svg viewBox="0 0 64 64" width="52" height="52"><path d="M32 6l7.6 16.4 17.9 2.1-13.2 12.3 3.5 17.7L32 45.2 16.2 54.5l3.5-17.7L6.5 24.5l17.9-2.1z" fill="#fff"/></svg>';
   var ZZ = [50, 66, 74, 66, 50, 34, 26, 34];
   function path(){
-    page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Your path</h2><p class="sub" id="cnsub">Opening…</p></div><div id="cnbody"></div>'); el("cb").onclick = hub;
+    page(top() + '<div id="cnbody"><p class="sub" id="cnsub" style="text-align:center">Opening…</p></div>'); el("cb").onclick = home;
     R("nv_nav", {tok: O.tok}).then(function(n){
       if (!n || !n.ok){ el("cnsub").textContent = "Please try again in a moment."; return; }
       S.nav = n; var open = (n.open || []).map(Number).filter(function(u){ return u <= 6; }), ck = (n.ckeys || []).map(Number), cur = null;
       for (var i = 0; i < open.length; i++) if (ck.indexOf(open[i]) < 0){ cur = open[i]; break; }
-      el("cnsub").textContent = cur === null ? "Everything open is complete. Well done!" : "Tap your stage to begin";
-      var H = 170, tot = open.length * H + 300, h = '<div class="bn"><div><small>UNIT ' + (cur === null ? open[open.length - 1] : cur) + '</small><b>Listening · Reading · Writing</b></div><i>☰</i></div><div class="pth" style="height:' + tot + 'px">';
-      var pts = open.map(function(u, k){ return [ZZ[k % 8], tot - 90 - k * H]; });
+      var hint = cur === null ? "Everything open is complete. Well done!" : "Tap your stage to begin";
+      var H = 170, tot = open.length * H + 330, h = '<div class="pth" style="height:' + tot + 'px">';
+      var pts = open.map(function(u, k){ return [ZZ[k % 8], tot - 110 - k * H]; });
       open.forEach(function(u, k){ var st = ck.indexOf(u) >= 0 ? "done" : u === cur ? "cur" : "idle";
         h += '<button class="nd ' + st + '" data-u="' + u + '" style="left:' + pts[k][0] + '%;top:' + pts[k][1] + 'px">' + '<b class="nn">' + u + '</b>' + (st === "done" ? '<u>✔</u>' : '') + (st === "cur" ? '<em>START</em>' : '') + '</button>'; });
-      /* clouds hide everything beyond the open stages */
-      h += '<div class="cld" style="height:290px;top:50px">' + cloud(260, 120, "-6%", 0, .96) + cloud(300, 130, "52%", 14, .97) + cloud(240, 110, "22%", 70, .98) + cloud(320, 140, "-10%", 96, .95) + cloud(280, 120, "56%", 110, .96) + '</div></div>';
+      h += '<div class="hnt" style="left:' + pts[0][0] + '%;top:' + (pts[0][1] + 92) + 'px">' + hint + '</div>';
+      /* only clouds above the last open stage: nothing else is drawn there */
+      var top6 = pts[pts.length - 1][1] - 90, cw = 760, ch = cw * 0.376, step = 95, n = Math.ceil((top6 - ch * 0.5) / step) + 1, cs = "";
+      for (var q = 0; q < n; q++){ var ty = Math.min(q * step, Math.max(0, top6 - ch + 30)); cs += '<img class="cli" src="' + (O.cloud || "cloud.png") + '" alt="" style="left:' + (q % 2 ? 18 : 6) + '%;top:' + ty + 'px;width:' + (cw - (q % 3) * 70) + 'px;animation-delay:-' + (q * 2.1) + 's">'; }
+      h += '<div class="cld" style="height:' + top6 + 'px">' + cs + '</div></div>';
       el("cnbody").innerHTML = h;
       [].forEach.call(document.querySelectorAll(".nd"), function(b){ b.onclick = function(){ S.unit = +b.getAttribute("data-u"); keyCheck(); }; });
       var c = document.querySelector(".nd.cur") || document.querySelector(".nd"); if (c && c.scrollIntoView) c.scrollIntoView({block: "center"});
