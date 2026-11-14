@@ -366,7 +366,7 @@ body.xcb .xo.on{border-color:#d2471a;background:#fff0e4}body.xcb .xo.on .lt{back
 <div id="newv" class="hide"><div style="font-size:56px">🚀</div><h2>New</h2><p>Your new learning area is almost ready. Your units will appear here.</p><div style="height:18px"></div><button class="btn alt" id="newback" type="button">← Back</button></div>
 <div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 35</div>
 <script src="core.js?v=16"></script>
-<script src="newhome.js?v=22"></script>
+<script src="newhome.js?v=23"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
@@ -461,7 +461,7 @@ function home(){
     var r = x[0];
     if (!r.ok){ ls("nnt_phone_token", null); TOK = null; loginScreen(); note("m_login","err","Your login has ended. Please log in again with a new code from your teacher."); return; }
     VIDS = {}; var VI = []; if (x[1] && x[1].ok){ x[1].units.forEach(function(u){ VIDS[u] = 1; }); VI = x[1].items || []; VREC = typeof x[1].rec === "number" ? x[1].rec : null; }
-    ME = r; note("m_home","",""); var backNv = false; try{ backNv = sessionStorage.getItem("nnt_back_nv") === "1"; if (backNv) sessionStorage.removeItem("nnt_back_nv"); }catch(e){}
+    ME = r; note("m_home","",""); var backNv = false; try{ backNv = sessionStorage.getItem("nnt_back_nv") === "1"; if (backNv){ sessionStorage.removeItem("nnt_back_nv"); sessionStorage.setItem("nnt_ret","1"); } }catch(e){}
     var mode = ""; try{ mode = localStorage.getItem("nnt_mode") || ""; }catch(e){}
     if ((backNv || mode === "new") && ME && ME.new_ok){ window.ENTRY_DONE = true; $("e_new").onclick(); var cv = document.getElementById("nvcov"); if (cv) setTimeout(function(){ cv.remove(); }, 60); }
     else { var cv2 = document.getElementById("nvcov"); if (cv2) cv2.remove(); if (!window.ENTRY_DONE){ window.ENTRY_DONE = true; if (mode === "classic") entryClose(); else entryOpen(); } }

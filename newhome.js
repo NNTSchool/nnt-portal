@@ -172,7 +172,9 @@
     rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){ S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); S.jump = !!(x && x.ok && x.jump); S.testacct = !!(x && x.ok && x.testacct); S.jpct = x && x.ok ? x.jpct : 80; return rpc("nv_state", {tok: tok(), u: S.unit}); }).then(function(r){
       if (!r || !r.ok){ page('<h2>Unit ' + S.unit + '</h2><p class="sub">' + (r && r.err === "closed" ? "This unit is not open yet. Your teacher will open it soon." : r && r.err === "locked" ? "Finish the earlier unit first." : "Not available right now.") + ' <small style="opacity:.6">(' + esc((r && r.err) || "error") + ')</small></p>'); return; }
       S.vids = r.videos;
-      var kseen = false; try{ kseen = sessionStorage.getItem("nvks" + S.unit) === "1"; }catch(e){}
+      var kseen = false, ret = false; try{ kseen = sessionStorage.getItem("nvks" + S.unit) === "1"; ret = sessionStorage.getItem("nnt_ret") === "1"; sessionStorage.removeItem("nnt_ret"); }catch(e){}
+      /* coming back from the home test or the writing: stay on the steps; the key screen is only for finishing the last step */
+      if (ret && !(S.st && S.st.speak)) kseen = true;
       if (S.st && S.st.key && !S.review && !kseen){ keyScreen(); return; }
       if (S.jump && S.chose !== S.unit){ choiceScreen(); return; }
       var done = S.vids.filter(function(v){ return v.done; }).length, jumped = !!(S.st && S.st.jumped), all = jumped || done === S.vids.length;
