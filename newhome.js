@@ -1,24 +1,42 @@
 /* NNT School portal: the Novel home-practice area (videos first). */
 (function(){
   var CSS = ''
-  + '#newv{display:block;overflow-y:auto;text-align:left;padding:0;background:radial-gradient(ellipse at 20% 0%,#00d4ff 0%,rgba(0,212,255,0) 38%),linear-gradient(160deg,#4f1fff 0%,#7a1cff 48%,#c015ff 100%);background-attachment:fixed}#newv .nw{max-width:760px;margin:0 auto;padding:18px 16px 60px}'
+  + '#newv{display:block;overflow-y:auto;text-align:left;padding:0;background:radial-gradient(ellipse 70% 40% at 15% 0%,rgba(0,229,195,.30),rgba(0,229,195,0) 70%),radial-gradient(ellipse 60% 45% at 100% 30%,rgba(61,123,255,.26),rgba(61,123,255,0) 70%),radial-gradient(ellipse 70% 40% at 0% 100%,rgba(143,107,255,.18),rgba(143,107,255,0) 70%),linear-gradient(180deg,#050c18 0%,#071a2e 100%);background-attachment:fixed}#newv .nw{max-width:760px;margin:0 auto;padding:18px 16px 60px}'
   + '#newv .nbk{background:transparent;border:1.5px solid rgba(255,255,255,.45);color:#fff;border-radius:99px;padding:7px 16px;font:700 15px system-ui;cursor:pointer}'
   + '#newv h2{font-size:30px;margin:16px 0 2px;color:#fff}#newv .sub{color:#f0e9ff;font-size:16px;margin:0 0 18px;max-width:none}'
   + '#newv .st{display:flex;align-items:center;gap:14px;border-radius:18px;padding:16px;margin:12px 0;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.16);color:#fff}'
-  + '#newv .st .n{flex:none;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ff2d6f,#ff7a00);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}'
+  + '#newv .st .n{color:#04121f;flex:none;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#19e6c1,#2f9bff);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}'
   + '#newv .st.off{opacity:.5}#newv .st.off .n{background:rgba(255,255,255,.28)}#newv .st b{font-size:19px}#newv .st small{display:block;color:#f0e9ff;font-size:14px;margin-top:2px}'
   + '#newv .vc{border-radius:16px;padding:14px 16px;margin:10px 0;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.22);color:#fff}'
   + '#newv .vc .t{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700}#newv .vc .t span{margin-left:auto;font-size:14px;color:#f0e9ff;font-weight:600;white-space:nowrap}'
-  + '#newv .bar{height:10px;border-radius:9px;background:rgba(255,255,255,.18);margin:10px 0 6px;overflow:hidden}#newv .bar i{display:block;height:100%;background:linear-gradient(90deg,#ffb300,#ff7a00);border-radius:9px}'
-  + '#newv .vc small{color:#f0e9ff;font-size:14px}#newv .go{margin-top:10px;border:0;border-radius:12px;padding:11px 20px;font:800 16px system-ui;color:#fff;background:linear-gradient(135deg,#ff2d6f,#ff7a00);cursor:pointer}#newv .go:disabled{background:#3a4470;color:#9aa5cc;cursor:default}'
-  + '#nvp .go{margin-top:10px;border:0;border-radius:12px;padding:11px 20px;font:800 16px system-ui;color:#fff;background:linear-gradient(135deg,#ff2d6f,#ff7a00);cursor:pointer}#nvp .go:disabled{background:#3a4470;color:#9aa5cc}#nvp h3,#nvp p{color:#fff}'
+  + '#newv .bar{height:10px;border-radius:9px;background:rgba(255,255,255,.18);margin:10px 0 6px;overflow:hidden}#newv .bar i{display:block;height:100%;background:linear-gradient(90deg,#19e6c1,#2f9bff);border-radius:9px}'
+  + '#newv .vc small{color:#f0e9ff;font-size:14px}#newv .go{margin-top:10px;border:0;border-radius:12px;padding:11px 20px;font:800 16px system-ui;color:#04121f;background:linear-gradient(135deg,#19e6c1,#2f9bff);cursor:pointer}#newv .go:disabled{background:#3a4470;color:#9aa5cc;cursor:default}'
+
+  + '#newv .hb{position:relative}#newv .hero{display:flex;align-items:center;gap:18px;margin:14px 0 6px}#newv .ring{flex:none;position:relative;width:118px;height:118px}#newv .ring svg{width:118px;height:118px;transform:rotate(-90deg)}#newv .ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}#newv .ring .c small{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8fd8ff}#newv .ring .c b{font-size:38px;color:#eaf6ff}'
+  + '#newv .chip{display:inline-block;border-radius:99px;padding:5px 12px;font:700 13px system-ui;background:rgba(77,255,216,.12);border:1px solid rgba(77,255,216,.4);color:#8cffe6;margin:0 6px 6px 0}'
+  + '#newv .hb h2{margin:0 0 6px;font-size:27px;color:#eaf6ff}#newv .hb p.sub{margin:0 0 8px;color:#a9c6dc;font-size:15px}'
+  + '#newv .path{position:relative;margin:18px 0 8px;padding-left:0}#newv .path:before{content:"";position:absolute;left:25px;top:24px;bottom:30px;width:3px;border-radius:3px;background:linear-gradient(180deg,#4dffd8 0%,#2f9bff 38%,rgba(47,155,255,.0) 80%)}'
+  + '#newv .nd{position:relative;display:flex;gap:14px;align-items:flex-start;margin:0 0 14px}#newv .nd .dot{flex:none;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 19px system-ui;background:#0a2238;border:2px solid rgba(143,216,255,.3);color:#8fd8ff;position:relative;z-index:1}'
+  + '#newv .nd .bx{flex:1;border-radius:18px;padding:14px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(143,216,255,.18);color:#eaf6ff;position:relative;overflow:hidden}#newv .nd .bx b{font-size:18px;display:block}#newv .nd .bx small{display:block;color:#a9c6dc;font-size:14px;margin-top:3px;line-height:1.35}'
+  + '#newv .nd.done .dot{background:linear-gradient(135deg,#19e6c1,#2f9bff);color:#04121f;border-color:transparent}#newv .nd.done .bx{opacity:.8}'
+  + '#newv .nd.now .dot{background:#04121f;border-color:#4dffd8;color:#4dffd8;box-shadow:0 0 0 0 rgba(77,255,216,.6);animation:nvpulse 2s infinite}#newv .nd.now .bx{background:linear-gradient(160deg,rgba(77,255,216,.14),rgba(47,155,255,.10));border:1.5px solid rgba(77,255,216,.55);box-shadow:0 10px 40px -12px rgba(77,255,216,.45)}'
+  + '#newv .nd.now .go{width:100%;margin-top:12px;padding:14px 18px;font-size:17px}'
+  + '#newv .nd .dot.kd svg{width:34px;height:auto;opacity:.55;filter:grayscale(.6)}#newv .hb{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}#newv .nd.mist .dot{background:#0a1a2c;border-color:rgba(143,216,255,.14);color:rgba(143,216,255,.45)}#newv .nd.mist .bx{border-style:dashed;border-color:rgba(143,216,255,.14)}#newv .nd.mist .bx .in{filter:blur(5.5px);opacity:.55;user-select:none}'
+  + '#newv .nd.mist .bx:after{content:"";position:absolute;inset:-30%;background:radial-gradient(closest-side,rgba(190,225,255,.22),rgba(190,225,255,0)) 0 0/60% 90% no-repeat,radial-gradient(closest-side,rgba(190,225,255,.18),rgba(190,225,255,0)) 100% 100%/70% 90% no-repeat;animation:nvfog 14s ease-in-out infinite alternate;pointer-events:none}'
+  + '#newv .nd.mist .bx .tag{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;z-index:2;font:700 13px system-ui;letter-spacing:.08em;color:#cfe8ff;text-transform:uppercase}'
+  + '#newv .nd.mist.m2 .bx .in{filter:blur(8px);opacity:.4}#newv .nd.mist.m3 .bx .in{filter:blur(11px);opacity:.28}'
+  + '#newv .rw{margin:22px 0 6px;border-radius:22px;padding:18px;background:linear-gradient(160deg,rgba(143,107,255,.16),rgba(47,155,255,.10));border:1px solid rgba(143,216,255,.28);color:#eaf6ff;position:relative;overflow:hidden}#newv .rw h3{margin:0 0 4px;font-size:18px;color:#eaf6ff}#newv .rw p{margin:0 0 10px;color:#a9c6dc;font-size:14px}#newv .rw .kk{display:flex;align-items:center;gap:12px}#newv .rw .kk svg{flex:none;width:92px;height:auto;filter:drop-shadow(0 6px 14px rgba(255,196,40,.35))}'
+  + '#newv .rw .ch{display:flex;flex-wrap:wrap;gap:8px}#newv .rw .ch span{border-radius:12px;padding:8px 12px;font:700 13px system-ui;background:rgba(255,255,255,.08);border:1px solid rgba(143,216,255,.22)}#newv .rw .ch span.bl{filter:blur(4.5px);opacity:.6;user-select:none}'
+  + '#newv .kgot{text-align:center;padding:10px 0 4px}#newv .kgot svg{width:230px;max-width:70%;height:auto;filter:drop-shadow(0 14px 26px rgba(255,196,40,.45))}'
+  + '@keyframes nvpulse{70%{box-shadow:0 0 0 14px rgba(77,255,216,0)}100%{box-shadow:0 0 0 0 rgba(77,255,216,0)}}@keyframes nvfog{from{transform:translateX(-6%)}to{transform:translateX(8%)}}@keyframes nvfloat{0%,100%{transform:translateY(0) rotate(-14deg)}50%{transform:translateY(-6px) rotate(-10deg)}}#newv .rw .kk svg{animation:nvfloat 5s ease-in-out infinite}@media (prefers-reduced-motion:reduce){#newv *{animation:none!important}}'
+  + '#nvp .go{margin-top:10px;border:0;border-radius:12px;padding:11px 20px;font:800 16px system-ui;color:#04121f;background:linear-gradient(135deg,#19e6c1,#2f9bff);cursor:pointer}#nvp .go:disabled{background:#3a4470;color:#9aa5cc}#nvp h3,#nvp p{color:#fff}'
   + '#nvp{position:fixed;inset:0;z-index:95;background:#04071a;color:#fff;display:none;flex-direction:column;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow-y:auto}#nvp.on{display:flex}'
   + '#nvp .tb{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0b1236;border-bottom:1px solid rgba(255,255,255,.14)}#nvp .tb b{font-size:16px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
   + '#nvp button.q{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5);border-radius:99px;padding:6px 13px;font:700 14px system-ui;cursor:pointer}#nvp button.q.on{background:#ff7a00;border-color:#ff7a00}'
   + '#nvp .vw{position:relative;width:100%;max-width:calc((100vh - 235px) * 1.7778);min-width:min(100%,320px);margin:0 auto;aspect-ratio:16/9;background:#000}#nvp .vw iframe,#nvp .vw #nv_yt{position:absolute;inset:0;width:100%;height:100%;border:0}'
   + '#nvp .pn{width:100%;max-width:900px;margin:0 auto;padding:12px 16px 30px;box-sizing:border-box}#nvp .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0}#nvp .info{color:#f0e9ff;font-size:15px}'
   + '#nvp .bar{position:relative;height:14px;border-radius:9px;background:rgba(255,255,255,.18);margin:8px 0;overflow:hidden}#nvp .bar i{display:block;height:100%;background:linear-gradient(90deg,#ffb300,#ff7a00)}'
-  + '#nvp .wb{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:5;background:linear-gradient(135deg,#ff2d6f,#ff7a00);color:#fff;border-radius:18px;padding:12px 26px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.6);display:none;max-width:92%}#nvp .wb.on{display:block}'
+  + '#nvp .wb{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:5;background:linear-gradient(135deg,#19e6c1,#2f9bff);color:#fff;border-radius:18px;padding:12px 26px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.6);display:none;max-width:92%}#nvp .wb.on{display:block}'
   + '#nvp .wb small{display:block;font-size:13px;font-weight:700;letter-spacing:.08em}#nvp .wb b{display:block;font-size:34px;letter-spacing:.12em}'
   + '#nvp .ov{position:fixed;inset:0;z-index:98;background:rgba(4,7,26,.94);display:none;align-items:center;justify-content:center;text-align:center;padding:24px}#nvp .ov.on{display:flex}#nvp .ov div{max-width:460px}#nvp .ov h3{font-size:28px;margin:8px 0}#nvp .ov p{color:#f6f1ff;font-size:18px;line-height:1.45;margin:6px 0 16px}'
   + '#nvp .ans{margin-top:14px;border-radius:16px;padding:14px;background:rgba(255,179,0,.14);border:2px solid #ffb300;display:none}#nvp .ans.on{display:block}#nvp .ans input{width:100%;box-sizing:border-box;margin:6px 0;padding:11px 12px;border-radius:10px;border:0;font:700 18px system-ui;text-transform:uppercase;letter-spacing:.08em}'
@@ -104,8 +122,67 @@
       window.onYouTubeIframeAPIReady = function(){ if (old) try{ old(); }catch(e){} var q = S.ytQ; S.ytQ = []; q.forEach(function(f){ f(); }); };
     }
   }
+
+  /* a real-looking key (vector, sharp at any size) */
+  var KID = 0;
+  function keySvg(){
+    var g = "kg" + (++KID);
+    return '<svg viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Key"><defs>'
+      + '<linearGradient id="' + g + 'a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6c2"/><stop offset=".35" stop-color="#ffd23f"/><stop offset=".75" stop-color="#e29a00"/><stop offset="1" stop-color="#9a6100"/></linearGradient>'
+      + '<linearGradient id="' + g + 'b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe98a"/><stop offset=".5" stop-color="#f2b01e"/><stop offset="1" stop-color="#b87300"/></linearGradient></defs>'
+      + '<path fill="url(#' + g + 'a)" stroke="#8a5600" stroke-width="1.6" fill-rule="evenodd" d="M48 8a40 40 0 1 0 .01 0zM48 34a14 14 0 1 1-.01 0z"/>'
+      + '<circle cx="48" cy="48" r="29" fill="none" stroke="#fff4b8" stroke-opacity=".75" stroke-width="2"/>'
+      + '<rect x="84" y="41" width="140" height="15" rx="7.5" fill="url(#' + g + 'b)" stroke="#8a5600" stroke-width="1.6"/>'
+      + '<rect x="92" y="35" width="11" height="27" rx="3" fill="url(#' + g + 'a)" stroke="#8a5600" stroke-width="1.4"/>'
+      + '<path fill="url(#' + g + 'b)" stroke="#8a5600" stroke-width="1.5" stroke-linejoin="round" d="M178 56h14v24h-14zM200 56h12v17h-12zM218 56h8v11h-8z"/>'
+      + '<path d="M86 45h134" stroke="#fffbe0" stroke-opacity=".85" stroke-width="2.2" stroke-linecap="round"/><path d="M26 30a30 30 0 0 1 30-14" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="3" stroke-linecap="round"/></svg>';
+  }
+  function ringSvg(frac){
+    var C = 2 * Math.PI * 50;
+    return '<svg viewBox="0 0 120 120"><defs><linearGradient id="nvrg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4dffd8"/><stop offset="1" stop-color="#2f9bff"/></linearGradient></defs>'
+      + '<circle cx="60" cy="60" r="50" fill="none" stroke="rgba(143,216,255,.16)" stroke-width="9"/>'
+      + '<circle cx="60" cy="60" r="50" fill="none" stroke="url(#nvrg)" stroke-width="9" stroke-linecap="round" stroke-dasharray="' + (C * frac).toFixed(1) + ' ' + C.toFixed(1) + '"/></svg>';
+  }
+  /* the Novel home: where you are, what is next, and a hint of what waits in class */
+  function hubPage(){
+    S.sub = false;
+    rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){
+      if (!x || !x.ok){ S.sub = true; unitPage(); return; }
+      var st = x.st || {}, track = x.track, tn = track === "ie" ? "IELTS" : track === "ml" ? "Multi-level" : "";
+      var vOK = !!st.jumped || (st.vtotal > 0 && st.vdone >= st.vtotal), tOK = !!st.test, wOK = !!st.essay, sOK = !!st.speak;
+      var steps = [
+        {k: "Watch the videos", ok: vOK, d: st.jumped ? "Skipped with the jump test" : (st.vdone || 0) + " of " + (st.vtotal || 0) + " finished", w: "Short videos with secret words to catch."},
+        {k: "Home test", ok: tOK, d: tOK ? Math.round(st.pct || 0) + "%" : "Listening, grammar, vocabulary", w: "91 questions, about 1 hour."},
+        {k: "Writing", ok: wOK, d: wOK ? "Done" : "Put the unit on paper", w: "Do it in one go."},
+        {k: "Speaking", ok: sOK, d: sOK ? "Done" : "Use your own voice", w: "About 20 minutes."}];
+      var cur = -1; for (var i = 0; i < steps.length; i++) if (!steps[i].ok){ cur = i; break; }
+      var nd = steps.filter(function(q){ return q.ok; }).length, key = !!st.key;
+      var h = '<div class="hb"><div class="hero"><div class="ring">' + ringSvg(key ? 1 : nd / 4) + '<div class="c"><small>Unit</small><b>' + S.unit + '</b></div></div>'
+        + '<div><h2>Your Novel journey</h2><p class="sub">' + (key ? "Unit " + S.unit + " complete. The key is yours." : nd === 0 ? "Your adventure begins here." : nd + " of 4 steps done. Keep going.") + '</p>'
+        + (tn ? '<span class="chip">Track · ' + tn + '</span>' : '<span class="chip">Track · you choose after the videos</span>') + '<span class="chip">Unit ' + S.unit + ' of 20</span></div></div>';
+      h += '<div class="path">';
+      var mi = 0;
+      steps.forEach(function(q, i){
+        if (q.ok) h += '<div class="nd done"><div class="dot">✓</div><div class="bx"><b>' + q.k + '</b><small>' + q.d + '</small></div></div>';
+        else if (i === cur) h += '<div class="nd now"><div class="dot">' + (i + 1) + '</div><div class="bx"><b>' + q.k + '</b><small>Your next step · ' + q.w + '</small><button class="go" id="nvhgo" type="button">' + (i === 0 && !(st.vdone > 0) ? "Begin" : "Continue") + ' →</button></div></div>';
+        else { mi++; h += '<div class="nd mist m' + Math.min(mi, 3) + '"><div class="dot">' + (i + 1) + '</div><div class="bx"><div class="in"><b>' + q.k + '</b><small>' + q.w + '</small></div><span class="tag">Hidden in the mist</span></div></div>'; }
+      });
+      if (key) h += '<div class="nd done"><div class="dot">★</div><div class="bx"><b>Key earned</b><small>Your class test is open.</small></div></div>';
+      else { mi++; h += '<div class="nd mist m3"><div class="dot kd">'+keySvg()+'</div><div class="bx"><div class="in"><b>The key</b><small>Something opens for you</small></div><span class="tag">Waiting at the end</span></div></div>'; }
+      h += '</div>';
+      if (key) h += '<div class="kgot">' + keySvg() + '</div><button class="go" id="nvhmove" type="button" style="width:100%;margin-top:6px;padding:15px 18px;font-size:17px">Move on to Unit ' + (S.unit + 1) + ' →</button><button class="go" id="nvhrev" type="button" style="width:100%;margin-top:10px;background:transparent;color:#eaf6ff;border:1.5px solid rgba(143,216,255,.4)">Look at Unit ' + S.unit + ' again</button>';
+      else h += '<div class="rw"><div class="kk">' + keySvg() + '<div><h3>Waiting for you in class</h3><p>Finish this unit and the key is yours. It opens your class test for Unit ' + S.unit + '.</p></div></div>'
+        + '<div class="ch"><span>Unit ' + S.unit + ' class test</span><span class="bl">Something extra</span><span class="bl">More to discover</span></div></div>';
+      h += '</div>';
+      page(h);
+      S.hubOk = true;
+      if (el("nvhgo")) el("nvhgo").onclick = function(){ S.sub = true; unitPage(); };
+      if (el("nvhmove")) el("nvhmove").onclick = function(){ moveOn(this); };
+      if (el("nvhrev")) el("nvhrev").onclick = function(){ S.review = true; S.sub = true; unitPage(); };
+    }).catch(function(){ page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>'); });
+  }
   /* ---------- unit page ---------- */
-  function page(html){ el("newv").innerHTML = '<div class="nw"><button class="nbk" id="nvback" type="button">← Back</button>' + html + '</div>'; el("nvback").onclick = function(){ if (S.back) S.back(); }; }
+  function page(html){ el("newv").innerHTML = '<div class="nw"><button class="nbk" id="nvback" type="button">← Back</button>' + html + '</div>'; el("nvback").onclick = function(){ if (S.sub && S.hubOk){ S.review = false; hubPage(); } else if (S.back) S.back(); }; }
   function open(back){
     inject(); S.back = back || null;
     page('<h2>Loading…</h2>');
@@ -113,7 +190,7 @@
       if (!r || !r.ok){ page('<h2>Novel</h2><p class="sub">' + (r && r.err === "unpaid" ? "" : "Novel is not open for you yet.") + '</p>'); return; }
       if (r.all_done){ page('<h2>All done for now ✅</h2><p class="sub">You have finished every unit that is open.' + (r.more ? ' The next unit opens soon.' : '') + '</p>'); return; }
       var u = r.units && r.units[0]; if (!u){ page('<h2>Novel</h2><p class="sub">Your units will appear here soon.</p>'); return; }
-      S.unit = u.unit; unitPage();
+      S.unit = u.unit; S.hubOk = false; var ret = false; try{ ret = sessionStorage.getItem("nnt_ret") === "1"; }catch(e){} if (ret){ S.sub = true; unitPage(); } else hubPage();
     }).catch(function(){ page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>'); });
   }
   /* go to the next unit: ask the server which unit is next; if it still says this one, go to the next number anyway (the server then says if it is closed or locked) */
@@ -122,7 +199,7 @@
     rpc("nv_units", {tok: tok()}).then(function(r){
       if (r && r.ok && r.all_done){ S.st = null; S.review = false; page('<h2>All done for now ✅</h2><p class="sub">You have finished every unit that is open.' + (r.more ? ' The next unit opens soon.' : '') + '</p>'); return; }
       var nu = r && r.ok && r.units && r.units[0] ? r.units[0].unit : cur + 1;
-      S.unit = nu > cur ? nu : cur + 1; S.st = null; S.review = false; S.chose = null; unitPage();
+      S.unit = nu > cur ? nu : cur + 1; S.st = null; S.review = false; S.chose = null; hubPage();
     }).catch(function(){ if (btn){ btn.disabled = false; btn.textContent = "Move on to Unit " + (cur + 1) + " →"; } nvNote("No internet connection. Please try again."); });
   }
   /* our own message boxes (instead of the small grey browser pop-ups) */
@@ -130,19 +207,19 @@
     var o = document.getElementById("nvbox"); if (o) o.remove();
     o = document.createElement("div"); o.id = "nvbox";
     o.style.cssText = "position:fixed;inset:0;z-index:100000;background:rgba(20,5,70,.72);display:flex;align-items:center;justify-content:center;padding:20px;font-family:inherit";
-    o.innerHTML = '<div style="max-width:440px;width:100%;background:linear-gradient(160deg,#5b1fff,#a21cff);color:#fff;border-radius:22px;padding:24px 22px;box-shadow:0 20px 60px rgba(0,0,0,.5);border:1.5px solid rgba(255,255,255,.35)"><h3 style="margin:0 0 10px;font-size:24px;color:#fff">' + title + '</h3><div style="font-size:17px;line-height:1.5;color:#f6f1ff" id="nvboxb">' + body + '</div><div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap" id="nvboxbtn"></div></div>';
+    o.innerHTML = '<div style="max-width:440px;width:100%;background:linear-gradient(160deg,#0b2a4a,#0a6074);color:#fff;border-radius:22px;padding:24px 22px;box-shadow:0 20px 60px rgba(0,0,0,.5);border:1.5px solid rgba(255,255,255,.35)"><h3 style="margin:0 0 10px;font-size:24px;color:#fff">' + title + '</h3><div style="font-size:17px;line-height:1.5;color:#f6f1ff" id="nvboxb">' + body + '</div><div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap" id="nvboxbtn"></div></div>';
     document.body.appendChild(o);
     var bx = o.querySelector("#nvboxbtn");
-    btns.forEach(function(b){ var x = document.createElement("button"); x.type = "button"; x.textContent = b.t; x.style.cssText = "flex:1;min-width:120px;border:0;border-radius:12px;padding:13px 16px;font:800 17px system-ui;cursor:pointer;" + (b.ok ? "color:#fff;background:linear-gradient(135deg,#ff2d6f,#ff7a00)" : "color:#fff;background:rgba(255,255,255,.2)"); x.onclick = function(){ o.remove(); if (b.f) b.f(); }; bx.appendChild(x); });
+    btns.forEach(function(b){ var x = document.createElement("button"); x.type = "button"; x.textContent = b.t; x.style.cssText = "flex:1;min-width:120px;border:0;border-radius:12px;padding:13px 16px;font:800 17px system-ui;cursor:pointer;" + (b.ok ? "color:#fff;background:linear-gradient(135deg,#19e6c1,#2f9bff)" : "color:#fff;background:rgba(255,255,255,.2)"); x.onclick = function(){ o.remove(); if (b.f) b.f(); }; bx.appendChild(x); });
     var ul = o.querySelector("ul"); if (ul) ul.style.cssText = "margin:0;padding-left:20px";
   }
   function nvAsk(title, body, okText, onOk){ nvBox(title, body, [{t: "Cancel"}, {t: okText || "OK", ok: 1, f: onOk}]); }
   function nvNote(text){ nvBox("Notice", text, [{t: "OK", ok: 1}]); }
   function keyScreen(){
     var nu = S.unit + 1; try{ sessionStorage.setItem("nvks" + S.unit, "1"); }catch(e){}
-    page('<div style="text-align:center;padding:18px 0 6px"><div class="nvkey" style="font-size:150px;line-height:1.05;filter:drop-shadow(0 8px 18px rgba(255,200,40,.55))">🔑</div>'
+    page('<div style="text-align:center;padding:18px 0 6px"><div class="nvkey" style="width:260px;max-width:78%;margin:0 auto;filter:drop-shadow(0 14px 26px rgba(255,196,40,.5))">'+keySvg()+'</div>'
       + '<h2 style="margin:6px 0 4px">You earned the key!</h2><p class="sub">Unit ' + S.unit + ' is complete. Your class test for this unit is now open.</p>'
-      + '<button id="nvnext" type="button" style="margin-top:14px;width:100%;max-width:420px;padding:16px 18px;border:0;border-radius:14px;background:#16a34a;color:#fff;font:800 19px/1.2 inherit;font-family:inherit;box-shadow:0 5px 0 #0f7a37;cursor:pointer">Move on to Unit ' + nu + ' →</button>'
+      + '<button id="nvnext" type="button" style="margin-top:14px;width:100%;max-width:420px;padding:16px 18px;border:0;border-radius:14px;background:linear-gradient(135deg,#19e6c1,#2f9bff);color:#fff;font:800 19px/1.2 inherit;font-family:inherit;box-shadow:0 5px 0 #0a7f9c;cursor:pointer">Move on to Unit ' + nu + ' →</button>'
       + '<button id="nvrev" type="button" style="margin-top:12px;width:100%;max-width:420px;padding:13px 18px;border:2px solid rgba(255,255,255,.35);border-radius:14px;background:transparent;color:inherit;font:700 17px/1.2 inherit;font-family:inherit;cursor:pointer">← Go back to Unit ' + S.unit + '</button></div>');
     var st = document.createElement("style"); st.textContent = "@keyframes nvk{0%{transform:scale(.3) rotate(-25deg);opacity:0}60%{transform:scale(1.15) rotate(8deg);opacity:1}100%{transform:scale(1) rotate(0)}}.nvkey{animation:nvk .9s ease-out}"; el("newv").appendChild(st);
     el("nvnext").onclick = function(){ moveOn(this); };
@@ -158,7 +235,7 @@
       return;
     }
     h += '<div class="st"><div class="n">📚</div><div><b>Study deeply</b><small>Videos, then the home test, writing and speaking. The full way. Best if this unit is new for you.</small></div></div>'
-      + '<button class="go" id="nvdeep" type="button" style="background:#16a34a;width:100%">Study deeply</button>'
+      + '<button class="go" id="nvdeep" type="button" style="background:linear-gradient(135deg,#19e6c1,#2f9bff);width:100%">Study deeply</button>'
       + '<div class="st" style="margin-top:18px"><div class="n">⚡</div><div><b>Jump to the test</b><small>Skip the videos and take the home test now. You need at least ' + S.jpct + '% to go on. You can jump only <b>once</b> for this unit. If you do not reach ' + S.jpct + '%, you will start from the videos. If you leave the test window 3 times, the test is cancelled.</small></div></div>'
       + '<button class="go" id="nvjump" type="button" style="width:100%">Jump to the test</button>';
     page(h);
@@ -169,6 +246,7 @@
     };
   }
   function unitPage(){
+    S.sub = true;
     rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){ S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); S.jump = !!(x && x.ok && x.jump); S.testacct = !!(x && x.ok && x.testacct); S.jpct = x && x.ok ? x.jpct : 80; return rpc("nv_state", {tok: tok(), u: S.unit}); }).then(function(r){
       if (!r || !r.ok){ page('<h2>Unit ' + S.unit + '</h2><p class="sub">' + (r && r.err === "closed" ? "This unit is not open yet. Your teacher will open it soon." : r && r.err === "locked" ? "Finish the earlier unit first." : "Not available right now.") + ' <small style="opacity:.6">(' + esc((r && r.err) || "error") + ')</small></p>'); return; }
       S.vids = r.videos;
@@ -193,19 +271,19 @@
           + '<button class="go" id="nvtml" type="button">Multi-level</button> <button class="go" id="nvtie" type="button" style="margin-left:8px">IELTS</button>';
       } else {
         h += '<div class="st"><div class="n">2</div><div><b>Home test</b><small>91 questions · about 1 hour · ' + tn + '. Listening needs headphones. Do it in one go.</small>' + (st.cancels ? '<small style="color:#ffe27a;font-weight:700;margin-top:6px">⚠ Your last try was cancelled (you left the test window 3 times). You must take the test again.</small>' : '') + '</div></div>'
-          + '<button class="go" id="nvstarttest" type="button" style="background:#16a34a">Start the home test</button>';
+          + '<button class="go" id="nvstarttest" type="button" style="background:linear-gradient(135deg,#19e6c1,#2f9bff)">Start the home test</button>';
       }
       if (st.essay){ h += '<div class="st"><div class="n">✓</div><div><b>Writing</b><small>Done</small></div></div>'; }
       else if (st.test){ h += '<div class="st"><div class="n">3</div><div><b>Writing</b><small>' + (S.track === "ie" ? "40 minutes · at least 250 words" : "30 minutes · at least 180 words") + '. Do it in one go.</small></div></div>'
-          + '<button class="go" id="nvstartwrite" type="button" style="background:#16a34a">Start the writing</button>'; }
+          + '<button class="go" id="nvstartwrite" type="button" style="background:linear-gradient(135deg,#19e6c1,#2f9bff)">Start the writing</button>'; }
       else { h += '<div class="st off"><div class="n">3</div><div><b>Writing</b><small>Opens after the home test</small></div></div>'; }
       if (st.speak){ h += '<div class="st"><div class="n">✓</div><div><b>Speaking</b><small>Done</small></div></div>'; }
       else if (st.essay){ h += '<div class="st"><div class="n">4</div><div><b>Speaking</b><small>About 20 minutes. You record your voice on this device. Nobody marks it. Allow the microphone.</small></div></div>'
-          + '<button class="go" id="nvstartspeak" type="button" style="background:#16a34a">Start the speaking</button>'; }
+          + '<button class="go" id="nvstartspeak" type="button" style="background:linear-gradient(135deg,#19e6c1,#2f9bff)">Start the speaking</button>'; }
       else { h += '<div class="st off"><div class="n">4</div><div><b>Speaking</b><small>Opens after the writing</small></div></div>'; }
       if (S.teacher){ h += '<div class="st"><div class="n">👑</div><div><b>Teacher: open any step</b><small>Your time and results are still recorded. Nothing is blocked for you.</small></div></div>'
           + '<button class="go" id="nvtt" type="button">Home test</button> <button class="go" id="nvtw" type="button" style="margin-left:6px">Writing</button> <button class="go" id="nvts" type="button" style="margin-left:6px">Speaking</button>'; }
-      if (S.st && S.st.key && S.review) h += '<button class="go" id="nvmove" type="button" style="background:#16a34a;margin-top:12px;width:100%">Move on to Unit ' + (S.unit + 1) + ' →</button>';
+      if (S.st && S.st.key && S.review) h += '<button class="go" id="nvmove" type="button" style="background:linear-gradient(135deg,#19e6c1,#2f9bff);margin-top:12px;width:100%">Move on to Unit ' + (S.unit + 1) + ' →</button>';
       page(h);
       ["ml","ie"].forEach(function(t){ var b = el("nvt" + t); if (b) b.onclick = function(){ nvAsk("Choose " + (t === "ie" ? "IELTS" : "Multi-level") + "?", "You cannot change this later without your teacher.", "Yes, choose it", function(){ rpc("nv_set_track", {tok: tok(), trk: t}).then(function(r){ if (r && (r.ok || r.err === "fixed")) unitPage(); }); }); }; });
       if (el("nvstarttest")) el("nvstarttest").onclick = function(){ startHome(this); };
