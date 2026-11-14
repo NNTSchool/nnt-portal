@@ -5,7 +5,7 @@
   function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
   var CSS = '#cnv{position:fixed;inset:0;z-index:80;overflow:auto;-webkit-overflow-scrolling:touch;color:#eaf1ff;font-family:Lexend,system-ui,sans-serif;background:#070b1d}'
   + '#cnv .bg{position:fixed;inset:0;z-index:0;background:radial-gradient(900px 520px at 85% -10%,#2a1b6e 0,transparent 60%),radial-gradient(800px 500px at -10% 105%,#06506b 0,transparent 60%),#070b1d}'
-  + '#cnv .w{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:18px 16px 60px}'
+  + '#cnv .w{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:18px 16px 60px}'
   + '#cnv h1,#cnv h2,#cnv b{color:#fff}#cnv h1,#cnv h2{margin:0 0 8px;letter-spacing:-.02em}#cnv p{line-height:1.5}'
   + '#cnv .row{display:flex;align-items:center;gap:10px}#cnv .sp{flex:1}'
   + '#cnv .tb{display:flex;align-items:center;gap:10px;margin-bottom:14px}'
@@ -31,6 +31,20 @@
   + '#cnv .nd em{position:absolute;top:-38px;left:50%;transform:translateX(-50%);background:#fff;color:#06122e;border-radius:12px;padding:6px 12px;font-weight:800;font-size:13px;font-style:normal;letter-spacing:.08em;box-shadow:0 4px 0 rgba(0,0,0,.25)}'
   + '#cnv .bn{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(120deg,#6b4df0,#16b8d6);border-radius:20px;padding:14px 16px;box-shadow:0 6px 0 #3b2a8f;margin:4px 0 6px}#cnv .bn small{display:block;opacity:.85;font-weight:700;letter-spacing:.08em;font-size:12px}#cnv .bn b{font-size:19px}#cnv .bn i{font-style:normal;font-size:24px;border-left:2px solid rgba(255,255,255,.35);padding-left:14px}'
   + '#cnv .cld{position:absolute;left:0;right:0;top:0;pointer-events:none;background:linear-gradient(#070b1d 0,#070b1d 38%,rgba(7,11,29,0) 100%)}#cnv .cl{position:absolute;border-radius:50%;background:radial-gradient(ellipse at 50% 40%,#fff 0,#dfe9ff 55%,#aebfff 100%);filter:blur(2px)}';
+  CSS += '#cnv .hm{position:relative;min-height:calc(100vh - 36px);display:flex;align-items:center;justify-content:space-between;gap:30px;overflow:hidden}#cnv .hmb{position:absolute;left:0;top:0;z-index:3}'
+  + '#cnv .hmL{position:relative;z-index:2;max-width:620px}#cnv .hmt{display:inline-block;font-weight:800;font-size:13px;letter-spacing:.22em;color:#5df2d6;border:1.5px solid rgba(93,242,214,.5);border-radius:99px;padding:7px 16px;background:rgba(93,242,214,.08)}'
+  + '#cnv .hmh{font-size:64px;line-height:1.04;letter-spacing:-.035em;margin:20px 0 14px;font-weight:800;color:#fff}#cnv .hmh em{font-style:normal;background:linear-gradient(100deg,#5df2d6,#7aa2ff 45%,#ff7ad9);-webkit-background-clip:text;background-clip:text;color:transparent}'
+  + '#cnv .hmp{font-size:21px;opacity:.85;margin:0 0 24px;max-width:520px}#cnv .hmc{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px}#cnv .hmc span{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);border-radius:16px;padding:12px 18px;font-size:22px}#cnv .hmc b{font-size:16px;color:#fff}'
+  + '#cnv .hmg{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:18px;border:0;border-radius:22px;padding:24px 40px;font-family:inherit;font-weight:800;font-size:26px;letter-spacing:.06em;color:#06122e;cursor:pointer;background:linear-gradient(110deg,#5df2d6,#7aa2ff 55%,#ff7ad9);box-shadow:0 0 0 0 rgba(122,162,255,.7),0 16px 50px rgba(110,140,255,.55);animation:hmp 2s ease-in-out infinite}'
+  + '#cnv .hmg b{font-size:30px;transition:transform .2s}#cnv .hmg:hover b{transform:translateX(8px)}#cnv .hmg:before{content:"";position:absolute;top:0;bottom:0;width:60px;left:-90px;background:rgba(255,255,255,.55);transform:skewX(-22deg);animation:hms 3s ease-in-out infinite}'
+  + '@keyframes hmp{50%{box-shadow:0 0 0 18px rgba(122,162,255,0),0 16px 60px rgba(110,140,255,.75)}}@keyframes hms{0%,55%{left:-90px}100%{left:120%}}'
+  + '#cnv .hmR{position:relative;z-index:1;flex:none;width:440px;height:440px;display:flex;align-items:center;justify-content:center}#cnv .orb{position:relative;width:400px;height:400px;display:flex;align-items:center;justify-content:center;animation:hmf 6s ease-in-out infinite}@keyframes hmf{50%{transform:translateY(-14px)}}'
+  + '#cnv .rg{position:absolute;inset:0;border-radius:50%;border:6px solid transparent;background:conic-gradient(from 0deg,#5df2d6,#7aa2ff,#ff7ad9,#5df2d6) border-box;-webkit-mask:linear-gradient(#000 0 0) padding-box exclude,linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) padding-box exclude,linear-gradient(#000 0 0);-webkit-mask-composite:xor;animation:hmr 9s linear infinite;filter:drop-shadow(0 0 18px rgba(122,162,255,.7))}'
+  + '#cnv .rg.r2{inset:30px;animation-duration:14s;animation-direction:reverse;opacity:.55}@keyframes hmr{to{transform:rotate(360deg)}}'
+  + '#cnv .core{position:relative;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle at 35% 28%,#3b2f9a,#120c44 70%);box-shadow:inset 0 0 40px rgba(122,162,255,.35),0 0 70px rgba(122,162,255,.4);display:flex;flex-direction:column;align-items:center;justify-content:center}'
+  + '#cnv .core small{font-weight:800;letter-spacing:.24em;font-size:13px;color:#9fb4ff}#cnv .core b{font-size:128px;line-height:1;font-weight:800;background:linear-gradient(160deg,#fff,#9fd0ff 60%,#c58bff);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 6px 0 rgba(0,0,0,.25))}'
+  + '#cnv .orb i{position:absolute;border-radius:50%;background:#fff;box-shadow:0 0 18px 6px rgba(255,255,255,.6)}#cnv .o1{width:16px;height:16px;left:50%;top:-8px;animation:hmo 7s linear infinite;transform-origin:0 208px}#cnv .o2{width:11px;height:11px;left:50%;top:-5px;background:#5df2d6;transform-origin:0 205px;animation:hmo 11s linear infinite reverse}#cnv .o3{width:9px;height:9px;left:50%;top:-4px;background:#ff7ad9;transform-origin:0 204px;animation:hmo 15s linear infinite}@keyframes hmo{to{transform:rotate(360deg)}}'
+  + '#cnv .sk{position:absolute;border-radius:50%;background:#fff;opacity:0;animation:hmk 4s ease-in-out infinite}@keyframes hmk{50%{opacity:.9;transform:scale(1.8)}}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
   function page(h){ stopAudio(); root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
@@ -49,10 +63,18 @@
 
   /* ---------- home, path, hub ---------- */
   function cloud(w, h, l, t, o){ return '<i class="cl" style="width:' + w + 'px;height:' + h + 'px;left:' + l + ';top:' + t + 'px;opacity:' + o + '"></i>'; }
+  var LINES = ["Every stage you finish makes you sharper.", "Your ears, your eyes, your pen: let's train them all.", "Small drills today, big scores tomorrow.", "Champions are built one stage at a time.", "Focus up. This is where it gets good."];
   function home(){
-    page(top("← Back") + '<div class="hero" style="padding-top:48px"><div class="hi">🎯</div><h1>Classroom drilling</h1><p class="sub">Listening, reading and writing. One stage at a time.</p></div>'
-      + '<button class="big" id="cstart" style="margin-top:26px">Start drilling<small>Your path is waiting</small></button>');
+    var nm = (O.name ? String(O.name).split(" ")[0] : "") || "Champion", ln = LINES[Math.floor(Date.now() / 6e4) % LINES.length];
+    var sp = ""; for (var i = 0; i < 18; i++) sp += '<i class="sk" style="left:' + ((i * 53 + 7) % 100) + '%;top:' + ((i * 37 + 11) % 100) + '%;animation-delay:' + ((i * 0.37) % 4).toFixed(2) + 's;width:' + (3 + i % 4) + 'px;height:' + (3 + i % 4) + 'px"></i>';
+    page('<div class="hm">' + sp + '<button class="pill hmb" id="cb">← Back</button>'
+      + '<div class="hmL"><span class="hmt">NNT SCHOOL · CLASSROOM</span><h1 class="hmh">Ready to <em>level up</em>, ' + esc(nm) + '?</h1><p class="hmp">' + esc(ln) + '</p>'
+      + '<div class="hmc"><span>🎧<b>Listening</b></span><span>📖<b>Reading</b></span><span>✍️<b>Writing</b></span></div>'
+      + '<button class="hmg" id="cstart"><span>START DRILLING</span><b>→</b></button></div>'
+      + '<div class="hmR"><div class="orb"><div class="rg"></div><div class="rg r2"></div><div class="core"><small>YOUR UNIT</small><b id="hmu">…</b></div><i class="o1"></i><i class="o2"></i><i class="o3"></i></div></div></div>');
     el("cb").onclick = close; el("cstart").onclick = path;
+    R("nv_nav", {tok: O.tok}).then(function(n){ if (!n || !n.ok) return; var open = (n.open || []).map(Number).filter(function(u){ return u <= 6; }), ck = (n.ckeys || []).map(Number), c = null;
+      for (var i = 0; i < open.length; i++) if (ck.indexOf(open[i]) < 0){ c = open[i]; break; } if (c === null && open.length) c = open[open.length - 1]; if (el("hmu") && c !== null) el("hmu").textContent = c; }).catch(function(){});
   }
   var FLAG = '<svg viewBox="0 0 64 64" width="52" height="52"><path d="M16 8v50" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M20 12c10-6 16 6 28 0v24c-12 6-18-6-28 0z" fill="#fff"/></svg>', STAR = '<svg viewBox="0 0 64 64" width="52" height="52"><path d="M32 6l7.6 16.4 17.9 2.1-13.2 12.3 3.5 17.7L32 45.2 16.2 54.5l3.5-17.7L6.5 24.5l17.9-2.1z" fill="#fff"/></svg>';
   var ZZ = [50, 66, 74, 66, 50, 34, 26, 34];
