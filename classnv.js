@@ -208,7 +208,7 @@
     function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
     page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Unit ' + S.unit + '</h2><p class="sub">Your path today: three drillings, with a break between them</p></div>'
       + '<div class="fch">' + card("hl", "🎧", "Listening drilling", (S.lisDone && S.lisDone[S.unit]) ? "Done ✔ · you can redo it" : "Start here", "about 60 min", true, 1) + link()
-      + card("hr", "📖", "Reading drilling", (S.rdDone && S.rdDone[S.unit]) ? "Done ✔ · you can redo it" : "Passage + 13 questions", "about 20 min", S.unit === 1, 2) + link()
+      + card("hr", "📖", "Reading drilling", (S.rdDone && S.rdDone[S.unit]) ? "Done ✔ · you can redo it" : "Passage + questions", "about 30 min", S.unit === 1, 2) + link()
       + card("hw", "✍️", "Writing drilling", "Opens soon", "after your break", false, 3) + '</div>');
     el("cb").onclick = path; el("hl").onclick = startPart;
     el("hr").onclick = S.unit === 1 ? startReading : function(){ this.classList.add("shk"); var t0_ = this; setTimeout(function(){ t0_.classList.remove("shk"); }, 400); };
