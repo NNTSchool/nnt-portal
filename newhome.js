@@ -162,7 +162,7 @@
       if (S.st && S.st.key && !S.review){ keyScreen(); return; }
       if (S.jump && S.chose !== S.unit){ choiceScreen(); return; }
       var done = S.vids.filter(function(v){ return v.done; }).length, jumped = !!(S.st && S.st.jumped), all = jumped || done === S.vids.length;
-      var h = '<h2>Unit ' + S.unit + ' · Home practice</h2><p class="sub">Do the steps in order. Each step opens after the one before it.</p>';
+      var h = '<h2>Unit ' + S.unit + ' · Home practice</h2><p class="sub">Do the steps in order. Each step opens after the one before it.</p>' + (S.vids.length && !(S.st && S.st.jumped) ? '<p class="sub" style="font-size:14px">🔑 While you watch, 3 secret words pop up at random moments. Remember them: you type them at the end of each video.</p>' : '');
       h += '<div class="st"><div class="n">' + (all ? "✓" : "1") + '</div><div><b>Watch the videos</b><small>' + (jumped ? "⏭ Skipped: you passed the jump test" : done + ' of ' + S.vids.length + ' finished') + '</small></div></div>';
       if (!all) S.vids.forEach(function(v){
         var pc = Math.min(100, Math.round(v.covered / v.target * 100)), lab = v.done ? "✅ Finished" : v.locked ? "🔒 Locked" : v.covered >= v.target ? "Type the secret words" : v.covered ? "Continue" : "Start";
@@ -260,6 +260,7 @@
     el("nvt").textContent = v.title; el("nvans").classList.remove("on"); el("nvwb").classList.remove("on"); el("nvov").classList.remove("on"); el("nvam").textContent = "";
     el("nvp").classList.add("on"); document.body.style.overflow = "hidden";
     paint(v.covered, v.target, v.wack || 0);
+    if (!v.covered && !v.wack) showOv("🔑 Before you start", "3 secret words will pop up on the screen while you watch, for about 9 seconds each. They come at different moments for every student. Remember or write them down. At the end you must type all 3 in order, or you watch the video again. Only real watching counts: do not pause for long, skip ahead or leave the screen.");
     loadYT(function(){
       el("nvyw").innerHTML = '<div id="nv_yt"></div>';
       S.pl = new YT.Player("nv_yt", {videoId: v.yt, host: "https://www.youtube-nocookie.com",
