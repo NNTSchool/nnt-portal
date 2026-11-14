@@ -141,6 +141,23 @@
   + '#cnv .wess{white-space:pre-wrap;background:#fffdf8;border:1px solid #c9d6ee;border-radius:12px;padding:10px 14px;font:17px/1.85 Georgia,serif}#cnv .wess u.err{text-decoration:underline solid #d62828;text-decoration-thickness:2px;text-underline-offset:3px;color:#b00020}#cnv .wess u.chk{text-decoration:underline dotted #d98a00;text-decoration-thickness:2px;text-underline-offset:3px}#cnv .wess u.sty{text-decoration:underline dotted #2b6cb0;text-decoration-thickness:2px;text-underline-offset:3px}#cnv .wess .okfx{color:#0a8f3c;font:700 15.5px system-ui;white-space:normal}#cnv .wess .okfx.q{color:#a06a00}#cnv .wess .okfx.s{color:#2b6cb0}#cnv .wess mark.okw{background:#d6f3e3;border-radius:5px;padding:0 3px}'
   + '@media(max-width:980px){#cnv .wgg{grid-template-columns:1fr}}';
   CSS += '#cnv .drw{max-width:820px;margin:10px auto 100px}#cnv .drb{height:10px;border-radius:99px;background:rgba(120,140,200,.3);margin-bottom:14px;overflow:hidden}#cnv .drp{height:100%;background:linear-gradient(90deg,#2bd5b3,#ffc21a);transition:width .4s}#cnv .drc{background:#fffdf8;border:2px solid #c9d6ee;border-radius:18px;padding:18px 22px;color:#10204a}#cnv .dri{font:800 12.5px system-ui;letter-spacing:.09em;text-transform:uppercase;color:#46566e;margin:6px 0}#cnv .drs{font:21px/1.6 Georgia,serif;background:#fff1f1;border-left:5px solid #d62828;border-radius:8px;padding:10px 14px;margin-bottom:12px}#cnv textarea.drta{height:110px;min-height:90px}#cnv .drx{background:#fff6dd;border:1.5px solid #f0c24a;border-radius:12px;padding:10px 14px;margin:10px 0;font:15.5px/1.5 system-ui}#cnv .drg{font:21px/1.6 Georgia,serif;color:#0a6d33;margin:8px 0}#cnv .drg.bad{color:#b00020}#cnv #drk{margin-top:12px}';
+  CSS += '#cnv .stp.l4{max-width:760px;margin:6px auto 10px}#cnv .l4ph{font-weight:800;letter-spacing:.14em;font-size:12px;color:#ffd23f;text-transform:uppercase;margin-top:6px}'
+  + '#cnv .l4bar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px;flex-wrap:wrap}#cnv .wrm.ok{color:#5df2d6}#cnv .wrm.gd{color:#5df2d6;font-size:18px}#cnv .wrm.bd{color:#ff9db3;font-size:16px}'
+  + '#cnv textarea.l4na{min-height:300px;font-size:19px;line-height:1.55;margin-top:12px;background:#fffdf7;color:#10204a;border:2px solid #9db4ff;border-radius:16px;padding:16px 18px}'
+  + '#cnv .l4two{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;align-items:start;margin-top:12px}#cnv .l4two.rv{grid-template-columns:minmax(0,6fr) minmax(0,6fr)}'
+  + '#cnv .l4notes,#cnv .l4tp{background:#fffdf7;color:#10204a;border:2px solid #c9d6ee;border-radius:18px;padding:16px 20px;max-height:calc(100vh - 260px);overflow:auto}#cnv .l4notes h3,#cnv .l4tp h3{margin:0 0 8px;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:#3e63d8}#cnv .l4tp h3 small{display:block;text-transform:none;letter-spacing:0;font-size:13px;color:#6a7aa6;font-weight:600;margin-top:2px}'
+  + '#cnv .l4nt,#cnv .l4tx{font:17px/1.6 Georgia,serif;color:#1b2a52}#cnv .l4tx{font-size:16px}#cnv .l4ev{background:#ffd23f;color:#3a2a00;border-radius:4px;padding:1px 2px;box-shadow:0 0 0 2px #ffd23f}#cnv .l4au{display:flex;align-items:center;gap:12px;margin-top:12px;position:sticky;bottom:0;background:linear-gradient(transparent,#fffdf7 30%);padding-top:8px}'
+  + '#cnv .l4ans{background:#fffdf7;color:#10204a;border:2px solid #c9d6ee;border-radius:18px;padding:16px 18px;margin-top:12px}#cnv .l4ans.lk{opacity:.78}#cnv .l4two .l4ans{margin-top:0}#cnv .l4qh{font-weight:700;font-size:16px;color:#2d3f73;margin-bottom:10px;padding:10px 12px;border-radius:12px;background:linear-gradient(120deg,#d7f5ef,#d9e6ff 55%,#eadcff)}'
+  + '#cnv .l4r{display:flex;align-items:center;gap:12px;padding:10px 6px;border-bottom:1px solid #e3eaf8}#cnv .l4r:last-child{border:0}#cnv .l4r .qn{flex:0 0 34px;height:34px;border-radius:10px;background:#3e63d8;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}#cnv .l4r .qt{flex:1;font-size:17px;line-height:1.4;font-weight:600;color:#10204a}#cnv .l4r .qt strong{color:#b25400;margin-left:6px}'
+  + '#cnv .l4t{display:flex;gap:8px;align-items:center}#cnv .l4tf{border:2px solid #b9c9e6;background:#fff;color:#2d3f73;border-radius:12px;padding:9px 18px;font:800 15px Lexend,system-ui;cursor:pointer;min-width:84px}#cnv .l4tf.on{background:#3e63d8;border-color:#3e63d8;color:#fff;box-shadow:0 4px 0 #27409a}#cnv .l4tf:disabled{cursor:default}'
+  + '#cnv .l4ok{border:2px solid #b9c9e6;background:#fff;color:#2d3f73;border-radius:12px;padding:9px 14px;font:800 14px Lexend,system-ui;cursor:pointer;white-space:nowrap}#cnv .l4ok.on{background:#0c9c84;border-color:#0c9c84;color:#fff;box-shadow:0 4px 0 #086b5a}#cnv .l4in{width:230px;max-width:46vw;padding:9px 12px;font-size:16px;border:2px solid #b9c9e6;border-radius:12px;color:#10204a;background:#fff}'
+  + '#cnv .l4ex{display:flex;gap:10px;align-items:center;padding:8px 12px;margin-bottom:6px;border-radius:12px;background:#eef2ff;color:#3d4f80;font-size:15px}#cnv .l4ex b{background:#8a5cf0;color:#fff;border-radius:8px;padding:2px 9px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}#cnv .l4ex span{flex:1}#cnv .l4ex em{font-style:normal;font-weight:800;color:#0c7a66}#cnv .l4ex .l4tf{min-width:0;padding:5px 14px}'
+  + '#cnv .l4g{margin:6px 0 16px}#cnv .l4gh{font-weight:800;font-size:17px;color:#10204a;margin-bottom:8px}#cnv .l4gh small{display:block;font-weight:600;font-size:13px;color:#6a7aa6}#cnv .l4gr{display:grid;grid-template-columns:minmax(0,1fr) 150px 150px;align-items:center;gap:8px;padding:8px 10px;border-radius:10px}#cnv .l4gr:nth-child(even){background:#f3f6ff}#cnv .l4gr.hd{background:linear-gradient(120deg,#3e63d8,#6b4df0);color:#fff;border-radius:12px 12px 0 0}#cnv .l4gr.hd b{text-align:center;font-size:16px}#cnv .l4gr.hd i{font-style:normal;font-size:11px;opacity:.8}#cnv .l4gr span{font-size:17px;font-weight:600;color:#10204a}#cnv .l4gr.one{grid-template-columns:minmax(0,1fr) 150px}'
+  + '#cnv .l4tk{justify-self:center;width:38px;height:38px;border-radius:10px;border:2.5px solid #9db4ff;background:#fff;cursor:pointer;position:relative}#cnv .l4tk.on{background:#0c9c84;border-color:#0c9c84;box-shadow:0 4px 0 #086b5a}#cnv .l4tk.on:after{content:"✔";color:#fff;font-size:22px;font-weight:800;position:absolute;inset:0;display:flex;align-items:center;justify-content:center}'
+  + '#cnv .l4sc{margin-top:14px;padding:14px 18px;border-radius:16px;background:rgba(255,255,255,.08);border:2px solid var(--c);display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline}#cnv .l4sc b{font-size:34px;color:var(--c)}#cnv .l4sc span{font-size:17px;font-weight:700}#cnv .l4sc small{flex-basis:100%;opacity:.8}'
+  + '#cnv .l4rv{border-radius:14px;padding:10px 12px;margin-bottom:10px;background:#fff;border:2px solid #d3dcf0;color:#10204a}#cnv .l4rv.g{border-color:#2bb59b;background:#effaf6}#cnv .l4rv.b{border-color:#e0607f;background:#fff4f6}#cnv .l4rh{display:flex;gap:10px;align-items:center}#cnv .l4rh .qn{flex:0 0 30px;height:30px;border-radius:9px;background:#3e63d8;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}#cnv .l4rv.g .qn{background:#0c9c84}#cnv .l4rv.b .qn{background:#d6395f}#cnv .l4rh span{flex:1;font-weight:700;font-size:15.5px}#cnv .l4rh i{font-style:normal;font-weight:800;font-size:20px}'
+  + '#cnv .l4ro{margin:6px 0 0 40px;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline;font-size:16px}#cnv .l4ro small{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#6a7aa6}#cnv .l4ro s{color:#d6395f}#cnv .l4ro strong{color:#0c7a66}#cnv .l4evb{margin:6px 0 0 40px;padding:8px 10px;border-radius:10px;background:#fff7d6;border:1.5px solid #f2d66b;font-size:14.5px;line-height:1.45;color:#5a4300}'
+  + '#cnv .l4how .rc,#cnv .l4sm .rc{animation:none}#cnv .l4how .rc small,#cnv .l4sm .rc small{color:#3d5a78!important;font-size:14.5px!important}#cnv .l4how .rc b,#cnv .l4sm .rc b{color:#10204a!important;font-size:19px}#cnv .l4gr.hd b{color:#fff}#cnv .l4sm .rc.g i{color:#0c9c84}#cnv .l4sm .rc.b i{color:#d6395f}#cnv .l4how .rc .rn,#cnv .l4sm .rc .rn{background:#3e63d8;color:#fff}@media(max-width:1100px){#cnv .l4two,#cnv .l4two.rv{grid-template-columns:1fr}}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
   function page(h){ stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
@@ -246,7 +263,7 @@
       + '<div class="fch">' + card("hl", "🎧", "Listening drilling", (S.lisDone && S.lisDone[S.unit]) ? "Done ✔ · you can redo it" : "Start here", "about 60 min", true, 1) + link()
       + card("hr", "📖", "Reading drilling", (S.rdDone && S.rdDone[S.unit]) ? "Done ✔ · you can redo it" : "Passage + questions", "about 30 min", S.unit === 1 && opn("read"), 2) + link()
       + card("hw", "✍️", "Writing drilling", (S.wrDone && S.wrDone[S.unit]) ? "Done ✔ · you can redo it" : "Write · feedback · rewrite", "about 40 min", S.unit === 1 && opn("write"), 3) + '</div><p class="sub" id="hlk" style="text-align:center;margin-top:14px;min-height:22px"></p>');
-    el("cb").onclick = path; el("hl").onclick = startPart;
+    el("cb").onclick = path; el("hl").onclick = S.unit > 1 ? startPart4 : startPart;
     el("hr").onclick = S.unit === 1 && opn("read") ? startReading : function(){ lockMsg(this, S.unit === 1 ? "🔒 Finish the listening drilling first." : ""); };
     el("hw").onclick = S.unit === 1 && opn("write") ? startWriting : function(){ lockMsg(this, S.unit === 1 ? "🔒 Finish the reading drilling first." : ""); };
   }
@@ -392,6 +409,204 @@
       el("cnx").onclick = function(){ S.fi++; fixEx(); };
       el("cout").scrollIntoView && el("cout").scrollIntoView({behavior: "smooth"});
     };
+  }
+  /* ---------- four-stage listening (Units 2+): notes, answer from notes, exam, analysis ---------- */
+  var STG = [["📝", "Take notes"], ["🧠", "Answer from notes"], ["⏱", "Exam"], ["🔎", "Analysis"]];
+  function stgBar(n){ var h = '<div class="stp l4">'; STG.forEach(function(s, i){ h += (i ? '<u class="' + (i < n ? "f" : "") + '"></u>' : '') + '<div class="sn ' + (i + 1 < n ? "dn" : i + 1 === n ? "cu" : "") + '"><span class="sb">' + (i + 1 < n ? "✔" : s[0]) + '</span><small>' + s[1] + '</small><em>' + (i + 1 === n ? "you are here" : "") + '</em></div>'; }); return h + '</div>'; }
+  function qn(ex){ return ex.kind === "grid" ? ex.groups.length * ex.cols.length : ex.qs.length; }
+  function fnorm(s){ return String(s).toLowerCase().replace(/(\d)(st|nd|rd|th)\b/g, "$1").replace(/[^a-z0-9. ]/g, " ").replace(/\b(dollars?|per|a|day|the|of|from|until|to|and|all|whole|is|it)\b/g, " ").replace(/\s+/g, " ").trim(); }
+  /* widgets: draw the answer controls of an exercise; read() gives the answers, mark() gives [{ok, said, right}] */
+  function qWidget(ex, pre){
+    var h = "", i;
+    if (ex.kind === "tf"){
+      h += '<div class="l4q">' + '<div class="l4ex"><b>Example</b><span>' + esc(ex.example.t) + '</span><i class="l4tf on">' + ex.example.a + '</i></div>';
+      ex.qs.forEach(function(q, k){ h += '<div class="l4r" data-k="' + k + '"><b class="qn">' + (k + 1) + '</b><span class="qt">' + esc(q.t) + '</span><div class="l4t"><button type="button" class="l4tf" data-v="T">True</button><button type="button" class="l4tf" data-v="F">False</button></div></div>'; });
+      return h + '</div>';
+    }
+    if (ex.kind === "grid"){
+      var n = 0;
+      ex.groups.forEach(function(g, gi){
+        h += '<div class="l4g"><div class="l4gh">' + esc(g.title) + '<small>Tick one item for each person.</small></div><div class="l4gt"><div class="l4gr hd"><span></span>' + ex.cols.map(function(c, ci){ return '<b>' + esc(c) + ' <i>Q' + (gi * ex.cols.length + ci + 1) + '</i></b>'; }).join("") + '</div>';
+        g.rows.forEach(function(r, ri){ h += '<div class="l4gr"><span>' + esc(r) + '</span>' + ex.cols.map(function(c, ci){ return '<button type="button" class="l4tk" data-g="' + gi + '" data-c="' + ci + '" data-r="' + ri + '" aria-label="' + esc(c + ": " + r) + '"></button>'; }).join("") + '</div>'; });
+        h += '</div></div>';
+      });
+      return h;
+    }
+    h += '<div class="l4q"><div class="l4ex"><b>Example</b><span>' + esc(ex.example.l) + ': <s>' + esc(ex.example.s) + '</s> → <em>' + esc(ex.example.a) + '</em></span></div><div class="l4ex"><b>Example</b><span>' + esc(ex.example2.l) + ': ' + esc(ex.example2.s) + ' → <em>✔ correct</em></span></div>';
+    ex.qs.forEach(function(q, k){ h += '<div class="l4r fx" data-k="' + k + '"><b class="qn">' + (k + 1) + '</b><span class="qt">' + esc(q.l) + (q.s ? ' <strong>' + esc(q.s) + '</strong>' : "") + '</span><div class="l4t"><button type="button" class="l4ok">✔ correct</button><input class="a l4in" type="text" placeholder="or write the correction" spellcheck="false" autocomplete="off" autocapitalize="off"></div></div>'; });
+    return h + '</div>';
+  }
+  function qWire(root, ex){
+    [].forEach.call(root.querySelectorAll(".l4tf[data-v]"), function(b){ b.onclick = function(){ var p = b.parentNode, was = b.getAttribute("data-sel") === "1"; [].forEach.call(p.querySelectorAll(".l4tf"), function(x){ x.removeAttribute("data-sel"); x.classList.remove("on"); }); if (!was){ b.setAttribute("data-sel", "1"); b.classList.add("on"); } }; });
+    [].forEach.call(root.querySelectorAll(".l4tk"), function(b){ b.onclick = function(){ var g = b.getAttribute("data-g"), c = b.getAttribute("data-c"), was = b.classList.contains("on");
+      [].forEach.call(root.querySelectorAll('.l4tk[data-g="' + g + '"][data-c="' + c + '"]'), function(x){ x.classList.remove("on"); }); if (!was) b.classList.add("on"); }; });
+    [].forEach.call(root.querySelectorAll(".l4r.fx"), function(r){ var ok = r.querySelector(".l4ok"), inp = r.querySelector(".l4in");
+      ok.onclick = function(){ var on = !ok.classList.contains("on"); ok.classList.toggle("on", on); if (on) inp.value = ""; };
+      inp.oninput = function(){ if (inp.value.trim()) ok.classList.remove("on"); }; });
+  }
+  function qRead(root, ex){
+    var out = [];
+    if (ex.kind === "tf"){ ex.qs.forEach(function(q, k){ var s = root.querySelector('.l4r[data-k="' + k + '"] .l4tf[data-sel="1"]'); out.push(s ? s.getAttribute("data-v") : ""); }); }
+    else if (ex.kind === "grid"){ ex.groups.forEach(function(g, gi){ ex.cols.forEach(function(c, ci){ var s = root.querySelector('.l4tk[data-g="' + gi + '"][data-c="' + ci + '"].on'); out.push(s ? +s.getAttribute("data-r") : -1); }); }); }
+    else { ex.qs.forEach(function(q, k){ var r = root.querySelector('.l4r[data-k="' + k + '"]'); out.push(r.querySelector(".l4ok").classList.contains("on") ? "tick" : r.querySelector(".l4in").value.trim()); }); }
+    return out;
+  }
+  function qMark(ex, ans){
+    var rows = [];
+    if (ex.kind === "tf") ex.qs.forEach(function(q, k){ rows.push({n: k + 1, ok: ans[k] === q.a, said: ans[k] ? (ans[k] === "T" ? "True" : "False") : "", right: q.a === "T" ? "True" : "False", text: q.t, ev: q.ev}); });
+    else if (ex.kind === "grid") ex.groups.forEach(function(g, gi){ ex.cols.forEach(function(c, ci){ var k = gi * ex.cols.length + ci, a = ans[k]; rows.push({n: k + 1, ok: a === g.ans[ci], said: a >= 0 ? g.rows[a] : "", right: g.rows[g.ans[ci]], text: c + ": " + g.title.replace(/^Which\s+/i, "").replace(/\?$/, ""), ev: g.ev[ci]}); }); });
+    else ex.qs.forEach(function(q, k){ var a = ans[k], ok = false, right = q.a || "✔ correct (no change)";
+      if (!q.a) ok = a === "tick"; else if (a && a !== "tick"){ var f = " " + fnorm(a) + " "; ok = (q.acc || []).some(function(x){ return f.indexOf(" " + fnorm(x) + " ") > -1; }); }
+      rows.push({n: k + 1, ok: ok, said: a === "tick" ? "✔ correct" : a, right: right, text: q.l + (q.s ? " (" + q.s + ")" : ""), ev: q.ev}); });
+    return rows;
+  }
+  function l4Player(ex, lim, key){
+    return '<div class="card" id="cpc"><div class="pl"><button class="go" id="cplay">▶ Play</button><div class="bar"><b id="cbar"></b></div><span id="ctm" class="sub">0:00</span></div><p class="sub" id="cplm" style="margin:8px 0 0"></p></div>';
+  }
+  function l4Wire(ex, lim, key, note){
+    var b = el("cplay"), bar = el("cbar"), tm = el("ctm"), m = el("cplm"); S.pl = S.pl || {}; var busy = false;
+    function left(){ return lim === 0 ? 99 : lim - (S.pl[key] || 0); }
+    function label(){ var l = left(); b.disabled = l <= 0 || busy; b.textContent = l <= 0 ? "✔ Played" : lim === 0 ? (S.pl[key] ? "▶ Play again" : "▶ Play") : S.pl[key] ? "▶ Play again (" + l + " left)" : "▶ Play (" + lim + (lim > 1 ? " plays" : " play") + ")"; m.textContent = note + (lim === 0 ? "" : ""); }
+    label();
+    b.onclick = function(){
+      if (left() <= 0 || busy) return; busy = true; stopAudio(); S.pl[key] = (S.pl[key] || 0) + 1; b.disabled = true; b.textContent = "Loading…";
+      audioUrl(ex).then(function(url){ A = new Audio(url); b.textContent = "Playing… listen to the end";
+        A.ontimeupdate = function(){ if (A && A.duration){ bar.style.width = (100 * A.currentTime / A.duration) + "%"; var t = Math.floor(A.currentTime); tm.textContent = Math.floor(t / 60) + ":" + ("0" + t % 60).slice(-2); } };
+        A.onended = function(){ busy = false; bar.style.width = "0"; label(); };
+        A.onerror = function(){ busy = false; S.pl[key]--; label(); };
+        var p = A.play(); if (p && p.catch) p.catch(function(){ busy = false; S.pl[key]--; label(); });
+      }).catch(function(){ busy = false; S.pl[key]--; label(); });
+    };
+  }
+  function startPart4(){
+    page(top() + '<div class="hero"><h2>Loading Part ' + S.unit + '…</h2></div>'); el("cb").onclick = hub;
+    Promise.all([getFile("c" + S.unit + "_part", "part" + S.unit + ".json").then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }), wrTrack()]).then(function(r){
+      S.P = r[0]; S.cur = "lis"; S.L = {stage: 1, ei: 0, notes: {}, a2: {}, a3: {}, track: r[1]}; S.res = {}; S.pl = {}; S.fix = []; if (!S.t0) S.t0 = Date.now(); l4Intro();
+    }).catch(function(){ page(top() + '<div class="card warn"><h2>This part is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
+  }
+  function l4Intro(){
+    var P = S.P, ie = S.L.track === "ie";
+    page(top() + '<div class="hero"><h2>Listening · Part ' + S.unit + '</h2><p class="sub">' + esc(P.title) + ' · ' + P.exercises.length + ' recordings · about 50 minutes</p></div>' + stgBar(0)
+      + '<div class="gr g2 fr l4how">'
+      + '<div class="rc g"><span class="rn">1</span><div><b>Take notes</b><small style="color:#bcd0ff">Sound only. Play each recording as often as you like and write down names, numbers, dates, choices and reasons. You cannot see the questions yet.</small></div></div>'
+      + '<div class="rc g"><span class="rn">2</span><div><b>Answer from your notes</b><small style="color:#bcd0ff">No audio. The questions appear and you answer using only your own notes.</small></div></div>'
+      + '<div class="rc g"><span class="rn">3</span><div><b>Exam</b><small style="color:#bcd0ff">Real exam conditions: each recording plays ' + (ie ? "ONCE only" : "up to TWICE") + '. Answer while you listen.</small></div></div>'
+      + '<div class="rc g"><span class="rn">4</span><div><b>Analysis</b><small style="color:#bcd0ff">See every mistake with the exact sentence you missed, read the script, and win your mistakes back.</small></div></div></div>'
+      + '<button class="go" id="l4go" style="margin-top:8px">Start stage 1 →</button>');
+    el("cb").onclick = hub; el("l4go").onclick = function(){ S.L.stage = 1; S.L.ei = 0; l4Notes(); };
+  }
+  function l4Head(){ var ex = S.P.exercises[S.L.ei]; return top("Exit") + stgBar(S.L.stage) + '<div class="l4ph">Stage ' + S.L.stage + ' of 4 · recording ' + (S.L.ei + 1) + ' of ' + S.P.exercises.length + '</div><h2 style="margin:4px 0 0">' + esc(ex.id + " · " + ex.name) + '</h2>'; }
+  function wc(s){ return (s.trim().match(/\S+/g) || []).length; }
+  function l4Notes(){
+    var ex = S.P.exercises[S.L.ei], L = S.L;
+    page(l4Head() + '<div class="ins hlz"><span class="ii">📝</span><div><small>STAGE 1 · TAKE NOTES</small><strong>' + esc(ex.intro) + ' Listen and write down everything useful. The questions come later.</strong></div></div>'
+      + l4Player(ex) + '<textarea id="l4n" class="wrta l4na" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Type your notes here. Names, numbers, dates, prices, who said what, what changed…">' + esc(L.notes[ex.id] || "") + '</textarea>'
+      + '<div class="l4bar"><span id="l4wc" class="wrm"></span><button class="go" id="l4nx" disabled>' + (L.ei + 1 < S.P.exercises.length ? "Next recording →" : "Go to stage 2 →") + '</button></div>');
+    el("cb").onclick = function(){ stopAudio(); hub(); };
+    l4Wire(ex, 0, "n" + ex.id, "Play it as many times as you need. You cannot skip ahead or rewind: that is the exam skill.");
+    var ta = el("l4n"), nx = el("l4nx"), c = el("l4wc");
+    function up(){ L.notes[ex.id] = ta.value; var w = wc(ta.value); c.innerHTML = '<b>' + w + '</b> / ' + ex.min + ' words at least'; nx.disabled = w < ex.min && !O.nofloor; c.classList.toggle("ok", w >= ex.min); }
+    ta.oninput = up; up(); ta.focus();
+    nx.onclick = function(){ stopAudio(); L.ei++; if (L.ei < S.P.exercises.length) l4Notes(); else { L.stage = 2; L.ei = 0; l4Answer(); } };
+  }
+  function l4Answer(){
+    var ex = S.P.exercises[S.L.ei], L = S.L;
+    page(l4Head() + '<div class="ins hlz"><span class="ii">🧠</span><div><small>STAGE 2 · ANSWER FROM YOUR NOTES</small><strong>No audio now. Use only your own notes to answer. You will not see the correct answers yet.</strong></div></div>'
+      + '<div class="l4two"><div class="l4notes"><h3>Your notes</h3><div class="l4nt">' + esc(L.notes[ex.id] || "").replace(/\n/g, "<br>") + '</div></div><div class="l4ans" id="l4a"><div class="l4qh">' + esc(ex.say) + '</div>' + qWidget(ex) + '</div></div>'
+      + '<div class="l4bar"><span class="wrm" id="l4m"></span><button class="go" id="l4ck">Check my answers</button></div><div id="cout"></div>');
+    el("cb").onclick = hub; qWire(el("l4a"), ex);
+    el("l4ck").onclick = function(){
+      var ans = qRead(el("l4a"), ex), rows = qMark(ex, ans), g = rows.filter(function(r){ return r.ok; }).length; L.a2[ex.id] = {good: g, n: rows.length};
+      var pct = Math.round(100 * g / rows.length), t = tier(pct);
+      el("l4ck").remove(); el("l4a").classList.add("lk"); [].forEach.call(el("l4a").querySelectorAll("button,input"), function(x){ x.disabled = true; });
+      el("cout").innerHTML = '<div class="l4sc" style="--c:' + t[2] + '"><b>' + g + ' / ' + rows.length + '</b><span>' + t[1] + ' ' + (pct >= 85 ? "Your notes are strong." : pct >= 55 ? "Decent notes. Next time catch more of the small details." : "Your notes missed a lot. Write more key words, numbers and names while you listen.") + '</span><small>The answers stay hidden. You will meet these recordings again in the exam.</small></div>'
+        + '<button class="go" id="l4nx" style="margin-top:12px">' + (L.ei + 1 < S.P.exercises.length ? "Next recording →" : "Go to the exam →") + '</button>';
+      el("l4nx").onclick = function(){ L.ei++; if (L.ei < S.P.exercises.length) l4Answer(); else { L.stage = 3; L.ei = 0; l4Exam(); } };
+      el("cout").scrollIntoView && el("cout").scrollIntoView({behavior: "smooth"});
+    };
+  }
+  function l4Exam(){
+    var ex = S.P.exercises[S.L.ei], L = S.L, ie = L.track === "ie", lim = ie ? 1 : 2;
+    page(l4Head() + '<div class="ins hlz"><span class="ii">⏱</span><div><small>STAGE 3 · EXAM CONDITIONS</small><strong>' + esc(ex.say) + ' The recording is played ' + (ie ? "once only" : "up to twice") + '. Your notes are hidden: answer while you listen.</strong></div></div>'
+      + l4Player(ex) + '<div class="l4ans" id="l4a">' + qWidget(ex) + '</div><div class="l4bar"><span class="wrm"></span><button class="go" id="l4ck">Submit my answers</button></div><div id="cout"></div>');
+    el("cb").onclick = function(){ stopAudio(); hub(); }; qWire(el("l4a"), ex);
+    l4Wire(ex, lim, "x" + ex.id, "You cannot skip or rewind. " + (ie ? "One play only, exactly like the real test." : "You can play it twice."));
+    el("l4ck").onclick = function(){
+      stopAudio(); var ans = qRead(el("l4a"), ex), rows = qMark(ex, ans), g = rows.filter(function(r){ return r.ok; }).length;
+      L.a3[ex.id] = {ans: ans, rows: rows, good: g, n: rows.length}; S.res[ex.id] = {good: g, n: rows.length, miss: rows.filter(function(r){ return !r.ok; }).map(function(r){ return r.n - 1; })};
+      L.ei++; if (L.ei < S.P.exercises.length){ l4ExamGap(); } else { L.stage = 4; l4Analysis(); }
+    };
+  }
+  function l4ExamGap(){
+    page(top("Exit") + stgBar(3) + '<div class="brk" style="padding:34px 0"><div class="bk good"><div class="be">✅</div><h1 class="bh">Answers locked</h1><p class="sub">Recording ' + S.L.ei + ' of ' + S.P.exercises.length + ' is submitted. You will see the results in the analysis at the end. Get ready for the next recording.</p></div><button class="go" id="l4nx" style="margin-top:20px">Next recording →</button></div>');
+    el("cb").onclick = hub; el("l4nx").onclick = l4Exam;
+  }
+  function l4Analysis(){
+    var L = S.L, g = 0, n = 0, rows = "", g2 = 0;
+    S.P.exercises.forEach(function(e, i){ var r = L.a3[e.id], a2 = L.a2[e.id]; g += r.good; n += r.n; g2 += a2 ? a2.good : 0; var pc = Math.round(100 * r.good / r.n);
+      rows += '<div class="rc ' + (r.good < r.n ? "b" : "g") + '"><span class="rn">' + (i + 1) + '</span><div><b>' + esc(e.name) + '</b><small style="color:#bcd0ff">Exam ' + r.good + ' of ' + r.n + ' · ' + pc + '% · from notes ' + (a2 ? a2.good + ' of ' + a2.n : "–") + '</small></div><i>' + (r.good < r.n ? "✖" : "✔") + '</i></div>'; });
+    S.fix = S.P.exercises.filter(function(e){ return L.a3[e.id].good < L.a3[e.id].n; });
+    var pct = Math.round(100 * g / n), t = tier(pct), sp = "";
+    if (pct >= 90) for (var q = 0; q < 34; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 2.5).toFixed(2) + 's;animation-duration:' + (2.4 + Math.random() * 2).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#ff9f43"][q % 5] + ';width:' + (5 + Math.random() * 6).toFixed(1) + 'px;height:' + (8 + Math.random() * 10).toFixed(1) + 'px"></i>';
+    var miss = n - g;
+    page(top("Exit") + stgBar(4) + '<div class="fbk"><div class="spk">' + sp + '</div><small class="wu">EXAM RESULT</small><div class="ring" style="--c:' + t[2] + ';--a:' + Math.round(3.6 * pct) + 'deg"><div><b>' + pct + '%</b><small>' + g + ' of ' + n + ' correct</small></div></div><div class="verd" style="color:' + t[2] + '">' + t[1] + ' ' + t[0] + '</div></div>'
+      + '<div class="gr g2 fr l4sm">' + rows + '</div><button class="go" id="l4rv" style="margin-top:6px">' + (miss ? '🔎 See every mistake and the sentence behind it →' : 'Read the scripts →') + '</button>');
+    el("cb").onclick = hub; el("l4rv").onclick = function(){ L.ri = 0; l4Review(); };
+  }
+  function hiEv(tape, ev){
+    var h = esc(tape).replace(/\n/g, "<br>"); if (!ev) return h;
+    ev.split(" ... ").forEach(function(part){ var e = esc(part.trim()); if (e && h.indexOf(e) > -1) h = h.replace(e, '<mark class="l4ev">' + e + '</mark>'); });
+    return h;
+  }
+  function l4Review(){
+    var L = S.L, ex = S.P.exercises[L.ri], r = L.a3[ex.id], last = L.ri + 1 >= S.P.exercises.length, h = "";
+    r.rows.forEach(function(w){
+      h += '<div class="l4rv ' + (w.ok ? "g" : "b") + '"><div class="l4rh"><b class="qn">' + w.n + '</b><span>' + esc(w.text) + '</span><i>' + (w.ok ? "✔" : "✖") + '</i></div>'
+        + (w.ok ? '<div class="l4ro"><small>Your answer</small><strong>' + esc(w.said) + '</strong></div>' : '<div class="l4ro"><small>You wrote</small><s>' + esc(w.said || "(empty)") + '</s><small>Correct</small><strong>' + esc(w.right) + '</strong></div>')
+        + (w.ev && !w.ok ? '<div class="l4evb">🎧 <em>“' + esc(w.ev.replace(/ \.\.\. /g, " … ")) + '”</em></div>' : "") + '</div>'; });
+    page(top("Exit") + stgBar(4) + '<div class="l4ph">Analysis · recording ' + (L.ri + 1) + ' of ' + S.P.exercises.length + '</div><h2 style="margin:4px 0 8px">' + esc(ex.id + " · " + ex.name) + ' · ' + r.good + ' of ' + r.n + '</h2>'
+      + '<div class="l4two rv"><div class="l4rvl">' + h + '</div><div class="l4tp"><h3>Script <small>the sentences you needed are highlighted</small></h3><div class="l4tx" id="l4tx">' + hiEv(ex.tape, r.rows.filter(function(w){ return !w.ok && w.ev; }).map(function(w){ return w.ev; }).join(" ... ")) + '</div><div class="l4au"><button class="pill" id="l4pl">▶ Listen again</button><span class="sub" id="l4ps">Pause, rewind and replay freely here.</span></div></div></div>'
+      + '<button class="go" id="l4nx" style="margin-top:14px">' + (last ? (S.fix.length ? "🛠 Win your mistakes back →" : "Finish the listening →") : "Next recording →") + '</button>');
+    el("cb").onclick = function(){ stopAudio(); hub(); };
+    var pl = el("l4pl"), B = null;
+    pl.onclick = function(){ if (B){ if (B.paused){ B.play(); pl.textContent = "❚❚ Pause"; } else { B.pause(); pl.textContent = "▶ Continue"; } return; } pl.textContent = "Loading…"; audioUrl(ex).then(function(u){ B = new Audio(u); B.controls = false; B.onended = function(){ B = null; pl.textContent = "▶ Listen again"; }; A = B; B.play(); pl.textContent = "❚❚ Pause"; }); };
+    el("l4nx").onclick = function(){ stopAudio(); if (!last){ L.ri++; l4Review(); } else if (S.fix.length){ l4Drill(); } else listeningDone(); };
+  }
+  /* win the mistakes back: re-answer each missed question after seeing the sentence, until all are right */
+  function l4Drill(){
+    var L = S.L, items = [];
+    S.P.exercises.forEach(function(e){ L.a3[e.id].rows.forEach(function(w){ if (!w.ok) items.push({ex: e, w: w}); }); });
+    L.dq = items; L.di = 0; L.dn = items.length; L.dfix = 0; L.try = {}; l4DrillQ();
+  }
+  function l4DrillQ(){
+    var L = S.L;
+    if (!L.dq.length){ return l4DrillEnd(); }
+    if (L.di >= L.dq.length) L.di = 0;
+    var it = L.dq[L.di], ex = it.ex, w = it.w, key = ex.id + ":" + w.n, tr = L.try[key] || 0;
+    var pct = Math.round(100 * (L.dn - L.dq.length) / L.dn);
+    var gi = ex.kind === "grid" ? Math.floor((w.n - 1) / ex.cols.length) : 0, ci = ex.kind === "grid" ? (w.n - 1) % ex.cols.length : 0;
+    var wid = "";
+    if (ex.kind === "tf") wid = '<div class="l4q"><div class="l4r" data-k="0"><b class="qn">' + w.n + '</b><span class="qt">' + esc(ex.qs[w.n - 1].t) + '</span><div class="l4t"><button type="button" class="l4tf" data-v="T">True</button><button type="button" class="l4tf" data-v="F">False</button></div></div></div>';
+    else if (ex.kind === "grid"){ var g = ex.groups[gi]; wid = '<div class="l4g"><div class="l4gh">' + esc(ex.cols[ci]) + ': ' + esc(g.title) + '<small>Tick one item.</small></div><div class="l4gt">' + g.rows.map(function(r, ri){ return '<div class="l4gr one"><span>' + esc(r) + '</span><button type="button" class="l4tk" data-g="0" data-c="0" data-r="' + ri + '"></button></div>'; }).join("") + '</div></div>'; }
+    else { var q = ex.qs[w.n - 1]; wid = '<div class="l4q"><div class="l4r fx" data-k="0"><b class="qn">' + w.n + '</b><span class="qt">' + esc(q.l) + (q.s ? ' <strong>' + esc(q.s) + '</strong>' : "") + '</span><div class="l4t"><button type="button" class="l4ok">✔ correct</button><input class="a l4in" type="text" placeholder="or write the correction" spellcheck="false" autocomplete="off" autocapitalize="off"></div></div></div>'; }
+    page(top("Exit") + stgBar(4) + '<div class="fxtag">🛠 WIN IT BACK · ' + (L.dn - L.dq.length) + ' of ' + L.dn + ' won</div><div class="drb"><i style="width:' + pct + '%"></i></div>'
+      + '<div class="ins fixc"><span class="ii">🎯</span><div><small>THE SENTENCE YOU NEEDED</small><strong>“' + esc((w.ev || "").replace(/ \.\.\. /g, " … ")) + '”</strong></div></div>'
+      + '<div class="l4ans" id="l4a"><div class="l4qh">' + esc(ex.id + " · " + ex.name) + '</div>' + wid + '</div><div class="l4bar"><span class="wrm" id="l4m"></span><button class="go" id="l4ck">Check</button></div>');
+    el("cb").onclick = function(){ stopAudio(); hub(); }; qWire(el("l4a"), {kind: ex.kind});
+    el("l4ck").onclick = function(){
+      var root = el("l4a"), ok = false, ans;
+      if (ex.kind === "tf"){ var s = root.querySelector(".l4tf[data-sel='1']"); ok = !!s && s.getAttribute("data-v") === ex.qs[w.n - 1].a; }
+      else if (ex.kind === "grid"){ var s2 = root.querySelector(".l4tk.on"); ok = !!s2 && +s2.getAttribute("data-r") === ex.groups[gi].ans[ci]; }
+      else { ans = qRead(root, {kind: "fix", qs: [ex.qs[w.n - 1]]}); ok = qMark({kind: "fix", qs: [ex.qs[w.n - 1]]}, ans)[0].ok; }
+      L.try[key] = (L.try[key] || 0) + 1; var m = el("l4m");
+      if (ok){ m.className = "wrm gd"; m.textContent = "✔ Yes! That is the one."; L.dq.splice(L.di, 1); L.dfix++; el("l4ck").textContent = "Next →"; el("l4ck").onclick = l4DrillQ; [].forEach.call(root.querySelectorAll("button,input"), function(x){ x.disabled = true; }); }
+      else if (L.try[key] >= 2){ m.className = "wrm bd"; m.innerHTML = "Not yet. The answer is <b>" + esc(w.right) + "</b>. Read the sentence again, then it will come back to you."; el("l4ck").textContent = "Next →"; L.di++; [].forEach.call(root.querySelectorAll("button,input"), function(x){ x.disabled = true; }); el("l4ck").onclick = l4DrillQ; }
+      else { m.className = "wrm bd"; m.textContent = "✖ Not quite. Read the sentence above once more and try again."; }
+    };
+  }
+  function l4DrillEnd(){
+    page(top("Exit") + '<div class="brk"><div class="bk good"><div class="be">🏆</div><h1 class="bh">All won back!</h1><p class="sub">You fixed every mistake from the exam. That is exactly how listening scores go up.</p></div><button class="go" id="l4nx" style="margin-top:20px">Finish the listening →</button></div>');
+    el("cb").onclick = hub; el("l4nx").onclick = listeningDone;
   }
   var BRK = 600;
   function mmss(t){ t = Math.max(0, Math.floor(t)); return ("0" + Math.floor(t / 60)).slice(-2) + ":" + ("0" + t % 60).slice(-2); }
