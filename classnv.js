@@ -5,7 +5,7 @@
   function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
   var CSS = '#cnv{position:fixed;inset:0;z-index:80;overflow:auto;-webkit-overflow-scrolling:touch;color:#eaf1ff;font-family:Lexend,system-ui,sans-serif;background:#070b1d}'
   + '#cnv .bg{position:fixed;inset:0;z-index:0;background:radial-gradient(900px 520px at 85% -10%,#2a1b6e 0,transparent 60%),radial-gradient(800px 500px at -10% 105%,#06506b 0,transparent 60%),#070b1d}'
-  + '#cnv .w{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:18px 16px 60px}'
+  + '#cnv .w{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:18px 16px 60px}'
   + '#cnv h1,#cnv h2,#cnv b{color:#fff}#cnv h1,#cnv h2{margin:0 0 8px;letter-spacing:-.02em}#cnv p{line-height:1.5}'
   + '#cnv .row{display:flex;align-items:center;gap:10px}#cnv .sp{flex:1}'
   + '#cnv .tb{display:flex;align-items:center;gap:10px;margin-bottom:14px}'
@@ -24,9 +24,9 @@
   + '#cnv textarea.a{min-height:130px}#cnv .r{margin:8px 0;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.25)}#cnv .r.g{border-left:4px solid #5df2d6}#cnv .r.b{border-left:4px solid #ff7a9a}'
   + '#cnv .r small{display:block;opacity:.85;margin-top:3px}#cnv .nk{filter:drop-shadow(0 14px 30px rgba(120,100,255,.6));animation:cnk 1s ease-out}@keyframes cnk{0%{transform:scale(.3) rotate(-30deg);opacity:0}60%{transform:scale(1.12) rotate(6deg);opacity:1}100%{transform:scale(1)}}';
   CSS += '#cnv .big.dim{background:linear-gradient(120deg,#39425f,#2a3152);color:#c9d3f5;box-shadow:none}#cnv .shk{animation:esh .4s}@keyframes esh{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}'
-  + '#cnv .hi{font-size:56px}#cnv .pth{position:relative;margin:6px 0 0}#cnv .pl2{position:absolute;inset:0;width:100%;height:100%}#cnv .pl2 path{fill:none;stroke:rgba(255,255,255,.22);stroke-width:2;stroke-dasharray:5 6;vector-effect:non-scaling-stroke}'
-  + '#cnv .nd{position:absolute;transform:translate(-50%,-50%);width:124px;height:108px;border-radius:50%;border:0;color:#fff;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;justify-content:center;font-family:inherit;--d:#3b2a8f;box-shadow:0 12px 0 var(--d),0 18px 24px rgba(0,0,0,.4)}'
-  + '#cnv .nd:active{transform:translate(-50%,-47%);box-shadow:0 5px 0 var(--d)}#cnv .nd u{position:absolute;right:6px;bottom:2px;font-weight:800;font-size:15px;text-decoration:none;opacity:.9}'
+  + '#cnv .hi{font-size:56px}#cnv .pth{position:relative;margin:6px auto 0;max-width:560px}#cnv .pl2{position:absolute;inset:0;width:100%;height:100%}#cnv .pl2 path{fill:none;stroke:rgba(255,255,255,.22);stroke-width:2;stroke-dasharray:5 6;vector-effect:non-scaling-stroke}'
+  + '#cnv .nd{position:absolute;transform:translate(-50%,-50%);width:150px;height:128px;border-radius:50%;border:0;color:#fff;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;justify-content:center;font-family:inherit;--d:#3b2a8f;box-shadow:0 12px 0 var(--d),0 18px 24px rgba(0,0,0,.4)}'
+  + '#cnv .nd:active{transform:translate(-50%,-47%);box-shadow:0 5px 0 var(--d)}#cnv .nd u{position:absolute;right:10px;top:6px;width:34px;height:34px;border-radius:50%;background:#fff;color:#c47a00;font-weight:800;font-size:19px;text-decoration:none;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(0,0,0,.25)}#cnv .nn{font-size:68px;font-weight:800;line-height:1;color:#fff;text-shadow:0 5px 0 rgba(0,0,0,.28),0 0 22px rgba(255,255,255,.35);letter-spacing:-.03em}'
   + '#cnv .nd.done{background:radial-gradient(ellipse at 35% 25%,#ffe58a,#ffb12b);--d:#c47a00}#cnv .nd.idle{background:radial-gradient(ellipse at 35% 25%,#a99bff,#6b4df0);--d:#3b2a8f}#cnv .nd.cur{background:radial-gradient(ellipse at 35% 25%,#7dfbe2,#16b8d6);--d:#0a7f96;animation:ndp 1.8s ease-in-out infinite}@keyframes ndp{50%{transform:translate(-50%,-53%)}}'
   + '#cnv .nd em{position:absolute;top:-38px;left:50%;transform:translateX(-50%);background:#fff;color:#06122e;border-radius:12px;padding:6px 12px;font-weight:800;font-size:13px;font-style:normal;letter-spacing:.08em;box-shadow:0 4px 0 rgba(0,0,0,.25)}'
   + '#cnv .bn{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(120deg,#6b4df0,#16b8d6);border-radius:20px;padding:14px 16px;box-shadow:0 6px 0 #3b2a8f;margin:4px 0 6px}#cnv .bn small{display:block;opacity:.85;font-weight:700;letter-spacing:.08em;font-size:12px}#cnv .bn b{font-size:19px}#cnv .bn i{font-style:normal;font-size:24px;border-left:2px solid rgba(255,255,255,.35);padding-left:14px}'
@@ -63,10 +63,10 @@
       S.nav = n; var open = (n.open || []).map(Number).filter(function(u){ return u <= 6; }), ck = (n.ckeys || []).map(Number), cur = null;
       for (var i = 0; i < open.length; i++) if (ck.indexOf(open[i]) < 0){ cur = open[i]; break; }
       el("cnsub").textContent = cur === null ? "Everything open is complete. Well done!" : "Tap your stage to begin";
-      var H = 150, tot = open.length * H + 300, h = '<div class="bn"><div><small>UNIT ' + (cur === null ? open[open.length - 1] : cur) + '</small><b>Listening · Reading · Writing</b></div><i>☰</i></div><div class="pth" style="height:' + tot + 'px">';
+      var H = 170, tot = open.length * H + 300, h = '<div class="bn"><div><small>UNIT ' + (cur === null ? open[open.length - 1] : cur) + '</small><b>Listening · Reading · Writing</b></div><i>☰</i></div><div class="pth" style="height:' + tot + 'px">';
       var pts = open.map(function(u, k){ return [ZZ[k % 8], tot - 90 - k * H]; });
       open.forEach(function(u, k){ var st = ck.indexOf(u) >= 0 ? "done" : u === cur ? "cur" : "idle";
-        h += '<button class="nd ' + st + '" data-u="' + u + '" style="left:' + pts[k][0] + '%;top:' + pts[k][1] + 'px">' + (st === "done" ? STAR : FLAG) + '<u>' + u + '</u>' + (st === "cur" ? '<em>START</em>' : '') + '</button>'; });
+        h += '<button class="nd ' + st + '" data-u="' + u + '" style="left:' + pts[k][0] + '%;top:' + pts[k][1] + 'px">' + '<b class="nn">' + u + '</b>' + (st === "done" ? '<u>✔</u>' : '') + (st === "cur" ? '<em>START</em>' : '') + '</button>'; });
       /* clouds hide everything beyond the open stages */
       h += '<div class="cld" style="height:290px;top:50px">' + cloud(260, 120, "-6%", 0, .96) + cloud(300, 130, "52%", 14, .97) + cloud(240, 110, "22%", 70, .98) + cloud(320, 140, "-10%", 96, .95) + cloud(280, 120, "56%", 110, .96) + '</div></div>';
       el("cnbody").innerHTML = h;
