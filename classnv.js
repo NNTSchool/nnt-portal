@@ -47,8 +47,8 @@
   + '#cnv .sk{position:absolute;border-radius:50%;background:#fff;opacity:0;animation:hmk 4s ease-in-out infinite}@keyframes hmk{50%{opacity:.9;transform:scale(1.8)}}';
   CSS += '#cnv .cld{background:none!important;overflow:hidden;left:-200px!important;right:-200px!important}#cnv .cli{-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 58%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 58%,transparent 100%);position:absolute;height:auto;max-width:none;animation:cdr 9s ease-in-out infinite alternate;filter:drop-shadow(0 12px 26px rgba(120,140,255,.35))}@keyframes cdr{from{transform:translateX(-14px)}to{transform:translateX(14px)}}'
   + '#cnv .hnt{position:absolute;transform:translateX(-50%);white-space:nowrap;font-weight:700;font-size:18px;color:#bfe9ff;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);border-radius:99px;padding:8px 18px}';
-  CSS += '#cnv .fin{text-align:center;padding:36px 0 60px;position:relative;overflow:hidden;min-height:90vh}#cnv .kdrop{width:210px;margin:30px auto 0;animation:kdrop 1.5s cubic-bezier(.3,1.4,.5,1) both,kglow 2.6s 1.5s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(255,194,26,.7))}'
-  + '@keyframes kdrop{0%{transform:translateY(-110vh) rotate(-40deg) scale(.6)}70%{transform:translateY(18px) rotate(10deg) scale(1.05)}100%{transform:none}}@keyframes kglow{50%{transform:translateY(-8px) rotate(3deg);filter:drop-shadow(0 0 56px rgba(255,210,63,.95))}}'
+  CSS += '#cnv .fin{text-align:center;padding:36px 0 60px;position:relative;overflow:hidden;min-height:90vh}#cnv .kdrop{width:210px;margin:30px auto 0;animation:kdrop 1.5s cubic-bezier(.3,1.4,.5,1) both,kglow 2.6s 1.5s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(122,162,255,.75))}'
+  + '@keyframes kdrop{0%{transform:translateY(-110vh) rotate(-40deg) scale(.6)}70%{transform:translateY(18px) rotate(10deg) scale(1.05)}100%{transform:none}}@keyframes kglow{50%{transform:translateY(-8px) rotate(3deg);filter:drop-shadow(0 0 56px rgba(140,190,255,.95))}}'
   + '#cnv .flash{position:absolute;inset:0;background:radial-gradient(circle at 50% 38%,#fff,rgba(255,226,122,.6) 30%,transparent 60%);opacity:0;animation:flsh 1.1s 1.1s ease-out both;pointer-events:none}@keyframes flsh{0%{opacity:.95}100%{opacity:0}}'
   + '#cnv .spk i{position:absolute;top:-30px;border-radius:2px;opacity:0;animation:fall linear infinite;animation-fill-mode:both}@keyframes fall{0%{transform:translateY(0) rotate(0);opacity:0}8%{opacity:1}100%{transform:translateY(105vh) rotate(540deg);opacity:.9}}'
   + '#cnv .fh{font-size:58px;line-height:1.05;letter-spacing:-.03em;margin:26px 0 6px;font-weight:800;color:#fff;opacity:0;animation:fup .8s 1.5s both}#cnv .fn{font-size:20px;color:#bfe9ff;margin:0 0 26px;opacity:0;animation:fup .8s 1.8s both}@keyframes fup{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}'
@@ -71,6 +71,20 @@
     + '<polygon points="120,222 156,232 120,246" fill="url(#kg2)"/><polygon points="120,256 146,264 120,274" fill="url(#kg2)"/><polygon points="100,238 76,246 100,256" fill="url(#kg2)"/></svg>'; }
 
   /* ---------- home, path, hub ---------- */
+  var PKID = 0;
+  function portalKey(){
+    var g = "pk" + (++PKID);
+    return '<svg viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Key"><defs>'
+      + '<linearGradient id="' + g + 'a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6c2"/><stop offset=".35" stop-color="#ffd23f"/><stop offset=".75" stop-color="#e29a00"/><stop offset="1" stop-color="#9a6100"/></linearGradient>'
+      + '<linearGradient id="' + g + 'b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe98a"/><stop offset=".5" stop-color="#f2b01e"/><stop offset="1" stop-color="#b87300"/></linearGradient></defs>'
+      + '<path fill="url(#' + g + 'a)" stroke="#8a5600" stroke-width="1.6" fill-rule="evenodd" d="M48 8a40 40 0 1 0 .01 0zM48 34a14 14 0 1 1-.01 0z"/>'
+      + '<circle cx="48" cy="48" r="29" fill="none" stroke="#fff4b8" stroke-opacity=".75" stroke-width="2"/>'
+      + '<rect x="84" y="41" width="140" height="15" rx="7.5" fill="url(#' + g + 'b)" stroke="#8a5600" stroke-width="1.6"/>'
+      + '<rect x="92" y="35" width="11" height="27" rx="3" fill="url(#' + g + 'a)" stroke="#8a5600" stroke-width="1.4"/>'
+      + '<path fill="url(#' + g + 'b)" stroke="#8a5600" stroke-width="1.5" stroke-linejoin="round" d="M178 56h14v24h-14zM200 56h12v17h-12zM218 56h8v11h-8z"/>'
+      + '<path d="M86 45h134" stroke="#fffbe0" stroke-opacity=".85" stroke-width="2.2" stroke-linecap="round"/><path d="M26 30a30 30 0 0 1 30-14" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="3" stroke-linecap="round"/></svg>';
+  }
+
   function cloud(w, h, l, t, o){ return '<i class="cl" style="width:' + w + 'px;height:' + h + 'px;left:' + l + ';top:' + t + 'px;opacity:' + o + '"></i>'; }
   var LINES = ["Every stage you finish makes you sharper.", "Your ears, your eyes, your pen: let's train them all.", "Small drills today, big scores tomorrow.", "Champions are built one stage at a time.", "Focus up. This is where it gets good."];
   function home(){
@@ -115,7 +129,7 @@
       if (!r || !r.ok){ page(top() + '<div class="card warn"><h2>Please try again</h2><p>We could not check your key.</p></div>'); el("cb").onclick = path; return; }
       if (!r.earned){
         page(top() + '<div class="card warn"><h2>Your key has not been earned yet</h2><p>You need the key of Unit ' + S.unit + ' on the student portal first. Go earn it, then come back.</p></div>'); el("cb").onclick = path; return; }
-      page(top() + '<div style="text-align:center;padding:10px 0 4px"><div class="kdrop" style="width:230px;margin:0 auto">' + goldKey() + '</div><h2 style="margin:10px 0 4px;font-size:34px">Your key is earned. Welcome!</h2><p class="sub">You can now begin the mock test of Unit ' + S.unit + '.</p><button class="go" id="cgo" style="margin-top:12px">Continue →</button></div>');
+      page(top() + '<div style="text-align:center;padding:10px 0 4px"><div class="kdrop" style="width:380px;max-width:80%;margin:0 auto;filter:drop-shadow(0 14px 30px rgba(255,196,40,.55))">' + portalKey() + '</div><h2 style="margin:10px 0 4px;font-size:34px">Your key is earned. Welcome!</h2><p class="sub">You can now begin the mock test of Unit ' + S.unit + '.</p><button class="go" id="cgo" style="margin-top:12px">Continue →</button></div>');
       el("cb").onclick = path; el("cgo").onclick = hub;
     }).catch(function(){ page(top() + '<div class="card warn"><h2>No internet connection</h2></div>'); el("cb").onclick = path; });
   }
@@ -235,7 +249,7 @@
     var pct = n ? Math.round(100 * g / n) : 100, fx = S.fix ? S.fix.length : 0, mins = Math.max(1, Math.round(secs / 60)), u = S.unit, nx = u + 1, sp = "";
     R("nv_class_done", {tok: O.tok, u: u});
     for (var q = 0; q < 46; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 3.5).toFixed(2) + 's;animation-duration:' + (2.6 + Math.random() * 2.4).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#fff"][q % 5] + ';width:' + (5 + Math.random() * 7).toFixed(1) + 'px;height:' + (8 + Math.random() * 12).toFixed(1) + 'px"></i>';
-    page('<div class="fin"><div class="spk">' + sp + '</div><div class="flash"></div><div class="kdrop">' + goldKey() + '</div>'
+    page('<div class="fin"><div class="spk">' + sp + '</div><div class="flash"></div><div class="kdrop">' + keySvg() + '</div>'
       + '<h1 class="fh">Unit ' + u + ' conquered</h1><p class="fn">' + esc(O.name || "") + ', your class key is yours.</p>'
       + '<div class="fst"><div><b data-n="' + pct + '" data-s="%">0</b><span>accuracy</span></div><div><b data-n="' + ex + '">0</b><span>exercises</span></div><div><b data-n="' + mins + '" data-s=" min">0</b><span>on task</span></div><div><b data-n="' + fx + '">0</b><span>fixed in the fix round</span></div></div>'
       + '<button class="go" id="cfin">Show me my next stage →</button></div>');

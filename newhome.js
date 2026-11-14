@@ -164,6 +164,15 @@
       + '<path fill="url(#' + g + 'b)" stroke="#8a5600" stroke-width="1.5" stroke-linejoin="round" d="M178 56h14v24h-14zM200 56h12v17h-12zM218 56h8v11h-8z"/>'
       + '<path d="M86 45h134" stroke="#fffbe0" stroke-opacity=".85" stroke-width="2.2" stroke-linecap="round"/><path d="M26 30a30 30 0 0 1 30-14" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="3" stroke-linecap="round"/></svg>';
   }
+  function classKeySvg(){ return '<svg viewBox="0 0 220 300" width="100%" aria-hidden="true"><defs><linearGradient id="kg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5df2d6"/><stop offset=".5" stop-color="#7aa2ff"/><stop offset="1" stop-color="#c58bff"/></linearGradient><linearGradient id="kg2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#c58bff"/><stop offset="1" stop-color="#fff"/></linearGradient></defs>'
+    + '<polygon points="110,6 200,52 200,148 110,194 20,148 20,52" fill="url(#kg)" stroke="#fff" stroke-opacity=".7" stroke-width="3"/>'
+    + '<polygon points="110,30 178,64 178,136 110,170 42,136 42,64" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2.5"/>'
+    + '<polygon points="110,66 140,82 140,118 110,134 80,118 80,82" fill="#070b1d" stroke="#fff" stroke-opacity=".8" stroke-width="2.5"/>'
+    + '<path d="M110 70 L136 84 L110 98 L84 84Z" fill="#fff" fill-opacity=".35"/>'
+    + '<rect x="100" y="194" width="20" height="92" rx="4" fill="url(#kg2)"/>'
+    + '<polygon points="120,222 156,232 120,246" fill="url(#kg2)"/><polygon points="120,256 146,264 120,274" fill="url(#kg2)"/><polygon points="100,238 76,246 100,256" fill="url(#kg2)"/></svg>'; }
+
+  /* ---------- home, path, hub ---------- */
   function ringSvg(frac){
     var C = 2 * Math.PI * 50;
     return '<svg viewBox="0 0 120 120"><defs><linearGradient id="nvrg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46f0c4"/><stop offset="1" stop-color="#7c5cff"/></linearGradient></defs>'
@@ -279,8 +288,9 @@
   }
   /* Proceed: first the earned key, then the next unit */
   function keyThen(cur, nx, go){
-    page('<div style="text-align:center;padding:22px 0 6px"><div class="nvkey" style="width:300px;max-width:78%;margin:0 auto;filter:drop-shadow(0 14px 30px rgba(255,196,40,.55))">' + keySvg() + '</div>'
-      + '<h2 style="margin:8px 0 4px">Your key is earned. Welcome!</h2><p class="sub">Unit ' + cur + ' is complete. Unit ' + nx + ' is waiting for you.</p>'
+    var cke = nvCDone(cur);
+    page('<div style="text-align:center;padding:22px 0 6px"><div class="nvkey" style="width:' + (cke ? 230 : 300) + 'px;max-width:78%;margin:0 auto;filter:drop-shadow(0 14px 30px ' + (cke ? 'rgba(122,162,255,.6)' : 'rgba(255,196,40,.55)') + ')">' + (cke ? classKeySvg() : keySvg()) + '</div>'
+      + '<h2 style="margin:8px 0 4px">' + (cke ? "Your class key is earned. Welcome!" : "Your key is earned. Welcome!") + '</h2><p class="sub">Unit ' + cur + ' is complete. Unit ' + nx + ' is waiting for you.</p>'
       + '<button id="nvkgo" type="button" class="go" style="margin-top:14px;width:100%;max-width:420px;padding:16px 18px;font-size:19px">Continue →</button></div>');
     var st = document.createElement("style"); st.textContent = "@keyframes nvk{0%{transform:scale(.3) rotate(-25deg);opacity:0}60%{transform:scale(1.15) rotate(8deg);opacity:1}100%{transform:scale(1) rotate(0)}}.nvkey{animation:nvk .9s ease-out}"; el("newv").appendChild(st);
     el("nvkgo").onclick = go;
