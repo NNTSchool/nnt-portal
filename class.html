@@ -3,7 +3,7 @@
 <title>NNT School · Classroom tests</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared.css?v=17"><link rel="stylesheet" href="class_flow.css?v=1">
+<link rel="stylesheet" href="shared.css?v=17">
 <style>
 .who{display:flex;align-items:center;justify-content:space-between;gap:12px}.who small{color:var(--mute);font-size:14px}
 .who h2{font-size:26px;margin:2px 0 0}
@@ -23,11 +23,11 @@
   <label for="code">Your 5-digit code</label><input type="password" id="code" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="•••••">
   <div style="height:16px"></div><button class="btn" id="go">Log in</button><div id="m_login"></div><div style="text-align:center;margin-top:10px"><a href="#" id="cfglink" style="font-size:12px;color:#9aa6bf;text-decoration:none">Computer <span id="pcshow">–</span> · setup</a></div>
 </div><div class="hall"><h3>🏆 Our students scored IELTS 8.0 — you can be the next!</h3><div class="cert c1"><div class="ct">IELTS Academic · Sep 2026</div><h4>Noila Amonova</h4><div class="cb"><div class="band"><b>8.0</b><small>BAND</small></div><div class="sk"><div><small>Listening</small><b>8.0</b></div><div><small>Reading</small><b>8.5</b></div><div><small>Writing</small><b>7.0</b></div><div><small>Speaking</small><b>7.5</b></div></div></div><div class="cf">CEFR C1 · <b>You can be the next!</b> ⭐</div></div><div class="cert c2"><div class="ct">IELTS Academic · Apr 2025</div><h4>Jahongir Shodiyev</h4><div class="cb"><div class="band"><b>8.0</b><small>BAND</small></div><div class="sk"><div><small>Listening</small><b>8.5</b></div><div><small>Reading</small><b>8.0</b></div><div><small>Writing</small><b>8.0</b></div><div><small>Speaking</small><b>6.5</b></div></div></div><div class="cf">CEFR C1 · <b>You can be the next!</b> ⭐</div></div></div></div>
- <div id="s_lib" class="hide"><div class="card gilt who"><div><small>Logged in as</small><h2 id="who"></h2></div><button class="btn sm alt" id="tohome" type="button">⌂ Home</button></div>
+ <div id="s_lib" class="hide"><div class="card gilt who"><div><small>Logged in as</small><h2 id="who"></h2></div></div>
   <div class="sec">Your tests</div><div id="tests" class="vols"></div><div id="m_lib"></div></div>
  <div id="s_load" class="card gilt login hide"><h2 id="ltitle">Opening your test…</h2><p>Please wait. This can take a few seconds.</p><div class="bar"><i id="lbar"></i></div></div>
 </div>
-<script src="core.js?v=16"></script><script src="class_flow.js?v=1"></script>
+<script src="core.js?v=16"></script>
 <script>
 var TOK = null, NAME = "", SID = 0, ROSTER = [], pickId = 0;
 function show(id){ ["s_setup","s_login","s_lib","s_load"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); $("out").classList.toggle("hide", id !== "s_lib"); }
@@ -65,8 +65,7 @@ $("go").onclick = function(){
   }).catch(function(){ $("go").disabled = false; note("m_login","err","No internet connection."); });
 };
 $("code").onkeydown = function(e){ if (e.key === "Enter") $("go").click(); };
-$("tohome").onclick = function(){ if (window.CF) CF.home(); };
-$("out").onclick = function(){ if (window.CF) CF.close(); if (TOK) rpc("logout", {tok: TOK}); TOK = null; pickId = 0; $("nq").value = ""; show("s_login"); drawList(); };
+$("out").onclick = function(){ if (TOK) rpc("logout", {tok: TOK}); TOK = null; pickId = 0; $("nq").value = ""; show("s_login"); drawList(); };
 /* Daily plan: one test per day, counted in Tashkent time. Day 0 = 5 Nov 2026 = Unit 14, then one unit per day except days off. */
 var REC = null, PLAN_START = Date.UTC(2026, 10, 5), PLAN_UNIT = 14;
 var OFFD = [2, 3]; /* days off since 5 Nov 2026 (2 = Saturday 7 Nov, 3 = Sunday 8 Nov). The server sends the real plan; this is only a fallback */
@@ -87,7 +86,6 @@ function loadTests(){
       h += '<button class="vol ' + ((fin || soon) ? "dim" : "") + (soon ? " soon" : "") + (!soon && t.retake ? " retake" : "") + (rec ? " rec" : "") + '" data-u="' + esc(t.unit) + '"' + ((!t.can) ? " disabled" : "") + '><span class="sp">' + t.no + '</span><span class="bd"><b>' + esc(t.title.replace(/^Unit \d+ · /, "")) + '</b><small>Unit ' + t.no + " · " + st + '</small></span>' + (fin ? '<i class="rib">✓</i>' : '') + (soon ? '<em class="cs">Coming soon</em>' : '') + (rec ? '<em class="cr">★ Recommended today</em>' : '') + '</button>';
     });
     $("tests").innerHTML = h;
-    if (window.CF && !window.__noHome){ CF.open(NAME, r.tests); }
   }).catch(function(){ note("m_lib","err","No internet connection."); });
 }
 $("tests").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b || b.disabled) return; openTest(b.getAttribute("data-u")); };
