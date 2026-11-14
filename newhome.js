@@ -12,7 +12,7 @@
   + '#newv .bar{height:10px;border-radius:9px;background:rgba(255,255,255,.18);margin:10px 0 6px;overflow:hidden}#newv .bar i{display:block;height:100%;background:linear-gradient(90deg,#19e6c1,#2f9bff);border-radius:9px}'
   + '#newv .vc small{color:#f0e9ff;font-size:14px}#newv .go{margin-top:10px;border:0;border-radius:12px;padding:11px 20px;font:800 16px system-ui;color:#04121f;background:linear-gradient(135deg,#19e6c1,#2f9bff);cursor:pointer}#newv .go:disabled{background:#3a4470;color:#9aa5cc;cursor:default}'
 
-  + '#newv .hb{position:relative}#newv .hero{display:flex;align-items:center;gap:18px;margin:14px 0 6px}#newv .ring{flex:none;position:relative;width:118px;height:118px}#newv .ring svg{width:118px;height:118px;transform:rotate(-90deg)}#newv .ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}#newv .ring .c small{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8fd8ff}#newv .ring .c b{font-size:38px;color:#eaf6ff}'
+  + '#newv .hbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 0}#newv .hbar button{border-radius:99px;padding:7px 14px;font:700 14px system-ui;cursor:pointer;color:#eaf6ff;background:rgba(255,255,255,.07);border:1px solid rgba(143,216,255,.3)}#newv .hbar button.paybtn{border:0;padding:5px 12px 5px 9px;color:#fff}#newv .hb{position:relative}#newv .hero{display:flex;align-items:center;gap:18px;margin:14px 0 6px}#newv .ring{flex:none;position:relative;width:118px;height:118px}#newv .ring svg{width:118px;height:118px;transform:rotate(-90deg)}#newv .ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}#newv .ring .c small{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8fd8ff}#newv .ring .c b{font-size:38px;color:#eaf6ff}'
   + '#newv .chip{display:inline-block;border-radius:99px;padding:5px 12px;font:700 13px system-ui;background:rgba(77,255,216,.12);border:1px solid rgba(77,255,216,.4);color:#8cffe6;margin:0 6px 6px 0}'
   + '#newv .hb h2{margin:0 0 6px;font-size:27px;color:#eaf6ff}#newv .hb p.sub{margin:0 0 8px;color:#a9c6dc;font-size:15px}'
   + '#newv .path{position:relative;margin:18px 0 8px;padding-left:0}#newv .path:before{content:"";position:absolute;left:25px;top:24px;bottom:30px;width:3px;border-radius:3px;background:linear-gradient(180deg,#4dffd8 0%,#2f9bff 38%,rgba(47,155,255,.0) 80%)}'
@@ -157,7 +157,8 @@
         {k: "Speaking", ok: sOK, d: sOK ? "Done" : "Use your own voice", w: "About 20 minutes."}];
       var cur = -1; for (var i = 0; i < steps.length; i++) if (!steps[i].ok){ cur = i; break; }
       var nd = steps.filter(function(q){ return q.ok; }).length, key = !!st.key;
-      var h = '<div class="hb"><div class="hero"><div class="ring">' + ringSvg(key ? 1 : nd / 4) + '<div class="c"><small>Unit</small><b>' + S.unit + '</b></div></div>'
+      var pb = document.getElementById("paybtn"), hasPay = pb && !pb.classList.contains("hide");
+      var h = '<div class="hb"><div class="hbar"><button id="nvhsw" type="button">⇄ Switch</button>' + (hasPay ? '<button id="nvhpay" type="button" class="' + pb.className.replace(/\bhide\b/, '') + '">' + pb.innerHTML + '</button>' : '') + '<button id="nvhout" type="button">Log out</button></div><div class="hero"><div class="ring">' + ringSvg(key ? 1 : nd / 4) + '<div class="c"><small>Unit</small><b>' + S.unit + '</b></div></div>'
         + '<div><h2>Your Novel journey</h2><p class="sub">' + (key ? "Unit " + S.unit + " complete. The key is yours." : nd === 0 ? "Your adventure begins here." : nd + " of 4 steps done. Keep going.") + '</p>'
         + (tn ? '<span class="chip">Track · ' + tn + '</span>' : '<span class="chip">Track · you choose after the videos</span>') + '<span class="chip">Unit ' + S.unit + ' of 20</span></div></div>';
       h += '<div class="path">';
@@ -176,6 +177,9 @@
       h += '</div>';
       page(h);
       S.hubOk = true;
+      el("nvhsw").onclick = function(){ var b = document.getElementById("swbtn"); if (b) b.click(); };
+      if (el("nvhpay")) el("nvhpay").onclick = function(){ pb.click(); };
+      el("nvhout").onclick = function(){ nvAsk("Log out?", "You will need a new code from your teacher to log in again.", "Log out", function(){ if (window.NNT_OUT) window.NNT_OUT(); }); };
       if (el("nvhgo")) el("nvhgo").onclick = function(){ S.sub = true; unitPage(); };
       if (el("nvhmove")) el("nvhmove").onclick = function(){ moveOn(this); };
       if (el("nvhrev")) el("nvhrev").onclick = function(){ S.review = true; S.sub = true; unitPage(); };

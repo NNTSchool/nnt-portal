@@ -366,7 +366,7 @@ body.xcb .xo.on{border-color:#d2471a;background:#fff0e4}body.xcb .xo.on .lt{back
 <div id="newv" class="hide"><div style="font-size:56px">🚀</div><h2>Novel</h2><p>Your new learning area is almost ready. Your units will appear here.</p><div style="height:18px"></div><button class="btn alt" id="newback" type="button">← Back</button></div>
 <div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 35</div>
 <script src="core.js?v=16"></script>
-<script src="newhome.js?v=25"></script>
+<script src="newhome.js?v=26"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
@@ -409,7 +409,8 @@ $("go").onclick = function(){
   }).catch(function(){ $("go").disabled = false; note("m_login","err","No internet connection."); });
 };
 $("code").onkeydown = function(e){ if (e.key === "Enter") $("go").click(); };
-$("out").onclick = function(){ if (!confirm("Log out? You will need a new code from your teacher to log in again.")) return; rpc("logout", {tok: TOK}); ls("nnt_phone_token", null); TOK = null; pickId = 0; loginScreen(); };
+window.NNT_OUT = function(){ rpc("logout", {tok: TOK}); ls("nnt_phone_token", null); TOK = null; pickId = 0; loginScreen(); };
+$("out").onclick = function(){ if (!confirm("Log out? You will need a new code from your teacher to log in again.")) return; window.NNT_OUT(); };
 var VIDS = {}, VREC = null;
 var IC = {play:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg>',
   book:'<svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20"/></svg>',
