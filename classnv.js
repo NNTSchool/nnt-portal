@@ -9,20 +9,28 @@
   + '#cnv h1,#cnv h2,#cnv b{color:#fff}#cnv h1,#cnv h2{margin:0 0 8px;letter-spacing:-.02em}#cnv p{line-height:1.5}'
   + '#cnv .row{display:flex;align-items:center;gap:10px}#cnv .sp{flex:1}'
   + '#cnv .tb{display:flex;align-items:center;gap:10px;margin-bottom:14px}'
-  + '#cnv .pill{border:1.5px solid rgba(255,255,255,.28);background:rgba(255,255,255,.07);color:#fff;border-radius:99px;padding:9px 16px;font:600 15px/1 inherit;font-family:inherit;cursor:pointer;touch-action:manipulation}'
+  + '#cnv .pill{border:1.5px solid rgba(255,255,255,.28);background:rgba(255,255,255,.07);color:#fff;border-radius:99px;padding:9px 16px;font-weight:600;font-size:15px;line-height:1;font-family:inherit;cursor:pointer;touch-action:manipulation}'
   + '#cnv .card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:18px;margin:12px 0}'
-  + '#cnv .big{display:block;width:100%;border:0;border-radius:20px;padding:22px 18px;font:800 24px/1.1 inherit;font-family:inherit;color:#06122e;cursor:pointer;background:linear-gradient(120deg,#5df2d6,#7aa2ff 55%,#c58bff);box-shadow:0 12px 40px rgba(110,140,255,.45);touch-action:manipulation}'
-  + '#cnv .big small{display:block;font:600 14px inherit;opacity:.8;margin-top:6px}'
-  + '#cnv .go{border:0;border-radius:14px;padding:14px 20px;font:700 17px/1 inherit;font-family:inherit;color:#06122e;background:linear-gradient(120deg,#5df2d6,#7aa2ff);cursor:pointer;touch-action:manipulation}'
+  + '#cnv .big{display:block;width:100%;border:0;border-radius:20px;padding:22px 18px;font-weight:800;font-size:24px;line-height:1.1;font-family:inherit;color:#06122e;cursor:pointer;background:linear-gradient(120deg,#5df2d6,#7aa2ff 55%,#c58bff);box-shadow:0 12px 40px rgba(110,140,255,.45);touch-action:manipulation}'
+  + '#cnv .big small{display:block;font-weight:600;font-size:14px;opacity:.8;margin-top:6px}'
+  + '#cnv .go{border:0;border-radius:14px;padding:14px 20px;font-weight:700;font-size:17px;line-height:1;font-family:inherit;color:#06122e;background:linear-gradient(120deg,#5df2d6,#7aa2ff);cursor:pointer;touch-action:manipulation}'
   + '#cnv .go[disabled]{opacity:.4}'
   + '#cnv .hero{text-align:center;padding:34px 8px 10px}#cnv .hero h1{font-size:34px}'
   + '#cnv .sub{opacity:.8}#cnv .warn{background:#3a2330;border:1px solid #ff7a9a;border-radius:16px;padding:14px}#cnv .ok{background:#0d3a35;border:1px solid #5df2d6;border-radius:16px;padding:14px}'
   + '#cnv .dots{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px}#cnv .dots i{width:26px;height:6px;border-radius:4px;background:rgba(255,255,255,.18)}#cnv .dots i.on{background:#5df2d6}#cnv .dots i.cur{background:#c58bff}'
   + '#cnv .pl{display:flex;align-items:center;gap:12px}#cnv .bar{flex:1;height:8px;border-radius:6px;background:rgba(255,255,255,.15);overflow:hidden}#cnv .bar b{display:block;height:100%;width:0;background:linear-gradient(90deg,#5df2d6,#c58bff)}'
   + '#cnv .it{display:flex;gap:8px;align-items:center;margin:8px 0}#cnv .it span{width:28px;opacity:.7;text-align:right}'
-  + '#cnv input.a,#cnv textarea.a{flex:1;width:100%;box-sizing:border-box;border:1.5px solid rgba(255,255,255,.28);background:rgba(0,0,0,.28);color:#fff;border-radius:12px;padding:11px 12px;font:500 17px inherit;font-family:inherit}'
+  + '#cnv input.a,#cnv textarea.a{flex:1;width:100%;box-sizing:border-box;border:1.5px solid rgba(255,255,255,.28);background:rgba(0,0,0,.28);color:#fff;border-radius:12px;padding:11px 12px;font-weight:500;font-size:17px;font-family:inherit}'
   + '#cnv textarea.a{min-height:130px}#cnv .r{margin:8px 0;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.25)}#cnv .r.g{border-left:4px solid #5df2d6}#cnv .r.b{border-left:4px solid #ff7a9a}'
   + '#cnv .r small{display:block;opacity:.85;margin-top:3px}#cnv .nk{filter:drop-shadow(0 14px 30px rgba(120,100,255,.6));animation:cnk 1s ease-out}@keyframes cnk{0%{transform:scale(.3) rotate(-30deg);opacity:0}60%{transform:scale(1.12) rotate(6deg);opacity:1}100%{transform:scale(1)}}';
+  CSS += '#cnv .big.dim{background:linear-gradient(120deg,#39425f,#2a3152);color:#c9d3f5;box-shadow:none}#cnv .shk{animation:esh .4s}@keyframes esh{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}'
+  + '#cnv .hi{font-size:56px}#cnv .pth{position:relative;margin:6px 0 0}#cnv .pl2{position:absolute;inset:0;width:100%;height:100%}#cnv .pl2 path{fill:none;stroke:rgba(255,255,255,.22);stroke-width:2;stroke-dasharray:5 6;vector-effect:non-scaling-stroke}'
+  + '#cnv .nd{position:absolute;transform:translate(-50%,-50%);width:124px;height:108px;border-radius:50%;border:0;color:#fff;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;justify-content:center;font-family:inherit;--d:#3b2a8f;box-shadow:0 12px 0 var(--d),0 18px 24px rgba(0,0,0,.4)}'
+  + '#cnv .nd:active{transform:translate(-50%,-47%);box-shadow:0 5px 0 var(--d)}#cnv .nd u{position:absolute;right:6px;bottom:2px;font-weight:800;font-size:15px;text-decoration:none;opacity:.9}'
+  + '#cnv .nd.done{background:radial-gradient(ellipse at 35% 25%,#ffe58a,#ffb12b);--d:#c47a00}#cnv .nd.idle{background:radial-gradient(ellipse at 35% 25%,#a99bff,#6b4df0);--d:#3b2a8f}#cnv .nd.cur{background:radial-gradient(ellipse at 35% 25%,#7dfbe2,#16b8d6);--d:#0a7f96;animation:ndp 1.8s ease-in-out infinite}@keyframes ndp{50%{transform:translate(-50%,-53%)}}'
+  + '#cnv .nd em{position:absolute;top:-38px;left:50%;transform:translateX(-50%);background:#fff;color:#06122e;border-radius:12px;padding:6px 12px;font-weight:800;font-size:13px;font-style:normal;letter-spacing:.08em;box-shadow:0 4px 0 rgba(0,0,0,.25)}'
+  + '#cnv .bn{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(120deg,#6b4df0,#16b8d6);border-radius:20px;padding:14px 16px;box-shadow:0 6px 0 #3b2a8f;margin:4px 0 6px}#cnv .bn small{display:block;opacity:.85;font-weight:700;letter-spacing:.08em;font-size:12px}#cnv .bn b{font-size:19px}#cnv .bn i{font-style:normal;font-size:24px;border-left:2px solid rgba(255,255,255,.35);padding-left:14px}'
+  + '#cnv .cld{position:absolute;left:0;right:0;top:0;pointer-events:none;background:linear-gradient(#070b1d 0,#070b1d 38%,rgba(7,11,29,0) 100%)}#cnv .cl{position:absolute;border-radius:50%;background:radial-gradient(ellipse at 50% 40%,#fff 0,#dfe9ff 55%,#aebfff 100%);filter:blur(2px)}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
   function page(h){ stopAudio(); root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
@@ -39,30 +47,50 @@
     + '<rect x="100" y="194" width="20" height="92" rx="4" fill="url(#kg2)"/>'
     + '<polygon points="120,222 156,232 120,246" fill="url(#kg2)"/><polygon points="120,256 146,264 120,274" fill="url(#kg2)"/><polygon points="100,238 76,246 100,256" fill="url(#kg2)"/></svg>'; }
 
-  /* ---------- home ---------- */
+  /* ---------- home, path, hub ---------- */
+  function cloud(w, h, l, t, o){ return '<i class="cl" style="width:' + w + 'px;height:' + h + 'px;left:' + l + ';top:' + t + 'px;opacity:' + o + '"></i>'; }
   function home(){
-    page(top("← Back") + '<div class="hero"><h1>Classroom practice</h1><p class="sub" id="cnsub">Opening…</p></div><div id="cnbody"></div>');
-    el("cb").onclick = close;
+    page(top("← Back") + '<div class="hero" style="padding-top:48px"><div class="hi">🎯</div><h1>Classroom drilling</h1><p class="sub">Listening, reading and writing. One stage at a time.</p></div>'
+      + '<button class="big" id="cstart" style="margin-top:26px">Start drilling<small>Your path is waiting</small></button>');
+    el("cb").onclick = close; el("cstart").onclick = path;
+  }
+  var FLAG = '<svg viewBox="0 0 64 64" width="52" height="52"><path d="M16 8v50" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M20 12c10-6 16 6 28 0v24c-12 6-18-6-28 0z" fill="#fff"/></svg>', STAR = '<svg viewBox="0 0 64 64" width="52" height="52"><path d="M32 6l7.6 16.4 17.9 2.1-13.2 12.3 3.5 17.7L32 45.2 16.2 54.5l3.5-17.7L6.5 24.5l17.9-2.1z" fill="#fff"/></svg>';
+  var ZZ = [50, 66, 74, 66, 50, 34, 26, 34];
+  function path(){
+    page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Your path</h2><p class="sub" id="cnsub">Opening…</p></div><div id="cnbody"></div>'); el("cb").onclick = hub;
     R("nv_nav", {tok: O.tok}).then(function(n){
       if (!n || !n.ok){ el("cnsub").textContent = "Please try again in a moment."; return; }
-      S.nav = n; var open = (n.open || []).map(Number), ck = (n.ckeys || []).map(Number), hk = (n.keys || []).map(Number);
-      var u = null; for (var i = 0; i < open.length; i++) if (ck.indexOf(open[i]) < 0){ u = open[i]; break; }
-      if (u === null){ el("cnsub").textContent = "Everything open is complete. Well done!"; return; }
-      S.unit = u; el("cnsub").textContent = "Unit " + u + " · Part " + u + " of the listening plan";
-      el("cnbody").innerHTML = '<button class="big" id="cstart">Start classroom practice<small>Unit ' + u + ' · about 2 hours with breaks</small></button>'
-        + '<div class="card"><b>What happens today</b><p class="sub">1. Listening · 2. Break · 3. Reading · 4. Break · 5. Writing. Then your class key.</p></div>';
-      el("cstart").onclick = keyCheck;
+      S.nav = n; var open = (n.open || []).map(Number).filter(function(u){ return u <= 6; }), ck = (n.ckeys || []).map(Number), cur = null;
+      for (var i = 0; i < open.length; i++) if (ck.indexOf(open[i]) < 0){ cur = open[i]; break; }
+      el("cnsub").textContent = cur === null ? "Everything open is complete. Well done!" : "Tap your stage to begin";
+      var H = 150, tot = open.length * H + 300, h = '<div class="bn"><div><small>UNIT ' + (cur === null ? open[open.length - 1] : cur) + '</small><b>Listening · Reading · Writing</b></div><i>☰</i></div><div class="pth" style="height:' + tot + 'px">';
+      var pts = open.map(function(u, k){ return [ZZ[k % 8], tot - 90 - k * H]; });
+      open.forEach(function(u, k){ var st = ck.indexOf(u) >= 0 ? "done" : u === cur ? "cur" : "idle";
+        h += '<button class="nd ' + st + '" data-u="' + u + '" style="left:' + pts[k][0] + '%;top:' + pts[k][1] + 'px">' + (st === "done" ? STAR : FLAG) + '<u>' + u + '</u>' + (st === "cur" ? '<em>START</em>' : '') + '</button>'; });
+      /* clouds hide everything beyond the open stages */
+      h += '<div class="cld" style="height:290px;top:50px">' + cloud(260, 120, "-6%", 0, .96) + cloud(300, 130, "52%", 14, .97) + cloud(240, 110, "22%", 70, .98) + cloud(320, 140, "-10%", 96, .95) + cloud(280, 120, "56%", 110, .96) + '</div></div>';
+      el("cnbody").innerHTML = h;
+      [].forEach.call(document.querySelectorAll(".nd"), function(b){ b.onclick = function(){ S.unit = +b.getAttribute("data-u"); keyCheck(); }; });
+      var c = document.querySelector(".nd.cur") || document.querySelector(".nd"); if (c && c.scrollIntoView) c.scrollIntoView({block: "center"});
     }).catch(function(){ el("cnsub").textContent = "No internet connection. Please try again."; });
   }
   function keyCheck(){
-    page(top() + '<div class="hero"><h2>Checking your key…</h2></div>'); el("cb").onclick = home;
+    page(top() + '<div class="hero"><h2>Checking your key…</h2></div>'); el("cb").onclick = path;
     R("nv_class_check", {tok: O.tok, u: S.unit}).then(function(r){
-      if (!r || !r.ok){ page(top() + '<div class="card warn"><h2>Please try again</h2><p>We could not check your key.</p></div>'); el("cb").onclick = home; return; }
+      if (!r || !r.ok){ page(top() + '<div class="card warn"><h2>Please try again</h2><p>We could not check your key.</p></div>'); el("cb").onclick = path; return; }
       if (!r.earned){
-        page(top() + '<div class="card warn"><h2>Your key has not been earned yet</h2><p>You need the key of Unit ' + S.unit + ' on the student portal first. Go earn it, then come back.</p></div>'); el("cb").onclick = home; return; }
-      page(top() + '<div class="card ok"><h2>Your key is earned. Welcome!</h2><p>You can now begin the mock test of Unit ' + S.unit + '.</p></div><button class="go" id="cgo" style="margin-top:8px">Begin listening →</button>');
-      el("cb").onclick = home; el("cgo").onclick = function(){ startPart(); };
-    }).catch(function(){ page(top() + '<div class="card warn"><h2>No internet connection</h2></div>'); el("cb").onclick = home; });
+        page(top() + '<div class="card warn"><h2>Your key has not been earned yet</h2><p>You need the key of Unit ' + S.unit + ' on the student portal first. Go earn it, then come back.</p></div>'); el("cb").onclick = path; return; }
+      page(top() + '<div class="card ok"><h2>Your key is earned. Welcome!</h2><p>You can now begin the mock test of Unit ' + S.unit + '.</p></div><button class="go" id="cgo" style="margin-top:8px">Continue →</button>');
+      el("cb").onclick = path; el("cgo").onclick = hub;
+    }).catch(function(){ page(top() + '<div class="card warn"><h2>No internet connection</h2></div>'); el("cb").onclick = path; });
+  }
+  function hub(){
+    page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Unit ' + S.unit + '</h2><p class="sub">Choose your drilling</p></div>'
+      + '<button class="big" id="hl" style="margin-top:12px">🎧 Listening drilling<small>Start here</small></button>'
+      + '<button class="big dim" id="hr" style="margin-top:12px">📖 Reading drilling<small>Opens soon</small></button>'
+      + '<button class="big dim" id="hw" style="margin-top:12px">✍️ Writing drilling<small>Opens soon</small></button>');
+    el("cb").onclick = path; el("hl").onclick = startPart;
+    el("hr").onclick = el("hw").onclick = function(){ this.classList.add("shk"); var t = this; setTimeout(function(){ t.classList.remove("shk"); }, 400); };
   }
 
   /* ---------- Part runner (listening) ---------- */
@@ -77,7 +105,7 @@
     page(top() + '<div class="hero"><h2>Loading Part ' + S.unit + '…</h2></div>');
     fetch(O.base + "part" + S.unit + ".json", {cache: "no-store"}).then(function(r){ if (!r.ok) throw 0; return r.json(); }).then(function(P){
       S.P = P; S.ei = 0; S.res = {}; runEx();
-    }).catch(function(){ page(top() + '<div class="card warn"><h2>This part is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = home; });
+    }).catch(function(){ page(top() + '<div class="card warn"><h2>This part is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
   }
   function dots(){ return '<div class="dots">' + S.P.exercises.map(function(e, i){ return '<i class="' + (i < S.ei ? "on" : i === S.ei ? "cur" : "") + '"></i>'; }).join("") + '</div>'; }
   function player(ex){
@@ -100,7 +128,7 @@
       : '<div class="it"><span>' + (k + 1) + '</span><input class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off"></div>'; }).join("");
     page(top("Exit") + '<p class="sub" style="margin:0">Exercise ' + ex.id + ' · ' + (S.ei + 1) + ' of ' + S.P.exercises.length + '</p><h2>' + esc(ex.name) + '</h2>' + dots()
       + '<p>' + esc(ex.say) + '</p>' + player(ex) + '<div id="cin">' + inputs + '</div><button class="go" id="cchk" style="margin-top:6px">Check my answers</button><div id="cout"></div>');
-    el("cb").onclick = function(){ stopAudio(); home(); }; wirePlayer(ex);
+    el("cb").onclick = function(){ stopAudio(); hub(); }; wirePlayer(ex);
     el("cchk").onclick = function(){ checkEx(ex); };
   }
   function checkEx(ex){
@@ -120,7 +148,7 @@
     S.fix = S.P.exercises.filter(function(e){ return S.res[e.id].miss.length; });
     page(top() + '<div class="hero"><h2>Warm-up finished</h2><p class="sub">' + g + ' of ' + n + ' correct (' + Math.round(100 * g / n) + '%)</p></div>' + h
       + (S.fix.length ? '<button class="go" id="cfix" style="margin-top:10px">Fix it round: listen again and rewrite only what you missed →</button>' : '<button class="go" id="cdone" style="margin-top:10px">Continue →</button>'));
-    el("cb").onclick = home;
+    el("cb").onclick = hub;
     if (el("cfix")) el("cfix").onclick = function(){ S.fi = 0; fixEx(); };
     if (el("cdone")) el("cdone").onclick = listeningDone;
   }
@@ -131,7 +159,7 @@
       : '<div class="it"><span>' + (k + 1) + '</span><input class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off"></div>'; }).join("");
     page(top("Exit") + '<p class="sub" style="margin:0">Fix it · ' + (S.fi + 1) + ' of ' + S.fix.length + '</p><h2>' + esc(ex.id + " " + ex.name) + '</h2><p>Listen again. Write only the items you missed. The answers are hidden until you check.</p>' + player(ex)
       + '<div id="cin">' + inputs + '</div><button class="go" id="cchk">Check</button><div id="cout"></div>');
-    el("cb").onclick = function(){ stopAudio(); home(); }; wirePlayer(ex);
+    el("cb").onclick = function(){ stopAudio(); hub(); }; wirePlayer(ex);
     el("cchk").onclick = function(){
       stopAudio(); var h = "", fixed = 0; [].forEach.call(document.querySelectorAll("#cin .a"), function(x){ var k = +x.getAttribute("data-k"), j = judge(ex, k, x.value); if (j.ok) fixed++;
         h += '<div class="r ' + (j.ok ? "g" : "b") + '"><b>' + (k + 1) + '.</b> ' + (j.ok ? "✔ " : "✖ ") + esc(x.value.trim() || "(empty)") + (j.ok ? "" : '<small>Correct: ' + esc(ex.items[k]) + '</small>') + '</div>'; });
@@ -142,7 +170,7 @@
   function listeningDone(){
     page('<div class="hero"><h1>Listening done ✔</h1><p class="sub">Great focus. Now take a break.</p></div><div class="card ok"><h2>Take a 10-minute break</h2><p>Stand up, step outside, drink some water. You will focus better. If you feel full of energy, you can skip it.</p></div>'
       + '<button class="go" id="cbk">I am back →</button> <button class="pill" id="cign" style="margin-left:6px">Ignore the break, keep going</button>');
-    function nextStage(){ page(top() + '<div class="card"><h2>Reading is next</h2><p>The reading part of this unit is being prepared. Please ask your teacher.</p></div>'); el("cb").onclick = home; }
+    function nextStage(){ page(top() + '<div class="card"><h2>Reading is next</h2><p>The reading part of this unit is being prepared. Please ask your teacher.</p></div>'); el("cb").onclick = hub; }
     el("cbk").onclick = nextStage; el("cign").onclick = nextStage;
   }
   /* shown after listening, reading and writing are all complete */
