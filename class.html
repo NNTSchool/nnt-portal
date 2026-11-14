@@ -9,6 +9,21 @@
 .who h2{font-size:26px;margin:2px 0 0}
 .login{max-width:560px;margin:0 auto}
 .sec{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--ink);margin:22px 2px 10px}
+#entry{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:18px;background:radial-gradient(ellipse at center,rgba(6,10,32,.84) 0%,rgba(6,10,32,.6) 60%,rgba(6,10,32,.4) 100%);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);overflow:auto}
+#entry.hide{display:none}
+#entry .bl{position:absolute;border-radius:50%;filter:blur(60px);opacity:.75;pointer-events:none}
+#entry .b1{width:340px;height:340px;left:4%;top:6%;background:#ff3d81}#entry .b2{width:380px;height:380px;right:2%;top:2%;background:#00c2ff}#entry .b3{width:320px;height:320px;left:30%;bottom:-4%;background:#ffb300}#entry .b4{width:240px;height:240px;right:14%;bottom:8%;background:#7c4dff}
+#entry .ec{position:relative;width:100%;max-width:720px;background:rgba(8,14,40,.82);border:1.5px solid rgba(255,255,255,.35);border-radius:28px;padding:28px 24px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.55);color:#fff}
+#entry h2{font-size:32px;letter-spacing:-.025em;margin:0;color:#fff}#entry .eq{color:#dfe6ff;margin:6px 0 22px;font-size:17px}
+#entry .ep{display:flex;gap:16px}#entry .ek{flex:1;border-radius:22px;padding:22px 18px;font-weight:800;font-size:26px;position:relative;text-align:left;border:0;color:#fff;font-family:inherit;cursor:pointer;line-height:1.1}
+#entry .ek small{display:block;font-weight:600;font-size:14.5px;margin-top:7px;line-height:1.35}#entry .ek .ic{font-size:32px;display:block;margin-bottom:8px}
+#entry .ec1{background:linear-gradient(135deg,#123f9c,#0a2a6e);border:2.5px solid #efdca8}#entry .ec1 small{color:#fbf4df}
+#entry .en{background:linear-gradient(135deg,#ff2d6f,#ff7a00 60%,#ffb300);box-shadow:0 10px 36px rgba(255,80,60,.55);text-shadow:0 1px 6px rgba(120,20,0,.45)}
+#entry .en .tag{position:absolute;right:12px;top:10px;background:#fff;color:#e0215e;font-size:12px;letter-spacing:.12em;border-radius:20px;padding:2px 10px;text-shadow:none}
+#entry .en.lock{background:linear-gradient(135deg,#3a4468,#2a3152);box-shadow:none;text-shadow:none}#entry .en.lock .tag{background:#fff;color:#2a3152}
+#entry .en.shake{animation:esh .45s}@keyframes esh{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+#entry .elock{margin-top:16px;background:#fff;color:#111;border-radius:14px;padding:12px 14px;font-weight:700;font-size:16px}
+#entry .eo{margin-top:16px;background:transparent;border:1.5px solid rgba(255,255,255,.4);color:#fff;border-radius:99px;padding:9px 20px;font:700 15px system-ui;cursor:pointer}
 </style></head><body>
 <div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small>Classroom tests</small></div><div class="sp"></div><button class="btn sm alt hide" id="out">Log out</button></div>
 <div class="wrap wide">
@@ -23,10 +38,15 @@
   <label for="code">Your 5-digit code</label><input type="password" id="code" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="•••••">
   <div style="height:16px"></div><button class="btn" id="go">Log in</button><div id="m_login"></div><div style="text-align:center;margin-top:10px"><a href="#" id="cfglink" style="font-size:12px;color:#9aa6bf;text-decoration:none">Computer <span id="pcshow">–</span> · setup</a></div>
 </div><div class="hall"><h3>🏆 Our students scored IELTS 8.0 — you can be the next!</h3><div class="cert c1"><div class="ct">IELTS Academic · Sep 2026</div><h4>Noila Amonova</h4><div class="cb"><div class="band"><b>8.0</b><small>BAND</small></div><div class="sk"><div><small>Listening</small><b>8.0</b></div><div><small>Reading</small><b>8.5</b></div><div><small>Writing</small><b>7.0</b></div><div><small>Speaking</small><b>7.5</b></div></div></div><div class="cf">CEFR C1 · <b>You can be the next!</b> ⭐</div></div><div class="cert c2"><div class="ct">IELTS Academic · Apr 2025</div><h4>Jahongir Shodiyev</h4><div class="cb"><div class="band"><b>8.0</b><small>BAND</small></div><div class="sk"><div><small>Listening</small><b>8.5</b></div><div><small>Reading</small><b>8.0</b></div><div><small>Writing</small><b>8.0</b></div><div><small>Speaking</small><b>6.5</b></div></div></div><div class="cf">CEFR C1 · <b>You can be the next!</b> ⭐</div></div></div></div>
- <div id="s_lib" class="hide"><div class="card gilt who"><div><small>Logged in as</small><h2 id="who"></h2></div></div>
+ <div id="s_lib" class="hide"><div class="card gilt who"><div><small>Logged in as</small><h2 id="who"></h2></div><button class="btn sm alt" id="swbtn" type="button">⇄ Switch</button></div>
   <div class="sec">Your tests</div><div id="tests" class="vols"></div><div id="m_lib"></div></div>
  <div id="s_load" class="card gilt login hide"><h2 id="ltitle">Opening your test…</h2><p>Please wait. This can take a few seconds.</p><div class="bar"><i id="lbar"></i></div></div>
 </div>
+<div id="entry" class="hide"><i class="bl b1"></i><i class="bl b2"></i><i class="bl b3"></i><i class="bl b4"></i>
+ <div class="ec"><h2>Welcome back, <span id="e_name"></span> 👋</h2><p class="eq">Where do you want to go today?</p>
+  <div class="ep"><button class="ek ec1" id="e_classic" type="button"><span class="ic">🏛️</span>Classic<small>Your class tests and results</small></button>
+  <button class="ek en lock" id="e_new" type="button"><span class="tag">NEW</span><span class="ic">🔒</span>Novel<small>The new learning experience</small></button></div>
+  <div id="e_msg"></div><button class="eo" id="e_out" type="button">Log out</button></div></div>
 <script src="core.js?v=16"></script>
 <script>
 var TOK = null, NAME = "", SID = 0, ROSTER = [], pickId = 0;
@@ -58,19 +78,26 @@ $("go").onclick = function(){
   $("go").disabled = true; note("m_login","info","Checking…");
   rpc("login_class", {sid: pickId, pcode: c, pclass_key: ls("nnt_class_key") || "", plabel: "classroom " + deviceLabel() + (ls("nnt_pc") ? " · PC" + ls("nnt_pc") : "")}).then(function(r){
     $("go").disabled = false;
-    if (r.ok){ TOK = r.token; NAME = r.name; SID = r.id; $("code").value = ""; if (!window.__pingH) window.__pingH = setInterval(function(){ if (TOK) rpc("ping", {tok: TOK}).catch(function(){}); }, 40000); loadTests(); return; }
+    if (r.ok){ TOK = r.token; NAME = r.name; SID = r.id; $("code").value = ""; if (!window.__pingH) window.__pingH = setInterval(function(){ if (TOK) rpc("ping", {tok: TOK}).catch(function(){}); }, 40000); entryOpen(); return; }
     var m = {wrong:"That code is not correct. " + (r.left != null ? r.left + " tries left." : ""), locked:"Too many wrong codes. Try again in " + (r.minutes || 10) + " minutes.", nocode:"You have no code at the moment. Ask your teacher.",
       classkey:"This computer is not set up for tests. Ask your teacher.", busy:"Please wait a few minutes and try again.", network:"Tests can only be taken in the classroom.", nostudent:"Name not found."};
     note("m_login","err", m[r.err] || "Could not log in."); if (r.err === "classkey"){ ls("nnt_class_key", null); setTimeout(init, 2500); }
   }).catch(function(){ $("go").disabled = false; note("m_login","err","No internet connection."); });
 };
 $("code").onkeydown = function(e){ if (e.key === "Enter") $("go").click(); };
-$("out").onclick = function(){ if (TOK) rpc("logout", {tok: TOK}); TOK = null; pickId = 0; $("nq").value = ""; show("s_login"); drawList(); };
+$("out").onclick = function(){ entryClose(); if (TOK) rpc("logout", {tok: TOK}); TOK = null; pickId = 0; $("nq").value = ""; show("s_login"); drawList(); };
 /* Daily plan: one test per day, counted in Tashkent time. Day 0 = 5 Nov 2026 = Unit 14, then one unit per day except days off. */
 var REC = null, PLAN_START = Date.UTC(2026, 10, 5), PLAN_UNIT = 14;
 var OFFD = [2, 3]; /* days off since 5 Nov 2026 (2 = Saturday 7 Nov, 3 = Sunday 8 Nov). The server sends the real plan; this is only a fallback */
 function testDays(n){ var c = 0; for (var i = 0; i < n; i++){ if (OFFD.indexOf(i) < 0 && i % 7 !== 3) c++; } return c; } /* every Sunday is a day off (day 3 = Sun 8 Nov) */
 function todayUnit(){ var d = Math.floor((Date.now() + 5 * 3600e3 - PLAN_START) / 864e5); if (d < 0 || OFFD.indexOf(d) > -1) return 0; return PLAN_UNIT + testDays(d); }
+/* the two doors, like the portal: Classic (the class tests) and Novel (closed here for now) */
+function entryOpen(){ $("e_name").textContent = NAME ? String(NAME).split(" ")[0] : ""; $("e_msg").innerHTML = ""; $("entry").classList.remove("hide"); document.body.style.overflow = "hidden"; }
+function entryClose(){ $("entry").classList.add("hide"); document.body.style.overflow = ""; }
+$("e_classic").onclick = function(){ entryClose(); loadTests(); };
+$("e_new").onclick = function(){ var b = $("e_new"); b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake"); $("e_msg").innerHTML = '<div class="elock">🔒 Novel is not open in the classroom yet. Please use Classic.</div>'; };
+$("e_out").onclick = function(){ entryClose(); $("out").click(); };
+$("swbtn").onclick = function(){ entryOpen(); };
 function loadTests(){
   show("s_lib"); $("who").textContent = NAME; note("m_lib","info","Loading tests…");
   rpc("class_tests", {tok: TOK}).then(function(r){
