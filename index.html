@@ -363,10 +363,10 @@ body.xcb .xo.on{border-color:#d2471a;background:#fff0e4}body.xcb .xo.on .lt{back
   <div class="ep"><button class="ek ec1" id="e_classic" type="button"><span class="ic">🏛️</span>Classic<small>Your tests, explanations and results</small></button>
   <button class="ek en" id="e_new" type="button"><span class="tag">NEW</span><span class="ic" id="e_ni">🚀</span>Novel<small>The new learning experience</small></button></div>
   <div id="e_msg"></div></div></div>
-<div id="newv" class="hide"><div style="font-size:56px">🚀</div><h2>New</h2><p>Your new learning area is almost ready. Your units will appear here.</p><div style="height:18px"></div><button class="btn alt" id="newback" type="button">← Back</button></div>
+<div id="newv" class="hide"><div style="font-size:56px">🚀</div><h2>Novel</h2><p>Your new learning area is almost ready. Your units will appear here.</p><div style="height:18px"></div><button class="btn alt" id="newback" type="button">← Back</button></div>
 <div id="ver" style="text-align:center;color:#9aa6bf;font-size:12px;padding:0 0 24px">Version 35</div>
 <script src="core.js?v=16"></script>
-<script src="newhome.js?v=23"></script>
+<script src="newhome.js?v=24"></script>
 <script type="module">
 import * as pdfjs from "./vendor/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = "./vendor/pdf.worker.mjs";
@@ -380,7 +380,7 @@ $("e_classic").onclick = function(){ try{ localStorage.setItem("nnt_mode", "clas
 $("e_new").onclick = function(){
   if (ME && ME.new_ok){ try{ localStorage.setItem("nnt_mode", "new"); }catch(e){} entryClose(); $("newv").classList.remove("hide"); document.body.style.overflow = "hidden"; NV.open(function(){ $("newv").classList.add("hide"); document.body.style.overflow = ""; entryOpen(); }); return; }
   var b = $("e_new"); b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake");
-  $("e_msg").innerHTML = '<div class="elock">🔒 New is not open for you yet. Your teacher will open it for you soon. Until then, Classic works as always.</div>';
+  $("e_msg").innerHTML = '<div class="elock">🔒 Novel is not open for you yet. Your teacher will open it for you soon. Until then, Classic works as always.</div>';
 };
 $("newback").onclick = function(){ $("newv").classList.add("hide"); document.body.style.overflow = ""; entryOpen(); };
 $("swbtn").onclick = function(){ if (window.NV) NV.close(); $("newv").classList.add("hide"); entryOpen(); };

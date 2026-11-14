@@ -1,4 +1,4 @@
-/* NNT School portal: the New home-practice area (videos first). */
+/* NNT School portal: the Novel home-practice area (videos first). */
 (function(){
   var CSS = ''
   + '#newv{display:block;overflow-y:auto;text-align:left;padding:0;background:radial-gradient(ellipse at 20% 0%,#00d4ff 0%,rgba(0,212,255,0) 38%),linear-gradient(160deg,#4f1fff 0%,#7a1cff 48%,#c015ff 100%);background-attachment:fixed}#newv .nw{max-width:760px;margin:0 auto;padding:18px 16px 60px}'
@@ -110,11 +110,11 @@
     inject(); S.back = back || null;
     page('<h2>Loading…</h2>');
     rpc("nv_units", {tok: tok()}).then(function(r){
-      if (!r || !r.ok){ page('<h2>New</h2><p class="sub">' + (r && r.err === "unpaid" ? "" : "New is not open for you yet.") + '</p>'); return; }
+      if (!r || !r.ok){ page('<h2>Novel</h2><p class="sub">' + (r && r.err === "unpaid" ? "" : "Novel is not open for you yet.") + '</p>'); return; }
       if (r.all_done){ page('<h2>All done for now ✅</h2><p class="sub">You have finished every unit that is open.' + (r.more ? ' The next unit opens soon.' : '') + '</p>'); return; }
-      var u = r.units && r.units[0]; if (!u){ page('<h2>New</h2><p class="sub">Your units will appear here soon.</p>'); return; }
+      var u = r.units && r.units[0]; if (!u){ page('<h2>Novel</h2><p class="sub">Your units will appear here soon.</p>'); return; }
       S.unit = u.unit; unitPage();
-    }).catch(function(){ page('<h2>New</h2><p class="sub">No internet connection. Please try again.</p>'); });
+    }).catch(function(){ page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>'); });
   }
   /* go to the next unit: ask the server which unit is next; if it still says this one, go to the next number anyway (the server then says if it is closed or locked) */
   function moveOn(btn){
@@ -216,7 +216,7 @@
       if (el("nvts")) el("nvts").onclick = function(){ startSpeak(this); };
       if (el("nvstartspeak")) el("nvstartspeak").onclick = function(){ startSpeak(this); };
       Array.prototype.forEach.call(el("newv").querySelectorAll(".go[data-i]"), function(b){ b.onclick = function(){ play(+b.getAttribute("data-i")); }; });
-    }).catch(function(){ page('<h2>New</h2><p class="sub">No internet connection. Please try again.</p>'); });
+    }).catch(function(){ page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>'); });
   }
   /* ---------- writing ---------- */
   function startWrite(btn){
