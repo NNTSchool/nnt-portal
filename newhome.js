@@ -224,11 +224,11 @@
         if (r && r.ok === false && r.err) return {err: r.err};
         var cur = r && r.ok && r.units && r.units[0] ? r.units[0].unit : (r && r.all_done ? (r.last || 1) : 1), o = [], k = [];
         for (var i = 1; i <= cur; i++){ o.push(i); if (i < cur || (r && r.all_done)) k.push(i); }
-        S.nav = {open: o, keys: k, vip: false, more: !!(r && r.more), src: "old"}; return S.nav;
+        S.nav = {open: o, keys: k, vip: false, more: !!(r && r.more), src: "old", ckeys: k, cfree: 99}; return S.nav;
       });
     }
     return rpc("nv_nav", {tok: tok()}).then(function(r){
-      if (r && r.ok){ S.nav = {open: (r.open || []).map(Number), keys: (r.keys || []).map(Number), vip: !!r.vip, more: !!r.more, src: "map"}; return S.nav; }
+      if (r && r.ok){ S.nav = {open: (r.open || []).map(Number), keys: (r.keys || []).map(Number), vip: !!r.vip, more: !!r.more, src: "map", ckeys: (r.ckeys || r.keys || []).map(Number), cfree: r.cfree == null ? 99 : Number(r.cfree)}; return S.nav; }
       if (r && r.ok === false && r.err) return {err: r.err};
       return fb();
     }, fb);
@@ -236,11 +236,12 @@
   function nvNext(){ var o = (S.nav && S.nav.open) || [], i = o.indexOf(S.unit); return i >= 0 && i < o.length - 1 ? o[i + 1] : null; }
   function nvPrev(){ var o = (S.nav && S.nav.open) || [], i = o.indexOf(S.unit); return i > 0 ? o[i - 1] : null; }
   function nvDone(u){ return !!S.nav && S.nav.keys.indexOf(u) >= 0; }
-  function nvCanNext(){ return nvNext() !== null && !!S.nav && (S.nav.vip || nvDone(S.unit)); }
+  function nvCDone(u){ return !!S.nav && (u <= (S.nav.cfree == null ? 1 : S.nav.cfree) || (S.nav.ckeys || []).indexOf(u) >= 0); }
+  function nvCanNext(){ return nvNext() !== null && !!S.nav && (S.nav.vip || (nvDone(S.unit) && nvCDone(S.unit))); }
   function navBar(){
     if (!S.nav) return "";
     var pv = nvPrev(), nx = nvNext(), can = nvCanNext();
-    var ph = nx === null ? (S.nav.more ? "The next unit opens soon" : "You are at the last unit") : can ? "Unit " + nx : "Finish Unit " + S.unit + " first";
+    var ph = nx === null ? (S.nav.more ? "The next unit opens soon" : "You are at the last unit") : can ? "Unit " + nx : nvDone(S.unit) ? "Finish the class test first" : "Finish Unit " + S.unit + " first";
     return '<div class="nvnav"><button type="button" class="gb" id="nvgb"' + (pv === null ? " disabled" : "") + '><b>← Go back</b><small>' + (pv === null ? "This is the first unit" : "Unit " + pv) + '</small></button>'
       + '<button type="button" class="pr" id="nvpr"' + (can ? "" : " disabled") + '><b>Proceed →</b><small>' + ph + '</small></button></div>'
 ;
@@ -287,7 +288,7 @@
       if (nx !== null && nvCanNext()){ goUnit(nx); return; }
       if (btn){ btn.innerHTML = old; }
       S.sub = true; unitPage();
-      nvNote(nx === null ? "The next unit opens soon." : "Finish all four steps of Unit " + cur + " to earn the key. Then Proceed opens.");
+      nvNote(nx === null ? "The next unit opens soon." : nvDone(cur) ? "Your class test is waiting for you in the classroom. Finish it there to open Unit " + nx + "." : "Finish all four steps of Unit " + cur + " to earn the key. Then Proceed opens.");
     }).catch(function(){ if (btn){ btn.disabled = false; btn.innerHTML = old; } nvNote("No internet connection. Please try again."); });
   }
   /* our own message boxes (instead of the small grey browser pop-ups) */
@@ -335,7 +336,8 @@
     var nu = nvNext(); try{ sessionStorage.setItem("nvks" + S.unit, "1"); }catch(e){}
     page('<div style="text-align:center;padding:18px 0 6px"><div class="nvkey" style="width:260px;max-width:78%;margin:0 auto;filter:drop-shadow(0 14px 26px rgba(255,196,40,.5))">'+keySvg()+'</div>'
       + '<h2 style="margin:6px 0 4px">You earned the key!</h2><p class="sub">Unit ' + S.unit + ' is complete. Your class test for this unit is now open.</p>'
-      + (nu !== null ? '<button id="nvnext" type="button" class="go" style="margin-top:14px;width:100%;max-width:420px;padding:16px 18px;font-size:19px">Proceed to Unit ' + nu + ' →</button>' : '<p class="sub">The next unit opens soon.</p>')
+      + (nu !== null && !nvCanNext() ? '<div class="st" style="text-align:left;margin:14px auto 0;max-width:420px"><div class="n">★</div><div><b>Your class test is waiting for you in the classroom</b><small>Finish it there to earn the class key. Then Unit ' + nu + ' opens.</small></div></div>' : '')
+      + (nu !== null && nvCanNext() ? '<button id="nvnext" type="button" class="go" style="margin-top:14px;width:100%;max-width:420px;padding:16px 18px;font-size:19px">Proceed to Unit ' + nu + ' →</button>' : '<p class="sub">The next unit opens soon.</p>')
       + '<button id="nvrev" type="button" style="margin-top:12px;width:100%;max-width:420px;padding:13px 18px;border:2px solid rgba(255,255,255,.35);border-radius:14px;background:transparent;color:inherit;font:700 17px/1.2 inherit;font-family:inherit;cursor:pointer">← Go back to Unit ' + S.unit + '</button></div>');
     var st = document.createElement("style"); st.textContent = "@keyframes nvk{0%{transform:scale(.3) rotate(-25deg);opacity:0}60%{transform:scale(1.15) rotate(8deg);opacity:1}100%{transform:scale(1) rotate(0)}}.nvkey{animation:nvk .9s ease-out}"; el("newv").appendChild(st);
     if (el("nvnext")) el("nvnext").onclick = function(){ moveOn(this); };
