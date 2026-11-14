@@ -229,16 +229,26 @@
       el("cb").onclick = path; el("cgo").onclick = hub;
     }).catch(function(){ page(top() + '<div class="card warn"><h2>No internet connection</h2></div>'); el("cb").onclick = path; });
   }
-  function hub(){ S.cur = null;
+  function opn(st){ if (O.nofloor) return true; return st === "read" ? !!(S.lisDone && S.lisDone[S.unit]) : !!(S.rdDone && S.rdDone[S.unit]); }
+  function lockMsg(el_, txt){ el_.classList.add("shk"); setTimeout(function(){ el_.classList.remove("shk"); }, 400); var m = el("hlk"); if (m) m.textContent = txt; }
+  function statusSync(){
+    if (S.stU === S.unit) return; S.stU = S.unit;
+    try { Promise.resolve(R("nv_class_status", {tok: O.tok, u: S.unit})).then(function(r){
+      if (!r || !r.ok || !r.lis) return; var ch = false, u = S.unit; S.lisDone = S.lisDone || {}; S.rdDone = S.rdDone || {}; S.wrDone = S.wrDone || {};
+      [["lis", S.lisDone], ["read", S.rdDone], ["write", S.wrDone]].forEach(function(p){ var x = r[p[0]]; if (!x) return; S.srv[u + ":" + p[0]] = Math.max(S.srv[u + ":" + p[0]] || 0, x.secs || 0); if (x.done && !p[1][u]){ p[1][u] = true; ch = true; } });
+      if (ch && !S.cur && el("hl")) hub();
+    }, function(){}); } catch (x) {}
+  }
+  function hub(){ S.cur = null; statusSync();
     function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
     function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
     page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Unit ' + S.unit + '</h2><p class="sub">Your path today: three drillings, with a break between them</p></div>'
       + '<div class="fch">' + card("hl", "🎧", "Listening drilling", (S.lisDone && S.lisDone[S.unit]) ? "Done ✔ · you can redo it" : "Start here", "about 60 min", true, 1) + link()
-      + card("hr", "📖", "Reading drilling", (S.rdDone && S.rdDone[S.unit]) ? "Done ✔ · you can redo it" : "Passage + questions", "about 30 min", S.unit === 1, 2) + link()
-      + card("hw", "✍️", "Writing drilling", (S.wrDone && S.wrDone[S.unit]) ? "Done ✔ · you can redo it" : "Write · feedback · rewrite", "about 40 min", S.unit === 1, 3) + '</div>');
+      + card("hr", "📖", "Reading drilling", (S.rdDone && S.rdDone[S.unit]) ? "Done ✔ · you can redo it" : "Passage + questions", "about 30 min", S.unit === 1 && opn("read"), 2) + link()
+      + card("hw", "✍️", "Writing drilling", (S.wrDone && S.wrDone[S.unit]) ? "Done ✔ · you can redo it" : "Write · feedback · rewrite", "about 40 min", S.unit === 1 && opn("write"), 3) + '</div><p class="sub" id="hlk" style="text-align:center;margin-top:14px;min-height:22px"></p>');
     el("cb").onclick = path; el("hl").onclick = startPart;
-    el("hr").onclick = S.unit === 1 ? startReading : function(){ this.classList.add("shk"); var t0_ = this; setTimeout(function(){ t0_.classList.remove("shk"); }, 400); };
-    el("hw").onclick = S.unit === 1 ? startWriting : function(){ this.classList.add("shk"); var t = this; setTimeout(function(){ t.classList.remove("shk"); }, 400); };
+    el("hr").onclick = S.unit === 1 && opn("read") ? startReading : function(){ lockMsg(this, S.unit === 1 ? "🔒 Finish the listening drilling first." : ""); };
+    el("hw").onclick = S.unit === 1 && opn("write") ? startWriting : function(){ lockMsg(this, S.unit === 1 ? "🔒 Finish the reading drilling first." : ""); };
   }
 
   /* ---------- Part runner (listening) ---------- */
@@ -424,7 +434,7 @@
     var n = norm(said).replace(/-/g, " "); return q.a.some(function(a){ return norm(a).replace(/-/g, " ") === n; });
   }
   function rdAll(D){ if (D.parts){ var o = []; D.parts.forEach(function(p){ o = o.concat(p.qs); }); return o; } return D.q.concat(D.t); }
-  function startReading(){ S.cur = "read";
+  function startReading(){ if (!opn("read")) return hub(); S.cur = "read";
     page(top() + '<div class="hero"><h2>Loading the reading…</h2></div>'); el("cb").onclick = hub;
     Promise.resolve(R("nv_stage", {tok: O.tok, u: S.unit})).then(function(r){ return r && r.track === "ml" ? "ml" : "ie"; }, function(){ return "ie"; }).then(function(tr){
       return getFile("c" + S.unit + (tr === "ml" ? "_readm" : "_read"), (tr === "ml" ? "readm" : "read") + S.unit + ".json");
@@ -570,7 +580,7 @@
       + '<div class="brk" style="padding:4px 0 8px"><div class="fst" style="opacity:1;animation:none"><div><b>' + g1 + '/' + tot + '</b><span>first try</span></div><div><b style="color:#0c9c84">' + g2 + '/' + tot + '</b><span>after the retake</span></div><div><b>' + (g2 - g1 >= 0 ? "+" + (g2 - g1) : g2 - g1) + '</b><span>improvement</span></div></div></div>'
       + cards + '<div style="text-align:center;margin:20px 0 30px"><button class="go" id="rfin">Finish the reading →</button></div>');
     wide(false); el("cb").onclick = hub;
-    el("rfin").onclick = function(){ S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.rdRes = S.rdRes || {}; S.rdRes[S.unit] = {first: g1, final: g2, total: tot, secs: Math.round((Date.now() - R_.t0) / 1000)}; readingDone(); };
+    el("rfin").onclick = function(){ S.rdRes = S.rdRes || {}; S.rdRes[S.unit] = {first: g1, final: g2, total: tot, secs: Math.round((Date.now() - R_.t0) / 1000)}; readingDone(); };
   }
 
   /* ---------- writing drilling: write, get feedback from the essay checker, rewrite, repeat ---------- */
@@ -581,7 +591,7 @@
   function wrTrack(){ if (S.trk) return Promise.resolve(S.trk); return Promise.resolve(R("nv_stage", {tok: O.tok, u: S.unit})).then(function(r){ return (S.trk = r && r.track === "ml" ? "ml" : "ie"); }, function(){ return (S.trk = "ie"); }); }
   function wrScore(W, tr){ return tr === "ml" ? W.m75.total : W.total; }
   function wrSan(tr, x){ return tr === "ml" ? String(x).replace(/band\s*\d+(\.\d)?\+?/ig, "the top mark").replace(/\bband\b/ig, "mark") : x; }
-  function startWriting(){ S.cur = "write";
+  function startWriting(){ if (!opn("write")) return hub(); S.cur = "write";
     page(top() + '<div class="hero"><h2>Loading the writing…</h2></div>'); el("cb").onclick = hub;
     Promise.all([wrLoad(), wrTrack()]).then(function(r){
       var FB = r[0], tr = r[1], P = FB.ESSAY[tr];
@@ -772,8 +782,8 @@
     el("cb").onclick = hub; el("drd").onclick = function(){ S.W.drDone = true; writingDone(); };
   }
   /* one break screen for every stage: listening, reading, writing... */
-  function listeningDone(){ if (!floorOk("lis")) return; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
-  function readingDone(){ if (!floorOk("read")) return; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
+  function listeningDone(){ if (!floorOk("lis")) return; flushLog("lis", {done: true}); S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
+  function readingDone(){ if (!floorOk("read")) return; flushLog("read", {done: true}); S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
   function stageBreak(label, onNext){ S.cur = null;
     var t0 = Date.now(), C = 2 * Math.PI * 130;
     page('<div class="brk"><small class="wu">' + label + '</small><h1 class="bh">Break time!</h1><p class="sub" id="bsub">Great focus. Recharge for ten minutes. We will keep the clock for you.</p>'
