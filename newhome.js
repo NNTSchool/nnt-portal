@@ -275,7 +275,7 @@
     var ph = nx === null ? (S.nav.more ? "The next unit opens soon" : "You are at the last unit") : can ? "Unit " + nx : "Finish Unit " + S.unit + " first";
     return '<div class="nvnav"><button type="button" class="gb" id="nvgb"' + (pv === null ? " disabled" : "") + '><b>← Go back</b><small>' + (pv === null ? "This is the first unit" : "Unit " + pv) + '</small></button>'
       + '<button type="button" class="pr" id="nvpr"' + (can ? "" : " disabled") + '><b>Proceed →</b><small>' + ph + '</small></button></div>'
-      + (S.nav.vip || S.nav.src === "old" ? '<div class="nvdbg">Open units: ' + (S.nav.open.join(", ") || "none") + (S.nav.src === "old" ? " · old map (run the latest NNT update)" : "") + '</div>' : '');
+;
   }
   function wireNav(){
     var g = el("nvgb"), p = el("nvpr");
@@ -334,6 +334,20 @@
   }
   function nvAsk(title, body, okText, onOk){ nvBox(title, body, [{t: "Cancel"}, {t: okText || "OK", ok: 1, f: onOk}]); }
   function nvNote(text){ nvBox("Notice", text, [{t: "OK", ok: 1}]); }
+
+  function confetti(){
+    try{ if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return; }catch(e){}
+    var host = el("newv"); if (!host) return;
+    var c = document.createElement("canvas"); c.style.cssText = "position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:99999"; document.body.appendChild(c);
+    var W = c.width = window.innerWidth, H = c.height = window.innerHeight, x = c.getContext("2d"), cols = ["#46f0c4","#7c5cff","#ffb86b","#ff7a8a","#ff5fa8","#ffe27a"], P = [];
+    for (var i = 0; i < 140; i++) P.push({x: W / 2 + (Math.random() - .5) * W * .3, y: H * .35, vx: (Math.random() - .5) * 14, vy: -Math.random() * 14 - 3, r: 4 + Math.random() * 5, c: cols[i % cols.length], a: Math.random() * 6, va: (Math.random() - .5) * .4});
+    var t0 = Date.now();
+    (function tick(){
+      var t = Date.now() - t0; x.clearRect(0, 0, W, H);
+      P.forEach(function(q){ q.vy += .32; q.vx *= .995; q.x += q.vx; q.y += q.vy; q.a += q.va; x.save(); x.translate(q.x, q.y); x.rotate(q.a); x.globalAlpha = Math.max(0, 1 - t / 3200); x.fillStyle = q.c; x.fillRect(-q.r, -q.r / 2, q.r * 2, q.r); x.restore(); });
+      if (t < 3200) requestAnimationFrame(tick); else c.remove();
+    })();
+  }
   function keyScreen(){
     var nu = nvNext(); try{ sessionStorage.setItem("nvks" + S.unit, "1"); }catch(e){}
     page('<div style="text-align:center;padding:18px 0 6px"><div class="nvkey" style="width:260px;max-width:78%;margin:0 auto;filter:drop-shadow(0 14px 26px rgba(255,196,40,.5))">'+keySvg()+'</div>'
@@ -343,6 +357,7 @@
     var st = document.createElement("style"); st.textContent = "@keyframes nvk{0%{transform:scale(.3) rotate(-25deg);opacity:0}60%{transform:scale(1.15) rotate(8deg);opacity:1}100%{transform:scale(1) rotate(0)}}.nvkey{animation:nvk .9s ease-out}"; el("newv").appendChild(st);
     if (el("nvnext")) el("nvnext").onclick = function(){ moveOn(this); };
     el("nvrev").onclick = function(){ S.review = true; unitPage(); };
+    setTimeout(confetti, 350);
   }
   function choiceScreen(){
     var h = '<h2>Unit ' + S.unit + '</h2><p class="sub">How do you want to start this unit?</p>';
