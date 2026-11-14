@@ -48,6 +48,7 @@
   <button class="ek en lock" id="e_new" type="button"><span class="tag">NEW</span><span class="ic">🔒</span>Novel<small>The new learning experience</small></button></div>
   <div id="e_msg"></div><button class="eo" id="e_out" type="button">Log out</button></div></div>
 <script src="core.js?v=16"></script>
+<script src="classnv.js?v=1"></script>
 <script>
 var TOK = null, NAME = "", SID = 0, ROSTER = [], pickId = 0;
 function show(id){ ["s_setup","s_login","s_lib","s_load"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); $("out").classList.toggle("hide", id !== "s_lib"); }
@@ -95,7 +96,7 @@ function todayUnit(){ var d = Math.floor((Date.now() + 5 * 3600e3 - PLAN_START) 
 function entryOpen(){ $("e_name").textContent = NAME ? String(NAME).split(" ")[0] : ""; $("e_msg").innerHTML = ""; $("entry").classList.remove("hide"); document.body.style.overflow = "hidden"; }
 function entryClose(){ $("entry").classList.add("hide"); document.body.style.overflow = ""; }
 $("e_classic").onclick = function(){ entryClose(); loadTests(); };
-$("e_new").onclick = function(){ var b = $("e_new"); b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake"); $("e_msg").innerHTML = '<div class="elock">🔒 Novel is not open in the classroom yet. Please use Classic.</div>'; };
+$("e_new").onclick = function(){ if (/[?&]preview=1/.test(location.search) && window.CNV){ entryClose(); CNV.open({tok: TOK, rpc: rpc, base: "classdata/", onExit: entryOpen}); return; } var b = $("e_new"); b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake"); $("e_msg").innerHTML = '<div class="elock">🔒 Novel is not open in the classroom yet. Please use Classic.</div>'; };
 $("e_out").onclick = function(){ entryClose(); $("out").click(); };
 $("swbtn").onclick = function(){ entryOpen(); };
 function loadTests(){
