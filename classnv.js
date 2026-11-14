@@ -3,6 +3,7 @@
   var O = null, R = null, S = {}, A = null;
   function el(i){ return document.getElementById(i); }
   function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  var ESC0 = esc;
   var CSS = '#cnv{position:fixed;inset:0;z-index:80;overflow:auto;-webkit-overflow-scrolling:touch;color:#eaf1ff;font-family:Lexend,system-ui,sans-serif;background:#070b1d}'
   + '#cnv .bg{position:fixed;inset:0;z-index:0;background:radial-gradient(900px 520px at 85% -10%,#2a1b6e 0,transparent 60%),radial-gradient(800px 500px at -10% 105%,#06506b 0,transparent 60%),#070b1d}'
   + '#cnv .w{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:18px 16px 60px}'
@@ -127,6 +128,18 @@
 
   CSS += '#cnv .nd.done{background:radial-gradient(ellipse at 35% 25%,#fff0a8,#ffc21a 60%,#f09a00);--d:#b36b00;box-shadow:0 14px 0 var(--d),0 22px 40px rgba(255,170,0,.55),inset 0 4px 10px rgba(255,255,255,.7)}#cnv .nd .gtk{width:118px;height:118px;filter:drop-shadow(0 6px 8px rgba(120,70,0,.45));animation:gtp 2.6s ease-in-out infinite}@keyframes gtp{50%{transform:scale(1.06) rotate(-3deg)}}'
   + '#cnv .nd .gsp{transform-origin:100px 29px;animation:gsp 1.8s ease-in-out infinite}@keyframes gsp{0%,100%{opacity:0;transform:scale(.3)}50%{opacity:1;transform:scale(1.1)}}#cnv .nd .ndn{position:absolute;right:6px;bottom:2px;min-width:30px;height:30px;border-radius:50%;background:#fff;color:#a05d00;font:800 16px/30px system-ui;text-align:center;box-shadow:0 3px 0 rgba(0,0,0,.25)}';
+
+  /* writing */
+  CSS += '#cnv .wrh{font-weight:800;letter-spacing:.1em;font-size:13px;color:#b25400;text-transform:uppercase;margin:0 0 8px}#cnv textarea.wrta{width:100%;box-sizing:border-box;height:calc(100% - 150px);min-height:260px;resize:none;padding:14px 16px;border-radius:14px;border:2px solid #8fa6d6;background:#fff;color:#10204a;font:19px/1.75 Georgia,serif;outline:none}#cnv textarea.wrta:focus{border-color:#3e63d8;box-shadow:0 0 0 4px rgba(62,99,216,.2)}'
+  + '#cnv .wrm{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-top:8px;font-weight:700;color:#3d4f80}#cnv .wrm b{color:#10204a;font-size:17px}'
+  + '#cnv .wrsd{font-weight:800;letter-spacing:.1em;font-size:12.5px;color:#46566e;text-transform:uppercase;margin:10px 0 4px}#cnv .widea{display:block;width:100%;text-align:left;background:#fff;border:2px solid #c9d6ee;border-radius:12px;padding:9px 12px;margin:0 0 6px;font:600 15.5px/1.4 system-ui;color:#10204a;cursor:pointer}#cnv .widea b{display:block;font:800 11.5px system-ui;letter-spacing:.08em;text-transform:uppercase;color:#46566e;margin-bottom:2px}#cnv .widea.own{border-style:dashed}#cnv .widea.s1.on{border-color:#0c9c84;background:#e3f8f1;box-shadow:0 0 0 3px rgba(12,156,132,.18)}#cnv .widea.s2.on{border-color:#d9480f;background:#fff1e6;box-shadow:0 0 0 3px rgba(217,72,15,.16)}#cnv .wown{margin:0 0 8px}'
+  + '#cnv .wpb{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;background:#f3f7fd;border:1.5px dashed #9db4d6;border-radius:12px;padding:10px 14px;font:15px/1.5 system-ui}#cnv .wpb h4{margin:0 0 2px;font:800 12px system-ui;letter-spacing:.09em;text-transform:uppercase;color:#2b4f86}#cnv .wpb ul{margin:0;padding-left:16px}#cnv .wch{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}#cnv .wch span{font:600 14px system-ui;padding:4px 12px;border-radius:99px;background:#f1ece0;color:#7b7260;transition:all .15s}#cnv .wch span.on{background:#3fcf60;color:#04210d;transform:scale(1.06)}'
+  + '#cnv .wsc{text-align:center;max-width:900px;margin:0 auto 14px;padding:14px 18px;border-radius:20px;background:linear-gradient(120deg,#d7f5ef,#d9e6ff 55%,#eadcff);border:2px solid #7f9de0}#cnv .wbg{font:800 66px/1.05 system-ui;color:#10204a}#cnv .wbg small{font-size:26px;color:#3d4f80}#cnv .wcr{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:8px 0}#cnv .wcr span{background:#fff;border-radius:10px;padding:6px 12px;font-weight:700;color:#3d4f80}#cnv .wcr span b{color:#10204a}'
+  + '#cnv .wah{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:8px}#cnv .wat{display:inline-flex;flex-direction:column;align-items:center;padding:6px 14px;border-radius:12px;background:#fff;border:2px solid #2bb59b}#cnv .wat.dw{border-color:#e0607f}#cnv .wat i{font:700 12px system-ui;font-style:normal;color:#3d4f80}#cnv .wat b{font-size:24px}#cnv .wat em{font:800 13px system-ui;font-style:normal;color:#0c9c84}#cnv .wat.dw em{color:#d6395f}#cnv .war{font-weight:800;color:#3d4f80}'
+  + '#cnv .wgg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:6px 0 14px}#cnv .rpn .wgg{grid-template-columns:1fr}#cnv .wgv,#cnv .wsec{background:#fff;border:2px solid #c9d6ee;border-radius:14px;padding:12px 16px;margin-bottom:12px}#cnv .wgv h3,#cnv .wsec h3{margin:0 0 4px;font:800 19px system-ui}#cnv .wgv ul,#cnv .wsec ul{margin:0;padding-left:20px;font:15px/1.5 system-ui}#cnv .wgv li{margin-bottom:5px}#cnv .wgh{font:800 12.5px system-ui;letter-spacing:.06em;margin:8px 0 3px;color:#3d4f80}#cnv .wbd{color:#d62828;text-decoration:line-through}#cnv .wfx{color:#0a8f3c;font-weight:800}#cnv .wgv small{color:#5f6f86;display:block}#cnv .wgv p{margin:0;font:15px/1.5 system-ui}'
+  + '#cnv .wlg{font:13px/1.4 system-ui;color:#46566e;margin:2px 0 6px}#cnv .wlg u{text-decoration:underline solid #d62828;text-decoration-thickness:2px}#cnv .wlg span{color:#0a8f3c;font-weight:700}'
+  + '#cnv .wess{white-space:pre-wrap;background:#fffdf8;border:1px solid #c9d6ee;border-radius:12px;padding:10px 14px;font:17px/1.85 Georgia,serif}#cnv .wess u.err{text-decoration:underline solid #d62828;text-decoration-thickness:2px;text-underline-offset:3px;color:#b00020}#cnv .wess u.chk{text-decoration:underline dotted #d98a00;text-decoration-thickness:2px;text-underline-offset:3px}#cnv .wess u.sty{text-decoration:underline dotted #2b6cb0;text-decoration-thickness:2px;text-underline-offset:3px}#cnv .wess .okfx{color:#0a8f3c;font:700 15.5px system-ui;white-space:normal}#cnv .wess .okfx.q{color:#a06a00}#cnv .wess .okfx.s{color:#2b6cb0}#cnv .wess mark.okw{background:#d6f3e3;border-radius:5px;padding:0 3px}'
+  + '@media(max-width:980px){#cnv .wgg{grid-template-columns:1fr}}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
   function page(h){ stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
@@ -221,10 +234,10 @@
     page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Unit ' + S.unit + '</h2><p class="sub">Your path today: three drillings, with a break between them</p></div>'
       + '<div class="fch">' + card("hl", "🎧", "Listening drilling", (S.lisDone && S.lisDone[S.unit]) ? "Done ✔ · you can redo it" : "Start here", "about 60 min", true, 1) + link()
       + card("hr", "📖", "Reading drilling", (S.rdDone && S.rdDone[S.unit]) ? "Done ✔ · you can redo it" : "Passage + questions", "about 30 min", S.unit === 1, 2) + link()
-      + card("hw", "✍️", "Writing drilling", "Opens soon", "after your break", false, 3) + '</div>');
+      + card("hw", "✍️", "Writing drilling", (S.wrDone && S.wrDone[S.unit]) ? "Done ✔ · you can redo it" : "Write · feedback · rewrite", "about 40 min", S.unit === 1, 3) + '</div>');
     el("cb").onclick = path; el("hl").onclick = startPart;
     el("hr").onclick = S.unit === 1 ? startReading : function(){ this.classList.add("shk"); var t0_ = this; setTimeout(function(){ t0_.classList.remove("shk"); }, 400); };
-    el("hw").onclick = function(){ this.classList.add("shk"); var t = this; setTimeout(function(){ t.classList.remove("shk"); }, 400); };
+    el("hw").onclick = S.unit === 1 ? startWriting : function(){ this.classList.add("shk"); var t = this; setTimeout(function(){ t.classList.remove("shk"); }, 400); };
   }
 
   /* ---------- Part runner (listening) ---------- */
@@ -373,11 +386,12 @@
   function mmss(t){ t = Math.max(0, Math.floor(t)); return ("0" + Math.floor(t / 60)).slice(-2) + ":" + ("0" + t % 60).slice(-2); }
   /* until reading and writing exist, a finished listening part ends on its own screen (no class key yet) */
   function nextStage(){
-    S.lisDone = S.lisDone || {}; var rd = S.nextKind === "read"; if (!rd) S.lisDone[S.unit] = true;
-    if (O.finale && !rd) return unitDone();
-    var ld = !!(S.lisDone && S.lisDone[S.unit]), rr = !!(S.rdDone && S.rdDone[S.unit]);
-    page('<div class="brk"><div class="bk good"><div class="be">' + (rd ? "📖" : "🎧") + '</div><h1 class="bh">' + (rd ? "Reading complete!" : "Listening complete!") + '</h1><p class="sub">Your ' + (rd ? "reading" : "listening") + ' drilling for Unit ' + S.unit + ' is saved. ' + (rd ? "Writing for this unit is being prepared. " : "") + 'Your class key arrives when all three are done.</p>'
-      + '<div class="fst" style="opacity:1;animation:none"><div><b style="color:' + (ld ? "#0c9c84" : "#8a98c4") + '">' + (ld ? "✔" : "…") + '</b><span>Listening</span></div><div><b style="color:' + (rr ? "#0c9c84" : "#8a98c4") + '">' + (rr ? "✔" : "…") + '</b><span>Reading</span></div><div><b style="color:#8a98c4">…</b><span>Writing, soon</span></div></div></div><button class="go" id="cbk3" style="margin-top:20px">Back to my unit →</button></div>');
+    S.lisDone = S.lisDone || {}; var k = S.nextKind, rd = k === "read", wr = k === "write"; if (!rd && !wr) S.lisDone[S.unit] = true;
+    var ld = !!(S.lisDone && S.lisDone[S.unit]), rr = !!(S.rdDone && S.rdDone[S.unit]), ww = !!(S.wrDone && S.wrDone[S.unit]);
+    if (O.finale && !rd && !wr) return unitDone();
+    if (ld && rr && ww) return unitDone();
+    page('<div class="brk"><div class="bk good"><div class="be">' + (wr ? "✍️" : rd ? "📖" : "🎧") + '</div><h1 class="bh">' + (wr ? "Writing complete!" : rd ? "Reading complete!" : "Listening complete!") + '</h1><p class="sub">Your ' + (wr ? "writing" : rd ? "reading" : "listening") + ' drilling for Unit ' + S.unit + ' is saved. ' + ((ld && rr && ww) ? "" : "Finish the other drillings of this unit to earn your class key.") + '</p>'
+      + '<div class="fst" style="opacity:1;animation:none"><div><b style="color:' + (ld ? "#0c9c84" : "#8a98c4") + '">' + (ld ? "✔" : "…") + '</b><span>Listening</span></div><div><b style="color:' + (rr ? "#0c9c84" : "#8a98c4") + '">' + (rr ? "✔" : "…") + '</b><span>Reading</span></div><div><b style="color:' + (ww ? "#0c9c84" : "#8a98c4") + '">' + (ww ? "✔" : "…") + '</b><span>Writing</span></div></div></div><button class="go" id="cbk3" style="margin-top:20px">Back to my unit →</button></div>');
     el("cbk3").onclick = hub;
   }
 
@@ -557,6 +571,110 @@
     wide(false); el("cb").onclick = hub;
     el("rfin").onclick = function(){ S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.rdRes = S.rdRes || {}; S.rdRes[S.unit] = {first: g1, final: g2, total: tot, secs: Math.round((Date.now() - R_.t0) / 1000)}; readingDone(); };
   }
+
+  /* ---------- writing drilling: write, get feedback from the essay checker, rewrite, repeat ---------- */
+  function wrLoad(){
+    if (S.FB) return Promise.resolve(S.FB);
+    return getFile("c" + S.unit + "_essay", "essay" + S.unit + ".js").then(function(b){ var FB = (new Function(new TextDecoder().decode(b) + "\nreturn FB;"))(); S.FB = FB; return FB; });
+  }
+  function wrTrack(){ if (S.trk) return Promise.resolve(S.trk); return Promise.resolve(R("nv_stage", {tok: O.tok, u: S.unit})).then(function(r){ return (S.trk = r && r.track === "ml" ? "ml" : "ie"); }, function(){ return (S.trk = "ie"); }); }
+  function wrScore(W, tr){ return tr === "ml" ? W.m75.total : W.total; }
+  function wrSan(tr, x){ return tr === "ml" ? String(x).replace(/band\s*\d+(\.\d)?\+?/ig, "the top mark").replace(/\bband\b/ig, "mark") : x; }
+  function startWriting(){
+    page(top() + '<div class="hero"><h2>Loading the writing…</h2></div>'); el("cb").onclick = hub;
+    Promise.all([wrLoad(), wrTrack()]).then(function(r){
+      var FB = r[0], tr = r[1], P = FB.ESSAY[tr];
+      S.W = {need: tr === "ml" ? 180 : 250, FB: FB, P: P, tr: tr, ideas: [-1, -1], own: ["", ""], text: "", att: [], t0: Date.now(), mins: tr === "ml" ? 30 : 40};
+      wrFirst();
+    }).catch(function(){ page(top() + '<div class="card warn"><h2>The writing is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
+  }
+  function wrSteps(){
+    var A = S.W.att, h = '<div class="rds"><span class="' + (A.length ? "dn" : "cu") + '">' + (A.length ? "✔ " : "") + '1 · Write</span>';
+    A.forEach(function(a, i){ var d = i ? a.sc - A[i - 1].sc : 0; h += '<span class="' + (i === A.length - 1 && S.W.mode === "fb" ? "cu" : "dn") + '">' + (i ? "↻ Rewrite " + i : "✓ Feedback") + ' · ' + a.sc + (i ? (d >= 0 ? " ▲" + d : " ▼" + Math.abs(d)) : "") + '</span>'; });
+    if (S.W.mode === "rw" || S.W.mode === "first" && A.length) h += '<span class="cu">↻ Rewrite ' + A.length + '</span>';
+    return h + '</div>';
+  }
+  function wrTimer(){
+    if (S.bt) clearInterval(S.bt); var W = S.W, lim = W.mins * 60;
+    function tk(){ var e = el("rtm"); if (!e){ clearInterval(S.bt); return; } var s_ = (Date.now() - W.t0) / 1000, left = lim - s_;
+      if (left >= 0){ e.textContent = "⏱ " + mmss(left); e.classList.remove("late"); } else { e.textContent = "⏱ +" + mmss(-left); e.classList.add("late"); } }
+    tk(); S.bt = setInterval(tk, 500);
+  }
+  function wrEditor(leftHtml, init){
+    var W = S.W, FB = W.FB, NEED = W.need;
+    page(top("← Unit") + '<div class="rdh"><h2>✍️ Writing · ' + esc(W.P.title) + '</h2>' + wrSteps() + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
+      + '<div class="rsp"><div class="rpn hlz" id="rdp">' + leftHtml + '</div><div class="rpn q" id="rdq"><div class="wrh">Your answer · ' + (W.tr === "ml" ? "180–200 words" : "at least " + NEED + " words") + '</div>'
+      + '<textarea id="wtx" class="wrta" spellcheck="false" autocomplete="off" placeholder="Start writing here…"></textarea>'
+      + '<div class="wrm"><b id="wcn">0 words</b><span id="wnd"></span><span id="wpr"></span></div></div></div>'
+      + '<div class="rbar rbfix" style="max-width:none"><button class="go" id="wck" disabled>Check my writing</button><small id="whint"></small></div>');
+    wide(true); wrTimer(); el("cb").onclick = function(){ if (S.bt) clearInterval(S.bt); wide(false); hub(); };
+    var ta = el("wtx"); ta.value = init || ""; ta.onpaste = function(e){ e.preventDefault(); }; ta.ondrop = function(e){ e.preventDefault(); }; ta.oncontextmenu = function(e){ e.preventDefault(); };
+    function upd(){
+      var tx = ta.value, n = FB.words(tx), u = FB.used(tx); W.text = tx;
+      el("wcn").textContent = n + " word" + (n === 1 ? "" : "s"); el("wnd").textContent = n >= NEED ? (W.tr === "ml" && n > 200 ? "a bit long · aim for 180–200" : "enough ✓") : (NEED - n) + " more words needed";
+      var pw = tx.split(/\n+/).map(function(x){ return FB.words(x); }).filter(function(x){ return x > 0; }); el("wpr").textContent = pw.length ? "paragraphs: " + pw.join(" + ") : "";
+      el("wck").disabled = n < NEED; el("whint").textContent = n < NEED ? "The check unlocks at " + NEED + " words." : "Ready. You can keep improving it before you check.";
+      [].forEach.call(document.querySelectorAll(".wch span"), function(c){ c.classList.toggle("on", u.indexOf(c.getAttribute("data-c")) > -1); });
+    }
+    ta.oninput = upd; upd(); ta.focus();
+    el("wck").onclick = function(){ wrCheck(); };
+  }
+  function wrFirst(){
+    var W = S.W, P = W.P, FB = W.FB; W.mode = "first";
+    function side(k, lab, cls){ var h = '<div class="wrsd">' + lab + '</div>'; [k, k + 1].forEach(function(i){ h += '<button type="button" class="widea ' + cls + '" data-i="' + i + '" data-s="' + (k / 2) + '"><b>Idea ' + (i + 1) + '</b>' + esc(P.ideas[i].t) + '</button>'; });
+      return h + '<button type="button" class="widea own ' + cls + '" data-i="' + (4 + k / 2) + '" data-s="' + (k / 2) + '"><b>✏️ Your own idea</b>Write your own idea here</button><input type="text" class="rin wown" id="own' + (k / 2) + '" maxlength="140" placeholder="Type your idea in one short sentence…" style="display:none" spellcheck="false" autocomplete="off">'; }
+    var left = '<h1 class="rpt" style="font-size:30px">' + esc(P.title) + '</h1><div class="qgh"><span class="qi">📝</span><div><b>' + esc(P.q) + '</b><small>' + esc(P.how) + '</small></div></div>'
+      + '<div class="vh">Pick one idea from each side</div>' + side(0, "👍 One side", "s1") + side(2, "👎 The other side", "s2")
+      + '<div class="vh">Useful phrases</div><div class="wpb">' + FB.PHRASES.concat(P.handy ? [{h: "Handy phrases for this topic", l: P.handy}] : []).map(function(g){ return '<div><h4>' + esc(g.h) + '</h4><ul>' + g.l.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>'; }).join("") + '</div>'
+      + '<div class="vh">Unit ' + S.unit + ' words and chunks · they turn green when you use them</div><div class="wch">' + FB.CHUNKS.map(function(c){ return '<span data-c="' + esc(c[0]) + '">' + esc(c[0]) + '</span>'; }).join("") + '</div>';
+    wrEditor(left, W.text);
+    [].forEach.call(document.querySelectorAll(".widea"), function(bt){ bt.onclick = function(){ var sd = +bt.getAttribute("data-s"); W.ideas[sd] = +bt.getAttribute("data-i");
+      [].forEach.call(document.querySelectorAll('.widea[data-s="' + sd + '"]'), function(x){ x.classList.toggle("on", x === bt); }); var oi = el("own" + sd); oi.style.display = bt.classList.contains("own") ? "block" : "none"; if (bt.classList.contains("own")) oi.focus(); }; });
+    [].forEach.call(document.querySelectorAll(".wown"), function(oi, k){ oi.oninput = function(){ W.own[k] = oi.value; }; });
+  }
+  function wrCheck(){
+    var W = S.W, r = W.FB.analyseEssay(W.text, W.tr, W.ideas); ["good", "better"].forEach(function(k){ if (r[k]) r[k] = r[k].map(function(x){ return wrSan(W.tr, x); }); });
+    W.att.push({W: r, sc: wrScore(r, W.tr), text: W.text}); W.mode = "fb"; wrFeedback();
+  }
+  function gvP(ttl, emo, G){
+    var esc = function(x){ return ESC0(wrSan(S.W.tr, x == null ? "" : x)); };
+    var li = function(x){ return '<li>' + esc(x) + '</li>'; };
+    var h = '<div class="wgv"><h3>' + emo + ' ' + ttl + '</h3><div class="wgh">✅ You did well</div><ul>' + G.good.map(li).join("") + '</ul><div class="wgh">🔧 Fix these</div>';
+    if (!G.fix.length) h += '<p>No mistakes found here. Great!</p>';
+    else h += '<ul>' + G.fix.map(function(f){ return '<li><b>' + esc(f.cat) + (f.count ? ' (' + f.count + ')' : '') + '</b><br><span class="wbd">' + esc(f.bad) + '</span> → <span class="wfx">' + esc(f.fix) + '</span>' + (f.extra ? '<br><span class="wbd">' + esc(f.extra.bad) + '</span> → <span class="wfx">' + esc(f.extra.fix) + '</span>' : '') + '<small>' + esc(f.why) + '</small></li>'; }).join("") + '</ul>';
+    return h + '<div class="wgh">➡️ Next time</div><p>' + esc(G.next) + '</p></div>';
+  }
+  function wrDetail(a){
+    var W = a.W, NEED = S.W.need, h = "", nt = [];
+    if (W.empty) nt.push("You wrote nothing, so the mark is 0."); else if (W.tooShort) nt.push("Only " + W.n + " words. Under 10 words cannot be marked, so the mark is 0."); else if (W.n < NEED) nt.push(W.n + " of " + NEED + " words, so the mark was lowered.");
+    if (nt.length) h += '<div class="card warn">' + nt.map(esc).join("<br>") + '</div>';
+    if (!W.empty && !W.tooShort){
+      if (W.gv && W.gvG && W.gvV) h += '<div class="wgg">' + gvP("Grammar", "📐", W.gvG) + gvP("Vocabulary", "📚", W.gvV) + '</div>';
+      if (W.good.length) h += '<div class="wsec"><h3>✅ What went well</h3><ul>' + W.good.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>';
+      if (W.better.length) h += '<div class="wsec"><h3>🎯 To improve</h3><ul>' + W.better.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>';
+    }
+    h += '<div class="wsec"><h3>✍️ Your writing</h3><div class="wlg"><u>red</u> = mistake <span>(green = correct version)</span> · amber dotted = please check · green highlight = unit word</div>' + (a.text.trim() ? '<div class="wess">' + W.html + '</div>' : '<p>Nothing written.</p>') + '</div>';
+    return h;
+  }
+  function wrFeedback(){
+    var Wd = S.W, A = Wd.att, a = A[A.length - 1], W = a.W, ml = Wd.tr === "ml", n = W.n, enough = n >= Wd.need;
+    var big = ml ? W.m75.total + '<small> / 75</small>' : W.total + '<small> / 9</small>';
+    var crit = ml ? [["TA", W.m75.ta, 19], ["CC", W.m75.cc, 19], ["GR", W.m75.gr, 19], ["LR", W.m75.lr, 18]] : [["TA", W.ta, 9], ["CC", W.cc, 9], ["GR", W.gr, 9], ["LR", W.lr, 9]];
+    var prev = A.length > 1 ? A[A.length - 2] : null, d = prev ? a.sc - prev.sc : 0;
+    var hist = A.map(function(x, i){ var dd = i ? x.sc - A[i - 1].sc : 0; return '<span class="wat ' + (i && dd < 0 ? "dw" : "up") + '"><i>' + (i ? "Rewrite " + i : "First try") + '</i><b>' + x.sc + '</b>' + (i ? '<em>' + (dd >= 0 ? "▲ +" + dd : "▼ " + dd) + '</em>' : "") + '</span>'; }).join('<span class="war">→</span>');
+    page(top("← Unit") + '<div class="rdh"><h2>✍️ Writing · feedback</h2>' + wrSteps() + hlTip() + '</div>'
+      + '<div class="wsc"><div class="wbg">' + (enough ? big : "–") + '</div>' + (enough ? '<div class="wcr">' + crit.map(function(c){ return '<span>' + c[0] + ' <b>' + c[1] + '</b> / ' + c[2] + '</span>'; }).join("") + '</div><div class="sub" style="margin:2px 0 8px">TA = task · CC = organisation · GR = grammar · LR = vocabulary</div>' : '<div class="sub" style="color:#b2334f;font-weight:700">Write at least ' + Wd.need + ' words to get a mark.</div>')
+      + '<div class="wah">' + hist + '</div>' + (prev ? '<p class="sub" style="margin:8px 0 0">' + (d > 0 ? "🔥 You improved by " + d + ". Keep going!" : d === 0 ? "Same mark. Fix the red words below to move up." : "A little lower this time. Check what changed in the red words.") + '</p>' : '<p class="sub" style="margin:8px 0 0">Now fix the mistakes and rewrite. Each rewrite should raise your mark.</p>') + '</div>'
+      + '<div class="hlz" id="rdp" style="max-width:1100px;margin:0 auto">' + wrDetail(a) + '</div>'
+      + '<div class="rbar rbfix"><button class="go fixgo" id="wrw">↻ Rewrite my essay</button><button class="pill" id="wfin"' + (A.length < 2 ? ' disabled style="opacity:.5;cursor:not-allowed"' : '') + '>Finish writing ✓</button><small>' + (A.length < 2 ? "Finish unlocks after one rewrite." : "You can finish, or rewrite again to push your mark higher.") + '</small></div>');
+    wide(false); el("cb").onclick = hub;
+    el("wrw").onclick = wrRewrite; el("wfin").onclick = function(){ if (S.W.att.length >= 2) writingDone(); };
+  }
+  function wrRewrite(){
+    var Wd = S.W, a = Wd.att[Wd.att.length - 1]; Wd.mode = "rw";
+    wrEditor('<h1 class="rpt" style="font-size:26px">Your feedback</h1><p class="rpi">Use it while you rewrite. Fix every red word, then press Check.</p>' + wrDetail(a), a.text);
+  }
+  function writingDone(){ S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
   /* one break screen for every stage: listening, reading, writing... */
   function listeningDone(){ S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
   function readingDone(){ S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
