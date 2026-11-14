@@ -277,16 +277,24 @@
       if (ret){ S.sub = true; unitPage(); } else homePage();
     }).catch(function(){ page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>', "exit"); });
   }
+  /* Proceed: first the earned key, then the next unit */
+  function keyThen(cur, nx, go){
+    page('<div style="text-align:center;padding:22px 0 6px"><div class="nvkey" style="width:300px;max-width:78%;margin:0 auto;filter:drop-shadow(0 14px 30px rgba(255,196,40,.55))">' + keySvg() + '</div>'
+      + '<h2 style="margin:8px 0 4px">Your key is earned. Welcome!</h2><p class="sub">Unit ' + cur + ' is complete. Unit ' + nx + ' is waiting for you.</p>'
+      + '<button id="nvkgo" type="button" class="go" style="margin-top:14px;width:100%;max-width:420px;padding:16px 18px;font-size:19px">Continue →</button></div>');
+    var st = document.createElement("style"); st.textContent = "@keyframes nvk{0%{transform:scale(.3) rotate(-25deg);opacity:0}60%{transform:scale(1.15) rotate(8deg);opacity:1}100%{transform:scale(1) rotate(0)}}.nvkey{animation:nvk .9s ease-out}"; el("newv").appendChild(st);
+    el("nvkgo").onclick = go;
+  }
   /* Proceed: refresh the map from the server, then open the next unit */
   function moveOn(btn){
     var cur = S.unit, old = btn ? btn.innerHTML : "";
-    if (nvCanNext()){ var fast = nvNext(); goUnit(fast); navLoad().then(function(){ if (S.unit === fast) prefetchNear(); }, function(){}); return; }
+    if (nvCanNext()){ var fast = nvNext(); keyThen(cur, fast, function(){ goUnit(fast); navLoad().then(function(){ if (S.unit === fast) prefetchNear(); }, function(){}); }); return; }
     if (btn){ btn.disabled = true; btn.innerHTML = "<b>Opening…</b>"; }
     navLoad().then(function(n){
       if (!n || n.err){ nvNote("Please try again in a moment."); if (btn){ btn.disabled = false; btn.innerHTML = old; } return; }
       S.unit = cur;
       var nx = nvNext();
-      if (nx !== null && nvCanNext()){ goUnit(nx); return; }
+      if (nx !== null && nvCanNext()){ keyThen(cur, nx, function(){ goUnit(nx); }); return; }
       if (btn){ btn.innerHTML = old; }
       S.sub = true; unitPage();
       nvNote(nx === null ? "The next unit opens soon." : nvDone(cur) ? "Your class test is waiting for you in the classroom. Finish it there to open Unit " + nx + "." : "Finish all four steps of Unit " + cur + " to earn the key. Then Proceed opens.");

@@ -115,7 +115,7 @@
       if (!r || !r.ok){ page(top() + '<div class="card warn"><h2>Please try again</h2><p>We could not check your key.</p></div>'); el("cb").onclick = path; return; }
       if (!r.earned){
         page(top() + '<div class="card warn"><h2>Your key has not been earned yet</h2><p>You need the key of Unit ' + S.unit + ' on the student portal first. Go earn it, then come back.</p></div>'); el("cb").onclick = path; return; }
-      page(top() + '<div class="card ok"><h2>Your key is earned. Welcome!</h2><p>You can now begin the mock test of Unit ' + S.unit + '.</p></div><button class="go" id="cgo" style="margin-top:8px">Continue →</button>');
+      page(top() + '<div style="text-align:center;padding:10px 0 4px"><div class="kdrop" style="width:230px;margin:0 auto">' + goldKey() + '</div><h2 style="margin:10px 0 4px;font-size:34px">Your key is earned. Welcome!</h2><p class="sub">You can now begin the mock test of Unit ' + S.unit + '.</p><button class="go" id="cgo" style="margin-top:12px">Continue →</button></div>');
       el("cb").onclick = path; el("cgo").onclick = hub;
     }).catch(function(){ page(top() + '<div class="card warn"><h2>No internet connection</h2></div>'); el("cb").onclick = path; });
   }
