@@ -123,8 +123,21 @@
       if (r && r.ok && r.all_done){ S.st = null; S.review = false; page('<h2>All done for now ✅</h2><p class="sub">You have finished every unit that is open.' + (r.more ? ' The next unit opens soon.' : '') + '</p>'); return; }
       var nu = r && r.ok && r.units && r.units[0] ? r.units[0].unit : cur + 1;
       S.unit = nu > cur ? nu : cur + 1; S.st = null; S.review = false; S.chose = null; unitPage();
-    }).catch(function(){ if (btn){ btn.disabled = false; btn.textContent = "Move on to Unit " + (cur + 1) + " →"; } alert("No internet connection. Please try again."); });
+    }).catch(function(){ if (btn){ btn.disabled = false; btn.textContent = "Move on to Unit " + (cur + 1) + " →"; } nvNote("No internet connection. Please try again."); });
   }
+  /* our own message boxes (instead of the small grey browser pop-ups) */
+  function nvBox(title, body, btns){
+    var o = document.getElementById("nvbox"); if (o) o.remove();
+    o = document.createElement("div"); o.id = "nvbox";
+    o.style.cssText = "position:fixed;inset:0;z-index:100000;background:rgba(20,5,70,.72);display:flex;align-items:center;justify-content:center;padding:20px;font-family:inherit";
+    o.innerHTML = '<div style="max-width:440px;width:100%;background:linear-gradient(160deg,#5b1fff,#a21cff);color:#fff;border-radius:22px;padding:24px 22px;box-shadow:0 20px 60px rgba(0,0,0,.5);border:1.5px solid rgba(255,255,255,.35)"><h3 style="margin:0 0 10px;font-size:24px;color:#fff">' + title + '</h3><div style="font-size:17px;line-height:1.5;color:#f6f1ff" id="nvboxb">' + body + '</div><div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap" id="nvboxbtn"></div></div>';
+    document.body.appendChild(o);
+    var bx = o.querySelector("#nvboxbtn");
+    btns.forEach(function(b){ var x = document.createElement("button"); x.type = "button"; x.textContent = b.t; x.style.cssText = "flex:1;min-width:120px;border:0;border-radius:12px;padding:13px 16px;font:800 17px system-ui;cursor:pointer;" + (b.ok ? "color:#fff;background:linear-gradient(135deg,#ff2d6f,#ff7a00)" : "color:#fff;background:rgba(255,255,255,.2)"); x.onclick = function(){ o.remove(); if (b.f) b.f(); }; bx.appendChild(x); });
+    var ul = o.querySelector("ul"); if (ul) ul.style.cssText = "margin:0;padding-left:20px";
+  }
+  function nvAsk(title, body, okText, onOk){ nvBox(title, body, [{t: "Cancel"}, {t: okText || "OK", ok: 1, f: onOk}]); }
+  function nvNote(text){ nvBox("Notice", text, [{t: "OK", ok: 1}]); }
   function keyScreen(){
     var nu = S.unit + 1;
     page('<div style="text-align:center;padding:18px 0 6px"><div class="nvkey" style="font-size:150px;line-height:1.05;filter:drop-shadow(0 8px 18px rgba(255,200,40,.55))">🔑</div>'
@@ -141,7 +154,7 @@
       h += '<div class="st"><div class="n">1</div><div><b>Choose your track</b><small>You choose once. Only your teacher can change it later.</small></div></div>'
         + '<button class="go" id="nvtml" type="button">Multi-level</button> <button class="go" id="nvtie" type="button" style="margin-left:8px">IELTS</button>';
       page(h);
-      ["ml","ie"].forEach(function(t){ var b = el("nvt" + t); if (b) b.onclick = function(){ if (!confirm("Choose " + (t === "ie" ? "IELTS" : "Multi-level") + "? You cannot change this later without your teacher.")) return; rpc("nv_set_track", {tok: tok(), trk: t}).then(function(r){ if (r && (r.ok || r.err === "fixed")) unitPage(); }); }; });
+      ["ml","ie"].forEach(function(t){ var b = el("nvt" + t); if (b) b.onclick = function(){ nvAsk("Choose " + (t === "ie" ? "IELTS" : "Multi-level") + "?", "You cannot change this later without your teacher.", "Yes, choose it", function(){ rpc("nv_set_track", {tok: tok(), trk: t}).then(function(r){ if (r && (r.ok || r.err === "fixed")) unitPage(); }); }); }; });
       return;
     }
     h += '<div class="st"><div class="n">📚</div><div><b>Study deeply</b><small>Videos, then the home test, writing and speaking. The full way. Best if this unit is new for you.</small></div></div>'
@@ -151,8 +164,8 @@
     page(h);
     el("nvdeep").onclick = function(){ S.chose = S.unit; unitPage(); };
     el("nvjump").onclick = function(){
-      if (!confirm("Jump to the test?\n\n• You skip the videos.\n• You need at least " + S.jpct + "%.\n• You can do this only once for this unit. It starts now and cannot be paused.\n• If you leave the test window 3 times, it is cancelled.\n• If you do not reach " + S.jpct + "%, you start from the videos.")) return;
-      startHome(this, true);
+      var jb = this;
+      nvAsk("⚡ Jump to the test?", "<ul><li>You <b>skip the videos</b>.</li><li>You need at least <b>" + S.jpct + "%</b> to go on.</li><li>You can do this <b>only once</b> for this unit. It starts now and cannot be paused.</li><li>If you <b>leave the test window 3 times</b>, it is cancelled.</li><li>If you do not reach " + S.jpct + "%, you start from the videos.</li></ul>", "Start the test", function(){ startHome(jb, true); });
     };
   }
   function unitPage(){
@@ -191,11 +204,11 @@
           + '<button class="go" id="nvtt" type="button">Home test</button> <button class="go" id="nvtw" type="button" style="margin-left:6px">Writing</button> <button class="go" id="nvts" type="button" style="margin-left:6px">Speaking</button>'; }
       if (S.st && S.st.key && S.review) h += '<button class="go" id="nvmove" type="button" style="background:#16a34a;margin-top:12px;width:100%">Move on to Unit ' + (S.unit + 1) + ' →</button>';
       page(h);
-      ["ml","ie"].forEach(function(t){ var b = el("nvt" + t); if (b) b.onclick = function(){ if (!confirm("Choose " + (t === "ie" ? "IELTS" : "Multi-level") + "? You cannot change this later without your teacher.")) return; rpc("nv_set_track", {tok: tok(), trk: t}).then(function(r){ if (r && (r.ok || r.err === "fixed")) unitPage(); }); }; });
+      ["ml","ie"].forEach(function(t){ var b = el("nvt" + t); if (b) b.onclick = function(){ nvAsk("Choose " + (t === "ie" ? "IELTS" : "Multi-level") + "?", "You cannot change this later without your teacher.", "Yes, choose it", function(){ rpc("nv_set_track", {tok: tok(), trk: t}).then(function(r){ if (r && (r.ok || r.err === "fixed")) unitPage(); }); }); }; });
       if (el("nvstarttest")) el("nvstarttest").onclick = function(){ startHome(this); };
       if (el("nvstartwrite")) el("nvstartwrite").onclick = function(){ startWrite(this); };
       if (el("nvmove")) el("nvmove").onclick = function(){ moveOn(this); };
-      if (el("nvtt")) el("nvtt").onclick = function(){ if (!S.track){ alert("Choose a track first (the Multi-level / IELTS buttons)."); return; } startHome(this); };
+      if (el("nvtt")) el("nvtt").onclick = function(){ if (!S.track){ nvNote("Choose a track first (the Multi-level / IELTS buttons)."); return; } startHome(this); };
       if (el("nvtw")) el("nvtw").onclick = function(){ startWrite(this); };
       if (el("nvts")) el("nvts").onclick = function(){ startSpeak(this); };
       if (el("nvstartspeak")) el("nvstartspeak").onclick = function(){ startSpeak(this); };
@@ -206,7 +219,7 @@
   function startWrite(btn){
     btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
     rpc("nv_write", {tok: tok(), u: S.unit}).then(function(r){
-      if (!r || !r.ok){ btn.disabled = false; btn.textContent = "Start the writing"; if (r && r.err === "done") unitPage(); else alert("The writing is not ready. Tell your teacher."); return; }
+      if (!r || !r.ok){ btn.disabled = false; btn.textContent = "Start the writing"; if (r && r.err === "done") unitPage(); else nvNote("The writing is not ready. Tell your teacher."); return; }
       return fetchDecrypt(r.path, r.key).then(function(buf){
         var html = new TextDecoder("utf-8").decode(buf);
         return fetch("shim.js", {cache: "no-store"}).then(function(x){ return x.text(); }).then(function(shim){
@@ -216,13 +229,13 @@
           document.open(); document.write(html); document.close();
         });
       });
-    }).catch(function(e){ btn.disabled = false; btn.textContent = "Start the writing"; alert("Could not open the writing. Check the internet and try again."); });
+    }).catch(function(e){ btn.disabled = false; btn.textContent = "Start the writing"; nvNote("Could not open the writing. Check the internet and try again."); });
   }
   /* ---------- speaking ---------- */
   function startSpeak(btn){
     btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
     rpc("nv_speak", {tok: tok(), u: S.unit}).then(function(r){
-      if (!r || !r.ok){ btn.disabled = false; btn.textContent = "Start the speaking"; if (r && r.err === "done" || r.err === "essay") unitPage(); else alert("The speaking is not ready. Tell your teacher."); return; }
+      if (!r || !r.ok){ btn.disabled = false; btn.textContent = "Start the speaking"; if (r && r.err === "done" || r.err === "essay") unitPage(); else nvNote("The speaking is not ready. Tell your teacher."); return; }
       return fetchDecrypt(r.path, r.key).then(function(buf){
         var html = new TextDecoder("utf-8").decode(buf);
         return fetch("shim.js", {cache: "no-store"}).then(function(x){ return x.text(); }).then(function(shim){
@@ -232,14 +245,14 @@
           document.open(); document.write(html); document.close();
         });
       });
-    }).catch(function(e){ btn.disabled = false; btn.textContent = "Start the speaking"; alert("Could not open the speaking. Check the internet and try again."); });
+    }).catch(function(e){ btn.disabled = false; btn.textContent = "Start the speaking"; nvNote("Could not open the speaking. Check the internet and try again."); });
   }
   /* ---------- home test ---------- */
   function startHome(btn, jump){
     var lab0 = btn.textContent;
     btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
     rpc(jump ? "nv_jump_start" : "nv_test", {tok: tok(), u: S.unit}).then(function(r){
-      if (!r || !r.ok){ btn.disabled = false; btn.textContent = jump ? lab0 : "Start the home test"; if (jump && r && r.err === "nojump"){ S.chose = S.unit; unitPage(); } else if (r && r.err === "done") unitPage(); else alert(r && r.err === "videos" ? "Finish all the videos first." : "The home test is not ready. Tell your teacher."); return; }
+      if (!r || !r.ok){ btn.disabled = false; btn.textContent = jump ? lab0 : "Start the home test"; if (jump && r && r.err === "nojump"){ S.chose = S.unit; unitPage(); } else if (r && r.err === "done") unitPage(); else nvNote(r && r.err === "videos" ? "Finish all the videos first." : "The home test is not ready. Tell your teacher."); return; }
       return fetchDecrypt(r.path, r.key).then(function(buf){
         var html = new TextDecoder("utf-8").decode(buf);
         return fetch("shim.js", {cache: "no-store"}).then(function(x){ return x.text(); }).then(function(shim){
@@ -249,7 +262,7 @@
           document.open(); document.write(html); document.close();
         });
       });
-    }).catch(function(e){ btn.disabled = false; btn.textContent = lab0; alert("Could not open the test. Check the internet and try again."); });
+    }).catch(function(e){ btn.disabled = false; btn.textContent = lab0; nvNote("Could not open the test. Check the internet and try again."); });
   }
   /* ---------- player ---------- */
   function play(idx){
