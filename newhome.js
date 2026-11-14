@@ -1,7 +1,7 @@
 /* NNT School portal: the Novel home-practice area (videos first). */
 (function(){
   var CSS = ''
-  + '#newv{display:block;overflow-y:auto;text-align:left;padding:0;background:radial-gradient(ellipse 80% 45% at 10% -5%,rgba(70,240,196,.22),rgba(70,240,196,0) 70%),radial-gradient(ellipse 65% 50% at 105% 25%,rgba(124,92,255,.34),rgba(124,92,255,0) 70%),radial-gradient(ellipse 70% 45% at -5% 105%,rgba(255,122,138,.16),rgba(255,122,138,0) 70%),linear-gradient(180deg,#080a22 0%,#0c0b2e 55%,#100c33 100%);background-attachment:fixed}#newv .nw{max-width:760px;margin:0 auto;padding:18px 16px 60px}'
+  + '#newv{display:block;overflow-y:auto;text-align:left;padding:0;background:radial-gradient(ellipse 80% 45% at 10% -5%,rgba(70,240,196,.22),rgba(70,240,196,0) 70%),radial-gradient(ellipse 65% 50% at 105% 25%,rgba(124,92,255,.34),rgba(124,92,255,0) 70%),radial-gradient(ellipse 70% 45% at -5% 105%,rgba(255,122,138,.16),rgba(255,122,138,0) 70%),linear-gradient(180deg,#080a22 0%,#0c0b2e 55%,#100c33 100%);}#newv .nw{max-width:760px;margin:0 auto;padding:18px 16px 60px}'
   + '#newv .nbk{background:transparent;border:1.5px solid rgba(255,255,255,.45);color:#fff;border-radius:99px;padding:7px 16px;font:700 15px system-ui;cursor:pointer}'
   + '#newv h2{font-size:30px;margin:16px 0 2px;color:#fff}#newv .sub{color:#f0e9ff;font-size:16px;margin:0 0 18px;max-width:none}'
   + '#newv .st{display:flex;align-items:center;gap:14px;border-radius:18px;padding:16px;margin:12px 0;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.16);color:#fff}'
@@ -19,10 +19,10 @@
   + '#newv .nd{position:relative;display:flex;gap:14px;align-items:flex-start;margin:0 0 14px}#newv .nd .dot{flex:none;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 19px system-ui;background:#0a2238;border:2px solid rgba(185,176,255,.3);color:#b9b0ff;position:relative;z-index:1}'
   + '#newv .nd .bx{flex:1;border-radius:18px;padding:14px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(185,176,255,.18);color:#f2f0ff;position:relative;overflow:hidden}#newv .nd .bx b{font-size:18px;display:block}#newv .nd .bx small{display:block;color:#b8b4dc;font-size:14px;margin-top:3px;line-height:1.35}'
   + '#newv .nd.done .dot{background:linear-gradient(135deg,#ffb86b 0%,#ff7a8a 55%,#ff5fa8 100%);color:#04121f;border-color:transparent}#newv .nd.done .bx{opacity:.8}'
-  + '#newv .nd.now .dot{background:#04121f;border-color:#46f0c4;color:#46f0c4;box-shadow:0 0 0 0 rgba(70,240,196,.6);animation:nvpulse 2s infinite}#newv .nd.now .bx{background:linear-gradient(160deg,rgba(70,240,196,.14),rgba(124,92,255,.10));border:1.5px solid rgba(70,240,196,.55);box-shadow:0 10px 40px -12px rgba(70,240,196,.45)}'
+  + '#newv .nd.now .dot{background:#04121f;border-color:#46f0c4;color:#46f0c4;box-shadow:0 0 0 0 rgba(70,240,196,.6);}#newv .nd.now .bx{background:linear-gradient(160deg,rgba(70,240,196,.14),rgba(124,92,255,.10));border:1.5px solid rgba(70,240,196,.55);box-shadow:0 10px 40px -12px rgba(70,240,196,.45)}'
   + '#newv .nd.now .go{width:100%;margin-top:12px;padding:14px 18px;font-size:17px}'
   + '#newv .nd .dot.kd svg{width:34px;height:auto;opacity:.55;filter:grayscale(.6)}#newv .hb{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}#newv .nd.mist .dot{background:#0a1a2c;border-color:rgba(185,176,255,.14);color:rgba(185,176,255,.45)}#newv .nd.mist .bx{border-style:dashed;border-color:rgba(185,176,255,.14)}#newv .nd.mist .bx .in{filter:blur(5.5px);opacity:.55;user-select:none}'
-  + '#newv .nd.mist .bx:after{content:"";position:absolute;inset:-30%;background:radial-gradient(closest-side,rgba(190,225,255,.22),rgba(190,225,255,0)) 0 0/60% 90% no-repeat,radial-gradient(closest-side,rgba(190,225,255,.18),rgba(190,225,255,0)) 100% 100%/70% 90% no-repeat;animation:nvfog 14s ease-in-out infinite alternate;pointer-events:none}'
+  + '#newv .nd.mist .bx:after{content:"";position:absolute;inset:-30%;background:radial-gradient(closest-side,rgba(190,225,255,.22),rgba(190,225,255,0)) 0 0/60% 90% no-repeat,radial-gradient(closest-side,rgba(190,225,255,.18),rgba(190,225,255,0)) 100% 100%/70% 90% no-repeat;pointer-events:none}'
   + '#newv .nd.mist .bx .tag{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;z-index:2;font:700 13px system-ui;letter-spacing:.08em;color:#cfe8ff;text-transform:uppercase}'
   + '#newv .nd.mist.m2 .bx .in{filter:blur(8px);opacity:.4}#newv .nd.mist.m3 .bx .in{filter:blur(11px);opacity:.28}'
   + '#newv .rw{margin:22px 0 6px;border-radius:22px;padding:18px;background:linear-gradient(160deg,rgba(143,107,255,.16),rgba(124,92,255,.10));border:1px solid rgba(185,176,255,.28);color:#f2f0ff;position:relative;overflow:hidden}#newv .rw h3{margin:0 0 4px;font-size:18px;color:#f2f0ff}#newv .rw p{margin:0 0 10px;color:#b8b4dc;font-size:14px}#newv .rw .kk{display:flex;align-items:center;gap:12px}#newv .rw .kk svg{flex:none;width:92px;height:auto;filter:drop-shadow(0 6px 14px rgba(255,196,40,.35))}'
@@ -45,11 +45,11 @@
   + '#nvp .hint{display:none;color:#ffd77a;font-size:14px;margin:6px 0}@media(orientation:portrait) and (max-width:700px){#nvp .hint{display:block}}'
 
   + '#newv .nd.done .dot,#newv .st .n,#newv .bar i,#newv .chip{background-image:none}#newv .nd.done .dot,#newv .st .n{background:linear-gradient(135deg,#46f0c4,#7c5cff);color:#0a0820}#newv .bar i{background:linear-gradient(90deg,#46f0c4,#7c5cff)}'
-  + '#newv .st,#newv .nd .bx,#newv .vc,#newv .rw{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:rgba(185,176,255,.2);background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.03))}'
+  + '#newv .st,#newv .nd .bx,#newv .vc,#newv .rw{border-color:rgba(185,176,255,.2);background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.03))}'
   + '#newv .nd.now .bx{background:linear-gradient(160deg,rgba(70,240,196,.16),rgba(124,92,255,.14));border:1.5px solid rgba(70,240,196,.6);box-shadow:0 14px 44px -14px rgba(70,240,196,.5),inset 0 0 0 1px rgba(255,255,255,.04)}'
   + '#newv .go{color:#2a0a1e;box-shadow:0 8px 26px -8px rgba(255,111,145,.6);transition:transform .15s,box-shadow .15s,filter .15s}#newv .go:hover{filter:brightness(1.06)}#newv .go:active{transform:translateY(1px) scale(.99)}#newv .go.ghost{background:transparent;color:#f2f0ff;border:1.5px solid rgba(185,176,255,.45);box-shadow:none}'
   + '#newv h2{letter-spacing:-.02em}#newv .hb h2{background:linear-gradient(90deg,#fff,#c9c2ff 60%,#9dfbe3);-webkit-background-clip:text;background-clip:text;color:transparent}'
-  + '#newv .nw{padding-bottom:20px}#newv .nvnav{position:sticky;bottom:0;z-index:20;display:flex;gap:10px;margin:22px -16px 0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(8,10,34,0),rgba(8,10,34,.88) 30%,rgba(8,10,34,.96));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}'
+  + '#newv .nw{padding-bottom:20px}#newv .nvnav{position:sticky;bottom:0;z-index:20;display:flex;gap:10px;margin:22px -16px 0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(8,10,34,0),rgba(8,10,34,.88) 30%,rgba(8,10,34,.96));}'
   + '#newv .nvnav button{flex:1;border-radius:16px;padding:12px 10px;cursor:pointer;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;text-align:center;min-height:56px;transition:transform .15s,filter .15s}#newv .nvnav button b{display:block;font-size:17px;font-weight:800}#newv .nvnav button small{display:block;font-size:12px;margin-top:2px;opacity:.85}'
   + '#newv .nvnav .pr{border:0;color:#2a0a1e;background:linear-gradient(135deg,#ffb86b 0%,#ff7a8a 55%,#ff5fa8 100%);box-shadow:0 10px 30px -10px rgba(255,111,145,.7)}#newv .nvnav .gb{color:#f2f0ff;background:rgba(255,255,255,.07);border:1.5px solid rgba(185,176,255,.4)}'
   + '#newv .nvnav button:disabled{cursor:default;box-shadow:none;background:rgba(255,255,255,.05);color:#8f8bb8;border:1.5px dashed rgba(185,176,255,.22)}#newv .nvnav button:not(:disabled):active{transform:scale(.98)}'
@@ -60,12 +60,15 @@
   + '#newv .hmbtns{display:flex;gap:8px;align-items:center;flex-wrap:wrap}#newv .hmbtns button{border-radius:99px;padding:8px 16px;font:700 14px system-ui;cursor:pointer;color:#f2f0ff;background:rgba(255,255,255,.07);border:1px solid rgba(185,176,255,.35);transition:background .15s}#newv .hmbtns button:hover{background:rgba(255,255,255,.14)}#newv .hmbtns button.paybtn{border:0;padding:5px 14px 5px 10px;color:#fff}'
   + '#newv .hmc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px 0 40px}#newv .hmgreet{font:700 16px system-ui;letter-spacing:.14em;text-transform:uppercase;color:#9dfbe3;margin-bottom:18px}'
   + '#newv .hmring .ring{width:min(46vw,200px);height:min(46vw,200px);position:relative;margin:0 auto}#newv .hmring .ring svg{width:100%;height:100%}#newv .hmring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}#newv .hmring .c small{font:700 13px system-ui;letter-spacing:.18em;text-transform:uppercase;color:#b9b0ff}#newv .hmring .c b{font:800 64px/1 system-ui;color:#fff;letter-spacing:-.03em}'
-  + '#newv .hmlvl{margin:16px 0 4px}#newv .hmq{margin:26px auto 30px;max-width:620px;padding:22px 26px;border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(185,176,255,.22);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}#newv .hmq p{margin:0;font:600 clamp(19px,2.6vw,25px)/1.4 Georgia,serif;font-style:italic;color:#f2f0ff}#newv .hmq cite{display:block;margin-top:10px;font:700 14px system-ui;font-style:normal;color:#b9b0ff;letter-spacing:.04em}'
-  + '#newv .hmgo{width:min(480px,100%);padding:22px 28px;font-size:23px;border-radius:20px;letter-spacing:.01em;box-shadow:0 18px 50px -12px rgba(255,111,145,.75);animation:nvglow 2.6s ease-in-out infinite}@keyframes nvglow{50%{box-shadow:0 18px 64px -6px rgba(255,111,145,.95)}}@media (prefers-reduced-motion:reduce){#newv .hmgo{animation:none}}'
+  + '#newv .hmlvl{margin:16px 0 4px}#newv .hmq{margin:26px auto 30px;max-width:620px;padding:22px 26px;border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(185,176,255,.22);}#newv .hmq p{margin:0;font:600 clamp(19px,2.6vw,25px)/1.4 Georgia,serif;font-style:italic;color:#f2f0ff}#newv .hmq cite{display:block;margin-top:10px;font:700 14px system-ui;font-style:normal;color:#b9b0ff;letter-spacing:.04em}'
+  + '#newv .hmgo{width:min(480px,100%);padding:22px 28px;font-size:23px;border-radius:20px;letter-spacing:.01em;box-shadow:0 18px 50px -12px rgba(255,111,145,.75);}@keyframes nvglow{50%{box-shadow:0 18px 64px -6px rgba(255,111,145,.95)}}@media (prefers-reduced-motion:reduce){#newv .hmgo{animation:none}}'
   + '#newv .nw:has(.hm){max-width:1000px}#newv .nvdbg{text-align:center;font:600 11px system-ui;color:#8f8bb8;padding:0 0 8px;margin-top:-6px;position:sticky;bottom:0;background:rgba(8,10,34,.96)}'
 
   + '#newv .nd.wait .dot{background:#12102e;border-color:rgba(185,176,255,.35);color:#b9b0ff}#newv .nd.wait .bx{opacity:.88}#newv .nd.open .dot{background:#12102e;border-color:rgba(185,176,255,.5);color:#f2f0ff}'
-  + '#newv .nd .bx .vc{margin:10px 0 0}#newv .nd .bx .go{margin-top:12px}#newv .nd .dot .kd svg{width:30px;height:auto;display:block}#newv .hero h2{margin:0 0 4px}';
+  + '#newv .nd .bx .vc{margin:10px 0 0}#newv .nd .bx .go{margin-top:12px}#newv .nd .dot .kd svg{width:30px;height:auto;display:block}#newv .hero h2{margin:0 0 4px}'
+
+  + '#newv button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}#newv .nw{animation:nvin .18s ease-out}@keyframes nvin{from{opacity:.4}to{opacity:1}}@media (prefers-reduced-motion:reduce){#newv .nw{animation:none}}'
+  + '#newv .sk{height:92px;border-radius:18px;margin:14px 0;background:linear-gradient(90deg,rgba(255,255,255,.05),rgba(255,255,255,.11),rgba(255,255,255,.05));background-size:200% 100%;animation:nvsk 1.1s linear infinite}@keyframes nvsk{to{background-position:-200% 0}}';
   var S = {unit: 1, vids: [], cur: null, pl: null, hb: null, ack: 0, mack: null, fails: 0, back: null, ytReady: false, ytQ: [], word: 0, wordT: 0, hidden: false, ready: false, busy: false};
   function tok(){ return ls("nnt_phone_token"); }
   function fmt(s){ s = Math.max(0, Math.round(s)); var h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return (h ? h + ":" + (m < 10 ? "0" : "") : "") + m + ":" + (x < 10 ? "0" : "") + x; }
@@ -275,6 +278,7 @@
   /* Proceed: refresh the map from the server, then open the next unit */
   function moveOn(btn){
     var cur = S.unit, old = btn ? btn.innerHTML : "";
+    if (nvCanNext()){ var fast = nvNext(); goUnit(fast); navLoad().then(function(){ if (S.unit === fast) prefetchNear(); }, function(){}); return; }
     if (btn){ btn.disabled = true; btn.innerHTML = "<b>Opening…</b>"; }
     navLoad().then(function(n){
       if (!n || n.err){ nvNote("Please try again in a moment."); if (btn){ btn.disabled = false; btn.innerHTML = old; } return; }
@@ -358,12 +362,35 @@
       nvAsk("⚡ Jump to the test?", "<ul><li>You <b>skip the videos</b>.</li><li>You need at least <b>" + S.jpct + "%</b> to go on.</li><li>You can do this <b>only once</b> for this unit. It starts now and cannot be paused.</li><li>If you <b>leave the test window 3 times</b>, it is cancelled.</li><li>If you do not reach " + S.jpct + "%, you start from the videos.</li></ul>", "Start the test", function(){ startHome(jb, true); });
     };
   }
+  /* a small memory of the units already opened, so moving between units is instant; the fresh answer always follows */
+  var CACHE = {};
+  function fetchUnit(u){ return Promise.all([rpc("nv_stage", {tok: tok(), u: u}), rpc("nv_state", {tok: tok(), u: u})]); }
+  function skeleton(u){
+    page('<div class="hb"><div class="hero"><div class="ring">' + ringSvg(0) + '<div class="c"><small>Unit</small><b>' + u + '</b></div></div><div><h2>Unit ' + u + ' · Learning Flow</h2><p class="sub">Opening…</p></div></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>', true);
+  }
+  function prefetchNear(){
+    var us = [nvPrev(), nvCanNext() ? nvNext() : null];
+    us.forEach(function(v){ if (v === null || CACHE[v]) return; fetchUnit(v).then(function(p){ CACHE[v] = {x: p[0], r: p[1], sig: JSON.stringify(p)}; }).catch(function(){}); });
+  }
   function unitPage(){
-    S.sub = true;
-    rpc("nv_stage", {tok: tok(), u: S.unit}).then(function(x){ S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); S.jump = !!(x && x.ok && x.jump); S.testacct = !!(x && x.ok && x.testacct); S.jpct = x && x.ok ? x.jpct : 80; return rpc("nv_state", {tok: tok(), u: S.unit}); }).then(function(r){
+    S.sub = true; var u = S.unit, F = {kseen: false, ret: false, auto: ""};
+    try{ F.kseen = sessionStorage.getItem("nvks" + u) === "1"; F.ret = sessionStorage.getItem("nnt_ret") === "1"; sessionStorage.removeItem("nnt_ret"); F.auto = sessionStorage.getItem("nvauto") || ""; sessionStorage.removeItem("nvauto"); }catch(e){}
+    var c = CACHE[u];
+    if (c && !F.ret) paintUnit(c.x, c.r, F); else skeleton(u);
+    fetchUnit(u).then(function(p){
+      var sig = JSON.stringify(p); CACHE[u] = {x: p[0], r: p[1], sig: sig};
+      if (S.unit !== u || !S.sub || el("nvbegin")) return;
+      if (!(c && !F.ret && c.sig === sig)) paintUnit(p[0], p[1], F);
+      setTimeout(prefetchNear, 400);
+    }).catch(function(){ if (!c) page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>', true); });
+  }
+  function paintUnit(x, r, F){
+    S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); S.jump = !!(x && x.ok && x.jump); S.testacct = !!(x && x.ok && x.testacct); S.jpct = x && x.ok ? x.jpct : 80;
+    {
       if (!r || !r.ok){ page('<h2>Unit ' + S.unit + '</h2><p class="sub">' + (r && r.err === "closed" ? "This unit is not open yet. Your teacher will open it soon." : r && r.err === "locked" ? "Finish the earlier unit first." : "Not available right now.") + ' <small style="opacity:.6">(' + esc((r && r.err) || "error") + ')</small></p>', true); return; }
       S.vids = r.videos;
-      var kseen = false, ret = false, auto = ""; try{ kseen = sessionStorage.getItem("nvks" + S.unit) === "1"; ret = sessionStorage.getItem("nnt_ret") === "1"; sessionStorage.removeItem("nnt_ret"); auto = sessionStorage.getItem("nvauto") || ""; sessionStorage.removeItem("nvauto"); }catch(e){}
+      var kseen = F.kseen, ret = F.ret, auto = F.auto;
+      if (S.st && S.st.key && S.nav && S.nav.keys.indexOf(S.unit) < 0) S.nav.keys.push(S.unit);
       /* coming back from the home test or the writing: stay on the steps; the key screen is only for finishing the last step */
       if (ret && !(S.st && S.st.speak)) kseen = true;
       /* the key screen is the celebration right after finishing the last step, not something to see again when moving between units */
@@ -423,10 +450,11 @@
       Array.prototype.forEach.call(el("newv").querySelectorAll(".go[data-i]"), function(b){ b.onclick = function(){ play(+b.getAttribute("data-i")); }; });
       if (ret && auto === "write" && st.test && !st.essay && el("nvstartwrite")) autoNext("Writing", "nvstartwrite", startWrite);
       else if (ret && auto === "speak" && st.essay && !st.speak && el("nvstartspeak")) autoNext("Speaking", "nvstartspeak", startSpeak);
-    }).catch(function(){ page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>', true); });
+    }
   }
   /* ---------- writing ---------- */
   function startWrite(btn){
+    CACHE = {};
     try{ sessionStorage.setItem("nvauto", "speak"); }catch(e){}
     btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
     rpc("nv_write", {tok: tok(), u: S.unit}).then(function(r){
@@ -444,6 +472,7 @@
   }
   /* ---------- speaking ---------- */
   function startSpeak(btn){
+    CACHE = {};
     btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
     rpc("nv_speak", {tok: tok(), u: S.unit}).then(function(r){
       if (!r || !r.ok){ btn.disabled = false; btn.textContent = "Start the speaking"; if (r && r.err === "done" || r.err === "essay") unitPage(); else nvNote("The speaking is not ready. Tell your teacher."); return; }
@@ -460,6 +489,7 @@
   }
   /* ---------- home test ---------- */
   function startHome(btn, jump){
+    CACHE = {};
     try{ sessionStorage.setItem("nvauto", "write"); }catch(e){}
     var lab0 = btn.textContent;
     btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
@@ -478,6 +508,7 @@
   }
   /* ---------- player ---------- */
   function play(idx){
+    CACHE = {};
     Z.z = 1; Z.x = 0; Z.y = 0; try{ zApply(); }catch(e){}
     setTimeout(fitView, 600);
     var v = S.vids.filter(function(x){ return x.idx === idx; })[0]; if (!v || !v.yt) return;
