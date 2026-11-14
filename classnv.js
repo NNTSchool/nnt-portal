@@ -58,6 +58,9 @@
   + '#cnv .fc .fi{font-size:84px;line-height:1}#cnv .fc b{font-size:30px;font-weight:800;line-height:1.1}#cnv .fc small{font-size:18px;font-weight:700;opacity:.8}#cnv .fc em{font-style:normal;font-size:14px;font-weight:700;padding:5px 14px;border-radius:99px;background:rgba(255,255,255,.1)}#cnv .fc .fb{position:absolute;top:16px;left:18px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.14);font-style:normal;font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center}'
   + '#cnv .fc.on{color:#0b1130;background:linear-gradient(135deg,#5df2d6,#7aa2ff 55%,#c58bff);box-shadow:0 14px 0 #3b4fa8,0 26px 50px rgba(122,162,255,.45);animation:fpl 2.4s ease-in-out infinite}#cnv .fc.on b{color:#0b1130}#cnv .fc.on em{background:rgba(255,255,255,.55)}#cnv .fc.on .fb{background:rgba(255,255,255,.6)}@keyframes fpl{50%{transform:translateY(-6px)}}'
   + '#cnv .fl{flex:0 0 170px;display:flex;flex-direction:column;align-items:center;gap:8px;color:#7d8fd6}#cnv .fl svg{width:130px;height:26px}#cnv .fl span{font-size:14px;font-weight:700;color:#9fb4ff;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.16);border-radius:99px;padding:5px 12px;white-space:nowrap}';
+  CSS += '#cnv .gr{display:grid;gap:12px 22px;margin:14px 0}#cnv .gr.g4{grid-template-columns:repeat(4,1fr)}#cnv .gr.g3{grid-template-columns:repeat(3,1fr)}#cnv .gr.g2{grid-template-columns:repeat(2,1fr)}#cnv .gr .it{display:flex;align-items:center;gap:10px;margin:0}#cnv .gr .it span{flex:0 0 30px;height:30px;border-radius:50%;background:rgba(122,162,255,.2);color:#bcd0ff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}#cnv .gr input.a{padding:9px 12px;font-size:18px}'
+  + '#cnv .num input.a{font-size:24px;letter-spacing:.08em;font-weight:700;color:#ffd23f;padding:11px 14px}#cnv .seek{flex:1;accent-color:#7aa2ff;height:6px;cursor:pointer}#cnv .spd{display:flex;align-items:center;gap:8px;margin-top:10px}#cnv .sp5{padding:7px 13px;font-size:14px}#cnv .sp5.on{background:#7aa2ff;color:#0b1130;border-color:#7aa2ff}';
+  CSS += '#cnv .ins{display:flex;align-items:center;gap:18px;margin:16px 0 8px;padding:18px 22px;border-radius:20px;background:linear-gradient(120deg,rgba(93,242,214,.2),rgba(122,162,255,.22) 55%,rgba(197,139,255,.22));border:2px solid rgba(160,190,255,.55);box-shadow:0 0 34px rgba(122,162,255,.22)}#cnv .ins .ii{flex:0 0 58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#5df2d6,#7aa2ff);display:flex;align-items:center;justify-content:center;font-size:30px}#cnv .ins small{display:block;font-size:12px;font-weight:800;letter-spacing:.2em;color:#ffd23f;margin-bottom:4px}#cnv .ins strong{font-size:24px;line-height:1.3;font-weight:700;color:#fff}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
   function page(h){ stopAudio(); root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
@@ -181,10 +184,27 @@
   }
   function dots(){ return '<div class="dots">' + S.P.exercises.map(function(e, i){ return '<i class="' + (i < S.ei ? "on" : i === S.ei ? "cur" : "") + '"></i>'; }).join("") + '</div>'; }
   function player(ex){
+    if (ex.long) return '<div class="card"><div class="pl"><button class="go" id="cplay">▶ Play</button><input type="range" id="cseek" min="0" max="1000" value="0" class="seek"><span id="ctm" class="sub">0:00</span></div>'
+      + '<div class="spd"><span class="sub">Speed</span><button class="pill sp5" data-s="0.6">0.6×</button><button class="pill sp5" data-s="0.8">0.8×</button><button class="pill sp5 on" data-s="1">1×</button><button class="pill sp5" data-s="1.25">1.25×</button></div>'
+      + '<p class="sub" style="margin:8px 0 0">Dictation: you can pause, move around the recording and change the speed. Take your time.</p></div>';
     return '<div class="card"><div class="pl"><button class="go" id="cplay">▶ Play</button><div class="bar"><b id="cbar"></b></div><span id="ctm" class="sub">0:00</span></div>'
       + '<p class="sub" style="margin:8px 0 0">You cannot skip or rewind. Once it starts, listen to the end. You can play it again afterwards.</p></div>';
   }
+  function wireFull(ex){
+    var b = el("cplay"), sk = el("cseek"), tm = el("ctm"), spd = 1, drag = false;
+    function fmt(t){ t = Math.floor(t); return Math.floor(t / 60) + ":" + ("0" + t % 60).slice(-2); }
+    function ensure(){ if (A) return Promise.resolve(); b.disabled = true; b.textContent = "Loading…";
+      return audioUrl(ex).then(function(url){ A = new Audio(url); A.playbackRate = spd; b.disabled = false;
+        A.ontimeupdate = function(){ if (A && A.duration && !drag){ sk.value = 1000 * A.currentTime / A.duration; } tm.textContent = fmt(A.currentTime) + " / " + fmt(A.duration || 0); };
+        A.onended = function(){ b.textContent = "▶ Play again"; };
+      }); }
+    b.onclick = function(){ ensure().then(function(){ if (A.paused){ A.playbackRate = spd; var p = A.play(); if (p && p.catch) p.catch(function(){}); b.textContent = "❚❚ Pause"; } else { A.pause(); b.textContent = "▶ Play"; } }).catch(function(){ b.disabled = false; b.textContent = "▶ Try again"; }); };
+    sk.oninput = function(){ drag = true; };
+    sk.onchange = function(){ drag = false; ensure().then(function(){ if (A.duration) A.currentTime = A.duration * sk.value / 1000; }); };
+    [].forEach.call(document.querySelectorAll(".sp5"), function(x){ x.onclick = function(){ spd = +x.getAttribute("data-s"); if (A) A.playbackRate = spd; [].forEach.call(document.querySelectorAll(".sp5"), function(y){ y.classList.toggle("on", y === x); }); }; });
+  }
   function wirePlayer(ex){
+    if (ex.long) return wireFull(ex);
     var b = el("cplay"), bar = el("cbar"), tm = el("ctm");
     b.onclick = function(){
       stopAudio(); b.disabled = true; b.textContent = "Loading…";
@@ -198,10 +218,11 @@
   }
   function runEx(){
     var ex = S.P.exercises[S.ei]; S.checked = false;
+    var ml = Math.max.apply(null, ex.items.map(function(t){ return t.length; })), gc = ex.long ? "" : ml <= 13 ? "g4" : ml <= 22 ? "g3" : "g2", w = Math.min(34, Math.max(9, ml + 3));
     var inputs = ex.items.map(function(_, k){ return ex.long ? '<div class="it"><span>' + (k + 1) + '</span><textarea class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>'
-      : '<div class="it"><span>' + (k + 1) + '</span><input class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off"></div>'; }).join("");
+      : '<div class="it"><span>' + (k + 1) + '</span><input class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off" style="max-width:' + Math.min(36, Math.max(8, ex.items[k].length + 4)) + 'ch"></div>'; }).join("");
     page(top("Exit") + '<p class="sub" style="margin:0">Exercise ' + ex.id + ' · ' + (S.ei + 1) + ' of ' + S.P.exercises.length + '</p><h2>' + esc(ex.name) + '</h2>' + dots()
-      + '<p>' + esc(ex.say) + '</p>' + player(ex) + '<div id="cin">' + inputs + '</div><button class="go" id="cchk" style="margin-top:6px">Check my answers</button><div id="cout"></div>');
+      + '<div class="ins"><span class="ii">' + (ex.long ? "✍️" : "🎧") + '</span><div><small>WHAT TO DO</small><strong>' + esc(ex.say) + '</strong></div></div>' + player(ex) + '<div id="cin" class="' + (gc ? "gr " + gc : "") + (ex.id === "1.05" ? " num" : "") + '">' + inputs + '</div><button class="go" id="cchk" style="margin-top:6px">Check my answers</button><div id="cout"></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; wirePlayer(ex);
     el("cchk").onclick = function(){ checkEx(ex); };
   }
