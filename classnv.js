@@ -68,9 +68,16 @@
   + '#cnv .verd{font-size:30px;font-weight:800;letter-spacing:.06em;margin-top:12px;animation:fup .7s .5s both}#cout{position:relative}#cnv .fbk .spk{position:absolute;inset:0;overflow:hidden;pointer-events:none}'
   + '#cnv .fr{margin:16px 0}#cnv .fr.rl{display:flex;flex-direction:column;gap:10px}#cnv .rc{display:flex;align-items:center;gap:10px;border-radius:14px;padding:10px 12px;animation:rcp .5s cubic-bezier(.2,1.4,.4,1) both}#cnv .rc>div{flex:1;min-width:0}#cnv .rc.g{background:linear-gradient(120deg,rgba(93,242,214,.22),rgba(93,242,214,.06));border:1.5px solid rgba(93,242,214,.55)}#cnv .rc.b{background:linear-gradient(120deg,rgba(255,122,154,.22),rgba(255,122,154,.06));border:1.5px solid rgba(255,122,154,.55)}'
   + '#cnv .rc .rn{flex:0 0 28px;height:28px;border-radius:50%;background:rgba(255,255,255,.14);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}#cnv .rc b{font-size:19px;color:#e9fff9}#cnv .rc s{display:block;font-size:15px;color:#ff9db3;opacity:.9}#cnv .rc strong{display:block;font-size:19px;color:#ffd23f}#cnv .rc small{display:block;font-size:13px;color:#ffc0cf;margin-top:2px}#cnv .rc i{font-style:normal;font-weight:800;font-size:20px}#cnv .rc.g i{color:#5df2d6}#cnv .rc.b i{color:#ff7a9a}@keyframes rcp{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}';
+  CSS += '#cnv .stp.fx .sn.cu .sb{background:linear-gradient(135deg,#ff9f43,#ff7a9a);box-shadow:0 5px 0 #a8452f,0 0 26px rgba(255,140,90,.8)}#cnv .stp.fx .sn.dn .sb{background:linear-gradient(135deg,#ffd23f,#ff9f43);box-shadow:0 5px 0 #a8661f}#cnv .stp.fx .sn.dn em{color:#ffd23f}#cnv .stp.fx u.f{background:linear-gradient(90deg,#ffd23f,#ff7a9a)}'
+  + '#cnv .fxtag{display:inline-block;font-weight:800;letter-spacing:.14em;font-size:13px;color:#2b1200;background:linear-gradient(90deg,#ffd23f,#ff9f43);border-radius:99px;padding:6px 14px;margin:2px 0 6px}#cnv .ins.fixc{background:linear-gradient(120deg,rgba(255,210,63,.2),rgba(255,122,154,.2));border-color:rgba(255,170,100,.7);box-shadow:0 0 34px rgba(255,150,90,.22)}#cnv .ins.fixc .ii{background:linear-gradient(135deg,#ffd23f,#ff7a9a)}#cnv .ins.fixc small{color:#ffd23f}'
+  + '#cnv .wu{display:block;font-weight:800;letter-spacing:.22em;font-size:13px;color:#ffd23f;margin-bottom:12px}#cnv .fixgo{margin-top:10px;background:linear-gradient(90deg,#ffd23f,#ff9f43,#ff7a9a);color:#2b1200;animation:fpl 2.2s ease-in-out infinite}'
+  + '#cnv .brk{text-align:center;padding:26px 0 40px}#cnv .bh{font-size:56px;line-height:1.05;letter-spacing:-.03em;margin:0 0 8px;font-weight:800;color:#fff}#cnv .bring{position:relative;width:300px;height:300px;margin:22px auto 10px;filter:drop-shadow(0 0 30px rgba(122,162,255,.35))}#cnv .bring svg{width:100%;height:100%}#cnv .bc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}#cnv .bc small{font-size:13px;font-weight:800;letter-spacing:.2em;color:#9fb4ff}#cnv .bc b{font-size:78px;line-height:1.05;font-weight:800;background:linear-gradient(160deg,#fff,#9fd0ff 60%,#c58bff);-webkit-background-clip:text;background-clip:text;color:transparent}#cnv .bc em{font-style:normal;font-size:15px;font-weight:700;color:#bfe9ff}'
+  + '#cnv .bring.late{animation:lshk 1s ease-in-out infinite;filter:drop-shadow(0 0 40px rgba(255,90,90,.6))}#cnv .bring.late #barc{stroke:#ff5a6e}#cnv .bring.late .bc b{background:linear-gradient(160deg,#fff,#ff9db3 60%,#ff5a6e);-webkit-background-clip:text;background-clip:text}#cnv .bring.late .bc b{font-size:64px}#cnv .bring.late .bc small,#cnv .bring.late .bc em{color:#ff9db3}@keyframes lshk{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}'
+  + '#cnv .chips{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px}#cnv .chips span{padding:9px 16px;border-radius:99px;font-weight:700;font-size:15px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.18)}#cnv .chips span:nth-child(1){border-color:#5df2d6}#cnv .chips span:nth-child(2){border-color:#7aa2ff}#cnv .chips span:nth-child(3){border-color:#c58bff}#cnv .chips span:nth-child(4){border-color:#ffd23f}'
+  + '#cnv .bk .be{font-size:92px;line-height:1;animation:rpop .8s cubic-bezier(.2,1.5,.4,1) both}#cnv .bk.lt .bh{color:#ffb3c1}#cnv .bk.ok .bh{color:#baffef}#cnv .bk .fst{display:flex;gap:14px;justify-content:center;margin:20px auto 0}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
-  function page(h){ stopAudio(); root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
+  function page(h){ stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
   function top(back){ return '<div class="tb"><button class="pill" id="cb">' + (back || "← Back") + '</button><div class="sp"></div><b>NNT · Classroom</b></div>'; }
   function stopAudio(){ if (A){ try{ A.pause(); }catch(e){} A = null; } }
   function close(){ stopAudio(); var r = el("cnv"); if (r) r.remove(); if (O && O.onExit) O.onExit(); }
@@ -190,12 +197,14 @@
     }).catch(function(){ page(top() + '<div class="card warn"><h2>This part is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
   }
   var ICO = {"01": "🔤", "02": "📝", "03": "🕒", "04": "🏠", "05": "🔢", "06": "👤", "07": "🌍", "08": "⭐"};
-  function dots(){
-    var h = '<div class="stp">';
-    S.P.exercises.forEach(function(e, i){ var r = S.res && S.res[e.id], st = i < S.ei ? "dn" : i === S.ei ? "cu" : "", sc = r ? r.good + "/" + r.n : "";
-      h += (i ? '<u class="' + (i <= S.ei ? "f" : "") + '"></u>' : '') + '<div class="sn ' + st + '"><span class="sb">' + (i < S.ei ? "✔" : (ICO[e.id.slice(-2)] || (i + 1))) + '</span><small>' + esc(e.name) + '</small><em>' + (sc || (i === S.ei ? "you are here" : "")) + '</em></div>'; });
+  function stepperOf(list, cur, scoreOf, fix){
+    var h = '<div class="stp' + (fix ? " fx" : "") + '">';
+    list.forEach(function(e, i){ var sc = scoreOf(e), st = i < cur ? "dn" : i === cur ? "cu" : "";
+      h += (i ? '<u class="' + (i <= cur ? "f" : "") + '"></u>' : '') + '<div class="sn ' + st + '"><span class="sb">' + (i < cur ? "✔" : (ICO[e.id.slice(-2)] || (i + 1))) + '</span><small>' + esc(e.name) + '</small><em>' + (sc || (i === cur ? "you are here" : "")) + '</em></div>'; });
     return h + '</div>';
   }
+  function dots(){ return stepperOf(S.P.exercises, S.ei, function(e){ var r = S.res && S.res[e.id]; return r ? r.good + "/" + r.n : ""; }); }
+
   function player(ex){
     if (ex.long) return '<div class="card" id="cpc"><div class="pl"><button class="go" id="cplay">▶ Play</button><input type="range" id="cseek" min="0" max="1000" value="0" class="seek"><span id="ctm" class="sub">0:00</span></div>'
       + '<div class="spd"><span class="sub">Speed</span><button class="pill sp5" data-s="0.6">0.6×</button><button class="pill sp5" data-s="0.8">0.8×</button><button class="pill sp5 on" data-s="1">1×</button><button class="pill sp5" data-s="1.25">1.25×</button></div>'
@@ -267,33 +276,64 @@
     el("cout").scrollIntoView && el("cout").scrollIntoView({behavior: "smooth"});
   }
   function summary(){
-    var g = 0, n = 0, h = ""; S.P.exercises.forEach(function(e){ var r = S.res[e.id]; g += r.good; n += r.n; h += '<div class="r ' + (r.miss.length ? "b" : "g") + '"><b>' + e.id + ' ' + esc(e.name) + '</b> · ' + r.good + '/' + r.n + '</div>'; });
+    var g = 0, n = 0, rows = ""; S.P.exercises.forEach(function(e, i){ var r = S.res[e.id]; g += r.good; n += r.n; var pc = Math.round(100 * r.good / r.n);
+      rows += '<div class="rc ' + (r.miss.length ? "b" : "g") + '" style="animation-delay:' + (0.4 + i * 0.08).toFixed(2) + 's"><span class="rn">' + (ICO[e.id.slice(-2)] || i + 1) + '</span><div><b>' + esc(e.name) + '</b><small style="color:#bcd0ff">' + r.good + ' of ' + r.n + ' · ' + pc + '%</small></div><i>' + (r.miss.length ? "✖" : "✔") + '</i></div>'; });
     S.fix = S.P.exercises.filter(function(e){ return S.res[e.id].miss.length; });
-    page(top() + '<div class="hero"><h2>Warm-up finished</h2><p class="sub">' + g + ' of ' + n + ' correct (' + Math.round(100 * g / n) + '%)</p></div>' + h
-      + (S.fix.length ? '<button class="go" id="cfix" style="margin-top:10px">Fix it round: listen again and rewrite only what you missed →</button>' : '<button class="go" id="cdone" style="margin-top:10px">Continue →</button>'));
+    var pct = Math.round(100 * g / n), t = tier(pct), sp = "";
+    if (pct >= 90) for (var q = 0; q < 34; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 2.5).toFixed(2) + 's;animation-duration:' + (2.4 + Math.random() * 2).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#fff"][q % 5] + ';width:' + (5 + Math.random() * 6).toFixed(1) + 'px;height:' + (8 + Math.random() * 10).toFixed(1) + 'px"></i>';
+    var miss = S.fix.reduce(function(a, e){ return a + S.res[e.id].miss.length; }, 0);
+    page(top() + '<div class="fbk"><div class="spk">' + sp + '</div><small class="wu">WARM-UP FINISHED</small><div class="ring" style="--c:' + t[2] + ';--a:' + Math.round(3.6 * pct) + 'deg"><div><b>' + pct + '%</b><small>' + g + ' of ' + n + ' correct</small></div></div><div class="verd" style="color:' + t[2] + '">' + t[1] + ' ' + t[0] + '</div></div>'
+      + '<div class="gr g2 fr">' + rows + '</div>'
+      + (S.fix.length ? '<button class="go fixgo" id="cfix">🛠 Start the fix round: ' + miss + ' item' + (miss > 1 ? "s" : "") + ' to win back →</button>' : '<button class="go" id="cdone" style="margin-top:6px">Continue →</button>'));
     el("cb").onclick = hub;
-    if (el("cfix")) el("cfix").onclick = function(){ S.fi = 0; fixEx(); };
+    if (el("cfix")) el("cfix").onclick = function(){ S.fi = 0; S.fres = {}; fixEx(); };
     if (el("cdone")) el("cdone").onclick = listeningDone;
   }
   function fixEx(){
     if (S.fi >= S.fix.length) return listeningDone();
-    S.inFix = true; var ex = S.fix[S.fi], miss = S.res[ex.id].miss;
+    S.inFix = true; var ex = S.fix[S.fi], miss = S.res[ex.id].miss, ml = Math.max.apply(null, miss.map(function(k){ return ex.items[k].length; })), gc = ex.long ? "" : ml <= 13 ? "g4" : ml <= 22 ? "g3" : "g2";
     var inputs = miss.map(function(k){ return ex.long ? '<div class="it"><span>' + (k + 1) + '</span><textarea class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>'
-      : '<div class="it"><span>' + (k + 1) + '</span><input class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off"></div>'; }).join("");
-    page(top("Exit") + '<p class="sub" style="margin:0">Fix it · ' + (S.fi + 1) + ' of ' + S.fix.length + '</p><h2>' + esc(ex.id + " " + ex.name) + '</h2><p>Listen again. Write only the items you missed. The answers are hidden until you check.</p>' + player(ex)
-      + '<div id="cin">' + inputs + '</div><button class="go" id="cchk">Check</button><div id="cout"></div>');
+      : '<div class="it"><span>' + (k + 1) + '</span><input class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off" style="max-width:' + Math.min(36, Math.max(8, ml + 4)) + 'ch"></div>'; }).join("");
+    page(top("Exit") + '<div class="fxtag">🛠 FIX ROUND · ' + (S.fi + 1) + ' of ' + S.fix.length + '</div>' + stepperOf(S.fix, S.fi, function(e){ var r = S.fres && S.fres[e.id]; return r ? r.good + "/" + r.n : ""; }, true)
+      + '<h2 style="margin:8px 0 0">' + esc(ex.id + " · " + ex.name) + '</h2>'
+      + '<div class="ins fixc"><span class="ii">🎯</span><div><small>WIN THEM BACK</small><strong>Listen once more and rewrite only the ' + miss.length + ' item' + (miss.length > 1 ? "s" : "") + ' you missed. The answers stay hidden until you check.</strong></div></div>' + player(ex)
+      + '<div id="cin" class="' + (gc ? "gr " + gc : "") + '">' + inputs + '</div><button class="go" id="cchk" style="margin-top:6px">Check my fixes</button><div id="cout"></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; wirePlayer(ex);
     el("cchk").onclick = function(){
       stopAudio(); var rows = [], fixed = 0; [].forEach.call(document.querySelectorAll("#cin .a"), function(x){ var k = +x.getAttribute("data-k"), j = judge(ex, k, x.value); if (j.ok) fixed++; rows.push({k: k, said: x.value.trim(), ok: j.ok, pct: j.pct}); });
-      el("cchk").remove(); el("cin").style.display = "none"; if (el("cpc")) el("cpc").remove(); el("cout").innerHTML = feedback(ex, rows, fixed, miss.length, "fixed") + '<button class="go" id="cnx" style="margin-top:14px">Continue →</button>';
+      S.fres = S.fres || {}; S.fres[ex.id] = {good: fixed, n: miss.length};
+      el("cchk").remove(); el("cin").style.display = "none"; if (el("cpc")) el("cpc").remove(); el("cout").innerHTML = feedback(ex, rows, fixed, miss.length, "fixed") + '<button class="go" id="cnx" style="margin-top:14px">' + (S.fi + 1 < S.fix.length ? "Next fix →" : "Finish the fix round →") + '</button>';
       el("cnx").onclick = function(){ S.fi++; fixEx(); };
+      el("cout").scrollIntoView && el("cout").scrollIntoView({behavior: "smooth"});
     };
   }
-  function listeningDone(){
-    page('<div class="hero"><h1>Listening done ✔</h1><p class="sub">Great focus. Now take a break.</p></div><div class="card ok"><h2>Take a 10-minute break</h2><p>Stand up, step outside, drink some water. You will focus better. If you feel full of energy, you can skip it.</p></div>'
-      + '<button class="go" id="cbk">I am back →</button> <button class="pill" id="cign" style="margin-left:6px">Ignore the break, keep going</button>');
-    function nextStage(){ unitDone(); }
-    el("cbk").onclick = nextStage; el("cign").onclick = nextStage;
+  var BRK = 600;
+  function mmss(t){ t = Math.max(0, Math.floor(t)); return ("0" + Math.floor(t / 60)).slice(-2) + ":" + ("0" + t % 60).slice(-2); }
+  function nextStage(info){ unitDone(); }
+  /* one break screen for every stage: listening, reading, writing... */
+  function listeningDone(){ stageBreak("LISTENING DONE ✔", nextStage); }
+  function readingDone(){ stageBreak("READING DONE ✔", nextStage); }
+  function stageBreak(label, onNext){
+    var t0 = Date.now(), C = 2 * Math.PI * 130;
+    page('<div class="brk"><small class="wu">' + label + '</small><h1 class="bh">Break time!</h1><p class="sub" id="bsub">Great focus. Recharge for ten minutes. We will keep the clock for you.</p>'
+      + '<div class="bring" id="bring"><svg viewBox="0 0 300 300"><defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5df2d6"/><stop offset="1" stop-color="#c58bff"/></linearGradient></defs><circle cx="150" cy="150" r="130" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="16"/><circle id="barc" cx="150" cy="150" r="130" fill="none" stroke="url(#bg1)" stroke-width="16" stroke-linecap="round" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="0" transform="rotate(-90 150 150)"/></svg>'
+      + '<div class="bc"><small id="blab">TIME LEFT</small><b id="btm">10:00</b><em id="bsm">☕ breathe</em></div></div>'
+      + '<div class="chips"><span>💧 Drink water</span><span>🚶 Stand up</span><span>👀 Rest your eyes</span><span>🌿 Fresh air</span></div>'
+      + '<div style="margin-top:22px"><button class="go" id="cbk">I am back →</button> <button class="pill" id="cign" style="margin-left:8px">Skip the break</button></div></div>');
+    function tick(){ var el_ = (Date.now() - t0) / 1000, left = BRK - el_, late = el_ > BRK, r = el("bring"); if (!r) return;
+      if (!late){ el("btm").textContent = mmss(left); el("barc").setAttribute("stroke-dashoffset", (C * (1 - left / BRK)).toFixed(1)); el("blab").textContent = "TIME LEFT"; el("bsm").textContent = left < 60 ? "⏳ almost time" : "☕ breathe"; }
+      else { r.classList.add("late"); el("btm").textContent = "+" + mmss(el_ - BRK); el("barc").setAttribute("stroke-dashoffset", "0"); el("blab").textContent = "YOU ARE LATE"; el("bsm").textContent = "⏰ class is waiting for you"; el("bsub").textContent = "The break is over. Come back now: every second is counted."; } }
+    tick(); S.bt = setInterval(tick, 250);
+    el("cbk").onclick = function(){ var away = (Date.now() - t0) / 1000; backScreen(away, onNext); };
+    el("cign").onclick = function(){ backScreen(-1, onNext); };
+  }
+  function backScreen(away, onNext){
+    var late = away > BRK ? away - BRK : 0, h;
+    if (away < 0) h = '<div class="bk skip"><div class="be">🔥</div><h1 class="bh">No break, full power!</h1><p class="sub">You skipped the break. Stay sharp and keep the energy.</p></div>';
+    else h = '<div class="bk ' + (late ? "lt" : "ok") + '"><div class="be">' + (late ? "⏰" : "🎉") + '</div><h1 class="bh">' + (late ? "Welcome back, a bit late" : "Welcome back, right on time") + '</h1><p class="sub">' + (late ? "The break was 10 minutes. Next time, be back a little sooner." : "You used your break well. Time to continue.") + '</p>'
+      + '<div class="fst" style="opacity:1;animation:none"><div><b style="color:#7aa2ff">10:00</b><span>break time</span></div><div><b style="color:#5df2d6">' + mmss(away) + '</b><span>you were away</span></div><div><b style="color:' + (late ? "#ff7a9a" : "#ffd23f") + '">' + (late ? "+" + mmss(late) : "0:00") + '</b><span>' + (late ? "late" : "late. Perfect!") + '</span></div></div></div>';
+    page('<div class="brk">' + h + '<button class="go" id="cbk2" style="margin-top:20px">Continue →</button></div>');
+    el("cbk2").onclick = onNext;
   }
   /* shown after listening, reading and writing are all complete */
   function goldKey(){ return keySvg().replace(/#5df2d6/g, "#fff3b0").replace(/#7aa2ff/g, "#ffc21a").replace(/#c58bff/g, "#d97a00"); }
