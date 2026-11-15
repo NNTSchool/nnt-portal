@@ -935,6 +935,18 @@
     ["mousemove", "keydown", "mousedown", "touchstart", "scroll"].forEach(function(ev){ document.addEventListener(ev, function(){ S.act = Date.now(); }, true); });
     function ping(){ if (document.visibilityState !== "visible" || !O.tok) return; try { Promise.resolve(R("nv_class_ping", {tok: O.tok, u: S.unit || 0, cur: S.cur || "hub"})).catch(function(){}); } catch (x) {} }
     setInterval(ping, 45000); setTimeout(ping, 2500);
+    /* leaving the window is counted for every classroom stage (one count per trip away) */
+    S.lvp = {}; S.away = false;
+    function lvSend(){
+      Object.keys(S.lvp).forEach(function(k){ var n = S.lvp[k]; if (!n || !O.tok) return; var p = k.split(":"); S.lvp[k] = 0;
+        try { Promise.resolve(R("nv_class_log", {tok: O.tok, u: +p[0], stage: p[1], add_secs: 0, detail: {lv: n}})).then(function(r){ if (!r || !r.ok) S.lvp[k] = (S.lvp[k] || 0) + n; }, function(){ S.lvp[k] = (S.lvp[k] || 0) + n; }); } catch (x) { S.lvp[k] += n; } });
+    }
+    function gone(){ if (S.away) return; S.away = true; if (!S.cur || !S.unit || ["lis", "read", "write"].indexOf(S.cur) < 0) return; var k = S.unit + ":" + S.cur; S.lvp[k] = (S.lvp[k] || 0) + 1; lvSend(); }
+    function back(){ S.away = false; lvSend(); }
+    document.addEventListener("visibilitychange", function(){ if (document.visibilityState === "hidden") gone(); else back(); });
+    window.addEventListener("blur", function(){ setTimeout(function(){ if (!document.hasFocus()) gone(); }, 400); });
+    window.addEventListener("focus", function(){ if (document.visibilityState === "visible") back(); });
+    setInterval(lvSend, 20000);
     setInterval(function(){
       if (!S.cur || document.visibilityState !== "visible" || Date.now() - S.act > 120000) return;
       var k = S.unit + ":" + S.cur; S.tm[k] = (S.tm[k] || 0) + 1; S.pend[k] = (S.pend[k] || 0) + 1;
