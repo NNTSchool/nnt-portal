@@ -535,7 +535,7 @@
       h += node(k2, tOK ? (st.cancelled ? "✕" : "✓") : "2", b2);
       /* 3 writing */
       var k3 = wOK ? "done" : tOK ? "now" : "wait", b3;
-      var SM = S.unit <= 4; /* units with the new read-and-summarise step */
+      var SM = S.unit <= 5; /* units with the new read-and-summarise step */
       if (wOK) b3 = '<b>' + (SM ? 'Read and summarise' : 'Writing') + '</b><small>Done</small>';
       else if (tOK) b3 = SM ? '<b>Read and summarise</b><small>Read a short article, then write a summary from memory · 30 minutes · at least 200 words. Do it in one go.</small><button class="go" id="nvstartwrite" type="button" style="' + cta + '">Start</button>' : '<b>Writing</b><small>' + (S.track === "ie" ? "40 minutes · at least 250 words" : "30 minutes · at least 180 words") + '. Do it in one go.</small><button class="go" id="nvstartwrite" type="button" style="' + cta + '">Start the writing</button>';
       else b3 = SM ? '<b>Read and summarise</b><small>Opens after the home test · read an article and write about it</small>' : '<b>Writing</b><small>Opens after the home test · put the unit on paper</small>';
@@ -550,7 +550,7 @@
       h += key ? node("done", '<span class="kk">' + keySvg() + '</span>', '<b>Key earned</b><small>Your class test for Unit ' + S.unit + ' is open.' + (S.nav && !nvCDone(S.unit) && nvNext() !== null && !S.nav.vip ? ' <b style="color:#ffd23f">Finish it in the classroom to unlock Unit ' + nvNext() + '.</b>' : '') + '</small>') : node("wait", '<span class="kd">' + keySvg() + '</span>', '<b>The key</b><small>Finish all four steps and it opens your class test for Unit ' + S.unit + '.</small>');
       h += '</div></div>';
       if (S.teacher){ h += '<div class="st"><div class="n">👑</div><div><b>Teacher: open any step</b><small>Your time and results are still recorded. Nothing is blocked for you.</small></div></div>'
-          + '<button class="go" id="nvtt" type="button">Home test</button> <button class="go" id="nvtw" type="button" style="margin-left:6px">' + (S.unit <= 4 ? 'Summary' : 'Writing') + '</button> <button class="go" id="nvts" type="button" style="margin-left:6px">Speaking</button>'; }
+          + '<button class="go" id="nvtt" type="button">Home test</button> <button class="go" id="nvtw" type="button" style="margin-left:6px">' + (S.unit <= 5 ? 'Summary' : 'Writing') + '</button> <button class="go" id="nvts" type="button" style="margin-left:6px">Speaking</button>'; }
       page(h, true);
       ["ml","ie"].forEach(function(t){ var b = el("nvt" + t); if (b) b.onclick = function(){ nvAsk("Choose " + (t === "ie" ? "IELTS" : "Multi-level") + "?", "You cannot change this later without your teacher.", "Yes, choose it", function(){ rpc("nv_set_track", {tok: tok(), trk: t}).then(function(r){ if (r && (r.ok || r.err === "fixed")) unitPage(); }); }); }; });
       if (el("nvstarttest")) el("nvstarttest").onclick = function(){ startHome(this); };
@@ -570,7 +570,7 @@
     try{ sessionStorage.setItem("nvauto", "speak"); }catch(e){}
     btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
     rpc("nv_write", {tok: tok(), u: S.unit}).then(function(r){
-      if (!r || !r.ok){ btn.disabled = false; btn.textContent = S.unit <= 4 ? "Start" : "Start the writing"; if (r && r.err === "done") unitPage(); else nvNote("The writing is not ready. Tell your teacher."); return; }
+      if (!r || !r.ok){ btn.disabled = false; btn.textContent = S.unit <= 5 ? "Start" : "Start the writing"; if (r && r.err === "done") unitPage(); else nvNote("The writing is not ready. Tell your teacher."); return; }
       return fetchDecrypt(r.path, r.key).then(function(buf){
         var html = new TextDecoder("utf-8").decode(buf);
         return fetch("shim.js", {cache: "no-store"}).then(function(x){ return x.text(); }).then(function(shim){
@@ -580,7 +580,7 @@
           document.open(); document.write(html); document.close();
         });
       });
-    }).catch(function(e){ btn.disabled = false; btn.textContent = S.unit <= 4 ? "Start" : "Start the writing"; nvNote("Could not open the writing. Check the internet and try again."); });
+    }).catch(function(e){ btn.disabled = false; btn.textContent = S.unit <= 5 ? "Start" : "Start the writing"; nvNote("Could not open the writing. Check the internet and try again."); });
   }
   /* ---------- speaking ---------- */
   function startSpeak(btn){
