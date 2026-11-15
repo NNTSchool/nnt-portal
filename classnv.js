@@ -812,10 +812,10 @@
 
   /* ---------- writing drilling: write, get feedback from the essay checker, rewrite, repeat ---------- */
   function wrLoad(){
-    if (S.FB) return Promise.resolve(S.FB);
-    return getFile("c" + S.unit + "_essay", "essay" + S.unit + ".js").then(function(b){ var FB = (new Function(new TextDecoder().decode(b) + "\nreturn FB;"))(); S.FB = FB; return FB; });
+    if (S.FB && S.FBu === S.unit) return Promise.resolve(S.FB);
+    return getFile("c" + S.unit + "_essay", "essay" + S.unit + ".js").then(function(b){ var FB = (new Function(new TextDecoder().decode(b) + "\nreturn FB;"))(); S.FB = FB; S.FBu = S.unit; return FB; });
   }
-  function wrTrack(){ if (S.trk) return Promise.resolve(S.trk); return Promise.resolve(R("nv_stage", {tok: O.tok, u: S.unit})).then(function(r){ return (S.trk = r && r.track === "ml" ? "ml" : "ie"); }, function(){ return (S.trk = "ie"); }); }
+  function wrTrack(){ if (S.trk && S.trku === S.unit) return Promise.resolve(S.trk); return Promise.resolve(R("nv_stage", {tok: O.tok, u: S.unit})).then(function(r){ S.trku = S.unit; return (S.trk = r && r.track === "ml" ? "ml" : "ie"); }, function(){ S.trku = S.unit; return (S.trk = "ie"); }); }
   function wrScore(W, tr){ return tr === "ml" ? W.m75.total : W.total; }
   function wrSan(tr, x){ return tr === "ml" ? String(x).replace(/band\s*\d+(\.\d)?\+?/ig, "the top mark").replace(/\bband\b/ig, "mark") : x; }
   function startWriting(){ if (!opn("write")) return hub(); S.cur = "write";
