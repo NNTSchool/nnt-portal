@@ -152,6 +152,7 @@
   + '#cnv .l4r{display:flex;align-items:center;gap:12px;padding:10px 6px;border-bottom:1px solid #e3eaf8}#cnv .l4r:last-child{border:0}#cnv .l4r .qn{flex:0 0 34px;height:34px;border-radius:10px;background:#3e63d8;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}#cnv .l4r .qt{flex:1;font-size:17px;line-height:1.4;font-weight:600;color:#10204a}#cnv .l4r .qt strong{color:#b25400;margin-left:6px}'
   + '#cnv .l4t{display:flex;gap:8px;align-items:center}#cnv .l4tf{border:2px solid #b9c9e6;background:#fff;color:#2d3f73;border-radius:12px;padding:9px 18px;font:800 15px Lexend,system-ui;cursor:pointer;min-width:84px}#cnv .l4tf.on{background:#3e63d8;border-color:#3e63d8;color:#fff;box-shadow:0 4px 0 #27409a}#cnv .l4tf:disabled{cursor:default}'
   + '#cnv .l4ok{border:2px solid #b9c9e6;background:#fff;color:#2d3f73;border-radius:12px;padding:9px 14px;font:800 14px Lexend,system-ui;cursor:pointer;white-space:nowrap}#cnv .l4ok.on{background:#0c9c84;border-color:#0c9c84;color:#fff;box-shadow:0 4px 0 #086b5a}#cnv .l4in{width:230px;max-width:46vw;padding:9px 12px;font-size:16px;border:2px solid #b9c9e6;border-radius:12px;color:#10204a;background:#fff}'
+  + '#cnv .l4map{margin:8px 0 12px;border-radius:12px;overflow:hidden;border:1px solid #c9d2ea}#cnv .l4map img{display:block;width:100%;height:auto}'
   + '#cnv .l4ex{display:flex;gap:10px;align-items:center;padding:8px 12px;margin-bottom:6px;border-radius:12px;background:#eef2ff;color:#3d4f80;font-size:15px}#cnv .l4ex b{background:#8a5cf0;color:#fff;border-radius:8px;padding:2px 9px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}#cnv .l4ex span{flex:1}#cnv .l4ex em{font-style:normal;font-weight:800;color:#0c7a66}#cnv .l4ex .l4tf{min-width:0;padding:5px 14px}'
   + '#cnv .l4g{margin:6px 0 16px}#cnv .l4gh{font-weight:800;font-size:17px;color:#10204a;margin-bottom:8px}#cnv .l4gh small{display:block;font-weight:600;font-size:13px;color:#6a7aa6}#cnv .l4gr{display:grid;grid-template-columns:minmax(0,1fr) 150px 150px;align-items:center;gap:8px;padding:8px 10px;border-radius:10px}#cnv .l4gr:nth-child(even){background:#f3f6ff}#cnv .l4gr.hd{background:linear-gradient(120deg,#3e63d8,#6b4df0);color:#fff;border-radius:12px 12px 0 0}#cnv .l4gr.hd b{text-align:center;font-size:16px}#cnv .l4gr.hd i{font-style:normal;font-size:11px;opacity:.8}#cnv .l4gr span{font-size:17px;font-weight:600;color:#10204a}#cnv .l4gr.one{grid-template-columns:minmax(0,1fr) 150px}'
   + '#cnv .l4tk{justify-self:center;width:38px;height:38px;border-radius:10px;border:2.5px solid #9db4ff;background:#fff;cursor:pointer;position:relative}#cnv .l4tk.on{background:#0c9c84;border-color:#0c9c84;box-shadow:0 4px 0 #086b5a}#cnv .l4tk.on:after{content:"✔";color:#fff;font-size:22px;font-weight:800;position:absolute;inset:0;display:flex;align-items:center;justify-content:center}'
@@ -201,7 +202,7 @@
       + '<button class="hmg" id="cstart"><span>START DRILLING</span><b>→</b></button></div>'
       + '<div class="hmR"><div class="orb"><div class="rg"></div><div class="rg r2"></div><div class="core"><small>YOUR UNIT</small><b id="hmu">…</b></div><i class="o1"></i><i class="o2"></i><i class="o3"></i></div></div></div>');
     el("cb").onclick = close; el("clo").onclick = function(){ close(); var o = document.getElementById("out"); if (o) o.click(); }; el("cstart").onclick = path;
-    R("nv_nav", {tok: O.tok}).then(function(n){ if (!n || !n.ok) return; var open = (n.open || []).map(Number).filter(function(u){ return u <= 6; }), ck = (n.ckeys || []).map(Number), c = null;
+    R("nv_nav", {tok: O.tok}).then(function(n){ if (!n || !n.ok) return; var open = (n.open || []).map(Number).filter(function(u){ return u <= 7; }), ck = (n.ckeys || []).map(Number), c = null;
       for (var i = 0; i < open.length; i++) if (ck.indexOf(open[i]) < 0){ c = open[i]; break; } if (c === null && open.length) c = open[open.length - 1]; if (el("hmu") && c !== null) el("hmu").textContent = c; }).catch(function(){});
   }
   var FLAG = '<svg viewBox="0 0 64 64" width="52" height="52"><path d="M16 8v50" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M20 12c10-6 16 6 28 0v24c-12 6-18-6-28 0z" fill="#fff"/></svg>', STAR = '<svg viewBox="0 0 64 64" width="52" height="52"><path d="M32 6l7.6 16.4 17.9 2.1-13.2 12.3 3.5 17.7L32 45.2 16.2 54.5l3.5-17.7L6.5 24.5l17.9-2.1z" fill="#fff"/></svg>';
@@ -219,7 +220,7 @@
     page(top() + '<div id="cnbody"><p class="sub" id="cnsub" style="text-align:center">Opening…</p></div>'); el("cb").onclick = home;
     R("nv_nav", {tok: O.tok}).then(function(n){
       if (!n || !n.ok){ el("cnsub").textContent = "Please try again in a moment."; return; }
-      S.nav = n; var ck = (n.ckeys || []).map(Number), lim = 6 + ck.filter(function(u){ return u <= 6 + ck.length; }).length, open = (n.open || []).map(Number).filter(function(u){ return u <= lim; }), cur = null;
+      S.nav = n; var ck = (n.ckeys || []).map(Number), lim = 7 + ck.filter(function(u){ return u <= 7 + ck.length; }).length, open = (n.open || []).map(Number).filter(function(u){ return u <= lim; }), cur = null;
       for (var i = 0; i < open.length; i++) if (ck.indexOf(open[i]) < 0){ cur = open[i]; break; }
       var hint = cur === null ? "Everything open is complete. Well done!" : "Tap your stage to begin";
       var H = 170, tot = open.length * H + 330, h = '<div class="pth" style="height:' + tot + 'px">';
@@ -264,7 +265,7 @@
       if (ch && !S.cur && el("hl")) hub();
     }, function(){}); } catch (x) {}
   }
-  var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1};
+  var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1};
   function hub(){ S.cur = null; statusSync();
     function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
     function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
@@ -423,7 +424,7 @@
   var STG = [["📝", "Take notes"], ["🧠", "Answer from notes"], ["⏱", "Exam"], ["🔎", "Analysis"]];
   function stgBar(n){ var h = '<div class="stp l4">'; STG.forEach(function(s, i){ h += (i ? '<u class="' + (i < n ? "f" : "") + '"></u>' : '') + '<div class="sn ' + (i + 1 < n ? "dn" : i + 1 === n ? "cu" : "") + '"><span class="sb">' + (i + 1 < n ? "✔" : s[0]) + '</span><small>' + s[1] + '</small><em>' + (i + 1 === n ? "you are here" : "") + '</em></div>'; }); return h + '</div>'; }
   function qn(ex){ return ex.kind === "grid" ? ex.groups.length * ex.cols.length : ex.qs.length; }
-  function fnorm(s){ return String(s).toLowerCase().replace(/(\d)(st|nd|rd|th)\b/g, "$1").replace(/[^a-z0-9. ]/g, " ").replace(/\b(dollars?|per|a|day|the|of|from|until|to|and|all|whole|is|it)\b/g, " ").replace(/\s+/g, " ").trim(); }
+  function fnorm(s){ var t0 = String(s).toLowerCase().trim(); if (/^[a-z]$/.test(t0)) return t0; return String(s).toLowerCase().replace(/(\d)(st|nd|rd|th)\b/g, "$1").replace(/[^a-z0-9. ]/g, " ").replace(/\b(dollars?|per|a|day|the|of|from|until|to|and|all|whole|is|it)\b/g, " ").replace(/\s+/g, " ").trim(); }
   /* widgets: draw the answer controls of an exercise; read() gives the answers, mark() gives [{ok, said, right}] */
   function qWidget(ex, pre){
     var h = "", i;
@@ -441,7 +442,7 @@
       });
       return h;
     }
-    h += '<div class="l4q"><div class="l4ex"><b>Example</b><span>' + esc(ex.example.l) + ': ' + (ex.example.s ? '<s>' + esc(ex.example.s) + '</s> → ' : '') + '<em>' + esc(ex.example.a) + '</em></span></div>' + (ex.example2 ? '<div class="l4ex"><b>Example</b><span>' + esc(ex.example2.l) + ': ' + esc(ex.example2.s) + ' → <em>✔ correct</em></span></div>' : '');
+    h += '<div class="l4q">' + (ex.img ? '<div class="l4map"><img src="' + ex.img + '" alt="Map"></div>' : '') + '<div class="l4ex"><b>Example</b><span>' + esc(ex.example.l) + ': ' + (ex.example.s ? '<s>' + esc(ex.example.s) + '</s> → ' : '') + '<em>' + esc(ex.example.a) + '</em></span></div>' + (ex.example2 ? '<div class="l4ex"><b>Example</b><span>' + esc(ex.example2.l) + ': ' + esc(ex.example2.s) + ' → <em>✔ correct</em></span></div>' : '');
     ex.qs.forEach(function(q, k){ h += '<div class="l4r fx" data-k="' + k + '"><b class="qn">' + (k + 1) + '</b><span class="qt">' + esc(q.l) + (q.s ? ' <strong>' + esc(q.s) + '</strong>' : "") + '</span><div class="l4t">' + (q.nt ? '' : '<button type="button" class="l4ok">✔ correct</button>') + '<input class="a l4in" type="text" placeholder="' + (q.nt ? 'write your answer' : 'or write the correction') + '" spellcheck="false" autocomplete="off" autocapitalize="off"></div></div>'; });
     return h + '</div>';
   }
@@ -509,7 +510,7 @@
   function l4Notes(){
     var ex = S.P.exercises[S.L.ei], L = S.L;
     page(l4Head() + '<div class="ins hlz"><span class="ii">📝</span><div><small>STAGE 1 · TAKE NOTES</small><strong>' + esc(ex.intro) + ' Listen and write down everything useful. The questions come later.</strong></div></div>'
-      + l4Player(ex) + '<textarea id="l4n" class="wrta l4na" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Type your notes here. Names, numbers, dates, prices, who said what, what changed…">' + esc(L.notes[ex.id] || "") + '</textarea>'
+      + l4Player(ex) + (ex.img ? '<div class="l4map"><img src="' + ex.img + '" alt="Map"></div>' : '') + '<textarea id="l4n" class="wrta l4na" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Type your notes here. Names, numbers, dates, prices, who said what, what changed…">' + esc(L.notes[ex.id] || "") + '</textarea>'
       + '<div class="l4bar"><span id="l4wc" class="wrm"></span><button class="go" id="l4nx" disabled>' + (L.ei + 1 < S.P.exercises.length ? "Next recording →" : "Go to stage 2 →") + '</button></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); };
     l4Wire(ex, 0, "n" + ex.id, "Play it as many times as you need. You cannot skip ahead or rewind: that is the exam skill.");
