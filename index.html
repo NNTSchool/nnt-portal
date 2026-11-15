@@ -376,9 +376,11 @@ function note(el, cls, txt){ $(el).innerHTML = txt ? '<div class="msg ' + cls + 
 
 function entryOpen(){ $("e_name").textContent = ME && ME.name ? ME.name.split(" ")[0] : ""; var ok = !!(ME && ME.new_ok); $("e_new").classList.toggle("lock", !ok); $("e_ni").textContent = ok ? "🚀" : "🔒"; $("e_msg").innerHTML = ""; $("entry").classList.remove("hide"); document.body.style.overflow = "hidden"; }
 function entryClose(){ $("entry").classList.add("hide"); document.body.style.overflow = ""; }
-$("e_classic").onclick = function(){ try{ localStorage.setItem("nnt_mode", "classic"); }catch(e){} entryClose(); show("s_home"); };
+function modeKey(){ return ME && ME.name ? "nnt_mode_" + String(ME.name).toLowerCase().replace(/\s+/g, " ") : ""; }
+function modeSave(m){ try{ localStorage.setItem("nnt_mode", m); var k = modeKey(); if (k) localStorage.setItem(k, m); }catch(e){} }
+$("e_classic").onclick = function(){ modeSave("classic"); entryClose(); show("s_home"); };
 $("e_new").onclick = function(){
-  if (ME && ME.new_ok){ try{ localStorage.setItem("nnt_mode", "new"); }catch(e){} entryClose(); $("newv").classList.remove("hide"); document.body.style.overflow = "hidden"; NV.open(function(){ $("newv").classList.add("hide"); document.body.style.overflow = ""; entryOpen(); }); return; }
+  if (ME && ME.new_ok){ modeSave("new"); entryClose(); $("newv").classList.remove("hide"); document.body.style.overflow = "hidden"; NV.open(function(){ $("newv").classList.add("hide"); document.body.style.overflow = ""; entryOpen(); }); return; }
   var b = $("e_new"); b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake");
   $("e_msg").innerHTML = '<div class="elock">🔒 Novel is not open for you yet. Your teacher will open it for you soon. Until then, Classic works as always.</div>';
 };
@@ -463,7 +465,7 @@ function home(){
     if (!r.ok){ ls("nnt_phone_token", null); TOK = null; loginScreen(); note("m_login","err","Your login has ended. Please log in again with a new code from your teacher."); return; }
     VIDS = {}; var VI = []; if (x[1] && x[1].ok){ x[1].units.forEach(function(u){ VIDS[u] = 1; }); VI = x[1].items || []; VREC = typeof x[1].rec === "number" ? x[1].rec : null; }
     ME = r; note("m_home","",""); var backNv = false; try{ backNv = sessionStorage.getItem("nnt_back_nv") === "1"; if (backNv){ sessionStorage.removeItem("nnt_back_nv"); sessionStorage.setItem("nnt_ret","1"); } }catch(e){}
-    var mode = ""; try{ mode = localStorage.getItem("nnt_mode") || ""; }catch(e){}
+    var mode = ""; try{ var mk = modeKey(); mode = (mk && localStorage.getItem(mk)) || ""; }catch(e){}
     if ((backNv || mode === "new") && ME && ME.new_ok){ window.ENTRY_DONE = true; $("e_new").onclick(); var cv = document.getElementById("nvcov"); if (cv) setTimeout(function(){ cv.remove(); }, 60); }
     else { var cv2 = document.getElementById("nvcov"); if (cv2) cv2.remove(); if (!window.ENTRY_DONE){ window.ENTRY_DONE = true; if (mode === "classic") entryClose(); else entryOpen(); } }
     $("hg").textContent = greet(); $("hi").textContent = r.name.split(" ")[0];
