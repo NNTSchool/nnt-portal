@@ -636,7 +636,7 @@
       S.pl = new YT.Player("nv_yt", {videoId: v.yt, host: "https://www.youtube-nocookie.com",
         playerVars: {rel: 0, modestbranding: 1, playsinline: 1, fs: 0, iv_load_policy: 3, start: Math.floor(v.pos || 0)},
         events: {onReady: function(){ setSpeed(1); }, onPlaybackRateChange: function(e){ if (e.data > 1.25) setSpeed(1.25); }}});
-      clearInterval(S.hb); S.hb = setInterval(beat, 10000);
+      clearInterval(S.hb); S.hb = setInterval(beat, 5000);
     });
   }
   function paint(cov, tgt, wack){
