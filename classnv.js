@@ -160,10 +160,10 @@
   + '#cnv .l4how .rc,#cnv .l4sm .rc{animation:none}#cnv .l4how .rc small,#cnv .l4sm .rc small{color:#3d5a78!important;font-size:14.5px!important}#cnv .l4how .rc b,#cnv .l4sm .rc b{color:#10204a!important;font-size:19px}#cnv .l4gr.hd b{color:#fff}#cnv .l4sm .rc.g i{color:#0c9c84}#cnv .l4sm .rc.b i{color:#d6395f}#cnv .l4how .rc .rn,#cnv .l4sm .rc .rn{background:#3e63d8;color:#fff}@media(max-width:1100px){#cnv .l4two,#cnv .l4two.rv{grid-template-columns:1fr}}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
-  function page(h){ stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
+  function page(h){ try{ document.body.classList.toggle("nvfocus", h.indexOf('id="cnbody"') < 0 && h.indexOf('class="hm"') < 0); }catch(e){} stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
   function top(back){ return '<div class="tb"><button class="pill" id="cb">' + (back || "← Back") + '</button><div class="sp"></div><b>NNT · Classroom</b></div>'; }
   function stopAudio(){ if (A){ try{ A.pause(); }catch(e){} A = null; } }
-  function close(){ stopAudio(); var r = el("cnv"); if (r) r.remove(); if (O && O.onExit) O.onExit(); }
+  function close(){ try{ document.body.classList.remove("nvfocus"); }catch(e){} stopAudio(); var r = el("cnv"); if (r) r.remove(); if (O && O.onExit) O.onExit(); }
 
   /* the exotic class key: a hexagonal crystal key (different shape from the yellow home key) */
   function keySvg(){ return '<svg viewBox="0 0 220 300" width="100%" aria-hidden="true"><defs><linearGradient id="kg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5df2d6"/><stop offset=".5" stop-color="#7aa2ff"/><stop offset="1" stop-color="#c58bff"/></linearGradient><linearGradient id="kg2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#c58bff"/><stop offset="1" stop-color="#fff"/></linearGradient></defs>'

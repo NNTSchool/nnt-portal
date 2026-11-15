@@ -36,6 +36,7 @@
 #paywin .row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:16px}#paywin .row b{font-weight:600}
 #paywin h3{font-size:18px;margin:16px 0 6px}#paywin .msg{background:var(--gold3);border-left:4px solid var(--gold);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:16px}#paywin .msg small{display:block;color:var(--mute);font-size:13px;margin-bottom:3px}
 #paywin .call.tg{background:#229ed9;font-size:19px;margin-top:10px;white-space:normal;line-height:1.35}#paywin .call{display:block;white-space:nowrap;background:#0e6b4d;color:#fff;text-decoration:none;text-align:center;font-weight:700;font-size:20px;padding:15px;border-radius:14px;margin-top:14px}
+body.nvfocus #paybtn{display:none!important}
 .paybtn{position:fixed!important;right:12px;bottom:12px;z-index:85}
 :root{--gold:#d9a400;--gold3:#fff6d6}
 </style></head><body>
@@ -63,7 +64,7 @@
   <div id="e_msg"></div><button class="eo" id="e_out" type="button">Log out</button></div></div>
 <button class="paybtn hide" id="paybtn" type="button"><span class="pi">💳</span><span class="pt"><b>Monthly payments</b><small id="pbs"></small></span><em id="pbn" class="hide"></em></button>
 <script src="core.js?v=16"></script>
-<script src="classnv.js?v=32"></script>
+<script src="classnv.js?v=33"></script>
 <script>
 var TOK = null, NAME = "", SID = 0, ROSTER = [], pickId = 0;
 function show(id){ ["s_setup","s_login","s_lib","s_load"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); $("out").classList.toggle("hide", id !== "s_lib"); }
