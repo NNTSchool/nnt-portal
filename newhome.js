@@ -483,6 +483,26 @@
       var d = document.createElement("div"); d.id = "nvdl"; d.innerHTML = html; host.insertBefore(d, host.firstChild);
     }).catch(function(){});
   }
+  /* the Test Account's only edge: it may skip a mandatory step. Everything else works exactly as for a student. */
+  function skipBox(f){
+    var b = function(step, t){ return '<button type="button" class="go nvsk" data-s="' + step + '" style="margin:4px 6px 0 0;padding:9px 13px;font-size:15px;background:linear-gradient(135deg,#7a8bff,#5b6cff)">⏭ ' + t + '</button>'; }, x = '';
+    if (f){
+      if (!f.all) x += b("videos", "Skip the videos"); else if (!f.tOK) x += b("test", "Skip the home test"); else if (!f.wOK) x += b("essay", S.unit <= 7 ? "Skip the summary" : "Skip the writing"); else if (!f.sOK) x += b("speak", "Skip the speaking");
+      if (!f.key) x += b("home", "Skip all home steps");
+      x += b("unit", "Skip the whole unit (home + class)");
+    }
+    if (S.unit > 1) x += b("before", "Skip all earlier units");
+    return '<div class="st" style="margin-top:14px"><div class="n">🧪</div><div><b>Test account: skip</b><small>Only this account can skip steps. Everything else works like for a student.</small>' + x + '</div></div>';
+  }
+  function skipWire(){
+    [].forEach.call(document.querySelectorAll(".nvsk"), function(b){ b.onclick = function(){
+      var step = b.getAttribute("data-s"); b.disabled = true; b.textContent = "Skipping…";
+      rpc("nv_skip", {tok: tok(), u: S.unit, step: step}).then(function(r){
+        CACHE = {}; if (!r || !r.ok){ nvNote("Could not skip this step."); b.disabled = false; return; }
+        navLoad().then(function(){ unitPage(); }, function(){ unitPage(); });
+      }, function(){ nvNote("No internet connection."); b.disabled = false; });
+    }; });
+  }
   function unitPage(){
     S.sub = true; var u = S.unit, F = {kseen: false, ret: false, auto: ""};
     try{ F.kseen = sessionStorage.getItem("nvks" + u) === "1"; F.ret = sessionStorage.getItem("nnt_ret") === "1"; sessionStorage.removeItem("nnt_ret"); F.auto = sessionStorage.getItem("nvauto") || ""; sessionStorage.removeItem("nvauto"); }catch(e){}
@@ -500,7 +520,7 @@
   function paintUnit(x, r, F){
     S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); S.jump = !!(x && x.ok && x.jump); S.testacct = !!(x && x.ok && x.testacct); S.jpct = x && x.ok ? x.jpct : 80;
     {
-      if (!r || !r.ok){ page('<h2>Unit ' + S.unit + '</h2><p class="sub">' + (r && r.err === "closed" ? "This unit is not open yet. Your teacher will open it soon." : r && r.err === "locked" ? "Finish the earlier unit first." : "Not available right now.") + ' <small style="opacity:.6">(' + esc((r && r.err) || "error") + ')</small></p>', true); return; }
+      if (!r || !r.ok){ page('<h2>Unit ' + S.unit + '</h2><p class="sub">' + (r && r.err === "closed" ? "This unit is not open yet. Your teacher will open it soon." : r && r.err === "locked" ? "Finish the earlier unit first." : "Not available right now.") + ' <small style="opacity:.6">(' + esc((r && r.err) || "error") + ')</small></p>' + (S.testacct && r && r.err === "locked" ? skipBox(false) : ""), true); if (S.testacct && r && r.err === "locked") skipWire(); return; }
       S.vids = r.videos;
       var kseen = F.kseen, ret = F.ret, auto = F.auto;
       if (S.st && S.st.key && S.nav && S.nav.keys.indexOf(S.unit) < 0) S.nav.keys.push(S.unit);
@@ -553,7 +573,8 @@
       h += '</div></div>';
       if (S.teacher){ h += '<div class="st"><div class="n">👑</div><div><b>Teacher: open any step</b><small>Your time and results are still recorded. Nothing is blocked for you.</small></div></div>'
           + '<button class="go" id="nvtt" type="button">Home test</button> <button class="go" id="nvtw" type="button" style="margin-left:6px">' + (S.unit <= 7 ? 'Summary' : 'Writing') + '</button> <button class="go" id="nvts" type="button" style="margin-left:6px">Speaking</button>'; }
-      page(h, true);
+      if (S.testacct && !S.teacher) h += skipBox({all: all, tOK: tOK, wOK: wOK, sOK: sOK, key: key});
+      page(h, true); if (S.testacct && !S.teacher) skipWire();
       ["ml","ie"].forEach(function(t){ var b = el("nvt" + t); if (b) b.onclick = function(){ nvAsk("Choose " + (t === "ie" ? "IELTS" : "Multi-level") + "?", "You cannot change this later without your teacher.", "Yes, choose it", function(){ rpc("nv_set_track", {tok: tok(), trk: t}).then(function(r){ if (r && (r.ok || r.err === "fixed")) unitPage(); }); }); }; });
       if (el("nvstarttest")) el("nvstarttest").onclick = function(){ startHome(this); };
       if (el("nvstartwrite")) el("nvstartwrite").onclick = function(){ startWrite(this); };
@@ -593,7 +614,7 @@
       return fetchDecrypt(r.path, r.key).then(function(buf){
         var html = new TextDecoder("utf-8").decode(buf);
         return fetch("shim.js", {cache: "no-store"}).then(function(x){ return x.text(); }).then(function(shim){
-          var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, teacher: !!S.teacher || !!S.testacct, name: r.name, mode: "speak", track: r.track}) + ";";
+          var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, teacher: !!S.teacher, name: r.name, mode: "speak", track: r.track}) + ";";
           var tag = "<script>" + cfg + "\n" + shim.replace(/<\/script/gi, "<\\/script") + "<\/script>";
           var m = html.match(/<head[^>]*>/i); html = m ? html.replace(m[0], m[0] + tag) : tag + html;
           document.open(); document.write(html); document.close();

@@ -243,6 +243,7 @@
       if (r && r.err === "classlocked"){ page(top() + '<div class="card warn"><h2>Novel is not open for you yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = path; return; }
       if (!r || !r.ok){ page(top() + '<div class="card warn"><h2>Please try again</h2><p>We could not check your key.</p></div>'); el("cb").onclick = path; return; }
       if (r.teacher) O.nofloor = true; /* teacher: every stage open, no minimum times */
+      S.testacct = !!r.testacct && !r.teacher; /* the Test Account may only SKIP steps (buttons); it has no other edge */
       if (!r.earned){
         var stp = function(n, ic, t){ return '<div style="flex:1;min-width:150px;background:#fff;border:2px solid #c9d6ee;border-radius:16px;padding:14px 12px;text-align:center"><div style="font-size:30px">' + ic + '</div><b style="display:block;color:#10204a;font-size:16px;margin-top:4px">' + t + '</b><small style="color:#5a6a86">Step ' + n + '</small></div>'; };
         page(top() + '<div style="text-align:center;padding:6px 0 0"><div style="position:relative;width:230px;max-width:60%;margin:0 auto;filter:grayscale(1) opacity(.55) drop-shadow(0 10px 22px rgba(40,60,120,.25))">' + portalKey() + '</div>'
@@ -250,10 +251,15 @@
           + '<h2 style="margin:6px 0 6px;font-size:32px;color:#10204a">Almost there! Unit ' + S.unit + ' is waiting for you</h2>'
           + '<p style="margin:0 auto 16px;max-width:560px;color:#3b4b69;font-size:18px;line-height:1.5">Earn the key of Unit ' + S.unit + ' at home first. It takes four short steps, and then this classroom opens for you.</p>'
           + '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:760px;margin:0 auto 18px">' + stp(1, "🎬", "Watch the videos") + stp(2, "📝", "Take the home test") + stp(3, "✍️", S.unit <= 2 ? "Read and summarise" : "Do the writing") + stp(4, "🎤", "Record your speaking") + '</div>'
-          + '<button class="go" id="cgo" style="padding:15px 26px;font-size:18px">← Back to the stages</button></div>'); el("cb").onclick = path; el("cgo").onclick = path; return; }
+          + '<button class="go" id="cgo" style="padding:15px 26px;font-size:18px">← Back to the stages</button></div>'); el("cb").onclick = path; el("cgo").onclick = path;
+          if (S.testacct){ var sb = document.createElement("button"); sb.className = "go"; sb.id = "csk"; sb.type = "button"; sb.style.cssText = "margin:12px 0 0 8px;padding:15px 22px;font-size:17px;background:linear-gradient(135deg,#7a8bff,#5b6cff)"; sb.textContent = "⏭ Skip the home steps (test account)"; el("cgo").parentNode.appendChild(sb); sb.onclick = function(){ sb.disabled = true; skipRun("home", keyCheck); }; }
+          return; }
       page(top() + '<div style="text-align:center;padding:10px 0 4px"><div class="kdrop" style="width:380px;max-width:80%;margin:0 auto;filter:drop-shadow(0 14px 30px rgba(255,196,40,.55))">' + portalKey() + '</div><h2 style="margin:10px 0 4px;font-size:34px">Your key is earned. Welcome!</h2><p class="sub">You can now begin the mock test of Unit ' + S.unit + '.</p><button class="go" id="cgo" style="margin-top:12px">Continue →</button></div>');
       el("cb").onclick = path; el("cgo").onclick = hub;
     }).catch(function(){ page(top() + '<div class="card warn"><h2>No internet connection</h2></div>'); el("cb").onclick = path; });
+  }
+  function skipRun(step, then){
+    Promise.resolve(R("nv_skip", {tok: O.tok, u: S.unit, step: step})).then(function(r){ if (r && r.ok){ S.stU = null; if (then) then(); } else { var m = el("hlk"); if (m) m.textContent = "Could not skip this step."; } }, function(){ var m = el("hlk"); if (m) m.textContent = "No internet connection."; });
   }
   function opn(st){ if (O.nofloor) return true; return st === "read" ? !!(S.lisDone && S.lisDone[S.unit]) : !!(S.rdDone && S.rdDone[S.unit]); }
   function lockMsg(el_, txt){ el_.classList.add("shk"); setTimeout(function(){ el_.classList.remove("shk"); }, 400); var m = el("hlk"); if (m) m.textContent = txt; }
@@ -276,6 +282,13 @@
     el("cb").onclick = path; el("hl").onclick = S.unit > 1 ? startPart4 : startPart;
     el("hr").onclick = RW[S.unit] && opn("read") ? startReading : function(){ lockMsg(this, RW[S.unit] ? "🔒 Finish the listening drilling first." : ""); };
     el("hw").onclick = RW[S.unit] && opn("write") ? startWriting : function(){ lockMsg(this, RW[S.unit] ? "🔒 Finish the reading drilling first." : ""); };
+    if (S.testacct){
+      var tb = document.createElement("div"); tb.style.cssText = "text-align:center;margin:18px auto 0;max-width:640px;padding:12px;border:2px dashed #9aa8d6;border-radius:14px;color:#10204a";
+      tb.innerHTML = '<b>🧪 Test account: skip</b><div style="font-size:13px;margin:2px 0 8px;opacity:.75">Only this account can skip. Everything else works like for a student.</div>'
+        + [["lis", "Skip listening"], ["read", "Skip reading"], ["write", "Skip writing"], ["class", "Skip all + get the class key"]].map(function(x){ return '<button type="button" class="go csk" data-s="' + x[0] + '" style="margin:4px;padding:9px 13px;font-size:15px;background:linear-gradient(135deg,#7a8bff,#5b6cff)">⏭ ' + x[1] + '</button>'; }).join("");
+      el("hlk").parentNode.appendChild(tb);
+      [].forEach.call(tb.querySelectorAll(".csk"), function(b){ b.onclick = function(){ b.disabled = true; skipRun(b.getAttribute("data-s"), function(){ var u = S.unit; S.lisDone = S.lisDone || {}; S.rdDone = S.rdDone || {}; S.wrDone = S.wrDone || {}; var st = b.getAttribute("data-s"); if (st === "lis" || st === "class") S.lisDone[u] = true; if (st === "read" || st === "class") S.rdDone[u] = true; if (st === "write" || st === "class") S.wrDone[u] = true; hub(); }); }; });
+    }
   }
 
   /* ---------- Part runner (listening) ---------- */
