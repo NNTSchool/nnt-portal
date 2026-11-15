@@ -282,7 +282,7 @@
     for (var i = 0; i < o.length; i++) if (!nvDone(o[i])) return o[i];
     return o.length ? o[o.length - 1] : 1;
   }
-  function fnFull(){ try{ if (typeof ME !== "undefined" && ME){ var n = ME.name || ME.full_name || ""; return String(n).trim(); } }catch(e){} return ""; }
+  function fnFull(){ try{ if (typeof ME !== "undefined" && ME){ var n = ME.name || ME.full_name || ""; if (String(n).trim()) return String(n).trim(); } var h = document.getElementById("hi"); if (h && h.textContent.trim()) return h.textContent.trim(); }catch(e){} return ""; }
   function fillName(k){ var el = document.getElementById("nvhname"); if (!el) return; var n = fnFull(); if (n) el.textContent = n; else if (k < 12) setTimeout(function(){ fillName(k + 1); }, 400); }
   function homePage(){
     S.sub = false; S.chose = null; S.review = false;
