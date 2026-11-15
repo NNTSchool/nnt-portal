@@ -240,6 +240,7 @@
     R("nv_class_check", {tok: O.tok, u: S.unit}).then(function(r){
       if (r && r.err === "classlocked"){ page(top() + '<div class="card warn"><h2>Novel is not open for you yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = path; return; }
       if (!r || !r.ok){ page(top() + '<div class="card warn"><h2>Please try again</h2><p>We could not check your key.</p></div>'); el("cb").onclick = path; return; }
+      if (r.teacher) O.nofloor = true; /* teacher: every stage open, no minimum times */
       if (!r.earned){
         page(top() + '<div class="card warn"><h2>Your key has not been earned yet</h2><p>You need the key of Unit ' + S.unit + ' on the student portal first. Go earn it, then come back.</p></div>'); el("cb").onclick = path; return; }
       page(top() + '<div style="text-align:center;padding:10px 0 4px"><div class="kdrop" style="width:380px;max-width:80%;margin:0 auto;filter:drop-shadow(0 14px 30px rgba(255,196,40,.55))">' + portalKey() + '</div><h2 style="margin:10px 0 4px;font-size:34px">Your key is earned. Welcome!</h2><p class="sub">You can now begin the mock test of Unit ' + S.unit + '.</p><button class="go" id="cgo" style="margin-top:12px">Continue →</button></div>');
@@ -843,7 +844,7 @@
       var tx = ta.value, n = FB.words(tx), u = FB.used(tx); W.text = tx;
       el("wcn").textContent = n + " word" + (n === 1 ? "" : "s"); el("wnd").textContent = n >= NEED ? (W.tr === "ml" && n > 200 ? "a bit long · aim for 180–200" : "enough ✓") : (NEED - n) + " more words needed";
       var pw = tx.split(/\n+/).map(function(x){ return FB.words(x); }).filter(function(x){ return x > 0; }); el("wpr").textContent = pw.length ? "paragraphs: " + pw.join(" + ") : "";
-      el("wck").disabled = n < NEED; el("whint").textContent = n < NEED ? "The check unlocks at " + NEED + " words." : "Ready. You can keep improving it before you check.";
+      el("wck").disabled = n < NEED && !O.nofloor; el("whint").textContent = n < NEED ? "The check unlocks at " + NEED + " words." : "Ready. You can keep improving it before you check.";
       [].forEach.call(document.querySelectorAll(".wch span"), function(c){ c.classList.toggle("on", u.indexOf(c.getAttribute("data-c")) > -1); });
     }
     ta.oninput = upd; upd(); ta.focus();
