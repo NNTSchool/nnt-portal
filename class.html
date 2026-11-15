@@ -24,6 +24,20 @@
 #entry .en.shake{animation:esh .45s}@keyframes esh{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
 #entry .elock{margin-top:16px;background:#fff;color:#111;border-radius:14px;padding:12px 14px;font-weight:700;font-size:16px}
 #entry .eo{margin-top:16px;background:transparent;border:1.5px solid rgba(255,255,255,.4);color:#fff;border-radius:99px;padding:9px 20px;font:700 15px system-ui;cursor:pointer}
+.paybtn{position:relative;border:0;border-radius:99px;color:#fff;cursor:pointer;display:flex;align-items:center;gap:7px;padding:5px 12px 5px 9px;font-family:inherit;box-shadow:0 0 0 2px rgba(255,255,255,.75),0 3px 8px -2px rgba(0,0,0,.55);text-align:left}
+.paybtn .pi{font-size:18px;line-height:1}.paybtn .pt{display:flex;flex-direction:column;line-height:1.1}.paybtn b{font-size:12px;display:block;letter-spacing:0;color:#fff;font-family:inherit;white-space:nowrap}.paybtn small{font-size:11px;color:#fff;font-weight:800;margin:0;letter-spacing:0;white-space:nowrap}
+.paybtn.g{background:linear-gradient(150deg,#12a56f,#0a6b4a)}.paybtn.a{background:linear-gradient(150deg,#f4a30c,#c86a00)}.paybtn.r{background:linear-gradient(150deg,#e5365f,#9c1a35)}
+.paybtn em{position:absolute;right:-5px;top:-7px;background:#fff;color:#c0213f;font-style:normal;font-weight:800;font-size:11px;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+#paywin{position:fixed;inset:0;z-index:9000;background:rgba(7,23,51,.75);display:flex;align-items:flex-end;justify-content:center}
+#paywin .pw{background:#fff;width:100%;max-width:520px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:20px 18px 26px}
+@media(min-width:600px){#paywin{align-items:center}#paywin .pw{border-radius:22px}}
+#paywin .st{border-radius:16px;padding:18px;text-align:center;color:#fff;margin:10px 0 14px}#paywin .st.g{background:#0e8a5d}#paywin .st.a{background:#d98500}#paywin .st.r{background:#c0213f}
+#paywin .st big{display:block;font-size:26px;font-weight:700;line-height:1.2}#paywin .st span{display:block;font-size:17px;margin-top:6px}
+#paywin .row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:16px}#paywin .row b{font-weight:600}
+#paywin h3{font-size:18px;margin:16px 0 6px}#paywin .msg{background:var(--gold3);border-left:4px solid var(--gold);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:16px}#paywin .msg small{display:block;color:var(--mute);font-size:13px;margin-bottom:3px}
+#paywin .call.tg{background:#229ed9;font-size:19px;margin-top:10px;white-space:normal;line-height:1.35}#paywin .call{display:block;white-space:nowrap;background:#0e6b4d;color:#fff;text-decoration:none;text-align:center;font-weight:700;font-size:20px;padding:15px;border-radius:14px;margin-top:14px}
+.paybtn{position:fixed!important;right:12px;bottom:12px;z-index:85}
+:root{--gold:#d9a400;--gold3:#fff6d6}
 </style></head><body>
 <div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small>Classroom tests</small></div><div class="sp"></div><button class="btn sm alt hide" id="out">Log out</button></div>
 <div class="wrap wide">
@@ -47,12 +61,46 @@
   <div class="ep"><button class="ek ec1" id="e_classic" type="button"><span class="ic">🏛️</span>Classic<small>Your class tests and results</small></button>
   <button class="ek en lock" id="e_new" type="button"><span class="tag">NEW</span><span class="ic">🔒</span>Novel<small>The new learning experience</small></button></div>
   <div id="e_msg"></div><button class="eo" id="e_out" type="button">Log out</button></div></div>
+<button class="paybtn hide" id="paybtn" type="button"><span class="pi">💳</span><span class="pt"><b>Monthly payments</b><small id="pbs"></small></span><em id="pbn" class="hide"></em></button>
 <script src="core.js?v=16"></script>
 <script src="classnv.js?v=31"></script>
 <script>
 var TOK = null, NAME = "", SID = 0, ROSTER = [], pickId = 0;
 function show(id){ ["s_setup","s_login","s_lib","s_load"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); $("out").classList.toggle("hide", id !== "s_lib"); }
 function note(el, cls, txt){ $(el).innerHTML = txt ? '<div class="msg ' + cls + '">' + txt + '</div>' : ""; }
+/* ---- monthly payments (button under Log out + window) ---- */
+var PAYM = null;
+function uzd(d){ if (!d) return ""; var p = String(d).split("-"); return p[2] + "." + p[1] + "." + p[0]; }
+function payCls(m){ if (!m || !m.on) return ""; if (!m.paid) return "r"; return m.left <= 3 ? "a" : "g"; }
+function payRefresh(){
+  if (!TOK){ $("paybtn").classList.add("hide"); return Promise.resolve(); }
+  return rpc("pay_me", {tok: TOK}).then(function(m){
+    PAYM = m; var b = $("paybtn");
+    if (!m || !m.ok || !m.on || !m.has){ b.classList.add("hide"); return; }
+    var c = payCls(m); b.className = "paybtn " + c;
+    $("pbs").textContent = !m.has ? "To\u2018lanmagan" : !m.paid ? "To\u2018lanmagan" : (m.left <= 0 ? "Bugun tugaydi" : m.left + " kun qoldi");
+    var n = $("pbn"); n.textContent = m.unread; n.classList.toggle("hide", !m.unread);
+  }).catch(function(){});
+}
+function payOpen(){
+  var m = PAYM; if (!m || !m.on) return;
+  var c = payCls(m), big, sub;
+  if (!m.has || !m.paid){ big = "To\u2018lov qilinmagan"; sub = "Portaldan foydalanish uchun oylik to\u2018lovni qiling."; }
+  else { big = "To\u2018langan \u2714"; sub = m.left <= 0 ? "Bugun oxirgi kun. Ertadan to\u2018lov kerak bo\u2018ladi." : m.left + " kun qoldi" + (m.left <= 3 ? ". Tez orada to\u2018lov qiling." : "."); }
+  var h = '<div class="pw"><div style="display:flex;justify-content:space-between;align-items:center"><h2 style="font-size:22px">Monthly payments</h2><button class="btn sm alt" id="payx" style="background:#eef0f6;color:#0f1a33">Yopish</button></div>'
+    + '<div class="st ' + c + '"><big>' + big + '</big><span>' + sub + '</span></div>';
+  if (m.has) h += '<div class="row"><span>Joriy davr</span><b>' + uzd(m.start) + ' \u2013 ' + uzd(m.end) + '</b></div><div class="row"><span>Oxirgi kun</span><b>' + uzd(m.end) + '</b></div>';
+  if (m.periods && m.periods.length > 1){ h += '<h3>Oldingi davrlar</h3>'; m.periods.slice(1).forEach(function(p){ h += '<div class="row"><span>' + uzd(p.start) + ' \u2013 ' + uzd(p.end) + '</span><b style="color:' + (p.paid ? '#0e6b4d' : '#9c2442') + '">' + (p.paid ? "To\u2018langan" : "To\u2018lanmagan") + '</b></div>'; }); }
+  if (m.msgs && m.msgs.length){ h += '<h3>Xabarlar</h3>'; m.msgs.forEach(function(x){ var d = new Date(x.at); h += '<div class="msg"><small>' + ("0" + d.getDate()).slice(-2) + "." + ("0" + (d.getMonth() + 1)).slice(-2) + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + '</small>' + esc(x.body) + '</div>'; }); }
+  h += '<p style="margin:16px 0 0;font-size:16px">To\u2018lov bo\u2018yicha administrator: <b>' + esc(m.admin || "Maftuna Samadova") + '</b></p><a class="call" href="tel:' + esc((m.phone || "+998938900808").replace(/\s/g, "")) + '">\uD83D\uDCDE ' + esc("+998 93 890 08 08") + '</a><a class="call tg" href="https://t.me/Malefisenta_Mafruza" target="_blank" rel="noopener">\u2708\uFE0F Telegram<br>@Malefisenta_Mafruza</a></div>';
+  var w = document.createElement("div"); w.id = "paywin"; w.innerHTML = h; document.body.appendChild(w);
+  var close = function(){ w.parentNode && w.parentNode.removeChild(w); };
+  w.onclick = function(e){ if (e.target === w) close(); }; $("payx").onclick = close;
+  if (m.unread){ rpc("pay_read", {tok: TOK}).then(function(){ m.unread = 0; $("pbn").classList.add("hide"); }).catch(function(){}); }
+}
+$("paybtn").onclick = function(){ payRefresh().then(payOpen); };
+setInterval(function(){ if (TOK && !document.hidden) payRefresh(); }, 60000);
+
 function init(){
   if (!ls("nnt_class_key")){ show("s_setup"); return; }
   $("pcshow").textContent = ls("nnt_pc") ? (/^M/.test(ls("nnt_pc")) ? "middle " + ls("nnt_pc") : ls("nnt_pc")) : "not numbered";
@@ -79,14 +127,14 @@ $("go").onclick = function(){
   $("go").disabled = true; note("m_login","info","Checking…");
   rpc("login_class", {sid: pickId, pcode: c, pclass_key: ls("nnt_class_key") || "", plabel: "classroom " + deviceLabel() + (ls("nnt_pc") ? " · PC" + ls("nnt_pc") : "")}).then(function(r){
     $("go").disabled = false;
-    if (r.ok){ TOK = r.token; NAME = r.name; SID = r.id; $("code").value = ""; if (!window.__pingH) window.__pingH = setInterval(function(){ if (TOK) rpc("ping", {tok: TOK}).catch(function(){}); }, 40000); entryOpen(); return; }
+    if (r.ok){ TOK = r.token; NAME = r.name; SID = r.id; $("code").value = ""; if (!window.__pingH) window.__pingH = setInterval(function(){ if (TOK) rpc("ping", {tok: TOK}).catch(function(){}); }, 40000); payRefresh(); entryOpen(); return; }
     var m = {wrong:"That code is not correct. " + (r.left != null ? r.left + " tries left." : ""), locked:"Too many wrong codes. Try again in " + (r.minutes || 10) + " minutes.", nocode:"You have no code at the moment. Ask your teacher.",
       classkey:"This computer is not set up for tests. Ask your teacher.", busy:"Please wait a few minutes and try again.", network:"Tests can only be taken in the classroom.", nostudent:"Name not found."};
     note("m_login","err", m[r.err] || "Could not log in."); if (r.err === "classkey"){ ls("nnt_class_key", null); setTimeout(init, 2500); }
   }).catch(function(){ $("go").disabled = false; note("m_login","err","No internet connection."); });
 };
 $("code").onkeydown = function(e){ if (e.key === "Enter") $("go").click(); };
-$("out").onclick = function(){ entryClose(); if (TOK) rpc("logout", {tok: TOK}); TOK = null; pickId = 0; $("nq").value = ""; show("s_login"); drawList(); };
+$("out").onclick = function(){ entryClose(); if (TOK) rpc("logout", {tok: TOK}); TOK = null; $("paybtn").classList.add("hide"); pickId = 0; $("nq").value = ""; show("s_login"); drawList(); };
 /* Daily plan: one test per day, counted in Tashkent time. Day 0 = 5 Nov 2026 = Unit 14, then one unit per day except days off. */
 var REC = null, PLAN_START = Date.UTC(2026, 10, 5), PLAN_UNIT = 14;
 var OFFD = [2, 3]; /* days off since 5 Nov 2026 (2 = Saturday 7 Nov, 3 = Sunday 8 Nov). The server sends the real plan; this is only a fallback */
