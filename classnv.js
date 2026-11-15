@@ -32,7 +32,7 @@
   + '#cnv .nd em{position:absolute;top:-38px;left:50%;transform:translateX(-50%);background:#fff;color:#06122e;border-radius:12px;padding:6px 12px;font-weight:800;font-size:13px;font-style:normal;letter-spacing:.08em;box-shadow:0 4px 0 rgba(0,0,0,.25)}'
   + '#cnv .bn{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(120deg,#6b4df0,#16b8d6);border-radius:20px;padding:14px 16px;box-shadow:0 6px 0 #3b2a8f;margin:4px 0 6px}#cnv .bn small{display:block;opacity:.85;font-weight:700;letter-spacing:.08em;font-size:12px}#cnv .bn b{font-size:19px}#cnv .bn i{font-style:normal;font-size:24px;border-left:2px solid rgba(255,255,255,.35);padding-left:14px}'
   + '#cnv .cld{position:absolute;left:0;right:0;top:0;pointer-events:none;background:linear-gradient(#070b1d 0,#070b1d 38%,rgba(7,11,29,0) 100%)}#cnv .cl{position:absolute;border-radius:50%;background:radial-gradient(ellipse at 50% 40%,#fff 0,#dfe9ff 55%,#aebfff 100%);filter:blur(2px)}';
-  CSS += '#cnv .hm{position:relative;min-height:calc(100vh - 36px);display:flex;align-items:center;justify-content:space-between;gap:30px;overflow:hidden}#cnv .hmb{position:absolute;left:0;top:0;z-index:3}'
+  CSS += '#cnv .hm{position:relative;min-height:calc(100vh - 36px);display:flex;align-items:center;justify-content:space-between;gap:30px;overflow:hidden}#cnv .hmb{position:absolute;left:0;top:0;z-index:3}#cnv .hmo{position:absolute;right:0;top:0;z-index:3}'
   + '#cnv .hmL{position:relative;z-index:2;max-width:620px}#cnv .hmt{display:inline-block;font-weight:800;font-size:13px;letter-spacing:.22em;color:#5df2d6;border:1.5px solid rgba(93,242,214,.5);border-radius:99px;padding:7px 16px;background:rgba(93,242,214,.08)}'
   + '#cnv .hmh{font-size:64px;line-height:1.04;letter-spacing:-.035em;margin:20px 0 14px;font-weight:800;color:#fff}#cnv .hmh em{font-style:normal;background:linear-gradient(100deg,#5df2d6,#7aa2ff 45%,#ff7ad9);-webkit-background-clip:text;background-clip:text;color:transparent}'
   + '#cnv .hmp{font-size:21px;opacity:.85;margin:0 0 24px;max-width:520px}#cnv .hmc{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px}#cnv .hmc span{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);border-radius:16px;padding:12px 18px;font-size:22px}#cnv .hmc b{font-size:16px;color:#fff}'
@@ -195,12 +195,12 @@
   function home(){
     var nm = (O.name ? String(O.name).split(" ")[0] : "") || "Champion", ln = LINES[Math.floor(Date.now() / 6e4) % LINES.length];
     var sp = ""; for (var i = 0; i < 18; i++) sp += '<i class="sk" style="left:' + ((i * 53 + 7) % 100) + '%;top:' + ((i * 37 + 11) % 100) + '%;animation-delay:' + ((i * 0.37) % 4).toFixed(2) + 's;width:' + (3 + i % 4) + 'px;height:' + (3 + i % 4) + 'px"></i>';
-    page('<div class="hm">' + sp + '<button class="pill hmb" id="cb">⇄ Switch</button>'
+    page('<div class="hm">' + sp + '<button class="pill hmb" id="cb">⇄ Switch</button><button class="pill hmo" id="clo">Log out</button>'
       + '<div class="hmL"><span class="hmt">NNT SCHOOL · CLASSROOM</span><h1 class="hmh">Ready to <em>level up</em>, ' + esc(nm) + '?</h1><p class="hmp">' + esc(ln) + '</p>'
       + '<div class="hmc"><span>🎧<b>Listening</b></span><span>📖<b>Reading</b></span><span>✍️<b>Writing</b></span></div>'
       + '<button class="hmg" id="cstart"><span>START DRILLING</span><b>→</b></button></div>'
       + '<div class="hmR"><div class="orb"><div class="rg"></div><div class="rg r2"></div><div class="core"><small>YOUR UNIT</small><b id="hmu">…</b></div><i class="o1"></i><i class="o2"></i><i class="o3"></i></div></div></div>');
-    el("cb").onclick = close; el("cstart").onclick = path;
+    el("cb").onclick = close; el("clo").onclick = function(){ close(); var o = document.getElementById("out"); if (o) o.click(); }; el("cstart").onclick = path;
     R("nv_nav", {tok: O.tok}).then(function(n){ if (!n || !n.ok) return; var open = (n.open || []).map(Number).filter(function(u){ return u <= 6; }), ck = (n.ckeys || []).map(Number), c = null;
       for (var i = 0; i < open.length; i++) if (ck.indexOf(open[i]) < 0){ c = open[i]; break; } if (c === null && open.length) c = open[open.length - 1]; if (el("hmu") && c !== null) el("hmu").textContent = c; }).catch(function(){});
   }
@@ -264,7 +264,7 @@
       if (ch && !S.cur && el("hl")) hub();
     }, function(){}); } catch (x) {}
   }
-  var RW = {1: 1, 2: 1};
+  var RW = {1: 1, 2: 1, 3: 1};
   function hub(){ S.cur = null; statusSync();
     function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
     function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
@@ -300,7 +300,7 @@
   function audioUrl(ex){
     S.au = S.au || {}; if (S.au[ex.audio]) return Promise.resolve(S.au[ex.audio]);
     var m = /(\d+)-(\d+)$/.exec(ex.audio) || [0, S.unit, "01"];
-    return getFile("c" + m[1] + "_" + m[2], ex.audio + ".mp3").then(function(b){ return (S.au[ex.audio] = URL.createObjectURL(new Blob([b], {type: "audio/mpeg"}))); });
+    return getFile(ex.file || ("c" + m[1] + "_" + m[2]), ex.audio + ".mp3").then(function(b){ return (S.au[ex.audio] = URL.createObjectURL(new Blob([b], {type: "audio/mpeg"}))); });
   }
   function startPart(){
     page(top() + '<div class="hero"><h2>Loading Part ' + S.unit + '…</h2></div>');
@@ -441,15 +441,15 @@
       });
       return h;
     }
-    h += '<div class="l4q"><div class="l4ex"><b>Example</b><span>' + esc(ex.example.l) + ': <s>' + esc(ex.example.s) + '</s> → <em>' + esc(ex.example.a) + '</em></span></div><div class="l4ex"><b>Example</b><span>' + esc(ex.example2.l) + ': ' + esc(ex.example2.s) + ' → <em>✔ correct</em></span></div>';
-    ex.qs.forEach(function(q, k){ h += '<div class="l4r fx" data-k="' + k + '"><b class="qn">' + (k + 1) + '</b><span class="qt">' + esc(q.l) + (q.s ? ' <strong>' + esc(q.s) + '</strong>' : "") + '</span><div class="l4t"><button type="button" class="l4ok">✔ correct</button><input class="a l4in" type="text" placeholder="or write the correction" spellcheck="false" autocomplete="off" autocapitalize="off"></div></div>'; });
+    h += '<div class="l4q"><div class="l4ex"><b>Example</b><span>' + esc(ex.example.l) + ': ' + (ex.example.s ? '<s>' + esc(ex.example.s) + '</s> → ' : '') + '<em>' + esc(ex.example.a) + '</em></span></div>' + (ex.example2 ? '<div class="l4ex"><b>Example</b><span>' + esc(ex.example2.l) + ': ' + esc(ex.example2.s) + ' → <em>✔ correct</em></span></div>' : '');
+    ex.qs.forEach(function(q, k){ h += '<div class="l4r fx" data-k="' + k + '"><b class="qn">' + (k + 1) + '</b><span class="qt">' + esc(q.l) + (q.s ? ' <strong>' + esc(q.s) + '</strong>' : "") + '</span><div class="l4t">' + (q.nt ? '' : '<button type="button" class="l4ok">✔ correct</button>') + '<input class="a l4in" type="text" placeholder="' + (q.nt ? 'write your answer' : 'or write the correction') + '" spellcheck="false" autocomplete="off" autocapitalize="off"></div></div>'; });
     return h + '</div>';
   }
   function qWire(root, ex){
     [].forEach.call(root.querySelectorAll(".l4tf[data-v]"), function(b){ b.onclick = function(){ var p = b.parentNode, was = b.getAttribute("data-sel") === "1"; [].forEach.call(p.querySelectorAll(".l4tf"), function(x){ x.removeAttribute("data-sel"); x.classList.remove("on"); }); if (!was){ b.setAttribute("data-sel", "1"); b.classList.add("on"); } }; });
     [].forEach.call(root.querySelectorAll(".l4tk"), function(b){ b.onclick = function(){ var g = b.getAttribute("data-g"), c = b.getAttribute("data-c"), was = b.classList.contains("on");
       [].forEach.call(root.querySelectorAll('.l4tk[data-g="' + g + '"][data-c="' + c + '"]'), function(x){ x.classList.remove("on"); }); if (!was) b.classList.add("on"); }; });
-    [].forEach.call(root.querySelectorAll(".l4r.fx"), function(r){ var ok = r.querySelector(".l4ok"), inp = r.querySelector(".l4in");
+    [].forEach.call(root.querySelectorAll(".l4r.fx"), function(r){ var ok = r.querySelector(".l4ok"), inp = r.querySelector(".l4in"); if (!ok) return;
       ok.onclick = function(){ var on = !ok.classList.contains("on"); ok.classList.toggle("on", on); if (on) inp.value = ""; };
       inp.oninput = function(){ if (inp.value.trim()) ok.classList.remove("on"); }; });
   }
@@ -457,7 +457,7 @@
     var out = [];
     if (ex.kind === "tf"){ ex.qs.forEach(function(q, k){ var s = root.querySelector('.l4r[data-k="' + k + '"] .l4tf[data-sel="1"]'); out.push(s ? s.getAttribute("data-v") : ""); }); }
     else if (ex.kind === "grid"){ ex.groups.forEach(function(g, gi){ ex.cols.forEach(function(c, ci){ var s = root.querySelector('.l4tk[data-g="' + gi + '"][data-c="' + ci + '"].on'); out.push(s ? +s.getAttribute("data-r") : -1); }); }); }
-    else { ex.qs.forEach(function(q, k){ var r = root.querySelector('.l4r[data-k="' + k + '"]'); out.push(r.querySelector(".l4ok").classList.contains("on") ? "tick" : r.querySelector(".l4in").value.trim()); }); }
+    else { ex.qs.forEach(function(q, k){ var r = root.querySelector('.l4r[data-k="' + k + '"]'); out.push(r.querySelector(".l4ok") && r.querySelector(".l4ok").classList.contains("on") ? "tick" : r.querySelector(".l4in").value.trim()); }); }
     return out;
   }
   function qMark(ex, ans){
@@ -465,7 +465,7 @@
     if (ex.kind === "tf") ex.qs.forEach(function(q, k){ rows.push({n: k + 1, ok: ans[k] === q.a, said: ans[k] ? (ans[k] === "T" ? "True" : "False") : "", right: q.a === "T" ? "True" : "False", text: q.t, ev: q.ev}); });
     else if (ex.kind === "grid") ex.groups.forEach(function(g, gi){ ex.cols.forEach(function(c, ci){ var k = gi * ex.cols.length + ci, a = ans[k]; rows.push({n: k + 1, ok: a === g.ans[ci], said: a >= 0 ? g.rows[a] : "", right: g.rows[g.ans[ci]], text: c + ": " + g.title.replace(/^Which\s+/i, "").replace(/\?$/, ""), ev: g.ev[ci]}); }); });
     else ex.qs.forEach(function(q, k){ var a = ans[k], ok = false, right = q.a || "✔ correct (no change)";
-      if (!q.a) ok = a === "tick"; else if (a && a !== "tick"){ var f = " " + fnorm(a) + " "; ok = (q.acc || []).some(function(x){ return f.indexOf(" " + fnorm(x) + " ") > -1; }); }
+      if (!q.a) ok = a === "tick"; else if (a && a !== "tick"){ var f = " " + fnorm(a) + " "; ok = (q.acc || []).some(function(x){ return f.indexOf(" " + fnorm(x) + " ") > -1 || (/\d/.test(x) && f.replace(/ /g, "").indexOf(fnorm(x).replace(/ /g, "")) > -1); }); }
       rows.push({n: k + 1, ok: ok, said: a === "tick" ? "✔ correct" : a, right: right, text: q.l + (q.s ? " (" + q.s + ")" : ""), ev: q.ev}); });
     return rows;
   }
@@ -597,7 +597,7 @@
     var wid = "";
     if (ex.kind === "tf") wid = '<div class="l4q"><div class="l4r" data-k="0"><b class="qn">' + w.n + '</b><span class="qt">' + esc(ex.qs[w.n - 1].t) + '</span><div class="l4t"><button type="button" class="l4tf" data-v="T">True</button><button type="button" class="l4tf" data-v="F">False</button></div></div></div>';
     else if (ex.kind === "grid"){ var g = ex.groups[gi]; wid = '<div class="l4g"><div class="l4gh">' + esc(ex.cols[ci]) + ': ' + esc(g.title) + '<small>Tick one item.</small></div><div class="l4gt">' + g.rows.map(function(r, ri){ return '<div class="l4gr one"><span>' + esc(r) + '</span><button type="button" class="l4tk" data-g="0" data-c="0" data-r="' + ri + '"></button></div>'; }).join("") + '</div></div>'; }
-    else { var q = ex.qs[w.n - 1]; wid = '<div class="l4q"><div class="l4r fx" data-k="0"><b class="qn">' + w.n + '</b><span class="qt">' + esc(q.l) + (q.s ? ' <strong>' + esc(q.s) + '</strong>' : "") + '</span><div class="l4t"><button type="button" class="l4ok">✔ correct</button><input class="a l4in" type="text" placeholder="or write the correction" spellcheck="false" autocomplete="off" autocapitalize="off"></div></div></div>'; }
+    else { var q = ex.qs[w.n - 1]; wid = '<div class="l4q"><div class="l4r fx" data-k="0"><b class="qn">' + w.n + '</b><span class="qt">' + esc(q.l) + (q.s ? ' <strong>' + esc(q.s) + '</strong>' : "") + '</span><div class="l4t">' + (q.nt ? '' : '<button type="button" class="l4ok">✔ correct</button>') + '<input class="a l4in" type="text" placeholder="' + (q.nt ? 'write your answer' : 'or write the correction') + '" spellcheck="false" autocomplete="off" autocapitalize="off"></div></div></div>'; }
     page(top("Exit") + stgBar(4) + '<div class="fxtag">🛠 WIN IT BACK · ' + (L.dn - L.dq.length) + ' of ' + L.dn + ' won</div><div class="drb"><i style="width:' + pct + '%"></i></div>'
       + '<div class="ins fixc"><span class="ii">🎯</span><div><small>THE SENTENCE YOU NEEDED</small><strong>“' + esc((w.ev || "").replace(/ \.\.\. /g, " … ")) + '”</strong></div></div>'
       + '<div class="l4ans" id="l4a"><div class="l4qh">' + esc(ex.id + " · " + ex.name) + '</div>' + wid + '</div><div class="l4bar"><span class="wrm" id="l4m"></span><button class="go" id="l4ck">Check</button></div>');
