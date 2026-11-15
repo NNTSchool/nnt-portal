@@ -242,7 +242,13 @@
       if (!r || !r.ok){ page(top() + '<div class="card warn"><h2>Please try again</h2><p>We could not check your key.</p></div>'); el("cb").onclick = path; return; }
       if (r.teacher) O.nofloor = true; /* teacher: every stage open, no minimum times */
       if (!r.earned){
-        page(top() + '<div class="card warn"><h2>Your key has not been earned yet</h2><p>You need the key of Unit ' + S.unit + ' on the student portal first. Go earn it, then come back.</p></div>'); el("cb").onclick = path; return; }
+        var stp = function(n, ic, t){ return '<div style="flex:1;min-width:150px;background:#fff;border:2px solid #c9d6ee;border-radius:16px;padding:14px 12px;text-align:center"><div style="font-size:30px">' + ic + '</div><b style="display:block;color:#10204a;font-size:16px;margin-top:4px">' + t + '</b><small style="color:#5a6a86">Step ' + n + '</small></div>'; };
+        page(top() + '<div style="text-align:center;padding:6px 0 0"><div style="position:relative;width:230px;max-width:60%;margin:0 auto;filter:grayscale(1) opacity(.55) drop-shadow(0 10px 22px rgba(40,60,120,.25))">' + portalKey() + '</div>'
+          + '<div style="font-size:44px;margin:-26px 0 0;position:relative">🔒</div>'
+          + '<h2 style="margin:6px 0 6px;font-size:32px;color:#10204a">Almost there! Unit ' + S.unit + ' is waiting for you</h2>'
+          + '<p style="margin:0 auto 16px;max-width:560px;color:#3b4b69;font-size:18px;line-height:1.5">Earn the key of Unit ' + S.unit + ' at home first. It takes four short steps, and then this classroom opens for you.</p>'
+          + '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:760px;margin:0 auto 18px">' + stp(1, "🎬", "Watch the videos") + stp(2, "📝", "Take the home test") + stp(3, "✍️", S.unit <= 2 ? "Read and summarise" : "Do the writing") + stp(4, "🎤", "Record your speaking") + '</div>'
+          + '<button class="go" id="cgo" style="padding:15px 26px;font-size:18px">← Back to the stages</button></div>'); el("cb").onclick = path; el("cgo").onclick = path; return; }
       page(top() + '<div style="text-align:center;padding:10px 0 4px"><div class="kdrop" style="width:380px;max-width:80%;margin:0 auto;filter:drop-shadow(0 14px 30px rgba(255,196,40,.55))">' + portalKey() + '</div><h2 style="margin:10px 0 4px;font-size:34px">Your key is earned. Welcome!</h2><p class="sub">You can now begin the mock test of Unit ' + S.unit + '.</p><button class="go" id="cgo" style="margin-top:12px">Continue →</button></div>');
       el("cb").onclick = path; el("cgo").onclick = hub;
     }).catch(function(){ page(top() + '<div class="card warn"><h2>No internet connection</h2></div>'); el("cb").onclick = path; });
