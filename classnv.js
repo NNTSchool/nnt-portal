@@ -264,7 +264,7 @@
       if (ch && !S.cur && el("hl")) hub();
     }, function(){}); } catch (x) {}
   }
-  var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1};
+  var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1};
   function hub(){ S.cur = null; statusSync();
     function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
     function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
