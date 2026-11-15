@@ -91,6 +91,7 @@
   + '#cnv .bh,#cnv .fh{color:#10204a}#cnv .fn{color:#3d4f80}#cnv .bring svg circle:nth-of-type(1){stroke:rgba(16,32,74,.12)}#cnv .bc small{color:#4d5f93}#cnv .bc em{color:#3d4f80}#cnv .bc b{background:linear-gradient(160deg,#10204a,#3e63d8 70%,#8a5cf0);-webkit-background-clip:text;background-clip:text}#cnv .bring.late .bc b{background:linear-gradient(160deg,#7a1230,#d6395f);-webkit-background-clip:text;background-clip:text}#cnv .bring.late .bc small,#cnv .bring.late .bc em{color:#b2334f}#cnv .bring.late #barc{stroke:#e0405f}'
   + '#cnv .chips span{background:#fff;color:#10204a}#cnv .fst div{background:#f6f9ff;border-color:#b9c9e6}#cnv .fst span{color:#3d4f80}#cnv .fst b{color:#d98b00}#cnv .bk.lt .bh{color:#b2334f}#cnv .bk.good .bh{color:#0b7a66}'
   + '#cnv .hmh{color:#10204a}#cnv .hmt{color:#b25400}#cnv .hmc span{background:#fff;border-color:#b9c9e6;color:#10204a}#cnv .hmc span b{color:#10204a}#cnv .sp5.on{background:#3e63d8;border-color:#3e63d8;color:#fff}#cnv .spk i{opacity:1}';
+  CSS += '@media(max-width:760px){#cnv .hm{padding-top:62px;box-sizing:border-box}#cnv .hmh{font-size:46px}}';
 
   /* ---------- reading: split screen ---------- */
   CSS += '#cnv .w.rdw{max-width:1700px;padding:12px 18px 24px}#cnv .rdh{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:4px 0 10px}#cnv .rdh h2{margin:0;font-size:26px;letter-spacing:-.02em}'
