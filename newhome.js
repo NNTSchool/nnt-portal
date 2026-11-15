@@ -59,7 +59,7 @@
   + '#newv .hm{min-height:calc(100vh - 36px);display:flex;flex-direction:column;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}#newv .hmtop{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:4px 0 0}'
   + '#newv .hmbrand{font:800 19px system-ui;letter-spacing:-.01em;color:#f2f0ff}#newv .hmbrand span{font-weight:600;color:#b9b0ff}'
   + '#newv .hmbtns{display:flex;gap:8px;align-items:center;flex-wrap:wrap}#newv .hmbtns button{border-radius:99px;padding:8px 16px;font:700 14px system-ui;cursor:pointer;color:#f2f0ff;background:rgba(255,255,255,.07);border:1px solid rgba(185,176,255,.35);transition:background .15s}#newv .hmbtns button:hover{background:rgba(255,255,255,.14)}#newv .hmbtns button.paybtn{border:0;padding:5px 14px 5px 10px;color:#fff}'
-  + '#newv .hmc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px 0 40px}#newv .hmgreet{font:700 16px system-ui;letter-spacing:.14em;text-transform:uppercase;color:#9dfbe3;margin-bottom:18px}'
+  + '#newv .hmc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px 0 40px}#newv .hmname{font:800 30px/1.2 system-ui;color:#fff;margin:6px 0 4px;text-align:center;min-height:36px}#newv .hmgreet{font:700 16px system-ui;letter-spacing:.14em;text-transform:uppercase;color:#9dfbe3;margin-bottom:18px}'
   + '#newv .hmring .ring{width:min(46vw,200px);height:min(46vw,200px);position:relative;margin:0 auto}#newv .hmring .ring svg{width:100%;height:100%}#newv .hmring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}#newv .hmring .c small{font:700 13px system-ui;letter-spacing:.18em;text-transform:uppercase;color:#b9b0ff}#newv .hmring .c b{font:800 64px/1 system-ui;color:#fff;letter-spacing:-.03em}'
   + '#newv .hmlvl{margin:16px 0 4px}#newv .hmq{margin:26px auto 30px;max-width:620px;padding:22px 26px;border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(185,176,255,.22);}#newv .hmq p{margin:0;font:600 clamp(19px,2.6vw,25px)/1.4 Georgia,serif;font-style:italic;color:#f2f0ff}#newv .hmq cite{display:block;margin-top:10px;font:700 14px system-ui;font-style:normal;color:#b9b0ff;letter-spacing:.04em}'
   + '#newv .hmgo{width:min(480px,100%);padding:22px 28px;font-size:23px;border-radius:20px;letter-spacing:.01em;box-shadow:0 18px 50px -12px rgba(255,111,145,.75);}@keyframes nvglow{50%{box-shadow:0 18px 64px -6px rgba(255,111,145,.95)}}@media (prefers-reduced-motion:reduce){#newv .hmgo{animation:none}}'
@@ -282,18 +282,20 @@
     for (var i = 0; i < o.length; i++) if (!nvDone(o[i])) return o[i];
     return o.length ? o[o.length - 1] : 1;
   }
+  function fnFull(){ try{ if (typeof ME !== "undefined" && ME){ var n = ME.name || ME.full_name || ""; return String(n).trim(); } }catch(e){} return ""; }
+  function fillName(k){ var el = document.getElementById("nvhname"); if (!el) return; var n = fnFull(); if (n) el.textContent = n; else if (k < 12) setTimeout(function(){ fillName(k + 1); }, 400); }
   function homePage(){
     S.sub = false; S.chose = null; S.review = false;
     var fu = frontUnit(), fn = ""; try{ if (typeof ME !== "undefined" && ME && ME.name) fn = String(ME.name).split(" ")[0]; }catch(e){}
     var pb = document.getElementById("paybtn"), hasPay = pb && !pb.classList.contains("hide"), q = pickQuote();
     var h = '<div class="hm"><div class="hmtop"><div class="hmbrand">NNT <span>School Academy</span></div><div class="hmbtns"><button id="nvhsw" type="button">⇄ Switch</button>'
       + (hasPay ? '<button id="nvhpay" type="button" class="' + pb.className.replace(/\bhide\b/, '') + '">' + pb.innerHTML + '</button>' : '') + '<button id="nvhout" type="button">Log out</button></div></div>'
-      + '<div class="hmc"><div class="hmgreet">' + (fn ? 'Welcome back, ' + esc(fn) : 'Welcome back') + '</div>'
+      + '<div class="hmc"><div class="hmgreet">Welcome back</div><div class="hmname" id="nvhname">' + esc(fnFull()) + '</div>'
       + '<div class="hmring"><div class="ring">' + ringSvg(Math.min(1, ((S.nav ? S.nav.keys.length : 0)) / 20)) + '<div class="c"><small>Unit</small><b>' + fu + '</b></div></div></div>'
       + '<div class="hmlvl"><span class="chip">Unit ' + fu + ' of 20</span><span class="chip" id="hmtrk" style="display:none"></span></div>'
       + '<blockquote class="hmq"><p>“' + esc(q[0]) + '”</p>' + (q[1] ? '<cite>— ' + esc(q[1]) + '</cite>' : '') + '</blockquote>'
       + '<button type="button" class="go hmgo" id="nvbegin">Begin Learning →</button></div></div>';
-    page(h);
+    page(h); fillName(0);
     el("nvbegin").onclick = function(){ this.disabled = true; goUnit(frontUnit()); };
     el("nvhsw").onclick = function(){ var b = document.getElementById("swbtn"); if (b) b.click(); };
     if (el("nvhpay")) el("nvhpay").onclick = function(){ pb.click(); };
