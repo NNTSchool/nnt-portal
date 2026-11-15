@@ -264,7 +264,7 @@
       if (ch && !S.cur && el("hl")) hub();
     }, function(){}); } catch (x) {}
   }
-  var RW = {1: 1, 2: 1, 3: 1};
+  var RW = {1: 1, 2: 1, 3: 1, 4: 1};
   function hub(){ S.cur = null; statusSync();
     function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
     function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
@@ -840,7 +840,7 @@
   }
   function wrEditor(leftHtml, init){
     var W = S.W, FB = W.FB, NEED = W.need;
-    page(top("← Unit") + '<div class="rdh"><h2>✍️ Writing · ' + esc(W.P.title) + '</h2>' + wrSteps() + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
+    page(top("← Unit") + '<div class="rdh"><h2>✍️ Writing · Unit ' + S.unit + ' · ' + esc(W.P.title) + '</h2>' + wrSteps() + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
       + '<div class="rsp"><div class="rpn hlz" id="rdp">' + leftHtml + '</div><div class="rpn q" id="rdq"><div class="wrh">Your answer · ' + (W.tr === "ml" ? "180–200 words" : "at least " + NEED + " words") + '</div>'
       + '<textarea id="wtx" class="wrta" spellcheck="false" autocomplete="off" placeholder="Start writing here…"></textarea>'
       + '<div class="wrm"><b id="wcn">0 words</b><span id="wnd"></span><span id="wpr"></span></div></div></div>'
