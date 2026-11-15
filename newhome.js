@@ -468,15 +468,30 @@
     var us = [nvPrev(), nvCanNext() ? nvNext() : null];
     us.forEach(function(v){ if (v === null || CACHE[v]) return; fetchUnit(v).then(function(p){ CACHE[v] = {x: p[0], r: p[1], sig: JSON.stringify(p)}; }).catch(function(){}); });
   }
+  /* class-day rule: shows the deadline (the student's next class) and, if a unit was restarted, why */
+  function dlBanner(u){
+    if (!S.sub || S.teacher) return;
+    Promise.resolve(rpc("nv_deadline", {tok: tok()})).then(function(r){
+      if (!r || !r.ok || !r.on || S.unit !== u || !S.sub) return;
+      var host = el("newv") && (el("newv").querySelector(".nw") || el("newv")); if (!host || el("nvdl")) return;
+      var html = "";
+      if (r.lost) html += '<div style="background:#fff1ee;border:2px solid #f0a090;color:#7a2616;border-radius:14px;padding:10px 14px;margin:0 0 10px;font-weight:700">Unit ' + r.lost.unit + ' was restarted because you did not finish the class on ' + String(r.lost.dow) + '. Do the home practice again and finish it before your next class.</div>';
+      if (r.next) html += '<div style="background:#eef3ff;border:2px solid #c3d0f5;color:#18285a;border-radius:14px;padding:10px 14px;margin:0 0 10px;font-weight:700">' + (r.live ? 'Your class is open now (14:00). Finish the class today.' : 'Finish this unit\'s home practice before your next class: ' + String(r.dow) + ' at 14:00.') + '</div>';
+      if (!html) return;
+      var d = document.createElement("div"); d.id = "nvdl"; d.innerHTML = html; host.insertBefore(d, host.firstChild);
+    }).catch(function(){});
+  }
   function unitPage(){
     S.sub = true; var u = S.unit, F = {kseen: false, ret: false, auto: ""};
     try{ F.kseen = sessionStorage.getItem("nvks" + u) === "1"; F.ret = sessionStorage.getItem("nnt_ret") === "1"; sessionStorage.removeItem("nnt_ret"); F.auto = sessionStorage.getItem("nvauto") || ""; sessionStorage.removeItem("nvauto"); }catch(e){}
     var c = CACHE[u];
     if (c && !F.ret) paintUnit(c.x, c.r, F); else skeleton(u);
+    dlBanner(u); setTimeout(function(){ dlBanner(u); }, 1500);
     fetchUnit(u).then(function(p){
       var sig = JSON.stringify(p); CACHE[u] = {x: p[0], r: p[1], sig: sig};
       if (S.unit !== u || !S.sub || el("nvbegin")) return;
       if (!(c && !F.ret && c.sig === sig)) paintUnit(p[0], p[1], F);
+      dlBanner(u);
       setTimeout(prefetchNear, 400);
     }).catch(function(){ if (!c) page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>', true); });
   }
