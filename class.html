@@ -128,7 +128,7 @@ $("go").onclick = function(){
   $("go").disabled = true; note("m_login","info","Checking…");
   rpc("login_class", {sid: pickId, pcode: c, pclass_key: ls("nnt_class_key") || "", plabel: "classroom " + deviceLabel() + (ls("nnt_pc") ? " · PC" + ls("nnt_pc") : "")}).then(function(r){
     $("go").disabled = false;
-    if (r.ok){ TOK = r.token; NAME = r.name; SID = r.id; $("code").value = ""; if (!window.__pingH) window.__pingH = setInterval(function(){ if (TOK) rpc("ping", {tok: TOK}).catch(function(){}); }, 40000); payRefresh(); entryOpen(); return; }
+    if (r.ok){ TOK = r.token; NAME = r.name; SID = r.id; $("code").value = ""; if (!window.__pingH) window.__pingH = setInterval(function(){ if (TOK) rpc("ping", {tok: TOK}).catch(function(){}); }, 40000); payRefresh(); var sm = modeGet(); if (sm === "classic"){ entryClose(); loadTests(); } else if (sm === "new"){ nvLook(function(){ if (NVOK) $("e_new").onclick(); else entryOpen(); }); } else entryOpen(); return; }
     var m = {wrong:"That code is not correct. " + (r.left != null ? r.left + " tries left." : ""), locked:"Too many wrong codes. Try again in " + (r.minutes || 10) + " minutes.", nocode:"You have no code at the moment. Ask your teacher.",
       classkey:"This computer is not set up for tests. Ask your teacher.", busy:"Please wait a few minutes and try again.", network:"Tests can only be taken in the classroom.", nostudent:"Name not found."};
     note("m_login","err", m[r.err] || "Could not log in."); if (r.err === "classkey"){ ls("nnt_class_key", null); setTimeout(init, 2500); }
@@ -143,11 +143,13 @@ function testDays(n){ var c = 0; for (var i = 0; i < n; i++){ if (OFFD.indexOf(i
 function todayUnit(){ var d = Math.floor((Date.now() + 5 * 3600e3 - PLAN_START) / 864e5); if (d < 0 || OFFD.indexOf(d) > -1) return 0; return PLAN_UNIT + testDays(d); }
 /* the two doors, like the portal: Classic (the class tests) and Novel (closed here for now) */
 var NVOK = false;
-function nvLook(){ var b = $("e_new"); b.classList.add("lock"); b.querySelector(".ic").textContent = "🔒"; NVOK = false; if (!TOK) return; rpc("nv_class_access", {tok: TOK}).then(function(r){ if (r && r.ok && r.allowed){ NVOK = true; b.classList.remove("lock"); b.querySelector(".ic").textContent = "🚀"; } }).catch(function(){}); }
+function nvLook(cb){ var b = $("e_new"); b.classList.add("lock"); b.querySelector(".ic").textContent = "🔒"; NVOK = false; if (!TOK) return; rpc("nv_class_access", {tok: TOK}).then(function(r){ if (r && r.ok && r.allowed){ NVOK = true; b.classList.remove("lock"); b.querySelector(".ic").textContent = "🚀"; } if (cb) cb(); }).catch(function(){ if (cb) cb(); }); }
 function entryOpen(){ nvLook(); $("e_name").textContent = NAME ? String(NAME).split(" ")[0] : ""; $("e_msg").innerHTML = ""; $("entry").classList.remove("hide"); document.body.style.overflow = "hidden"; }
 function entryClose(){ $("entry").classList.add("hide"); document.body.style.overflow = ""; }
-$("e_classic").onclick = function(){ entryClose(); loadTests(); };
-$("e_new").onclick = function(){ if ((NVOK || /[?&]preview=1/.test(location.search)) && window.CNV){ entryClose(); CNV.open({tok: TOK, name: NAME, rpc: rpc, base: "classdata/", enc: true, nofloor: /[?&]preview=1/.test(location.search), finale: /[?&]finale=1/.test(location.search), onExit: entryOpen}); return; } var b = $("e_new"); b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake"); $("e_msg").innerHTML = '<div class="elock">🔒 Novel is not open in the classroom yet. Please use Classic.</div>'; };
+function modeSave(m){ try{ if (SID) localStorage.setItem("nnt_cmode_" + SID, m); }catch(e){} }
+function modeGet(){ try{ return SID ? (localStorage.getItem("nnt_cmode_" + SID) || "") : ""; }catch(e){ return ""; } }
+$("e_classic").onclick = function(){ modeSave("classic"); entryClose(); loadTests(); };
+$("e_new").onclick = function(){ if ((NVOK || /[?&]preview=1/.test(location.search)) && window.CNV){ modeSave("new"); entryClose(); CNV.open({tok: TOK, name: NAME, rpc: rpc, base: "classdata/", enc: true, nofloor: /[?&]preview=1/.test(location.search), finale: /[?&]finale=1/.test(location.search), onExit: entryOpen}); return; } var b = $("e_new"); b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake"); $("e_msg").innerHTML = '<div class="elock">🔒 Novel is not open in the classroom yet. Please use Classic.</div>'; };
 $("e_out").onclick = function(){ entryClose(); $("out").click(); };
 $("swbtn").onclick = function(){ entryOpen(); };
 function loadTests(){
