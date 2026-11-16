@@ -42,6 +42,7 @@
   + '#nvp .ans{margin-top:14px;border-radius:16px;padding:14px;background:rgba(255,179,0,.14);border:2px solid #ffb300;display:none}#nvp .ans.on{display:block}#nvp .ans input{width:100%;box-sizing:border-box;margin:6px 0;padding:11px 12px;border-radius:10px;border:0;font:700 18px system-ui;text-transform:uppercase;letter-spacing:.08em}'
   + '@media(orientation:landscape) and (max-height:560px){#nvp .vw{max-width:calc(100vh * 1.7778)}}#nvp:fullscreen .vw,#nvp:-webkit-full-screen .vw{max-width:calc(100vh * 1.7778)}'
   + '@media(orientation:landscape) and (pointer:coarse){#nvp .vw{max-width:calc(100vh * 1.7778)}}#nvp .vw{overflow:hidden;flex:none}#nvp .yw{position:absolute;inset:0}#nvp .vw iframe,#nvp .vw #nv_yt{transform-origin:0 0;transform:scale(var(--z,1)) translate(var(--tx,0px),var(--ty,0px))}#nvp .zo{position:absolute;inset:0;z-index:3;display:none;touch-action:none;cursor:grab}#nvp .zo.on{display:block}#nvp .zr{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0}'
+  + '#nvp.free .pn{display:none}'
   + '#nvp .hint{display:none;color:#ffd77a;font-size:14px;margin:6px 0}@media(orientation:portrait) and (max-width:700px){#nvp .hint{display:block}}'
 
   + '#newv .nd.done .dot,#newv .st .n,#newv .bar i,#newv .chip{background-image:none}#newv .nd.done .dot,#newv .st .n{background:linear-gradient(135deg,#46f0c4,#7c5cff);color:#0a0820}#newv .bar i{background:linear-gradient(90deg,#46f0c4,#7c5cff)}'
@@ -94,7 +95,7 @@
     el("nvsend").onclick = sendWords;
     el("nvok").onclick = function(){ el("nvov").classList.remove("on"); };
     document.addEventListener("visibilitychange", function(){
-      if (!S.cur || !el("nvp").classList.contains("on")) return;
+      if (S.free || !S.cur || !el("nvp").classList.contains("on")) return;
       if (document.hidden){ S.hidden = true; try{ S.pl.pauseVideo(); }catch(e){} }
       else if (S.hidden){ S.hidden = false; showOv("Your teacher is watching", "You left this screen, so the video was paused and the time did not count. Stay on this screen while the video plays."); beat(); }
     });
@@ -547,13 +548,17 @@
             + '<button class="go" data-i="' + v.idx + '"' + (v.locked || v.done ? " disabled" : "") + ' type="button">' + lab + '</button></div>';
         });
       }
+      if (all && !jumped){
+        var rw = ""; S.vids.forEach(function(v){ if (v.yt) rw += '<button class="go ghost" data-rw="' + v.idx + '" type="button">▶ Watch again: ' + esc(v.title) + '</button>'; });
+        if (rw) b1 += '<small style="margin-top:8px">🔁 Watch again any time. No secret words, pause whenever you like. It does not count for anything.</small><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">' + rw + '</div>';
+      }
       h += node(all ? "done" : "now", all ? "✓" : "1", b1);
       /* 2 home test */
       var k2 = tOK ? "done" : cur === 1 ? "now" : (!all && !S.teacher) ? "wait" : "open", b2;
       if (tOK) b2 = '<b>Home test</b><small>Done · ' + Math.round(st.pct || 0) + '%</small>';
       else if (!all && !S.teacher) b2 = '<b>Home test</b><small>Opens after the videos · 91 questions, about 1 hour</small>';
       else if (!S.track) b2 = '<b>Choose your track</b><small>You choose once. Only your teacher can change it later.</small><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="go" id="nvtml" type="button">Multi-level</button><button class="go" id="nvtie" type="button">IELTS</button></div>';
-      else b2 = '<b>Home test</b><small>91 questions · about 1 hour · ' + tn + '. Listening needs headphones. Do it in one go.</small>' + (st.cancels ? '<small style="color:#ffe27a;font-weight:700;margin-top:6px">⚠ Your last try was cancelled (you left the test window 3 times). You must take the test again.</small>' : '') + '<button class="go" id="nvstarttest" type="button" style="' + cta + '">Start the home test</button>';
+      else b2 = '<b>Home test</b><small>91 questions · about 1 hour · ' + tn + '. Listening needs headphones. Do it in one go.</small>' + (st.tries ? '<small style="color:#ffe27a;font-weight:700;margin-top:6px">Your last try: ' + Math.round(st.lastpct || 0) + '%. You need ' + Math.round(st.need || 70) + '% to pass. Watch the videos again (the button in step 1), then redo the test. The answers appear after you pass.</small>' : '') + (st.cancels ? '<small style="color:#ffe27a;font-weight:700;margin-top:6px">⚠ Your last try was cancelled (you left the test window 3 times). You must take the test again.</small>' : '') + '<button class="go" id="nvstarttest" type="button" style="' + cta + '">' + (st.tries ? "Redo the test" : "Start the home test") + '</button>';
       h += node(k2, tOK ? (st.cancelled ? "✕" : "✓") : "2", b2);
       /* 3 writing */
       var k3 = wOK ? "done" : tOK ? "now" : "wait", b3;
@@ -583,7 +588,9 @@
       if (el("nvts")) el("nvts").onclick = function(){ startSpeak(this); };
       if (el("nvstartspeak")) el("nvstartspeak").onclick = function(){ startSpeak(this); };
       Array.prototype.forEach.call(el("newv").querySelectorAll(".go[data-i]"), function(b){ b.onclick = function(){ play(+b.getAttribute("data-i")); }; });
-      if (ret && auto === "write" && st.test && !st.essay && el("nvstartwrite")) autoNext(SM ? "Read and summarise" : "Writing", "nvstartwrite", startWrite);
+      Array.prototype.forEach.call(el("newv").querySelectorAll(".go[data-rw]"), function(b){ b.onclick = function(){ play(+b.getAttribute("data-rw"), true); }; });
+      if (ret && auto === "home" && !st.test && el("nvstarttest")) startHome(el("nvstarttest"));
+      else if (ret && auto === "write" && st.test && !st.essay && el("nvstartwrite")) autoNext(SM ? "Read and summarise" : "Writing", "nvstartwrite", startWrite);
       else if (ret && auto === "speak" && st.essay && !st.speak && el("nvstartspeak")) autoNext("Speaking", "nvstartspeak", startSpeak);
     }
   }
@@ -642,12 +649,23 @@
     }).catch(function(e){ btn.disabled = false; btn.textContent = lab0; nvNote("Could not open the test. Check the internet and try again."); });
   }
   /* ---------- player ---------- */
-  function play(idx){
-    CACHE = {};
+  function play(idx, free){
+    CACHE = {}; S.free = !!free;
+    try{ el("nvp").classList.toggle("free", !!free); }catch(e){}
     Z.z = 1; Z.x = 0; Z.y = 0; try{ zApply(); }catch(e){}
     setTimeout(fitView, 600);
     var v = S.vids.filter(function(x){ return x.idx === idx; })[0]; if (!v || !v.yt) return;
     S.cur = v; S.ack = v.wack || 0; S.mack = null; S.fails = 0; S.hidden = false; S.ready = false; S.lastPos = v.pos || 0;
+    if (free){
+      el("nvt").textContent = v.title + " · watching again"; el("nvans").classList.remove("on"); el("nvwb").classList.remove("on"); el("nvov").classList.remove("on");
+      el("nvp").classList.add("on"); document.body.style.overflow = "hidden";
+      loadYT(function(){
+        el("nvyw").innerHTML = '<div id="nv_yt"></div>';
+        S.pl = new YT.Player("nv_yt", {videoId: v.yt, host: "https://www.youtube-nocookie.com", playerVars: {rel: 0, modestbranding: 1, playsinline: 1, fs: 0, iv_load_policy: 3, start: 0}});
+        clearInterval(S.hb); S.hb = null;
+      });
+      return;
+    }
     el("nvt").textContent = v.title; el("nvans").classList.remove("on"); el("nvwb").classList.remove("on"); el("nvov").classList.remove("on"); el("nvam").textContent = "";
     el("nvp").classList.add("on"); document.body.style.overflow = "hidden";
     paint(v.covered, v.target, v.wack || 0);
@@ -674,6 +692,7 @@
     return "play";
   }
   function beat(){
+    if (S.free) return;
     if (!S.cur || !S.pl || !S.pl.getCurrentTime || S.busy) return;
     var st = state(), pos = S.pl.getCurrentTime(), spd = S.pl.getPlaybackRate ? S.pl.getPlaybackRate() : 1;
     S.busy = true;
@@ -711,7 +730,7 @@
   function leave(){
     if (S.pl && S.cur) beat();
     setTimeout(function(){
-      stopPlayer(); S.cur = null;
+      stopPlayer(); S.cur = null; S.free = false; try{ el("nvp").classList.remove("free"); }catch(e){}
       try{ if (document.fullscreenElement || document.webkitFullscreenElement) (document.exitFullscreen || document.webkitExitFullscreen).call(document); }catch(e){}
       el("nvp").classList.remove("on"); el("nvov").classList.remove("on"); el("nvyw").innerHTML = '<div id="nv_yt"></div>';
       unitPage();
