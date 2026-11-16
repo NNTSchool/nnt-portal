@@ -1250,7 +1250,12 @@
     el("cb").onclick = hub; el("drd").onclick = function(){ S.W.drDone = true; writingDone(); };
   }
   /* one break screen for every stage: listening, reading, writing... */
-  function listeningDone(){ if (!floorOk("lis")) return; clearDrafts("lis"); flushLog("lis", {done: true, prog: null, prog4: null, draft: null}); S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
+  /* accuracy the student has reached in this listening, sent to the server with "done" */
+  function lisAcc(){ try {
+    if (S.dict){ var g = 0, n = 0; S.P.exercises.forEach(function(e){ var r = S.res[e.id]; if (r){ g += r.good; n += r.n; } }); return n ? Math.round(100 * g / n) : 0; }
+    return Math.round(100 * l4Run());
+  } catch (e) { return 0; } }
+  function listeningDone(){ if (!floorOk("lis")) return; clearDrafts("lis"); flushLog("lis", {done: true, acc: lisAcc(), prog: null, prog4: null, draft: null}); S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
   function readingDone(){ if (!floorOk("read")) return; clearDrafts("read"); flushLog("read", {done: true, draft: null}); S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
   function stageBreak(label, onNext){ S.cur = null;
     var t0 = Date.now(), C = 2 * Math.PI * 130;
