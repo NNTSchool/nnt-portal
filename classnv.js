@@ -394,10 +394,10 @@
   function checkEx(ex){
     var ins = [].slice.call(document.querySelectorAll("#cin .a")), good = 0, rows = [];
     /* bare minimum effort: at least half of the boxes must be filled before the answers are shown */
-    var filled = ins.filter(function(x){ return x.value.trim().length > 0; }).length, minF = Math.ceil(ins.length / 2);
+    var wc0 = function(t){ return (String(t).trim().match(/\S+/g) || []).length; }, filled = ins.filter(function(x, k){ return ex.long ? wc0(x.value) >= Math.max(3, Math.ceil(0.25 * wc0(ex.items[k]))) : x.value.trim().length > 0; }).length, minF = Math.ceil(ins.length / 2);
     if (!O.nofloor && filled < minF){
       var w = el("cwarn"); if (!w){ w = document.createElement("div"); w.id = "cwarn"; w.style.cssText = "margin:10px 0 0;padding:10px 14px;border-radius:12px;background:#fff3d6;color:#7a4b00;font-weight:700"; el("cchk").insertAdjacentElement("afterend", w); }
-      w.textContent = "Not so fast! You filled " + filled + " of " + ins.length + " boxes. Try at least " + minF + " before you check. Play the audio again and write what you hear, even if you are not sure.";
+      w.textContent = "Not so fast! You filled " + filled + " of " + ins.length + " boxes properly" + (ex.long ? " (write at least a quarter of each passage)" : "") + ". Try at least " + minF + " before you check. Play the audio again and write what you hear, even if you are not sure.";
       return;
     }
     stopAudio();
