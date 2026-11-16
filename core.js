@@ -11,7 +11,7 @@ function rpc(name, args, timeout){
     body: JSON.stringify(args || {}), signal: ctl ? ctl.signal : undefined
   }).then(function(r){
     if (t) clearTimeout(t);
-    return r.json().then(function(j){ if (!r.ok) throw new Error((j && (j.message || j.hint)) || ("HTTP " + r.status)); if (j && j.err === "unpaid") payWall(); return j; });
+    return r.json().then(function(j){ if (!r.ok) throw new Error((j && (j.message || j.hint)) || ("HTTP " + r.status)); if (j && j.err === "unpaid") payWall(); if (j && args && args.tok && (j.err === "auth" || (name === "ping" && j.ok === false))) kicked(); return j; });
   });
 }
 function $(id){ return document.getElementById(id); }
@@ -62,3 +62,17 @@ function payWall(){
   document.body.appendChild(d);
   document.getElementById("paywall_x").onclick = function(){ d.parentNode.removeChild(d); };
 }
+
+/* signed out because the account was opened on another device (or the session ended) */
+var __kicked = false;
+function kicked(){
+  if (__kicked) return; __kicked = true;
+  try{ ls("nnt_phone_token", null); }catch(e){}
+  var o = document.createElement("div");
+  o.style.cssText = "position:fixed;inset:0;z-index:99999;background:rgba(10,20,40,.78);display:flex;align-items:center;justify-content:center;padding:20px;font-family:system-ui,sans-serif";
+  o.innerHTML = '<div style="background:#fff;border-radius:20px;max-width:420px;padding:26px;text-align:center"><div style="font-size:46px">📱</div><h2 style="margin:8px 0">You were signed out</h2><p style="color:#445;line-height:1.5">Your account was opened on another device, or your session ended. Only one device can use an account at a time. Sign in again to continue here.</p><button id="kick_ok" style="background:#1558b0;color:#fff;border:0;border-radius:12px;padding:13px 26px;font-size:17px;font-weight:700">Sign in again</button></div>';
+  document.body.appendChild(o);
+  document.getElementById("kick_ok").onclick = function(){ location.reload(); };
+}
+/* phones: check every 45 s that this session is still the active one */
+setInterval(function(){ var t = ls("nnt_phone_token"); if (t && !__kicked && document.visibilityState === "visible") rpc("ping", {tok: t}).catch(function(){}); }, 45000);
