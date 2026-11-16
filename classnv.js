@@ -524,12 +524,13 @@
     var g = 0, n = 0, rows = ""; S.P.exercises.forEach(function(e, i){ var r = S.res[e.id]; g += r.good; n += r.n; var pc = Math.round(100 * r.good / r.n);
       rows += '<div class="rc ' + (r.miss.length ? "b" : "g") + '" style="animation-delay:' + (0.4 + i * 0.08).toFixed(2) + 's"><span class="rn">' + (ICO[e.id.slice(-2)] || i + 1) + '</span><div><b>' + esc(e.name) + '</b><small style="color:#bcd0ff">' + r.good + ' of ' + r.n + ' · ' + pc + '%</small></div><i>' + (r.miss.length ? "✖" : "✔") + '</i></div>'; });
     var pct = Math.round(100 * g / n), t = tier(pct), sp = "";
-    S.fix = pct >= 80 ? [] : S.P.exercises.filter(function(e){ return S.res[e.id].miss.length; });   /* below 80%: fix rounds until the target is reached */
+    S.fix = S.P.exercises.filter(function(e){ return S.res[e.id].miss.length; });   /* below 80%: fix rounds are compulsory; from 80% they are the optional road to 100% */
+    var need80 = pct < 80;
     if (pct >= 90) for (var q = 0; q < 34; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 2.5).toFixed(2) + 's;animation-duration:' + (2.4 + Math.random() * 2).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#ff9f43"][q % 5] + ';width:' + (5 + Math.random() * 6).toFixed(1) + 'px;height:' + (8 + Math.random() * 10).toFixed(1) + 'px"></i>';
     var miss = S.fix.reduce(function(a, e){ return a + S.res[e.id].miss.length; }, 0), left80 = Math.max(1, Math.ceil(0.8 * n) - g);
     page(top() + '<div class="fbk"><div class="spk">' + sp + '</div><small class="wu">WARM-UP FINISHED</small><div class="ring" style="--c:' + t[2] + ';--a:' + Math.round(3.6 * pct) + 'deg"><div><b>' + pct + '%</b><small>' + g + ' of ' + n + ' correct</small></div></div><div class="verd" style="color:' + t[2] + '">' + t[1] + ' ' + t[0] + '</div></div>'
       + '<div class="gr g2 fr">' + rows + '</div>'
-      + (S.fix.length ? '<div class="card warn" style="margin:14px 0 4px;text-align:center"><b>You need 80% to move on.</b> You are at ' + pct + '%. Win back at least ' + left80 + ' more item' + (left80 > 1 ? 's' : '') + '. The fix rounds repeat until you get there.</div><button class="go fixgo" id="cfix">🛠 Start the fix round: ' + miss + ' item' + (miss > 1 ? "s" : "") + ' to win back →</button>' : '<button class="go" id="cdone" style="margin-top:6px">Continue →</button>'));
+      + (S.fix.length && need80 ? '<div class="card warn" style="margin:14px 0 4px;text-align:center"><b>You need 80% to move on.</b> You are at ' + pct + '%. Win back at least ' + left80 + ' more item' + (left80 > 1 ? 's' : '') + '. The fix rounds repeat until you get there.</div><button class="go fixgo" id="cfix">🛠 Start the fix round: ' + miss + ' item' + (miss > 1 ? "s" : "") + ' to win back →</button>' : S.fix.length ? '<button class="go fixgo" id="cfix" style="font-size:19px">🏆 Reach 100%: win back the last ' + miss + ' item' + (miss > 1 ? "s" : "") + ' →</button><button class="pill" id="cdone" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button><p class="sub" style="text-align:center;margin:8px 0 0">You passed with ' + pct + '%. The 100% round is your choice: perfect scores are what the best students bring home.</p>' : '<button class="go" id="cdone" style="margin-top:6px">Continue →</button>'));
     el("cb").onclick = hub;
     if (el("cfix")) el("cfix").onclick = function(){ S.fi = 0; S.fres = {}; fixEx(); };
     if (el("cdone")) el("cdone").onclick = listeningDone;
@@ -725,11 +726,11 @@
         + (w.ev && !w.ok ? '<div class="l4evb">🎧 <em>“' + esc(w.ev.replace(/ \.\.\. /g, " … ")) + '”</em></div>' : "") + '</div>'; });
     page(top("Exit") + stgBar(4) + '<div class="l4ph">Analysis · recording ' + (L.ri + 1) + ' of ' + S.P.exercises.length + '</div><h2 style="margin:4px 0 8px">' + esc(ex.id + " · " + ex.name) + ' · ' + r.good + ' of ' + r.n + '</h2>'
       + '<div class="l4two rv"><div class="l4rvl">' + h + '</div><div class="l4tp"><h3>Script <small>the sentences you needed are highlighted</small></h3><div class="l4tx" id="l4tx">' + hiEv(ex.tape, r.rows.filter(function(w){ return !w.ok && w.ev; }).map(function(w){ return w.ev; }).join(" ... ")) + '</div><div class="l4au"><button class="pill" id="l4pl">▶ Listen again</button><span class="sub" id="l4ps">Pause, rewind and replay freely here.</span></div></div></div>'
-      + '<button class="go" id="l4nx" style="margin-top:14px">' + (last ? (S.fix.length && l4Pct() < 80 ? "🛠 Win your mistakes back →" : "Finish the listening →") : "Next recording →") + '</button>');
+      + '<button class="go" id="l4nx" style="margin-top:14px">' + (last ? (S.fix.length && l4Pct() < 80 ? "🛠 Win your mistakes back →" : S.fix.length ? "🏆 Reach 100%: win the rest back →" : "Finish the listening →") : "Next recording →") + '</button>' + (last && S.fix.length && l4Pct() >= 80 ? '<button class="pill" id="l4fin" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button>' : ''));
     el("cb").onclick = function(){ stopAudio(); hub(); };
     var pl = el("l4pl"), B = null;
     pl.onclick = function(){ if (B){ if (B.paused){ B.play(); pl.textContent = "❚❚ Pause"; } else { B.pause(); pl.textContent = "▶ Continue"; } return; } pl.textContent = "Loading…"; audioUrl(ex).then(function(u){ B = new Audio(u); B.controls = false; B.onended = function(){ B = null; pl.textContent = "▶ Listen again"; }; A = B; B.play(); pl.textContent = "❚❚ Pause"; }); };
-    el("l4nx").onclick = function(){ stopAudio(); if (!last){ L.ri++; l4Review(); } else if (S.fix.length && l4Pct() < 80){ l4Drill(); } else listeningDone(); };
+    el("l4nx").onclick = function(){ stopAudio(); if (!last){ L.ri++; l4Review(); } else if (S.fix.length){ S.L.full = l4Pct() >= 80; l4Drill(); } else listeningDone(); }; if (el("l4fin")) el("l4fin").onclick = function(){ stopAudio(); listeningDone(); };
   }
   /* win the mistakes back: re-answer each missed question after seeing the sentence, until all are right */
   function l4Pct(){ var g = 0, n = 0; S.P.exercises.forEach(function(e){ var r = S.L.a3[e.id]; if (r){ g += r.good; n += r.n; } }); return n ? Math.round(100 * g / n) : 100; }
@@ -741,7 +742,7 @@
   }
   function l4DrillQ(){
     var L = S.L;
-    if (!L.dq.length || l4Run() >= 0.8){ return l4DrillEnd(); }
+    if (!L.dq.length || (!L.full && l4Run() >= 0.8)){ return l4DrillEnd(); }
     if (L.di >= L.dq.length) L.di = 0;
     var it = L.dq[L.di], ex = it.ex, w = it.w, key = ex.id + ":" + w.n, tr = L.try[key] || 0;
     var pct = Math.round(100 * (L.dn - L.dq.length) / L.dn);
@@ -766,8 +767,8 @@
     };
   }
   function l4DrillEnd(){
-    page(top("Exit") + '<div class="brk"><div class="bk good"><div class="be">🏆</div><h1 class="bh">80% reached!</h1><p class="sub">You won back enough mistakes to pass this listening. That is exactly how listening scores go up.</p></div><button class="go" id="l4nx" style="margin-top:20px">Finish the listening →</button></div>');
-    el("cb").onclick = hub; el("l4nx").onclick = listeningDone;
+    page(top("Exit") + '<div class="brk"><div class="bk good"><div class="be">🏆</div><h1 class="bh">' + (S.L.dq.length ? "80% reached!" : "100%! Perfect!") + '</h1><p class="sub">' + (S.L.dq.length ? "You won back enough mistakes to pass this listening. " + S.L.dq.length + " left: finish them for a perfect score." : "You fixed every mistake from the exam. That is exactly how listening scores go up.") + '</p></div>' + (S.L.dq.length ? '<button class="go fixgo" id="l4mo" style="margin-top:20px;font-size:19px">🏆 Reach 100%: win the last ' + S.L.dq.length + ' back →</button><button class="pill" id="l4nx" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button>' : '<button class="go" id="l4nx" style="margin-top:20px">Finish the listening →</button>') + '</div>');
+    el("cb").onclick = hub; el("l4nx").onclick = listeningDone; if (el("l4mo")) el("l4mo").onclick = function(){ S.L.full = true; l4DrillQ(); };
   }
   var BRK = 600;
   function mmss(t){ t = Math.max(0, Math.floor(t)); return ("0" + Math.floor(t / 60)).slice(-2) + ":" + ("0" + t % 60).slice(-2); }
