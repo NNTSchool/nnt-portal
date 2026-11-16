@@ -744,7 +744,12 @@
     Promise.resolve(R("nv_stage", {tok: O.tok, u: S.unit})).then(function(r){ return r && r.track === "ml" ? "ml" : "ie"; }, function(){ return "ie"; }).then(function(tr){
       return getFile("c" + S.unit + (tr === "ml" ? "_readm" : "_read"), (tr === "ml" ? "readm" : "read") + S.unit + ".json");
     }).then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }).then(function(D){
-      S.R = {D: D, ans: {}, first: null, second: null, t0: Date.now(), phase: 0}; rdTest(false);
+      S.R = {D: D, ans: {}, first: null, second: null, t0: Date.now(), phase: 0};
+      var dr = loadDraft("read"); if (dr && dr.x && Date.now() - (dr.at || 0) < 12 * 3600 * 1000){ if (dr.x.t0) S.R.t0 = dr.x.t0; S.R.ans = dr.x.ans || {}; }
+      rdTest(false);
+      try { var A = S.R.ans; [].forEach.call(document.querySelectorAll("#rdq .tf"), function(g){ var n = +g.parentNode.parentNode.getAttribute("data-n"); if (A[n]) [].forEach.call(g.children, function(b){ if (b.getAttribute("data-v") === A[n]) b.onclick(); }); });
+        [].forEach.call(document.querySelectorAll("#rdq select.rsel"), function(c){ var n = +c.getAttribute("data-n"); if (A[n]){ c.value = A[n]; if (c.onchange) c.onchange(); } });
+        [].forEach.call(document.querySelectorAll("input.rin[data-n]"), function(i){ var n = +i.getAttribute("data-n"); if (A[n] && !i.value) i.value = A[n]; if (i.value && i.oninput) i.oninput(); }); } catch (e) {}
     }).catch(function(){ page(top() + '<div class="card warn"><h2>The reading is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
   }
   function rdSteps(cur){
@@ -904,7 +909,10 @@
     Promise.all([wrLoad(), wrTrack()]).then(function(r){
       var FB = r[0], tr = r[1], P = FB.ESSAY[tr];
       S.W = {need: tr === "ml" ? 180 : 250, FB: FB, P: P, tr: tr, ideas: [-1, -1], own: ["", ""], text: "", att: [], t0: Date.now(), mins: tr === "ml" ? 30 : 40};
+      var dw = loadDraft("write"); if (dw && dw.x && Date.now() - (dw.at || 0) < 12 * 3600 * 1000){ if (dw.x.t0) S.W.t0 = dw.x.t0; if (dw.x.ideas) S.W.ideas = dw.x.ideas; if (dw.x.own) S.W.own = dw.x.own; if (dw.x.text) S.W.text = dw.x.text; }
       wrFirst();
+      try { [0, 1].forEach(function(sd){ var i = S.W.ideas[sd]; if (i >= 0){ var b = document.querySelector('.widea[data-s="' + sd + '"][data-i="' + i + '"]'); if (b) b.onclick(); } });
+        [].forEach.call(document.querySelectorAll(".wown"), function(oi, k){ if (S.W.own[k] && !oi.value) oi.value = S.W.own[k]; }); } catch (e) {}
     }).catch(function(){ page(top() + '<div class="card warn"><h2>The writing is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
   }
   function wrSteps(){
@@ -1036,13 +1044,22 @@
     var d = loadDraft(S.cur); if (!d || d.sig !== S.sig) return;
     f.forEach(function(x, i){ if (!x.value && d.vals[i]){ x.value = d.vals[i]; try { x.dispatchEvent(new Event("input", {bubbles: true})); } catch (e) {} } });
   }
+  function draftExtra(){
+    try {
+      if (S.cur === "read" && S.R && S.R.ans) return {t0: S.R.t0, ans: S.R.ans};
+      if (S.cur === "write" && S.W){ var ta = el("wtx"); return {t0: S.W.t0, ideas: S.W.ideas, own: S.W.own, text: ta ? ta.value : S.W.text}; }
+    } catch (e) {} return null;
+  }
   function saveDraft(){
-    if (!S.sig || !S.cur) return; var vals = draftFields().map(function(f){ return f.value; }); if (!vals.some(function(v){ return v.trim(); })) return;
-    var d = {sig: S.sig, vals: vals, at: Date.now()};
+    if (!S.sig || !S.cur) return; var vals = draftFields().map(function(f){ return f.value; }); var x = draftExtra();
+    if (!vals.some(function(v){ return v.trim(); }) && !(x && ((x.ans && Object.keys(x.ans).length) || (x.ideas && x.ideas.some(function(i){ return i >= 0; }))))) return;
+    var d = {sig: S.sig, vals: vals, at: Date.now()}; if (x) d.x = x;
     try { localStorage.setItem(dKey(S.cur), JSON.stringify(d)); } catch (e) {}
     if (!S.dsrv || Date.now() - S.dsrv > 8000){ S.dsrv = Date.now(); flushLog(S.cur, {draft: d}); }
   }
-  function draftWatch(){ document.addEventListener("input", function(e){ var t = e.target, c = el("cnv"); if (!S.cur || !c || !c.contains(t)) return; if (t.tagName !== "TEXTAREA" && !(t.tagName === "INPUT" && (!t.type || t.type === "text"))) return; clearTimeout(S.dtm); S.dtm = setTimeout(saveDraft, 1200); }, true); }
+  function draftWatch(){
+    ["click", "change"].forEach(function(ev){ document.addEventListener(ev, function(e){ var c = el("cnv"); if (!S.cur || (S.cur !== "read" && S.cur !== "write") || !c || !c.contains(e.target)) return; clearTimeout(S.dtm); S.dtm = setTimeout(saveDraft, 900); }, true); });
+    document.addEventListener("input", function(e){ var t = e.target, c = el("cnv"); if (!S.cur || !c || !c.contains(t)) return; if (t.tagName !== "TEXTAREA" && !(t.tagName === "INPUT" && (!t.type || t.type === "text"))) return; clearTimeout(S.dtm); S.dtm = setTimeout(saveDraft, 1200); }, true); }
   function clearDrafts(st){ try { localStorage.removeItem(dKey(st)); if (st === "lis"){ localStorage.removeItem(progKey()); localStorage.removeItem(prog4Key()); } } catch (e) {} if (S.draft0) delete S.draft0[S.unit + ":" + st]; }
   /* four-stage listening (units 2+): where the student is */
   function prog4Key(){ return "nnt_clsprog4_" + ((O && O.name) || "") + "_" + S.unit; }
