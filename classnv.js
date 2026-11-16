@@ -1,3 +1,62 @@
+/* writing feedback: one button per marking criterion, each explains the score */
+(function(){
+  if (window.nntCrit) return;
+  var css = '.cxr{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 10px}@media(max-width:700px){.cxr{grid-template-columns:1fr 1fr}}'
+  + '.cxb{font:inherit;cursor:pointer;border:2px solid #cfd8ea;background:#fff;color:#16305a;border-radius:14px;padding:10px 8px;text-align:center;display:flex;flex-direction:column;gap:2px;align-items:center;transition:.15s}'
+  + '.cxb span{font:800 12.5px/1.2 system-ui;letter-spacing:.04em}.cxb b{font:800 24px/1.1 system-ui}.cxb b small{font-size:13px;opacity:.7;font-weight:700}.cxb em{font-style:normal;font:800 11px system-ui;background:#e8efff;color:#1558b0;border-radius:99px;padding:2px 10px;margin-top:3px}'
+  + '.cxb:hover{border-color:#1558b0}.cxb.on{background:#1558b0;border-color:#1558b0;color:#fff}.cxb.on em{background:#fff}'
+  + '.cxd{background:#fff;border:2px solid #1558b0;border-radius:16px;padding:14px 18px;margin:0 0 14px;text-align:left;box-shadow:0 6px 20px rgba(21,88,176,.08)}.cxd[hidden]{display:none}'
+  + '.cxd h3{margin:0 0 4px;font:800 19px system-ui}.cxd .cxs{font:600 15px/1.45 system-ui;color:#36507a;margin:0 0 10px}.cxd h4{margin:10px 0 3px;font:800 13px system-ui;letter-spacing:.04em;text-transform:uppercase;color:#1558b0}'
+  + '.cxd ul{margin:0;padding-left:20px;font-size:15.5px;line-height:1.5}.cxd li{margin-bottom:5px}.cxd .bd{color:#c1121f;font-weight:700;text-decoration:line-through}.cxd .fx{color:#1b7f3b;font-weight:700}.cxd small{display:block;color:#5d6f8f}';
+  var st = document.createElement("style"); st.textContent = css; (document.head || document.documentElement).appendChild(st);
+  var DESC = {
+    ta: ["The task is only barely answered. Most of what you wrote is off the topic or too short.", "Part of the task is answered, but important ideas are missing or not developed.", "The task is answered, but some ideas stay general or are not fully explained.", "The task is answered well. Most ideas are relevant and developed.", "The task is answered fully with clear, well-developed ideas."],
+    cc: ["Hard to follow: little structure and almost no linking.", "Some structure, but paragraphs or linking are weak, so the reader has to work hard.", "Clear enough, but linking is basic or repeated and paragraphs are uneven.", "Well organised with clear paragraphs and a good range of linking.", "Very well organised, easy to follow, linking used naturally."],
+    gr: ["Errors in almost every sentence, so the meaning is often unclear.", "Many errors, even in simple sentences. They sometimes make the meaning hard to follow.", "Simple sentences are mostly right, but errors are frequent and complex sentences often break.", "Mostly accurate, with only a few errors that do not block the meaning.", "Accurate, with a good range of structures and very few slips."],
+    lr: ["Very limited vocabulary, often repeated or wrongly used.", "Basic vocabulary with frequent repetition, wrong word choice or spelling mistakes.", "Enough vocabulary for the task, but limited range, repetition and some wrong words.", "Good range of vocabulary, used mostly correctly.", "Wide, precise vocabulary used naturally."]
+  };
+  var NAME = {ta: "TASK ACHIEVEMENT", cc: "COHERENCE & COHESION", gr: "GRAMMAR", lr: "VOCABULARY"}, ABBR = {ta: "TA", cc: "CC", gr: "GR", lr: "LR"};
+  window.nntCx = function(b){
+    var root = b.closest(".cxw") || document, k = b.getAttribute("data-k"), was = b.classList.contains("on");
+    [].forEach.call(root.querySelectorAll(".cxb"), function(x){ x.classList.remove("on"); }); [].forEach.call(root.querySelectorAll(".cxd"), function(x){ x.hidden = true; });
+    if (!was){ b.classList.add("on"); var d = root.querySelector('.cxd[data-k="' + k + '"]'); if (d){ d.hidden = false; try { d.scrollIntoView({block: "nearest", behavior: "smooth"}); } catch (e) {} } }
+  };
+  window.nntCrit = function(W, ML, esc, san){
+    san = san || function(x){ return x; };
+    var E = function(x){ return esc(san(x == null ? "" : String(x))); };
+    var sc = ML ? {ta: W.m75.ta, cc: W.m75.cc, gr: W.m75.gr, lr: W.m75.lr} : {ta: W.ta, cc: W.cc, gr: W.gr, lr: W.lr};
+    var mx = ML ? {ta: 19, cc: 19, gr: 19, lr: 18} : {ta: 9, cc: 9, gr: 9, lr: 9};
+    var lines = {ta: {g: [], b: []}, cc: {g: [], b: []}, gr: {g: [], b: []}, lr: {g: [], b: []}};
+    function cls(x){ return /link|connect|paragraph|organis|introduc|conclusion|structure of your essay|order/i.test(x) ? "cc" : /mistake|underlin|grammar|tense|verb|agreement|sentence correctly|article|plural/i.test(x) ? "gr" : /unit phrase|amber|vocab|synonym|repeat|spelling|word choice|chunk|collocation/i.test(x) ? "lr" : "ta"; }
+    (W.good || []).forEach(function(x){ lines[cls(x)].g.push(x); }); (W.better || []).forEach(function(x){ lines[cls(x)].b.push(x); });
+    var gate = W.gate || {}, why = {ta: [], cc: [], gr: [], lr: []};
+    var need = W.need || 0;
+    if (need) why.ta.push(W.n + " words written (needed " + need + ")" + (W.n >= need ? "." : ", so the mark is lowered."));
+    if (typeof W.rel === "number") why.ta.push("About " + Math.round(W.rel * 100) + "% of your sentences are on the topic of the question.");
+    if (typeof W.ideaHits === "number" && W.P && W.P.ideas) why.ta.push("You used " + W.ideaHits + " of the " + W.P.ideas.length + " key ideas from the article.");
+    if (gate.paras && gate.paras.length) why.cc.push("You wrote " + gate.paras.length + " paragraph" + (gate.paras.length === 1 ? "" : "s") + " (" + gate.paras.join(" + ") + " words).");
+    var out = '<div class="cxw"><div class="cxr">';
+    ["ta", "cc", "gr", "lr"].forEach(function(k){ out += '<button type="button" class="cxb" data-k="' + k + '" onclick="nntCx(this)"><span>' + NAME[k] + '</span><b>' + sc[k] + '<small> / ' + mx[k] + '</small></b><em>' + ABBR[k] + ' EXP ▾</em></button>'; });
+    out += '</div>';
+    ["ta", "cc", "gr", "lr"].forEach(function(k){
+      var r = sc[k] / mx[k], di = r < .3 ? 0 : r < .5 ? 1 : r < .68 ? 2 : r < .85 ? 3 : 4;
+      var h = '<div class="cxd" data-k="' + k + '" hidden><h3>' + NAME[k] + ' · ' + sc[k] + ' / ' + mx[k] + '</h3><p class="cxs">' + esc(DESC[k][di]) + '</p>';
+      var ev = why[k].slice(); var G = k === "gr" ? W.gvG : k === "lr" ? W.gvV : null;
+      var good = (G && G.good ? G.good : []).concat(lines[k].g), bet = lines[k].b;
+      if (k === "gr" && G && G.total != null) ev.unshift(G.total + " grammar mistake" + (G.total === 1 ? "" : "s") + " found in your essay.");
+      if (ev.length) h += '<h4>Why this mark</h4><ul>' + ev.map(function(x){ return '<li>' + E(x) + '</li>'; }).join("") + '</ul>';
+      if (good.length) h += '<h4>✅ What helped</h4><ul>' + good.map(function(x){ return '<li>' + E(x) + '</li>'; }).join("") + '</ul>';
+      if (G && G.fix && G.fix.length) h += '<h4>🔧 What pulled it down</h4><ul>' + G.fix.map(function(f){ return '<li><b>' + E(f.cat) + (f.count ? ' (' + f.count + ')' : '') + '</b><br><span class="bd">' + E(f.bad) + '</span> → <span class="fx">' + E(f.fix) + '</span>' + (f.extra ? '<br><span class="bd">' + E(f.extra.bad) + '</span> → <span class="fx">' + E(f.extra.fix) + '</span>' : '') + '<small>' + E(f.why) + '</small></li>'; }).join("") + '</ul>';
+      else if (G && !G.fix.length) h += '<h4>🔧 What pulled it down</h4><p style="margin:0">No clear mistakes found here.</p>';
+      if (bet.length) h += '<h4>🎯 To raise it</h4><ul>' + bet.map(function(x){ return '<li>' + E(x) + '</li>'; }).join("") + '</ul>';
+      if (G && G.next) h += '<h4>➡️ Next time</h4><p style="margin:0">' + E(G.next) + '</p>';
+      if (k === "ta" && !why.ta.length && !good.length && !bet.length) h += '<p style="margin:0">Cover every part of the question and develop each idea with a reason or an example.</p>';
+      out += h + '</div>';
+    });
+    return out + '</div>';
+  };
+})();
+
 /* NNT classroom Novel: home page, key check, listening part runner, breaks, class key. Window.CNV = {open(opts)} */
 (function(){
   var O = null, R = null, S = {}, A = null;
@@ -976,9 +1035,7 @@
     if (W.empty) nt.push("You wrote nothing, so the mark is 0."); else if (W.tooShort) nt.push("Only " + W.n + " words. Under 10 words cannot be marked, so the mark is 0."); else if (W.n < NEED) nt.push(W.n + " of " + NEED + " words, so the mark was lowered.");
     if (nt.length) h += '<div class="card warn">' + nt.map(esc).join("<br>") + '</div>';
     if (!W.empty && !W.tooShort){
-      if (W.gv && W.gvG && W.gvV) h += '<div class="wgg">' + gvP("Grammar", "📐", W.gvG) + gvP("Vocabulary", "📚", W.gvV) + '</div>';
-      if (W.good.length) h += '<div class="wsec"><h3>✅ What went well</h3><ul>' + W.good.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>';
-      if (W.better.length) h += '<div class="wsec"><h3>🎯 To improve</h3><ul>' + W.better.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join("") + '</ul></div>';
+      h += '<div class="wsec" style="padding:14px 16px">' + nntCrit(W, S.W.tr === "ml", ESC0, function(x){ return wrSan(S.W.tr, x); }) + '</div>';
     }
     h += '<div class="wsec"><h3>✍️ Your writing</h3><div class="wlg"><u>red</u> = mistake <span>(green = correct version)</span> · amber dotted = please check · green highlight = unit word</div>' + (a.text.trim() ? '<div class="wess">' + W.html + '</div>' : '<p>Nothing written.</p>') + '</div>';
     return h;
