@@ -221,7 +221,8 @@
   + '#cnv .l4how .rc,#cnv .l4sm .rc{animation:none}#cnv .l4how .rc small,#cnv .l4sm .rc small{color:#3d5a78!important;font-size:14.5px!important}#cnv .l4how .rc b,#cnv .l4sm .rc b{color:#10204a!important;font-size:19px}#cnv .l4gr.hd b{color:#fff}#cnv .l4sm .rc.g i{color:#0c9c84}#cnv .l4sm .rc.b i{color:#d6395f}#cnv .l4how .rc .rn,#cnv .l4sm .rc .rn{background:#3e63d8;color:#fff}@media(max-width:1100px){#cnv .l4two,#cnv .l4two.rv{grid-template-columns:1fr}}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
-  function page(h){ try{ document.body.classList.toggle("nvfocus", h.indexOf('id="cnbody"') < 0 && h.indexOf('class="hm"') < 0); }catch(e){} stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; try { restoreDraft(); } catch (e) {} }
+  function page(h){ try{ document.body.classList.toggle("nvfocus", h.indexOf('id="cnbody"') < 0 && h.indexOf('class="hm"') < 0); }catch(e){} stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; try { hideExit(); } catch (e) {} try { restoreDraft(); } catch (e) {} }
+  function hideExit(){ var b = el("cb"); if (!b || !S.cur || ["lis", "read", "write"].indexOf(S.cur) < 0 || O.nofloor || root().querySelector(".card.warn")) return; b.style.display = "none"; }
   function top(back){ return '<div class="tb"><button class="pill" id="cb">' + (back || "← Back") + '</button><div class="sp"></div><b>NNT · Classroom</b></div>'; }
   function stopAudio(){ if (A){ try{ A.pause(); }catch(e){} A = null; } }
   function close(){ try{ document.body.classList.remove("nvfocus"); }catch(e){} stopAudio(); var r = el("cnv"); if (r) r.remove(); if (O && O.onExit) O.onExit(); }
@@ -646,6 +647,13 @@
   }
   function l4Head(){ var ex = S.P.exercises[S.L.ei]; setTimeout(saveProg4, 0); return top("Exit") + stgBar(S.L.stage) + '<div class="l4ph">Stage ' + S.L.stage + ' of 4 · recording ' + (S.L.ei + 1) + ' of ' + S.P.exercises.length + '</div><h2 style="margin:4px 0 0">' + esc(ex.id + " · " + ex.name) + '</h2>'; }
   function wc(s){ return (s.trim().match(/\S+/g) || []).length; }
+  /* at least half of the questions must have an answer before a stage can be submitted */
+  function l4Effort(ans, mid){
+    if (O.nofloor) return true; var n = ans.length, f = ans.filter(function(x){ return x !== "" && x !== -1 && x != null; }).length, need = Math.ceil(n / 2);
+    if (f >= need) return true;
+    var m = mid && el(mid) || document.querySelector(".l4bar .wrm") || el("cout"); if (m){ m.innerHTML = '<b style="color:#c1121f">Answer at least ' + need + ' of the ' + n + ' questions first (you have ' + f + '). A guess is fine, a blank is not.</b>'; }
+    return false;
+  }
   function l4Notes(){
     var ex = S.P.exercises[S.L.ei], L = S.L;
     page(l4Head() + '<div class="ins hlz"><span class="ii">📝</span><div><small>STAGE 1 · TAKE NOTES</small><strong>' + esc(ex.intro) + ' Listen and write down everything useful. The questions come later.</strong></div></div>'
@@ -665,7 +673,8 @@
       + '<div class="l4bar"><span class="wrm" id="l4m"></span><button class="go" id="l4ck">Check my answers</button></div><div id="cout"></div>');
     el("cb").onclick = hub; qWire(el("l4a"), ex);
     el("l4ck").onclick = function(){
-      var ans = qRead(el("l4a"), ex), rows = qMark(ex, ans), g = rows.filter(function(r){ return r.ok; }).length; L.a2[ex.id] = {good: g, n: rows.length};
+      var ans = qRead(el("l4a"), ex); if (!l4Effort(ans, "l4m")) return;
+      var rows = qMark(ex, ans), g = rows.filter(function(r){ return r.ok; }).length; L.a2[ex.id] = {good: g, n: rows.length};
       var pct = Math.round(100 * g / rows.length), t = tier(pct);
       el("l4ck").remove(); el("l4a").classList.add("lk"); [].forEach.call(el("l4a").querySelectorAll("button,input"), function(x){ x.disabled = true; });
       el("cout").innerHTML = '<div class="l4sc" style="--c:' + t[2] + '"><b>' + g + ' / ' + rows.length + '</b><span>' + t[1] + ' ' + (pct >= 85 ? "Your notes are strong." : pct >= 55 ? "Decent notes. Next time catch more of the small details." : "Your notes missed a lot. Write more key words, numbers and names while you listen.") + '</span><small>The answers stay hidden. You will meet these recordings again in the exam.</small></div>'
@@ -681,7 +690,8 @@
     el("cb").onclick = function(){ stopAudio(); hub(); }; qWire(el("l4a"), ex);
     l4Wire(ex, lim, "x" + ex.id, "You cannot skip or rewind. " + (ie ? "One play only, exactly like the real test." : "You can play it twice."));
     el("l4ck").onclick = function(){
-      stopAudio(); var ans = qRead(el("l4a"), ex), rows = qMark(ex, ans), g = rows.filter(function(r){ return r.ok; }).length;
+      stopAudio(); var ans = qRead(el("l4a"), ex); if (!l4Effort(ans)) return;
+      var rows = qMark(ex, ans), g = rows.filter(function(r){ return r.ok; }).length;
       L.a3[ex.id] = {ans: ans, rows: rows, good: g, n: rows.length}; S.res[ex.id] = {good: g, n: rows.length, miss: rows.filter(function(r){ return !r.ok; }).map(function(r){ return r.n - 1; })};
       L.ei++; if (L.ei < S.P.exercises.length){ l4ExamGap(); } else { L.stage = 4; l4Analysis(); }
     };
@@ -1073,11 +1083,20 @@
       Object.keys(S.lvp).forEach(function(k){ var n = S.lvp[k]; if (!n || !O.tok) return; var p = k.split(":"); S.lvp[k] = 0;
         try { Promise.resolve(R("nv_class_log", {tok: O.tok, u: +p[0], stage: p[1], add_secs: 0, detail: {lv: n}})).then(function(r){ if (!r || !r.ok) S.lvp[k] = (S.lvp[k] || 0) + n; }, function(){ S.lvp[k] = (S.lvp[k] || 0) + n; }); } catch (x) { S.lvp[k] += n; } });
     }
-    function gone(){ if (S.away) return; S.away = true; if (!S.cur || !S.unit || ["lis", "read", "write"].indexOf(S.cur) < 0) return; var k = S.unit + ":" + S.cur; S.lvp[k] = (S.lvp[k] || 0) + 1; lvSend(); }
-    function back(){ S.away = false; lvSend(); }
+    function lvKey(k){ return "nnt_lvn_" + ((O && O.name) || "") + "_" + k; }
+    function gone(){ if (S.away) return; S.away = true; if (!S.cur || !S.unit || ["lis", "read", "write"].indexOf(S.cur) < 0 || stDone(S.cur)) return; var k = S.unit + ":" + S.cur; S.lvp[k] = (S.lvp[k] || 0) + 1; S.lvShow = k;
+      var c = 0; try { c = +localStorage.getItem(lvKey(k)) || 0; } catch (e) {} c++; try { localStorage.setItem(lvKey(k), String(c)); } catch (e) {} S.lvn = c; lvSend(); }
+    function warn(){
+      if (!S.lvShow || !S.cur || document.getElementById("lvwarn")) return; S.lvShow = null;
+      var d = document.createElement("div"); d.id = "lvwarn"; d.style.cssText = "position:fixed;inset:0;z-index:99999;background:rgba(8,18,45,.94);display:flex;align-items:center;justify-content:center;padding:20px";
+      d.innerHTML = '<div style="background:#fff;color:#16305a;border-radius:20px;max-width:460px;padding:26px 24px;text-align:center;font-family:system-ui"><div style="font-size:54px">⚠️</div><h2 style="margin:6px 0 8px">Please stay on the test</h2><p style="margin:0 0 10px;font-size:17px;line-height:1.45">You left the test screen. This has been recorded: <b>' + (S.lvn || 1) + ' time' + ((S.lvn || 1) === 1 ? "" : "s") + '</b>. Your teacher can see it. Your time is still running.</p><button class="go" id="lvbk" style="margin-top:6px;padding:13px 22px;font-size:17px">Return to the test</button></div>';
+      document.body.appendChild(d); d.querySelector("#lvbk").onclick = function(){ d.remove(); };
+    }
+    function back(){ S.away = false; lvSend(); warn(); }
     document.addEventListener("visibilitychange", function(){ if (document.visibilityState === "hidden") gone(); else back(); });
     window.addEventListener("blur", function(){ setTimeout(function(){ if (!document.hasFocus()) gone(); }, 400); });
     window.addEventListener("focus", function(){ if (document.visibilityState === "visible") back(); });
+    window.addEventListener("beforeunload", function(e){ if (S.cur && ["lis", "read", "write"].indexOf(S.cur) >= 0 && !stDone(S.cur) && !O.nofloor){ e.preventDefault(); e.returnValue = ""; } });
     setInterval(lvSend, 20000);
     setInterval(function(){
       if (!S.cur || document.visibilityState !== "visible" || Date.now() - S.act > 120000) return;
