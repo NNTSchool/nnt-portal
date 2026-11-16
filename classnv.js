@@ -267,6 +267,7 @@
     if (S.stU === S.unit) return; S.stU = S.unit;
     try { Promise.resolve(R("nv_class_status", {tok: O.tok, u: S.unit})).then(function(r){
       if (!r || !r.ok || !r.lis) return; var ch = false, u = S.unit; S.lisDone = S.lisDone || {}; S.rdDone = S.rdDone || {}; S.wrDone = S.wrDone || {};
+      if (r.lis && r.lis.prog){ S.prog0 = S.prog0 || {}; S.prog0[u] = r.lis.prog; }
       [["lis", S.lisDone], ["read", S.rdDone], ["write", S.wrDone]].forEach(function(p){ var x = r[p[0]]; if (!x) return; S.srv[u + ":" + p[0]] = Math.max(S.srv[u + ":" + p[0]] || 0, x.secs || 0); if (x.done && !p[1][u]){ p[1][u] = true; ch = true; } });
       if (ch && !S.cur && el("hl")) hub();
     }, function(){}); } catch (x) {}
@@ -319,7 +320,10 @@
   function startPart(){
     page(top() + '<div class="hero"><h2>Loading Part ' + S.unit + '…</h2></div>');
     getFile("c" + S.unit + "_part", "part" + S.unit + ".json").then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }).then(function(P){
-      S.cur = "lis"; S.P = P; S.ei = 0; S.res = {}; if (!S.t0) S.t0 = Date.now(); runEx();
+      S.cur = "lis"; S.P = P; S.dict = true; S.ei = 0; S.res = {}; S.pl = {}; if (!S.t0) S.t0 = Date.now();
+      var sv = (S.lisDone && S.lisDone[S.unit]) ? null : loadProg();
+      if (sv && sv.res && typeof sv.ei === "number"){ S.ei = Math.min(sv.ei, P.exercises.length); S.res = sv.res; S.pl = sv.pl || {}; }
+      if (S.ei >= P.exercises.length && P.exercises.every(function(e){ return S.res[e.id]; })) summary(); else runEx();
     }).catch(function(){ page(top() + '<div class="card warn"><h2>This part is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
   }
   var ICO = {"01": "🔤", "02": "📝", "03": "🕒", "04": "🏠", "05": "🔢", "06": "👤", "07": "🌍", "08": "⭐"};
@@ -430,6 +434,7 @@
     stopAudio();
     ins.forEach(function(x, k){ var j = judge(ex, k, x.value); if (j.ok) good++; rows.push({k: k, said: x.value.trim(), ok: j.ok, pct: j.pct}); });
     S.res[ex.id] = {good: good, n: ex.items.length, miss: rows.filter(function(r){ return !r.ok; }).map(function(r){ return r.k; })};
+    saveProg();
     el("cchk").remove(); el("cin").style.display = "none"; if (el("cpc")) el("cpc").remove();
     el("cout").innerHTML = feedback(ex, rows, good, ex.items.length, "correct") + '<button class="go" id="cnext" style="margin-top:14px">' + (S.ei + 1 < S.P.exercises.length ? "Next exercise →" : "See my results →") + '</button>';
     el("cnext").onclick = function(){ S.ei++; if (S.ei < S.P.exercises.length) runEx(); else summary(); };
@@ -438,7 +443,7 @@
   function summary(){
     var g = 0, n = 0, rows = ""; S.P.exercises.forEach(function(e, i){ var r = S.res[e.id]; g += r.good; n += r.n; var pc = Math.round(100 * r.good / r.n);
       rows += '<div class="rc ' + (r.miss.length ? "b" : "g") + '" style="animation-delay:' + (0.4 + i * 0.08).toFixed(2) + 's"><span class="rn">' + (ICO[e.id.slice(-2)] || i + 1) + '</span><div><b>' + esc(e.name) + '</b><small style="color:#bcd0ff">' + r.good + ' of ' + r.n + ' · ' + pc + '%</small></div><i>' + (r.miss.length ? "✖" : "✔") + '</i></div>'; });
-    S.fix = S.P.exercises.filter(function(e){ return S.res[e.id].miss.length; });
+    S.fix = [];   /* the dictation has no forced redo: the student has already seen every mistake */
     var pct = Math.round(100 * g / n), t = tier(pct), sp = "";
     if (pct >= 90) for (var q = 0; q < 34; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 2.5).toFixed(2) + 's;animation-duration:' + (2.4 + Math.random() * 2).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#ff9f43"][q % 5] + ';width:' + (5 + Math.random() * 6).toFixed(1) + 'px;height:' + (8 + Math.random() * 10).toFixed(1) + 'px"></i>';
     var miss = S.fix.reduce(function(a, e){ return a + S.res[e.id].miss.length; }, 0);
@@ -538,7 +543,7 @@
   function startPart4(){
     page(top() + '<div class="hero"><h2>Loading Part ' + S.unit + '…</h2></div>'); el("cb").onclick = hub;
     Promise.all([getFile("c" + S.unit + "_part", "part" + S.unit + ".json").then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }), wrTrack()]).then(function(r){
-      S.P = r[0]; S.cur = "lis"; S.L = {stage: 1, ei: 0, notes: {}, a2: {}, a3: {}, track: r[1]}; S.res = {}; S.pl = {}; S.fix = []; if (!S.t0) S.t0 = Date.now(); l4Intro();
+      S.P = r[0]; S.dict = false; S.cur = "lis"; S.L = {stage: 1, ei: 0, notes: {}, a2: {}, a3: {}, track: r[1]}; S.res = {}; S.pl = {}; S.fix = []; if (!S.t0) S.t0 = Date.now(); l4Intro();
     }).catch(function(){ page(top() + '<div class="card warn"><h2>This part is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
   }
   function l4Intro(){
@@ -987,6 +992,19 @@
       if (S.pend[k] >= 30) flushLog(S.cur);
     }, 1000);
   }
+  /* the dictation progress is kept on this phone AND on the server, so a log out / log in (even on another device) never loses it */
+  function progKey(){ return "nnt_clsprog_" + ((O && O.name) || "") + "_" + S.unit; }
+  function saveProg(){
+    if (!S.dict || !S.P || S.cur !== "lis") return;
+    var ei = 0; S.P.exercises.forEach(function(e, i){ if (S.res[e.id] && ei === i) ei = i + 1; });
+    var snap = {ei: ei, res: S.res, pl: S.pl || {}, at: Date.now()};
+    try { localStorage.setItem(progKey(), JSON.stringify(snap)); } catch (e) {}
+    flushLog("lis", {prog: snap});
+  }
+  function loadProg(){
+    var a = null; try { a = JSON.parse(localStorage.getItem(progKey()) || "null"); } catch (e) {}
+    var b = S.prog0 && S.prog0[S.unit]; if (b && (!a || (b.at || 0) > (a.at || 0))) a = b; return a;
+  }
   function flushLog(st, detail){
     var k = S.unit + ":" + st, a = S.pend[k] || 0; if (!a && !detail) return; S.pend[k] = 0;
     try { Promise.resolve(R("nv_class_log", {tok: O.tok, u: S.unit, stage: st, add_secs: a, detail: detail || null})).then(function(r){ if (r && r.secs != null) S.srv[k] = r.secs; }, function(){ S.pend[k] = (S.pend[k] || 0) + a; }); } catch (x) {}
@@ -1071,7 +1089,7 @@
     el("cb").onclick = hub; el("drd").onclick = function(){ S.W.drDone = true; writingDone(); };
   }
   /* one break screen for every stage: listening, reading, writing... */
-  function listeningDone(){ if (!floorOk("lis")) return; flushLog("lis", {done: true}); S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
+  function listeningDone(){ if (!floorOk("lis")) return; try { if (S.dict) localStorage.removeItem(progKey()); } catch (e) {} flushLog("lis", {done: true}); S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
   function readingDone(){ if (!floorOk("read")) return; flushLog("read", {done: true}); S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
   function stageBreak(label, onNext){ S.cur = null;
     var t0 = Date.now(), C = 2 * Math.PI * 130;
