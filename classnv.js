@@ -273,16 +273,19 @@
     }, function(){}); } catch (x) {}
   }
   var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1};
-  function hub(){ S.cur = null; statusSync();
+  /* the drilling takes the whole screen, like the classic tests; the hub gives it back */
+  function goFS(){ var d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen || d.msRequestFullscreen; try { var p = f && f.call(d); if (p && p.catch) p.catch(function(){}); } catch (e) {} }
+  function leaveFS(){ if (document.fullscreenElement || document.webkitFullscreenElement){ try { (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) {} } }
+  function hub(){ S.cur = null; leaveFS(); statusSync();
     function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
     function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
     page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Unit ' + S.unit + '</h2><p class="sub">Your path today: three drillings, with a break between them</p></div>'
       + '<div class="fch">' + card("hl", "🎧", "Listening drilling", (S.lisDone && S.lisDone[S.unit]) ? "Done ✔ · you can redo it" : "Start here", "about 60 min", true, 1) + link()
       + card("hr", "📖", "Reading drilling", (S.rdDone && S.rdDone[S.unit]) ? "Done ✔ · you can redo it" : "Passage + questions", "about 30 min", RW[S.unit] && opn("read"), 2) + link()
       + card("hw", "✍️", "Writing drilling", (S.wrDone && S.wrDone[S.unit]) ? "Done ✔ · you can redo it" : "Write · feedback · rewrite", "about 40 min", RW[S.unit] && opn("write"), 3) + '</div><p class="sub" id="hlk" style="text-align:center;margin-top:14px;min-height:22px"></p>');
-    el("cb").onclick = path; el("hl").onclick = S.unit > 1 ? startPart4 : startPart;
-    el("hr").onclick = RW[S.unit] && opn("read") ? startReading : function(){ lockMsg(this, RW[S.unit] ? "🔒 Finish the listening drilling first." : ""); };
-    el("hw").onclick = RW[S.unit] && opn("write") ? startWriting : function(){ lockMsg(this, RW[S.unit] ? "🔒 Finish the reading drilling first." : ""); };
+    el("cb").onclick = path; el("hl").onclick = function(){ goFS(); (S.unit > 1 ? startPart4 : startPart)(); };
+    el("hr").onclick = RW[S.unit] && opn("read") ? function(){ goFS(); startReading(); } : function(){ lockMsg(this, RW[S.unit] ? "🔒 Finish the listening drilling first." : ""); };
+    el("hw").onclick = RW[S.unit] && opn("write") ? function(){ goFS(); startWriting(); } : function(){ lockMsg(this, RW[S.unit] ? "🔒 Finish the reading drilling first." : ""); };
     if (S.testacct){
       var tb = document.createElement("div"); tb.style.cssText = "text-align:center;margin:18px auto 0;max-width:640px;padding:12px;border:2px dashed #9aa8d6;border-radius:14px;color:#10204a";
       tb.innerHTML = '<b>🧪 Test account: skip</b><div style="font-size:13px;margin:2px 0 8px;opacity:.75">Only this account can skip. Everything else works like for a student.</div>'
