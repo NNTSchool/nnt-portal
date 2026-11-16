@@ -996,7 +996,7 @@
   function writingDone(){ if (!floorOk("write", wrFeedback)) return; clearDrafts("write"); S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
 
   /* ---------- supervision: active time per stage, minimum floors ---------- */
-  var FLOOR = {lis: 3000, read: 1200, write: 1200}, SNAME = {lis: "listening", read: "reading", write: "writing"};
+  var FLOOR = {lis: 3000, read: 900, write: 1200}, SNAME = {lis: "listening", read: "reading", write: "writing"};
   function trk(){
     if (S.trkOn) return; S.trkOn = true; S.tm = {}; S.srv = {}; S.act = Date.now(); S.pend = {};
     ["mousemove", "keydown", "mousedown", "touchstart", "scroll"].forEach(function(ev){ document.addEventListener(ev, function(){ S.act = Date.now(); }, true); });
