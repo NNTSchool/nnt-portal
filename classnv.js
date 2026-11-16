@@ -274,7 +274,22 @@
   }
   var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1};
   /* the drilling takes the whole screen, like the classic tests; the hub gives it back */
-  function goFS(){ var d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen || d.msRequestFullscreen; try { var p = f && f.call(d); if (p && p.catch) p.catch(function(){}); } catch (e) {} }
+  function goFS(){ var d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen || d.msRequestFullscreen; try { var p = f && f.call(d); if (p && p.then) p.then(function(){ try { if (navigator.keyboard && navigator.keyboard.lock) navigator.keyboard.lock(["Escape"]).catch(function(){}); } catch (e) {} }, function(){}); } catch (e) {} }
+  /* Esc cannot be fully blocked by a web page (Chrome lets a long press out), so if the student gets out, the drilling is covered until they return to full screen */
+  function fsWatch(){
+    var inFS = function(){ return !!(document.fullscreenElement || document.webkitFullscreenElement); };
+    var on = function(){
+      var o = document.getElementById("fsback");
+      if (inFS()){ if (o) o.remove(); return; }
+      if (!S.cur || O && O.nofloor || !document.documentElement.requestFullscreen && !document.documentElement.webkitRequestFullscreen) return;
+      if (o) return; o = document.createElement("div"); o.id = "fsback";
+      o.style.cssText = "position:fixed;inset:0;z-index:99998;background:rgba(10,20,40,.94);display:flex;align-items:center;justify-content:center;padding:20px;font-family:system-ui,sans-serif";
+      o.innerHTML = '<div style="background:#fff;border-radius:20px;max-width:420px;padding:26px;text-align:center"><div style="font-size:46px">🖥️</div><h2 style="margin:8px 0">Back to full screen</h2><p style="color:#445;line-height:1.5">The drilling is done in full screen. Press the button to continue.</p><button id="fsgo" style="background:#1558b0;color:#fff;border:0;border-radius:12px;padding:13px 26px;font-size:17px;font-weight:700">Continue in full screen</button></div>';
+      document.body.appendChild(o); document.getElementById("fsgo").onclick = function(){ goFS(); };
+    };
+    document.addEventListener("fullscreenchange", on); document.addEventListener("webkitfullscreenchange", on);
+  }
+  fsWatch();
   function leaveFS(){ if (document.fullscreenElement || document.webkitFullscreenElement){ try { (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) {} } }
   function hub(){ S.cur = null; leaveFS(); statusSync();
     function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
