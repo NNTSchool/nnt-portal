@@ -63,16 +63,16 @@ function payWall(){
   document.getElementById("paywall_x").onclick = function(){ d.parentNode.removeChild(d); };
 }
 
-/* signed out because the account was opened on another device (or the session ended) */
+/* signed out because the account was opened on another device (or the session ended).
+   Not a blocking popup: the student can finish and SAVE what they are doing (the server allows saving for 60 minutes). */
 var __kicked = false;
 function kicked(){
   if (__kicked) return; __kicked = true;
-  try{ ls("nnt_phone_token", null); }catch(e){}
   var o = document.createElement("div");
-  o.style.cssText = "position:fixed;inset:0;z-index:99999;background:rgba(10,20,40,.78);display:flex;align-items:center;justify-content:center;padding:20px;font-family:system-ui,sans-serif";
-  o.innerHTML = '<div style="background:#fff;border-radius:20px;max-width:420px;padding:26px;text-align:center"><div style="font-size:46px">📱</div><h2 style="margin:8px 0">You were signed out</h2><p style="color:#445;line-height:1.5">Your account was opened on another device, or your session ended. Only one device can use an account at a time. Sign in again to continue here.</p><button id="kick_ok" style="background:#1558b0;color:#fff;border:0;border-radius:12px;padding:13px 26px;font-size:17px;font-weight:700">Sign in again</button></div>';
+  o.style.cssText = "position:fixed;left:0;right:0;top:0;z-index:99999;background:#8a1c1c;color:#fff;padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;font:600 15px/1.4 system-ui,sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3)";
+  o.innerHTML = '<span>📱 Your account was opened on another device. Finish and save what you are doing now. Only one device can use an account at a time.</span><button id="kick_ok" style="background:#fff;color:#8a1c1c;border:0;border-radius:10px;padding:9px 16px;font-weight:800">Sign in again here</button>';
   document.body.appendChild(o);
-  document.getElementById("kick_ok").onclick = function(){ location.reload(); };
+  document.getElementById("kick_ok").onclick = function(){ try{ ls("nnt_phone_token", null); }catch(e){} location.reload(); };
 }
 /* phones: check every 45 s that this session is still the active one */
 setInterval(function(){ var t = ls("nnt_phone_token"); if (t && !__kicked && document.visibilityState === "visible") rpc("ping", {tok: t}).catch(function(){}); }, 45000);
