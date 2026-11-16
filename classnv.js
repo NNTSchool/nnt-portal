@@ -380,15 +380,42 @@
   }
   function layoutCls(ex){ var ml = Math.max.apply(null, ex.items.map(function(t){ return t.length; })); return ex.long ? "" : ml <= 13 ? "g4" : ml <= 22 ? "g3" : "g2"; }
   function tier(pct){ return pct === 100 ? ["PERFECT", "✨", "#d98b00"] : pct >= 85 ? ["EXCELLENT", "🔥", "#0c9c84"] : pct >= 65 ? ["GOOD JOB", "👏", "#3e63d8"] : pct >= 40 ? ["KEEP GOING", "💪", "#e0710f"] : ["LET'S FIX IT", "🎯", "#d6395f"]; }
+  /* word-level mistakes only: what was written wrongly, left out, or added, with two words of context */
+  function diffErrs(ref, said){
+    var A = words(ref), B = words(said), m = A.length, n = B.length, d = [], i, j;
+    if (!B.length) return '<div class="dfe">You wrote nothing for this part. Listen again and write what you hear.</div>';
+    for (i = 0; i <= m; i++){ d[i] = []; for (j = 0; j <= n; j++) d[i][j] = 0; }
+    for (i = m - 1; i >= 0; i--) for (j = n - 1; j >= 0; j--) d[i][j] = A[i] === B[j] ? d[i+1][j+1] + 1 : Math.max(d[i+1][j], d[i][j+1]);
+    var ops = [], x = 0, y = 0;
+    while (x < m && y < n){ if (A[x] === B[y]){ ops.push(["=", A[x]]); x++; y++; } else if (d[x+1][y] >= d[x][y+1]){ ops.push(["-", A[x]]); x++; } else { ops.push(["+", B[y]]); y++; } }
+    while (x < m){ ops.push(["-", A[x++]]); } while (y < n){ ops.push(["+", B[y++]]); }
+    var out = [], k = 0, ctx = [];
+    while (k < ops.length){
+      if (ops[k][0] === "="){ ctx.push(ops[k][1]); k++; continue; }
+      var del = [], ins = []; while (k < ops.length && ops[k][0] !== "="){ (ops[k][0] === "-" ? del : ins).push(ops[k][1]); k++; }
+      var before = ctx.slice(-2).join(" "); ctx = [];
+      out.push({b: before, w: ins.join(" "), r: del.join(" ")});
+    }
+    if (!out.length) return '<div class="dfe">No mistakes. Well done.</div>';
+    if (out.length > 14) { var extra = out.length - 14; out = out.slice(0, 14); out.push({more: extra}); }
+    return out.map(function(o){ if (o.more) return '<div class="dfe" style="opacity:.8">…and ' + o.more + ' more mistake' + (o.more > 1 ? "s" : "") + '. Listen again and check the whole passage.</div>';
+      return '<div class="dfe" style="margin:4px 0">' + (o.b ? '<span style="opacity:.65">…' + esc(o.b) + '</span> ' : '') + (o.w ? '<s>' + esc(o.w) + '</s>' : '<em style="opacity:.8">(left out)</em>') + ' → ' + (o.r ? '<strong>' + esc(o.r) + '</strong>' : '<em style="opacity:.8">(not in the audio)</em>') + '</div>'; }).join("");
+  }
   /* rows: [{k, said, ok, pct}] */
   function feedback(ex, rows, good, total, what){
     var pct = total ? Math.round(100 * good / total) : 100, t = tier(pct), ang = Math.round(3.6 * pct), sp = "";
     if (pct >= 90) for (var q = 0; q < 34; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 2.5).toFixed(2) + 's;animation-duration:' + (2.4 + Math.random() * 2).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#ff9f43"][q % 5] + ';width:' + (5 + Math.random() * 6).toFixed(1) + 'px;height:' + (8 + Math.random() * 10).toFixed(1) + 'px"></i>';
     var h = '<div class="fbk"><div class="spk">' + sp + '</div><div class="ring" style="--c:' + t[2] + ';--a:' + ang + 'deg"><div><b>' + pct + '%</b><small>' + good + ' of ' + total + ' ' + what + '</small></div></div>'
       + '<div class="verd" style="color:' + t[2] + '">' + t[1] + ' ' + t[0] + '</div></div>'
+      + (ex.long ? "" : (function(){ var okn = rows.filter(function(r){ return r.ok; }).map(function(r){ return r.k + 1; }); return okn.length ? '<div class="okln" style="margin:10px 0 0;padding:9px 14px;border-radius:12px;background:#d9f5ee;color:#0b4a3e;font-weight:700">✔ ' + okn.length + ' correct: ' + okn.join(", ") + '</div>' : ""; })())
       + '<div class="' + (ex.long ? "rl" : "gr " + layoutCls(ex)) + ' fr">';
-    rows.forEach(function(r, n){ h += '<div class="rc ' + (r.ok ? "g" : "b") + '" style="animation-delay:' + (0.35 + n * 0.06).toFixed(2) + 's"><span class="rn">' + (r.k + 1) + '</span><div>'
-      + (r.ok ? '<b>' + esc(r.said) + '</b>' : '<s>' + esc(r.said || "(empty)") + '</s><strong>' + esc(ex.items[r.k]) + '</strong>' + (ex.long && r.pct != null ? '<small>' + r.pct + '% of the words</small>' : '')) + '</div><i>' + (r.ok ? "✔" : "✖") + '</i></div>'; });
+    /* only the mistakes are shown, on their own: the parts the student got right are not repeated */
+    rows.forEach(function(r, n){
+      if (!ex.long){ if (r.ok) return;
+        h += '<div class="rc b" style="animation-delay:' + (0.35 + n * 0.06).toFixed(2) + 's"><span class="rn">' + (r.k + 1) + '</span><div><s>' + esc(r.said || "(empty)") + '</s><strong>' + esc(ex.items[r.k]) + '</strong></div><i>✖</i></div>'; return; }
+      var d = (r.pct != null && r.pct < 30) ? '<div class="dfe">Only a small part of this passage was written. Listen again and write everything you hear.</div>' : diffErrs(ex.items[r.k], r.said);
+      h += '<div class="rc ' + (r.ok ? "g" : "b") + '" style="animation-delay:' + (0.35 + n * 0.06).toFixed(2) + 's;align-items:flex-start"><span class="rn">' + (r.k + 1) + '</span><div style="flex:1">'
+        + '<small style="display:block;margin:0 0 6px;font-weight:800">' + (r.ok ? "Nearly all correct" : "Not correct yet") + ' · ' + (r.pct == null ? 0 : r.pct) + '% of the words</small>' + d + '</div><i>' + (r.ok ? "✔" : "✖") + '</i></div>'; });
     return h + '</div>';
   }
   function checkEx(ex){
