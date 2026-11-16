@@ -393,6 +393,13 @@
   }
   function checkEx(ex){
     var ins = [].slice.call(document.querySelectorAll("#cin .a")), good = 0, rows = [];
+    /* bare minimum effort: at least half of the boxes must be filled before the answers are shown */
+    var filled = ins.filter(function(x){ return x.value.trim().length > 0; }).length, minF = Math.ceil(ins.length / 2);
+    if (!O.nofloor && filled < minF){
+      var w = el("cwarn"); if (!w){ w = document.createElement("div"); w.id = "cwarn"; w.style.cssText = "margin:10px 0 0;padding:10px 14px;border-radius:12px;background:#fff3d6;color:#7a4b00;font-weight:700"; el("cchk").insertAdjacentElement("afterend", w); }
+      w.textContent = "Not so fast! You filled " + filled + " of " + ins.length + " boxes. Try at least " + minF + " before you check. Play the audio again and write what you hear, even if you are not sure.";
+      return;
+    }
     stopAudio();
     ins.forEach(function(x, k){ var j = judge(ex, k, x.value); if (j.ok) good++; rows.push({k: k, said: x.value.trim(), ok: j.ok, pct: j.pct}); });
     S.res[ex.id] = {good: good, n: ex.items.length, miss: rows.filter(function(r){ return !r.ok; }).map(function(r){ return r.k; })};
