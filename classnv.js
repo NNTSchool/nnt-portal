@@ -162,7 +162,7 @@
   + '#cnv .l4how .rc,#cnv .l4sm .rc{animation:none}#cnv .l4how .rc small,#cnv .l4sm .rc small{color:#3d5a78!important;font-size:14.5px!important}#cnv .l4how .rc b,#cnv .l4sm .rc b{color:#10204a!important;font-size:19px}#cnv .l4gr.hd b{color:#fff}#cnv .l4sm .rc.g i{color:#0c9c84}#cnv .l4sm .rc.b i{color:#d6395f}#cnv .l4how .rc .rn,#cnv .l4sm .rc .rn{background:#3e63d8;color:#fff}@media(max-width:1100px){#cnv .l4two,#cnv .l4two.rv{grid-template-columns:1fr}}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
-  function page(h){ try{ document.body.classList.toggle("nvfocus", h.indexOf('id="cnbody"') < 0 && h.indexOf('class="hm"') < 0); }catch(e){} stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; }
+  function page(h){ try{ document.body.classList.toggle("nvfocus", h.indexOf('id="cnbody"') < 0 && h.indexOf('class="hm"') < 0); }catch(e){} stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; try { restoreDraft(); } catch (e) {} }
   function top(back){ return '<div class="tb"><button class="pill" id="cb">' + (back || "← Back") + '</button><div class="sp"></div><b>NNT · Classroom</b></div>'; }
   function stopAudio(){ if (A){ try{ A.pause(); }catch(e){} A = null; } }
   function close(){ try{ document.body.classList.remove("nvfocus"); }catch(e){} stopAudio(); var r = el("cnv"); if (r) r.remove(); if (O && O.onExit) O.onExit(); }
@@ -268,6 +268,8 @@
     try { Promise.resolve(R("nv_class_status", {tok: O.tok, u: S.unit})).then(function(r){
       if (!r || !r.ok || !r.lis) return; var ch = false, u = S.unit; S.lisDone = S.lisDone || {}; S.rdDone = S.rdDone || {}; S.wrDone = S.wrDone || {};
       if (r.lis && r.lis.prog){ S.prog0 = S.prog0 || {}; S.prog0[u] = r.lis.prog; }
+      if (r.lis && r.lis.prog4){ S.prog4 = S.prog4 || {}; S.prog4[u] = r.lis.prog4; }
+      ["lis", "read", "write"].forEach(function(st){ if (r[st] && r[st].draft){ S.draft0 = S.draft0 || {}; S.draft0[u + ":" + st] = r[st].draft; } });
       [["lis", S.lisDone], ["read", S.rdDone], ["write", S.wrDone]].forEach(function(p){ var x = r[p[0]]; if (!x) return; S.srv[u + ":" + p[0]] = Math.max(S.srv[u + ":" + p[0]] || 0, x.secs || 0); if (x.done && !p[1][u]){ p[1][u] = true; ch = true; } });
       if (ch && !S.cur && el("hl")) hub();
     }, function(){}); } catch (x) {}
@@ -289,7 +291,7 @@
     };
     document.addEventListener("fullscreenchange", on); document.addEventListener("webkitfullscreenchange", on);
   }
-  fsWatch();
+  fsWatch(); draftWatch();
   function leaveFS(){ if (document.fullscreenElement || document.webkitFullscreenElement){ try { (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) {} } }
   function hub(){ S.cur = null; leaveFS(); statusSync();
     function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
@@ -561,7 +563,15 @@
   function startPart4(){
     page(top() + '<div class="hero"><h2>Loading Part ' + S.unit + '…</h2></div>'); el("cb").onclick = hub;
     Promise.all([getFile("c" + S.unit + "_part", "part" + S.unit + ".json").then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }), wrTrack()]).then(function(r){
-      S.P = r[0]; S.dict = false; S.cur = "lis"; S.L = {stage: 1, ei: 0, notes: {}, a2: {}, a3: {}, track: r[1]}; S.res = {}; S.pl = {}; S.fix = []; if (!S.t0) S.t0 = Date.now(); l4Intro();
+      S.P = r[0]; S.dict = false; S.cur = "lis"; S.L = {stage: 1, ei: 0, notes: {}, a2: {}, a3: {}, track: r[1]}; S.res = {}; S.pl = {}; S.fix = []; if (!S.t0) S.t0 = Date.now();
+      var sv = stDone("lis") ? null : loadProg4();
+      if (sv && sv.L && sv.L.stage >= 1 && S.P.exercises[sv.L.ei || 0]){
+        S.L = sv.L; S.L.track = r[1] || S.L.track; S.res = sv.res || {}; S.pl = sv.pl || {};
+        Object.keys(S.pl).forEach(function(k){ if (k.charAt(0) === "x") delete S.pl[k]; });   /* an exam that was cut short gets its play back */
+        S.fix = (sv.fix || []).map(function(id){ return S.P.exercises.filter(function(e){ return e.id === id; })[0]; }).filter(Boolean);
+        var g = S.L.stage; if (S.L.drill) return l4Drill(); if (g === 1) return l4Notes(); if (g === 2) return l4Answer(); if (g === 3) return l4Exam(); return l4Analysis();
+      }
+      l4Intro();
     }).catch(function(){ page(top() + '<div class="card warn"><h2>This part is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
   }
   function l4Intro(){
@@ -575,7 +585,7 @@
       + '<button class="go" id="l4go" style="margin-top:8px">Start stage 1 →</button>');
     el("cb").onclick = hub; el("l4go").onclick = function(){ S.L.stage = 1; S.L.ei = 0; l4Notes(); };
   }
-  function l4Head(){ var ex = S.P.exercises[S.L.ei]; return top("Exit") + stgBar(S.L.stage) + '<div class="l4ph">Stage ' + S.L.stage + ' of 4 · recording ' + (S.L.ei + 1) + ' of ' + S.P.exercises.length + '</div><h2 style="margin:4px 0 0">' + esc(ex.id + " · " + ex.name) + '</h2>'; }
+  function l4Head(){ var ex = S.P.exercises[S.L.ei]; setTimeout(saveProg4, 0); return top("Exit") + stgBar(S.L.stage) + '<div class="l4ph">Stage ' + S.L.stage + ' of 4 · recording ' + (S.L.ei + 1) + ' of ' + S.P.exercises.length + '</div><h2 style="margin:4px 0 0">' + esc(ex.id + " · " + ex.name) + '</h2>'; }
   function wc(s){ return (s.trim().match(/\S+/g) || []).length; }
   function l4Notes(){
     var ex = S.P.exercises[S.L.ei], L = S.L;
@@ -656,7 +666,7 @@
   function l4Drill(){
     var L = S.L, items = [];
     S.P.exercises.forEach(function(e){ L.a3[e.id].rows.forEach(function(w){ if (!w.ok) items.push({ex: e, w: w}); }); });
-    L.dq = items; L.di = 0; L.dn = items.length; L.dfix = 0; L.try = {}; l4DrillQ();
+    L.drill = true; L.dq = items; L.di = 0; L.dn = items.length; L.dfix = 0; L.try = {}; saveProg4(); l4DrillQ();
   }
   function l4DrillQ(){
     var L = S.L;
@@ -983,7 +993,7 @@
     var Wd = S.W, a = Wd.att[Wd.att.length - 1]; Wd.mode = "rw";
     wrEditor('<h1 class="rpt" style="font-size:26px">Your feedback</h1><p class="rpi">Use it while you rewrite. Fix every red word, then press Check.</p>' + wrDetail(a), a.text);
   }
-  function writingDone(){ if (!floorOk("write", wrFeedback)) return; S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
+  function writingDone(){ if (!floorOk("write", wrFeedback)) return; clearDrafts("write"); S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
 
   /* ---------- supervision: active time per stage, minimum floors ---------- */
   var FLOOR = {lis: 3000, read: 1200, write: 1200}, SNAME = {lis: "listening", read: "reading", write: "writing"};
@@ -1009,6 +1019,43 @@
       var k = S.unit + ":" + S.cur; S.tm[k] = (S.tm[k] || 0) + 1; S.pend[k] = (S.pend[k] || 0) + 1;
       if (S.pend[k] >= 30) flushLog(S.cur);
     }, 1000);
+  }
+  /* ---- drafts: whatever the student has typed on the current screen, and where they are in the four-stage listening, is kept on this phone AND on the server ---- */
+  function stDone(st){ var m = st === "lis" ? S.lisDone : st === "read" ? S.rdDone : S.wrDone; return !!(m && m[S.unit]); }
+  function dKey(st){ return "nnt_clsdraft_" + ((O && O.name) || "") + "_" + S.unit + "_" + st; }
+  function draftFields(){ var r = root(); return r ? [].slice.call(r.querySelectorAll("textarea, input[type=text], input:not([type])")).filter(function(f){ return !f.disabled && f.type !== "password" && f.type !== "hidden"; }) : []; }
+  function loadDraft(st){
+    var a = null; try { a = JSON.parse(localStorage.getItem(dKey(st)) || "null"); } catch (e) {}
+    var b = S.draft0 && S.draft0[S.unit + ":" + st]; if (b && (!a || (b.at || 0) > (a.at || 0))) a = b; return a;
+  }
+  function restoreDraft(){
+    S.sig = null; if (!S.cur || ["lis", "read", "write"].indexOf(S.cur) < 0) return;
+    var f = draftFields(); if (!f.length) return;
+    var h2 = root().querySelector("h2"); S.sig = S.unit + "|" + S.cur + "|" + (h2 ? h2.textContent.slice(0, 80) : "") + "|" + f.length;
+    if (stDone(S.cur)) return;
+    var d = loadDraft(S.cur); if (!d || d.sig !== S.sig) return;
+    f.forEach(function(x, i){ if (!x.value && d.vals[i]){ x.value = d.vals[i]; try { x.dispatchEvent(new Event("input", {bubbles: true})); } catch (e) {} } });
+  }
+  function saveDraft(){
+    if (!S.sig || !S.cur) return; var vals = draftFields().map(function(f){ return f.value; }); if (!vals.some(function(v){ return v.trim(); })) return;
+    var d = {sig: S.sig, vals: vals, at: Date.now()};
+    try { localStorage.setItem(dKey(S.cur), JSON.stringify(d)); } catch (e) {}
+    if (!S.dsrv || Date.now() - S.dsrv > 8000){ S.dsrv = Date.now(); flushLog(S.cur, {draft: d}); }
+  }
+  function draftWatch(){ document.addEventListener("input", function(e){ var t = e.target, c = el("cnv"); if (!S.cur || !c || !c.contains(t)) return; if (t.tagName !== "TEXTAREA" && !(t.tagName === "INPUT" && (!t.type || t.type === "text"))) return; clearTimeout(S.dtm); S.dtm = setTimeout(saveDraft, 1200); }, true); }
+  function clearDrafts(st){ try { localStorage.removeItem(dKey(st)); if (st === "lis"){ localStorage.removeItem(progKey()); localStorage.removeItem(prog4Key()); } } catch (e) {} if (S.draft0) delete S.draft0[S.unit + ":" + st]; }
+  /* four-stage listening (units 2+): where the student is */
+  function prog4Key(){ return "nnt_clsprog4_" + ((O && O.name) || "") + "_" + S.unit; }
+  function saveProg4(){
+    if (S.dict || !S.L || !S.P || S.cur !== "lis") return;
+    var L2 = {}; Object.keys(S.L).forEach(function(k){ if (["dq", "di", "dn", "dfix", "try"].indexOf(k) < 0) L2[k] = S.L[k]; });
+    var snap = {v: 4, L: L2, res: S.res || {}, pl: S.pl || {}, fix: (S.fix || []).map(function(e){ return e.id; }), at: Date.now()};
+    try { localStorage.setItem(prog4Key(), JSON.stringify(snap)); } catch (e) {}
+    flushLog("lis", {prog4: snap});
+  }
+  function loadProg4(){
+    var a = null; try { a = JSON.parse(localStorage.getItem(prog4Key()) || "null"); } catch (e) {}
+    var b = S.prog4 && S.prog4[S.unit]; if (b && (!a || (b.at || 0) > (a.at || 0))) a = b; return a && a.v === 4 ? a : null;
   }
   /* the dictation progress is kept on this phone AND on the server, so a log out / log in (even on another device) never loses it */
   function progKey(){ return "nnt_clsprog_" + ((O && O.name) || "") + "_" + S.unit; }
@@ -1107,8 +1154,8 @@
     el("cb").onclick = hub; el("drd").onclick = function(){ S.W.drDone = true; writingDone(); };
   }
   /* one break screen for every stage: listening, reading, writing... */
-  function listeningDone(){ if (!floorOk("lis")) return; try { if (S.dict) localStorage.removeItem(progKey()); } catch (e) {} flushLog("lis", {done: true}); S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
-  function readingDone(){ if (!floorOk("read")) return; flushLog("read", {done: true}); S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
+  function listeningDone(){ if (!floorOk("lis")) return; clearDrafts("lis"); flushLog("lis", {done: true, prog: null, prog4: null, draft: null}); S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
+  function readingDone(){ if (!floorOk("read")) return; clearDrafts("read"); flushLog("read", {done: true, draft: null}); S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
   function stageBreak(label, onNext){ S.cur = null;
     var t0 = Date.now(), C = 2 * Math.PI * 130;
     page('<div class="brk"><small class="wu">' + label + '</small><h1 class="bh">Break time!</h1><p class="sub" id="bsub">Great focus. Recharge for ten minutes. We will keep the clock for you.</p>'
