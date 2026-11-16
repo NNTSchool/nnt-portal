@@ -119,7 +119,7 @@
   + '#cnv .fc.on{color:#0b1130;background:linear-gradient(135deg,#5df2d6,#7aa2ff 55%,#c58bff);box-shadow:0 14px 0 #3b4fa8,0 26px 50px rgba(122,162,255,.45);animation:fpl 2.4s ease-in-out infinite}#cnv .fc.on b{color:#0b1130}#cnv .fc.on em{background:rgba(255,255,255,.55)}#cnv .fc.on .fb{background:rgba(255,255,255,.6)}@keyframes fpl{50%{transform:translateY(-6px)}}'
   + '#cnv .fl{flex:0 0 170px;display:flex;flex-direction:column;align-items:center;gap:8px;color:#7d8fd6}#cnv .fl svg{width:130px;height:26px}#cnv .fl span{font-size:14px;font-weight:700;color:#9fb4ff;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.16);border-radius:99px;padding:5px 12px;white-space:nowrap}';
   CSS += '#cnv .gr{display:grid;gap:12px 22px;margin:14px 0}#cnv .gr.g4{grid-template-columns:repeat(4,1fr)}#cnv .gr.g3{grid-template-columns:repeat(3,1fr)}#cnv .gr.g2{grid-template-columns:repeat(2,1fr)}#cnv .gr .it{display:flex;align-items:center;gap:10px;margin:0}#cnv .gr .it span{flex:0 0 30px;height:30px;border-radius:50%;background:rgba(122,162,255,.2);color:#bcd0ff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}#cnv .gr input.a{padding:9px 12px;font-size:18px}'
-  + '#cnv .num input.a{font-size:24px;letter-spacing:.08em;font-weight:700;color:#ffd23f;padding:11px 14px}#cnv .seek{flex:1;accent-color:#7aa2ff;height:6px;cursor:pointer}#cnv .spd{display:flex;align-items:center;gap:8px;margin-top:10px}#cnv .sp5{padding:7px 13px;font-size:14px}#cnv .sp5.on{background:#7aa2ff;color:#0b1130;border-color:#7aa2ff}';
+  + '#cnv .num input.a{font-size:22px;padding:11px 14px}#cnv .seek{flex:1;accent-color:#7aa2ff;height:6px;cursor:pointer}#cnv .spd{display:flex;align-items:center;gap:8px;margin-top:10px}#cnv .sp5{padding:7px 13px;font-size:14px}#cnv .sp5.on{background:#7aa2ff;color:#0b1130;border-color:#7aa2ff}';
   CSS += '#cnv .ins{display:flex;align-items:center;gap:18px;margin:16px 0 8px;padding:18px 22px;border-radius:20px;background:linear-gradient(120deg,rgba(93,242,214,.2),rgba(122,162,255,.22) 55%,rgba(197,139,255,.22));border:2px solid rgba(160,190,255,.55);box-shadow:0 0 34px rgba(122,162,255,.22)}#cnv .ins .ii{flex:0 0 58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#5df2d6,#7aa2ff);display:flex;align-items:center;justify-content:center;font-size:30px}#cnv .ins small{display:block;font-size:12px;font-weight:800;letter-spacing:.2em;color:#ffd23f;margin-bottom:4px}#cnv .ins strong{font-size:24px;line-height:1.3;font-weight:700;color:#fff}';
   CSS += '#cnv .stp{display:flex;align-items:flex-start;justify-content:space-between;margin:6px 0 10px}#cnv .stp u{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.14);margin-top:23px;min-width:10px}#cnv .stp u.f{background:linear-gradient(90deg,#5df2d6,#7aa2ff)}'
   + '#cnv .sn{width:92px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;opacity:.55}#cnv .sn .sb{width:50px;height:50px;border-radius:50%;background:#262e4d;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 5px 0 #151a31}#cnv .sn small{font-size:12px;font-weight:700;color:#cfd8ff}#cnv .sn em{font-style:normal;font-size:11px;font-weight:700;color:#8fa0e0;min-height:13px}'
@@ -523,19 +523,19 @@
   function summary(){
     var g = 0, n = 0, rows = ""; S.P.exercises.forEach(function(e, i){ var r = S.res[e.id]; g += r.good; n += r.n; var pc = Math.round(100 * r.good / r.n);
       rows += '<div class="rc ' + (r.miss.length ? "b" : "g") + '" style="animation-delay:' + (0.4 + i * 0.08).toFixed(2) + 's"><span class="rn">' + (ICO[e.id.slice(-2)] || i + 1) + '</span><div><b>' + esc(e.name) + '</b><small style="color:#bcd0ff">' + r.good + ' of ' + r.n + ' · ' + pc + '%</small></div><i>' + (r.miss.length ? "✖" : "✔") + '</i></div>'; });
-    S.fix = [];   /* the dictation has no forced redo: the student has already seen every mistake */
     var pct = Math.round(100 * g / n), t = tier(pct), sp = "";
+    S.fix = pct >= 80 ? [] : S.P.exercises.filter(function(e){ return S.res[e.id].miss.length; });   /* below 80%: fix rounds until the target is reached */
     if (pct >= 90) for (var q = 0; q < 34; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 2.5).toFixed(2) + 's;animation-duration:' + (2.4 + Math.random() * 2).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#ff9f43"][q % 5] + ';width:' + (5 + Math.random() * 6).toFixed(1) + 'px;height:' + (8 + Math.random() * 10).toFixed(1) + 'px"></i>';
-    var miss = S.fix.reduce(function(a, e){ return a + S.res[e.id].miss.length; }, 0);
+    var miss = S.fix.reduce(function(a, e){ return a + S.res[e.id].miss.length; }, 0), left80 = Math.max(1, Math.ceil(0.8 * n) - g);
     page(top() + '<div class="fbk"><div class="spk">' + sp + '</div><small class="wu">WARM-UP FINISHED</small><div class="ring" style="--c:' + t[2] + ';--a:' + Math.round(3.6 * pct) + 'deg"><div><b>' + pct + '%</b><small>' + g + ' of ' + n + ' correct</small></div></div><div class="verd" style="color:' + t[2] + '">' + t[1] + ' ' + t[0] + '</div></div>'
       + '<div class="gr g2 fr">' + rows + '</div>'
-      + (S.fix.length ? '<button class="go fixgo" id="cfix">🛠 Start the fix round: ' + miss + ' item' + (miss > 1 ? "s" : "") + ' to win back →</button>' : '<button class="go" id="cdone" style="margin-top:6px">Continue →</button>'));
+      + (S.fix.length ? '<div class="card warn" style="margin:14px 0 4px;text-align:center"><b>You need 80% to move on.</b> You are at ' + pct + '%. Win back at least ' + left80 + ' more item' + (left80 > 1 ? 's' : '') + '. The fix rounds repeat until you get there.</div><button class="go fixgo" id="cfix">🛠 Start the fix round: ' + miss + ' item' + (miss > 1 ? "s" : "") + ' to win back →</button>' : '<button class="go" id="cdone" style="margin-top:6px">Continue →</button>'));
     el("cb").onclick = hub;
     if (el("cfix")) el("cfix").onclick = function(){ S.fi = 0; S.fres = {}; fixEx(); };
     if (el("cdone")) el("cdone").onclick = listeningDone;
   }
   function fixEx(){
-    if (S.fi >= S.fix.length) return listeningDone();
+    if (S.fi >= S.fix.length){ S.inFix = false; S.P.exercises.forEach(function(e){ var f = S.fres && S.fres[e.id]; if (f && f.ks && S.res[e.id]){ S.res[e.id].good += f.ks.length; S.res[e.id].miss = S.res[e.id].miss.filter(function(k){ return f.ks.indexOf(k) < 0; }); } }); S.fres = {}; saveProg(); return summary(); }
     S.inFix = true; var ex = S.fix[S.fi], miss = S.res[ex.id].miss, ml = Math.max.apply(null, miss.map(function(k){ return ex.items[k].length; })), gc = ex.long ? "" : ml <= 13 ? "g4" : ml <= 22 ? "g3" : "g2";
     var inputs = miss.map(function(k){ return ex.long ? '<div class="it"><span>' + (k + 1) + '</span><textarea class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>'
       : '<div class="it"><span>' + (k + 1) + '</span><input class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off" style="max-width:' + Math.min(36, Math.max(8, ml + 4)) + 'ch"></div>'; }).join("");
@@ -545,8 +545,8 @@
       + '<div id="cin" class="' + (gc ? "gr " + gc : "") + '">' + inputs + '</div><button class="go" id="cchk" style="margin-top:6px">Check my fixes</button><div id="cout"></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; wirePlayer(ex);
     el("cchk").onclick = function(){
-      stopAudio(); var rows = [], fixed = 0; [].forEach.call(document.querySelectorAll("#cin .a"), function(x){ var k = +x.getAttribute("data-k"), j = judge(ex, k, x.value); if (j.ok) fixed++; rows.push({k: k, said: x.value.trim(), ok: j.ok, pct: j.pct}); });
-      S.fres = S.fres || {}; S.fres[ex.id] = {good: fixed, n: miss.length};
+      stopAudio(); var rows = [], fixed = 0, ks = []; [].forEach.call(document.querySelectorAll("#cin .a"), function(x){ var k = +x.getAttribute("data-k"), j = judge(ex, k, x.value); if (j.ok){ fixed++; ks.push(k); } rows.push({k: k, said: x.value.trim(), ok: j.ok, pct: j.pct}); });
+      S.fres = S.fres || {}; S.fres[ex.id] = {good: fixed, n: miss.length, ks: ks};
       el("cchk").remove(); el("cin").style.display = "none"; if (el("cpc")) el("cpc").remove(); el("cout").innerHTML = feedback(ex, rows, fixed, miss.length, "fixed") + '<button class="go" id="cnx" style="margin-top:14px">' + (S.fi + 1 < S.fix.length ? "Next fix →" : "Finish the fix round →") + '</button>';
       el("cnx").onclick = function(){ S.fi++; fixEx(); };
       el("cout").scrollIntoView && el("cout").scrollIntoView({behavior: "smooth"});
@@ -709,7 +709,7 @@
     if (pct >= 90) for (var q = 0; q < 34; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 2.5).toFixed(2) + 's;animation-duration:' + (2.4 + Math.random() * 2).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#ff9f43"][q % 5] + ';width:' + (5 + Math.random() * 6).toFixed(1) + 'px;height:' + (8 + Math.random() * 10).toFixed(1) + 'px"></i>';
     var miss = n - g;
     page(top("Exit") + stgBar(4) + '<div class="fbk"><div class="spk">' + sp + '</div><small class="wu">EXAM RESULT</small><div class="ring" style="--c:' + t[2] + ';--a:' + Math.round(3.6 * pct) + 'deg"><div><b>' + pct + '%</b><small>' + g + ' of ' + n + ' correct</small></div></div><div class="verd" style="color:' + t[2] + '">' + t[1] + ' ' + t[0] + '</div></div>'
-      + '<div class="gr g2 fr l4sm">' + rows + '</div><button class="go" id="l4rv" style="margin-top:6px">' + (miss ? '🔎 See every mistake and the sentence behind it →' : 'Read the scripts →') + '</button>');
+      + '<div class="gr g2 fr l4sm">' + rows + '</div>' + (pct < 80 ? '<div class="card warn" style="margin:12px 0 0;text-align:center"><b>You need 80% to move on.</b> You are at ' + pct + '%. Study every mistake, then win them back. The fix rounds repeat until you reach 80%.</div>' : '') + '<button class="go" id="l4rv" style="margin-top:6px">' + (miss ? '🔎 See every mistake and the sentence behind it →' : 'Read the scripts →') + '</button>');
     el("cb").onclick = hub; el("l4rv").onclick = function(){ L.ri = 0; l4Review(); };
   }
   function hiEv(tape, ev){
@@ -725,13 +725,15 @@
         + (w.ev && !w.ok ? '<div class="l4evb">🎧 <em>“' + esc(w.ev.replace(/ \.\.\. /g, " … ")) + '”</em></div>' : "") + '</div>'; });
     page(top("Exit") + stgBar(4) + '<div class="l4ph">Analysis · recording ' + (L.ri + 1) + ' of ' + S.P.exercises.length + '</div><h2 style="margin:4px 0 8px">' + esc(ex.id + " · " + ex.name) + ' · ' + r.good + ' of ' + r.n + '</h2>'
       + '<div class="l4two rv"><div class="l4rvl">' + h + '</div><div class="l4tp"><h3>Script <small>the sentences you needed are highlighted</small></h3><div class="l4tx" id="l4tx">' + hiEv(ex.tape, r.rows.filter(function(w){ return !w.ok && w.ev; }).map(function(w){ return w.ev; }).join(" ... ")) + '</div><div class="l4au"><button class="pill" id="l4pl">▶ Listen again</button><span class="sub" id="l4ps">Pause, rewind and replay freely here.</span></div></div></div>'
-      + '<button class="go" id="l4nx" style="margin-top:14px">' + (last ? (S.fix.length ? "🛠 Win your mistakes back →" : "Finish the listening →") : "Next recording →") + '</button>');
+      + '<button class="go" id="l4nx" style="margin-top:14px">' + (last ? (S.fix.length && l4Pct() < 80 ? "🛠 Win your mistakes back →" : "Finish the listening →") : "Next recording →") + '</button>');
     el("cb").onclick = function(){ stopAudio(); hub(); };
     var pl = el("l4pl"), B = null;
     pl.onclick = function(){ if (B){ if (B.paused){ B.play(); pl.textContent = "❚❚ Pause"; } else { B.pause(); pl.textContent = "▶ Continue"; } return; } pl.textContent = "Loading…"; audioUrl(ex).then(function(u){ B = new Audio(u); B.controls = false; B.onended = function(){ B = null; pl.textContent = "▶ Listen again"; }; A = B; B.play(); pl.textContent = "❚❚ Pause"; }); };
-    el("l4nx").onclick = function(){ stopAudio(); if (!last){ L.ri++; l4Review(); } else if (S.fix.length){ l4Drill(); } else listeningDone(); };
+    el("l4nx").onclick = function(){ stopAudio(); if (!last){ L.ri++; l4Review(); } else if (S.fix.length && l4Pct() < 80){ l4Drill(); } else listeningDone(); };
   }
   /* win the mistakes back: re-answer each missed question after seeing the sentence, until all are right */
+  function l4Pct(){ var g = 0, n = 0; S.P.exercises.forEach(function(e){ var r = S.L.a3[e.id]; if (r){ g += r.good; n += r.n; } }); return n ? Math.round(100 * g / n) : 100; }
+  function l4Run(){ var g = 0, n = 0; S.P.exercises.forEach(function(e){ var r = S.L.a3[e.id]; if (r){ g += r.good; n += r.n; } }); return n ? (g + (S.L.dfix || 0)) / n : 1; }
   function l4Drill(){
     var L = S.L, items = [];
     S.P.exercises.forEach(function(e){ L.a3[e.id].rows.forEach(function(w){ if (!w.ok) items.push({ex: e, w: w}); }); });
@@ -739,7 +741,7 @@
   }
   function l4DrillQ(){
     var L = S.L;
-    if (!L.dq.length){ return l4DrillEnd(); }
+    if (!L.dq.length || l4Run() >= 0.8){ return l4DrillEnd(); }
     if (L.di >= L.dq.length) L.di = 0;
     var it = L.dq[L.di], ex = it.ex, w = it.w, key = ex.id + ":" + w.n, tr = L.try[key] || 0;
     var pct = Math.round(100 * (L.dn - L.dq.length) / L.dn);
@@ -748,7 +750,7 @@
     if (ex.kind === "tf") wid = '<div class="l4q"><div class="l4r" data-k="0"><b class="qn">' + w.n + '</b><span class="qt">' + esc(ex.qs[w.n - 1].t) + '</span><div class="l4t"><button type="button" class="l4tf" data-v="T">True</button><button type="button" class="l4tf" data-v="F">False</button></div></div></div>';
     else if (ex.kind === "grid"){ var g = ex.groups[gi]; wid = '<div class="l4g"><div class="l4gh">' + esc(ex.cols[ci]) + ': ' + esc(g.title) + '<small>Tick one item.</small></div><div class="l4gt">' + g.rows.map(function(r, ri){ return '<div class="l4gr one"><span>' + esc(r) + '</span><button type="button" class="l4tk" data-g="0" data-c="0" data-r="' + ri + '"></button></div>'; }).join("") + '</div></div>'; }
     else { var q = ex.qs[w.n - 1]; wid = '<div class="l4q"><div class="l4r fx" data-k="0"><b class="qn">' + w.n + '</b><span class="qt">' + esc(q.l) + (q.s ? ' <strong>' + esc(q.s) + '</strong>' : "") + '</span><div class="l4t">' + (q.nt ? '' : '<button type="button" class="l4ok">✔ correct</button>') + '<input class="a l4in" type="text" placeholder="' + (q.nt ? 'write your answer' : 'or write the correction') + '" spellcheck="false" autocomplete="off" autocapitalize="off"></div></div></div>'; }
-    page(top("Exit") + stgBar(4) + '<div class="fxtag">🛠 WIN IT BACK · ' + (L.dn - L.dq.length) + ' of ' + L.dn + ' won</div><div class="drb"><i style="width:' + pct + '%"></i></div>'
+    page(top("Exit") + stgBar(4) + '<div class="fxtag">🛠 WIN IT BACK · ' + (L.dn - L.dq.length) + ' of ' + L.dn + ' won · accuracy ' + Math.round(l4Run() * 100) + '% of 80%</div><div class="drb"><i style="width:' + pct + '%"></i></div>'
       + '<div class="ins fixc"><span class="ii">🎯</span><div><small>THE SENTENCE YOU NEEDED</small><strong>“' + esc((w.ev || "").replace(/ \.\.\. /g, " … ")) + '”</strong></div></div>'
       + '<div class="l4ans" id="l4a"><div class="l4qh">' + esc(ex.id + " · " + ex.name) + '</div>' + wid + '</div><div class="l4bar"><span class="wrm" id="l4m"></span><button class="go" id="l4ck">Check</button></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; qWire(el("l4a"), {kind: ex.kind});
@@ -764,7 +766,7 @@
     };
   }
   function l4DrillEnd(){
-    page(top("Exit") + '<div class="brk"><div class="bk good"><div class="be">🏆</div><h1 class="bh">All won back!</h1><p class="sub">You fixed every mistake from the exam. That is exactly how listening scores go up.</p></div><button class="go" id="l4nx" style="margin-top:20px">Finish the listening →</button></div>');
+    page(top("Exit") + '<div class="brk"><div class="bk good"><div class="be">🏆</div><h1 class="bh">80% reached!</h1><p class="sub">You won back enough mistakes to pass this listening. That is exactly how listening scores go up.</p></div><button class="go" id="l4nx" style="margin-top:20px">Finish the listening →</button></div>');
     el("cb").onclick = hub; el("l4nx").onclick = listeningDone;
   }
   var BRK = 600;
