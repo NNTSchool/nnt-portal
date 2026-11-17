@@ -886,7 +886,7 @@
     Promise.resolve(R("nv_stage", {tok: O.tok, u: S.unit})).then(function(r){ return r && r.track === "ml" ? "ml" : "ie"; }, function(){ return "ie"; }).then(function(tr){
       return getFile("c" + S.unit + (tr === "ml" ? "_readm" : "_read"), (tr === "ml" ? "readm" : "read") + S.unit + ".json");
     }).then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }).then(function(D){
-      return Promise.all([syncP(), fetch(O.base + "readx.json", {cache: "no-store"}).then(function(r){ return r.json(); }).catch(function(){ return {}; }), fetch(O.base + "readp.json", {cache: "no-store"}).then(function(r){ return r.json(); }).catch(function(){ return {}; }), fetch(O.base + "readeg.json", {cache: "no-store"}).then(function(r){ return r.json(); }).catch(function(){ return {}; })]).then(function(z){ D.eg = z[3] || {}; D.x = (z[1] && z[1][S.unit]) || []; var pp = z[2] && z[2][D.parts ? "ml" : "ie"]; D.p = (pp && pp[S.unit]) || []; if (D.p.length) D.x = []; return D; });
+      return Promise.all([syncP(), fetch(O.base + "readx.json", {cache: "no-store"}).then(function(r){ return r.json(); }).catch(function(){ return {}; }), fetch(O.base + "readp.json", {cache: "no-store"}).then(function(r){ return r.json(); }).catch(function(){ return {}; }), fetch(O.base + "readeg.json", {cache: "no-store"}).then(function(r){ return r.json(); }).catch(function(){ return {}; })]).then(function(z){ D.eg = z[3] || {}; D.x = (z[1] && z[1][S.unit]) || []; var pp = z[2] && z[2][D.parts ? "ml" : "ie"]; D.pw = (pp && pp[S.unit]) || []; if (D.pw.length) D.x = []; return D; });
     }).then(function(D){
       S.R = {D: D, ans: {}, first: null, second: null, t0: Date.now(), phase: 0, step: "test", mist: 0};
       var dr = loadDraft("read"), st0 = "test"; if (dr && dr.x && Date.now() - (dr.at || 0) < 12 * 3600 * 1000){ if (dr.x.t0) S.R.t0 = dr.x.t0; S.R.ans = dr.x.ans || {}; st0 = dr.x.step || "test"; S.R.mist = dr.x.mist || 0; S.R.rounds = dr.x.rr || 0; }
@@ -1021,7 +1021,7 @@
   function rdVocab(){
     var D = S.R.D; rdStep("vocab");
     function card(x, c){ var eg = (D.eg && D.eg[String(x[0]).toLowerCase()]) || ""; return '<div class="vc ' + c + '"><b>' + esc(x[0]) + '</b><span>' + esc(x[1]) + '</span><em>' + esc(x[2]) + '</em>' + (eg ? '<i>“' + esc(eg) + '”</i>' : "") + '</div>'; }
-    var xs = D.x || [], ps = D.p || [];
+    var xs = D.x || [], ps = D.pw || [];
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · study</h2>' + rdSteps(2) + '</div>'
       + '<p class="sub" style="text-align:left;margin:4px 0">Learn every word and chunk below, the ones from the book <b>and</b> the new ones. The quiz has 20 questions and you need <b>18</b>.</p>'
       + '<div class="vh">Vocabulary from your Unit ' + S.unit + ' book</div><div class="vgrid">' + D.v.map(function(x){ return card(x, ""); }).join("") + '</div>'
@@ -1034,7 +1034,7 @@
   function shuf(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function rdQuiz(){
     var R_ = S.R, D = R_.D; rdStep("quiz");
-    var bk = D.v.concat(D.c), ps = D.p || [], xs = ps.length ? ps : (D.x || []), pool = bk.concat(xs);
+    var bk = D.v.concat(D.c), ps = D.pw || [], xs = ps.length ? ps : (D.x || []), pool = bk.concat(xs);
     var nx = Math.min(xs.length, ps.length ? 10 : 11), pick = shuf(xs).slice(0, nx).concat(shuf(bk).slice(0, 20 - nx));
     if (pick.length < 20) pick = pick.concat(shuf(pool.filter(function(p){ return pick.indexOf(p) < 0; })).slice(0, 20 - pick.length));
     pick = shuf(pick);
