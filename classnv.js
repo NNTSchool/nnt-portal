@@ -327,16 +327,16 @@
   function statusSync(){
     if (S.stU === S.unit) return S.stP; S.stU = S.unit;
     try { S.stP = Promise.resolve(R("nv_class_status", {tok: O.tok, u: S.unit})).then(function(r){
-      if (!r || !r.ok || !r.lis) return; var ch = false, u = S.unit; S.lisDone = S.lisDone || {}; S.rdDone = S.rdDone || {}; S.wrDone = S.wrDone || {};
+      if (!r || !r.ok || !r.lis){ S.stU = null; S.stTry = (S.stTry || 0) + 1; if (S.stTry <= 6) setTimeout(function(){ if (O && O.tok) statusSync(); }, 1500 * S.stTry); return; } S.stTry = 0; var ch = false, u = S.unit; S.lisDone = S.lisDone || {}; S.rdDone = S.rdDone || {}; S.wrDone = S.wrDone || {};
       if (r.lis && r.lis.prog){ S.prog0 = S.prog0 || {}; S.prog0[u] = r.lis.prog; }
       if (r.lis && r.lis.prog4){ S.prog4 = S.prog4 || {}; S.prog4[u] = r.lis.prog4; }
       ["lis", "read", "write"].forEach(function(st){ if (r[st] && r[st].draft){ S.draft0 = S.draft0 || {}; S.draft0[u + ":" + st] = r[st].draft; } });
       [["lis", S.lisDone], ["read", S.rdDone], ["write", S.wrDone]].forEach(function(p){ var x = r[p[0]]; if (!x) return; S.srv[u + ":" + p[0]] = Math.max(S.srv[u + ":" + p[0]] || 0, x.secs || 0); if (x.done && !p[1][u]){ p[1][u] = true; ch = true; } });
       if (ch && !S.cur && el("hl")) hub();
-    }, function(){}); return S.stP; } catch (x) {}
+    }, function(){ S.stU = null; S.stTry = (S.stTry || 0) + 1; if (S.stTry <= 6) setTimeout(function(){ if (O && O.tok) statusSync(); }, 1500 * S.stTry); }); return S.stP; } catch (x) {}
   }
-  function syncP(){ var p = statusSync(); return p ? Promise.race([p.catch(function(){}), new Promise(function(r){ setTimeout(r, 2000); })]) : Promise.resolve(); }
-  function synced(fn){ var d = false, g = function(){ if (!d){ d = true; fn(); } }; var p = statusSync(); if (!p){ g(); return; } p.then(g, g); setTimeout(g, 5000); }
+  function syncP(){ var p = statusSync(); return p ? Promise.race([p.catch(function(){}), new Promise(function(r){ setTimeout(r, 8000); })]) : Promise.resolve(); }
+  function synced(fn){ var d = false, g = function(){ if (!d){ d = true; fn(); } }; var p = statusSync(); if (!p){ g(); return; } p.then(g, g); setTimeout(g, 8000); }
   var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1};
   /* the drilling takes the whole screen, like the classic tests; the hub gives it back */
   function goFS(){ var d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen || d.msRequestFullscreen; try { var p = f && f.call(d); if (p && p.then) p.then(function(){ try { if (navigator.keyboard && navigator.keyboard.lock) navigator.keyboard.lock(["Escape"]).catch(function(){}); } catch (e) {} }, function(){}); } catch (e) {} }
