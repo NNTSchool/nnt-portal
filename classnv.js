@@ -1232,32 +1232,26 @@
   function drItems(){
     var W = S.W, seen = {}, out = [];
     W.att.forEach(function(a){
-      var re = /<u class="err">([^<]+)<\/u>\s*<span class="okfx">\(([^)]*)\)<\/span>/g, m, txt = a.text || "";
-      var sents = txt.replace(/\s+/g, " ").match(/[^.!?]+[.!?]*/g) || [];
-      while ((m = re.exec(a.W.html))){
-        var bad = m[1].replace(/&amp;/g, "&").trim(), fix = m[2].replace(/&amp;/g, "&").trim(), key = bad.toLowerCase();
-        if (seen[key]) continue;
-        var sn = sents.filter(function(x){ return x.toLowerCase().indexOf(key) > -1; })[0]; if (!sn) continue;
-        sn = sn.trim(); var i = sn.toLowerCase().indexOf(key);
-        var good = sn.slice(0, i) + fix + sn.slice(i + bad.length);
-        var info = null; ["gvG", "gvV"].forEach(function(g){ var G = a.W[g]; if (G && G.fix) G.fix.forEach(function(f){ if (!info && (f.bad && f.bad.toLowerCase() === key || f.extra && f.extra.bad && f.extra.bad.toLowerCase() === key)) info = f; }); });
-        seen[key] = 1; out.push({sn: sn, bad: bad, fix: fix, good: good, cat: info ? info.cat : "Correct form", why: info ? info.why : "", fails: 0, ok: false});
-      }
+      var text = String(a.text || ""), iss = (a.W && a.W.iss) || [], sents = [], re = /[^.!?\n]+[.!?]*/g, m, by = {};
+      while ((m = re.exec(text))) sents.push({s: m.index, e: m.index + m[0].length});
+      iss.forEach(function(i){ if (i.t !== "err" || i.nd || !i.alts || !i.alts.length) return; for (var j = 0; j < sents.length; j++){ if (i.s >= sents[j].s && i.e <= sents[j].e){ (by[j] = by[j] || []).push(i); break; } } });
+      Object.keys(by).forEach(function(j){
+        var g = by[j].sort(function(x, y){ return x.s - y.s; }), sd = sents[j], base = text.slice(sd.s, sd.e), key = base.replace(/\s+/g, " ").trim().toLowerCase(); if (seen[key]) return; seen[key] = 1;
+        function build(pick){ var o = base; g.slice().reverse().forEach(function(i, k){ var idx = g.length - 1 - k, sp = text.slice(i.s, i.e), ld = /^\s*/.exec(sp)[0], tr = /\s*$/.exec(sp)[0]; o = o.slice(0, i.s - sd.s) + ld + i.alts[pick[idx] || 0] + tr + o.slice(i.e - sd.s); }); return o.replace(/\s+/g, " ").trim(); }
+        var combos = [[]]; g.forEach(function(i){ var nx = []; combos.forEach(function(c){ i.alts.forEach(function(x, xi){ if (nx.length < 24) nx.push(c.concat([xi])); }); }); combos = nx; });
+        var all = g.map(function(i){ var bad = text.slice(i.s, i.e).trim(), info = null; ["gvG", "gvV"].forEach(function(gk){ var G = a.W[gk]; if (G && G.fix) G.fix.forEach(function(f){ if (!info && (f.bad && f.bad.toLowerCase() === bad.toLowerCase() || f.extra && f.extra.bad && f.extra.bad.toLowerCase() === bad.toLowerCase())) info = f; }); }); return {bad: bad, fix: i.alts.join(" / "), cat: info ? info.cat : "Correct form", why: info ? info.why : (i.why || "")}; });
+        out.push({sn: base.replace(/\s+/g, " ").trim(), bad: all[0].bad, fix: all[0].fix, good: build([]), combos: combos.map(function(c){ return drNorm(build(c)); }), cat: all[0].cat, why: all[0].why, fails: 0, ok: false, all: all, nm: all.length});
+      });
     });
-    out.forEach(function(it){
-      var g = it.sn;
-      out.filter(function(o){ return o.sn === it.sn; }).forEach(function(o){ var i = g.toLowerCase().indexOf(o.bad.toLowerCase()); if (i > -1) g = g.slice(0, i) + o.fix + g.slice(i + o.bad.length); });
-      it.good = g; it.all = out.filter(function(o){ return o.sn === it.sn; }); it.nm = it.all.length;
-    });
-    out = out.filter(function(it, i){ return out.findIndex(function(o){ return o.sn === it.sn; }) === i; });
     return out.slice(0, 10);
   }
   function drExp(it){ return (it.all || [it]).map(function(o){ return '<div class="drl"><b>' + esc(o.cat) + '</b>' + (o.why ? ' · ' + esc(o.why) : '') + '<br><span class="wbd">' + esc(o.bad) + '</span> → <span class="wfx">' + esc(o.fix) + '</span></div>'; }).join(""); }
   function drNorm(x){ return String(x).toLowerCase().replace(/[“”"']/g, "").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim(); }
   function drJudge(it, ans){
     var a = drNorm(ans), g = drNorm(it.good);
-    if (a === g) return true;
-    var extra = 0; return (it.all || [it]).every(function(o){ var b = drNorm(o.bad), al = String(o.fix).split(/\s*\/\s*/); extra += al.length - 1; return al.some(function(x){ var f = drNorm(x); return f && a.indexOf(f) > -1 && (f.indexOf(b) > -1 || a.indexOf(b) < 0); }); }) && Math.abs(a.split(" ").length - g.split(" ").length) <= 2 + 2 * extra;
+    if (a === g || (it.combos || []).indexOf(a) > -1) return true;
+    var extra = 0, near = (it.all || [it]).every(function(o){ var b = drNorm(o.bad), al = String(o.fix).split(/\s*\/\s*/); extra += al.length - 1; return al.some(function(x){ var f = drNorm(x); return f && a.indexOf(f) > -1 && (f.indexOf(b) > -1 || a.indexOf(b) < 0); }); }) && Math.abs(a.split(" ").length - g.split(" ").length) <= 2 + 2 * extra;
+    var F = S.FB; return near && (!(F && F.errsOf) || F.errsOf(String(ans)) === 0);
   }
   function startDrill(){
     var W = S.W; W.dr = {q: drItems(), t0: Date.now()};
