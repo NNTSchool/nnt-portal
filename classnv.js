@@ -640,7 +640,7 @@
   }
   function l4Intro(){
     var P = S.P, ie = S.L.track === "ie";
-    page(top() + '<div class="hero"><h2>Listening · Part ' + S.unit + '</h2><p class="sub">' + esc(P.title) + ' · ' + P.exercises.length + ' recordings · about 50 minutes</p></div>' + stgBar(0)
+    page(top() + '<div class="hero"><h2>Listening · Part ' + S.unit + '</h2><p class="sub">' + esc(P.title) + ' · ' + P.exercises.length + ' recordings · about 60 minutes</p></div>' + stgBar(0)
       + '<div class="gr g2 fr l4how">'
       + '<div class="rc g"><span class="rn">1</span><div><b>Take notes</b><small style="color:#bcd0ff">Sound only. Play each recording as often as you like and write down names, numbers, dates, choices and reasons. You cannot see the questions yet.</small></div></div>'
       + '<div class="rc g"><span class="rn">2</span><div><b>Answer from your notes</b><small style="color:#bcd0ff">No audio. The questions appear and you answer using only your own notes.</small></div></div>'
