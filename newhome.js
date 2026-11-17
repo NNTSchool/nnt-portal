@@ -16,7 +16,7 @@
   + '#newv .chip{display:inline-block;border-radius:99px;padding:5px 12px;font:700 13px system-ui;background:rgba(70,240,196,.12);border:1px solid rgba(70,240,196,.4);color:#9dfbe3;margin:0 6px 6px 0}'
   + '#newv .hb h2{margin:0 0 6px;font-size:27px;color:#f2f0ff}#newv .hb p.sub{margin:0 0 8px;color:#b8b4dc;font-size:15px}'
   + '#newv .path{position:relative;margin:18px 0 8px;padding-left:0}#newv .path:before{content:"";position:absolute;left:25px;top:24px;bottom:30px;width:3px;border-radius:3px;background:linear-gradient(180deg,#46f0c4 0%,#7c5cff 38%,rgba(124,92,255,.0) 80%)}'
-  + '#newv .nd{position:relative;display:flex;gap:14px;align-items:flex-start;margin:0 0 14px}#newv .nd .dot{flex:none;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 19px system-ui;background:#0a2238;border:2px solid rgba(185,176,255,.3);color:#b9b0ff;position:relative;z-index:1}'
+  + '#newv .nd{position:relative;display:flex;gap:14px;align-items:flex-start;margin:0 0 14px}#newv .nd .dot{flex:none;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 19px system-ui;background:#0a2238;border:2px solid rgba(185,176,255,.6);color:#d9d3ff;position:relative;z-index:1}'
   + '#newv .nd .bx{flex:1;border-radius:18px;padding:14px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(185,176,255,.18);color:#f2f0ff;position:relative;overflow:hidden}#newv .nd .bx b{font-size:18px;display:block}#newv .nd .bx small{display:block;color:#b8b4dc;font-size:14px;margin-top:3px;line-height:1.35}'
   + '#newv .nd.done .dot{background:linear-gradient(135deg,#ffb86b 0%,#ff7a8a 55%,#ff5fa8 100%);color:#04121f;border-color:transparent}#newv .nd.done .bx{opacity:.8}'
   + '#newv .nd.now .dot{background:#04121f;border-color:#46f0c4;color:#46f0c4;box-shadow:0 0 0 0 rgba(70,240,196,.6);}#newv .nd.now .bx{background:linear-gradient(160deg,rgba(70,240,196,.14),rgba(124,92,255,.10));border:1.5px solid rgba(70,240,196,.55);box-shadow:0 10px 40px -12px rgba(70,240,196,.45)}'
@@ -71,6 +71,10 @@
   + '#newv:has(.hm.dusk){background:radial-gradient(circle at 50% 80%,#fff1c2 0,#ffb347 6%,rgba(255,150,70,.55) 14%,rgba(255,120,80,0) 38%),linear-gradient(180deg,#2b1d5e 0%,#7a3b8f 40%,#e0627f 72%,#ffa65c 100%)}'
   + '#newv .hm.dusk .hmbrand,#newv .hm.dusk .hmname,#newv .hm.dusk .hmgreet,#newv .hm.dusk .hmring .c b,#newv .hm.dusk .hmring .c small{text-shadow:0 2px 10px rgba(25,5,45,.85)}#newv .hm.dusk .hmgreet{color:#ffe9b0}#newv .hm.dusk .hmring .c small{color:#ffe0b0}#newv .hm.dusk .hmbrand span{color:#ffd9a8}'
   + '#newv .hm.dusk .hmq{background:rgba(25,10,50,.6);border-color:rgba(255,217,168,.35)}#newv .hm.dusk .hmq p{color:#fff}#newv .hm.dusk .hmq cite{color:#ffd9a8}#newv .hm.dusk .hmbtns button{color:#fff;background:rgba(25,10,50,.45);border-color:rgba(255,217,168,.5)}'
+  + '#newv .hm .chip{background:rgba(70,240,196,.2);border-color:rgba(70,240,196,.75);color:#e2fff7}#newv .hm .hmring .rp{filter:drop-shadow(0 0 4px rgba(70,240,196,.55))}'
+  + '#newv .hm.day .chip{background:#0b2a55;border-color:#0b2a55;color:#fff}#newv .hm.day .hmring .rd{fill:rgba(255,255,255,.7);stroke:none}#newv .hm.day .hmring .rt{stroke:rgba(11,42,85,.3)}#newv .hm.day .hmring .rp{stroke:#1749c9;filter:none}'
+  + '#newv .hm.dusk .chip{background:rgba(25,10,50,.72);border-color:#ffd9a8;color:#ffeccc}#newv .hm.dusk .hmring .rd{fill:rgba(25,10,50,.42)}#newv .hm.dusk .hmring .rt{stroke:rgba(255,217,168,.4)}#newv .hm.dusk .hmring .rp{stroke:#ffd27a;filter:none}'
+  + '#newv .hm.day .hmbtns button.paybtn.g{background:linear-gradient(150deg,#12a56f,#0a6b4a)}#newv .hm.day .hmbtns button.paybtn.a{background:linear-gradient(150deg,#f4a30c,#c86a00)}#newv .hm.day .hmbtns button.paybtn.r{background:linear-gradient(150deg,#e5365f,#9c1a35)}#newv .hm.day .hmbtns button.paybtn b,#newv .hm.day .hmbtns button.paybtn small{color:#fff}#newv .hm:not(.day):not(.dusk) .hmring .rp{stroke:#46f0c4}'
   + '#newv .hm .hmq p,#newv .hm .hmname{text-shadow:0 1px 6px rgba(0,0,30,.35)}#newv .hm.day .hmq p,#newv .hm.day .hmname{text-shadow:none}'
   + '#newv .nw:has(.hm){max-width:1000px}#newv .nvdbg{text-align:center;font:600 11px system-ui;color:#8f8bb8;padding:0 0 8px;margin-top:-6px;position:sticky;bottom:0;background:rgba(8,10,34,.96)}'
 
@@ -185,8 +189,8 @@
   function ringSvg(frac){
     var C = 2 * Math.PI * 50;
     return '<svg viewBox="0 0 120 120"><defs><linearGradient id="nvrg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#46f0c4"/><stop offset="1" stop-color="#7c5cff"/></linearGradient></defs>'
-      + '<circle cx="60" cy="60" r="50" fill="none" stroke="rgba(185,176,255,.16)" stroke-width="9"/>'
-      + '<circle cx="60" cy="60" r="50" fill="none" stroke="url(#nvrg)" stroke-width="9" stroke-linecap="round" stroke-dasharray="' + (C * frac).toFixed(1) + ' ' + C.toFixed(1) + '"/></svg>';
+      + '<circle class="rd" cx="60" cy="60" r="50" fill="none" stroke="none" stroke-width="9"/><circle class="rt" cx="60" cy="60" r="50" fill="none" stroke="rgba(185,176,255,.34)" stroke-width="9"/>'
+      + '<circle class="rp" cx="60" cy="60" r="50" fill="none" stroke="url(#nvrg)" stroke-width="9" stroke-linecap="round" stroke-dasharray="' + (C * frac).toFixed(1) + ' ' + C.toFixed(1) + '"/></svg>';
   }
 
   /* ---------- the home page: where you are, one quote, one big button ---------- */

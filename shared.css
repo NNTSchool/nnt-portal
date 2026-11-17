@@ -62,8 +62,8 @@ input:focus,select:focus{outline:none;border-color:var(--royal);box-shadow:0 0 0
 .vol .bd{flex:1;padding:14px 46px 14px 16px;min-width:0}
 .vol .bd b{display:block;font-family:var(--serif);font-weight:600;font-size:17px;line-height:1.25;color:var(--ink)}
 .vol .bd small{display:block;margin-top:5px;color:var(--mute);font-size:13.5px}
-.vol.dim{cursor:default;opacity:.72}.vol.dim .sp{background:linear-gradient(160deg,#5d6b86,#3c4863);color:#cfd6e4;border-color:#aeb6c6}
-.vol:disabled{cursor:default;opacity:.55}
+.vol.dim{cursor:default;opacity:.88}.vol.dim .sp{background:linear-gradient(160deg,#5d6b86,#3c4863);color:#cfd6e4;border-color:#aeb6c6}
+.vol:disabled{cursor:default;opacity:.75}
 .vol.retake{border-color:var(--gold);background:var(--gold3)}
 .rib{position:absolute;top:0;right:14px;width:22px;height:38px;background:var(--ok);clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%);color:#fff;font-size:12px;font-weight:800;display:flex;justify-content:center;padding-top:6px;animation:drop .5s .15s both}
 .rib.bad{background:var(--bad)}.rib.go{background:var(--gold);color:#2a1c00}
