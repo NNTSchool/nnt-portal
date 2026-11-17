@@ -403,9 +403,9 @@
   function startPart(){
     page(top() + '<div class="hero"><h2>Loading Part ' + S.unit + '…</h2></div>');
     Promise.all([getFile("c" + S.unit + "_part", "part" + S.unit + ".json").then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }), syncP()]).then(function(rr){ var P = rr[0];
-      S.cur = "lis"; S.P = P; S.dict = true; S.ei = 0; S.res = {}; S.pl = {}; if (!S.t0) S.t0 = Date.now();
+      S.cur = "lis"; S.P = P; S.dict = true; S.ei = 0; S.res = {}; S.pl = {}; S.firstPct = null; S.fixRound = 0; if (!S.t0) S.t0 = Date.now();
       var sv = (S.lisDone && S.lisDone[S.unit]) ? null : loadProg();
-      if (sv && sv.res && typeof sv.ei === "number"){ S.ei = Math.min(sv.ei, P.exercises.length); S.res = sv.res; S.pl = sv.pl || {}; }
+      if (sv && sv.res && typeof sv.ei === "number"){ S.ei = Math.min(sv.ei, P.exercises.length); S.res = sv.res; S.pl = sv.pl || {}; S.firstPct = sv.first; S.fixRound = sv.fr || 0; }
       if (S.ei >= P.exercises.length && P.exercises.every(function(e){ return S.res[e.id]; })) summary(); else runEx();
     }).catch(function(){ page(top() + '<div class="card warn"><h2>This part is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
   }
@@ -517,6 +517,7 @@
     stopAudio();
     ins.forEach(function(x, k){ var j = judge(ex, k, x.value); if (j.ok) good++; rows.push({k: k, said: x.value.trim(), ok: j.ok, pct: j.pct}); });
     S.res[ex.id] = {good: good, n: ex.items.length, miss: rows.filter(function(r){ return !r.ok; }).map(function(r){ return r.k; })};
+    if (ex.long){ S.res[ex.id].txt = {}; rows.forEach(function(r){ S.res[ex.id].txt[r.k] = r.said; }); }   /* dictation: the fix rounds bring this text back to be edited */
     saveProg();
     el("cchk").remove(); el("cin").style.display = "none"; if (el("cpc")) el("cpc").remove();
     el("cout").innerHTML = feedback(ex, rows, good, ex.items.length, "correct") + '<button class="go" id="cnext" style="margin-top:14px">' + (S.ei + 1 < S.P.exercises.length ? "Next exercise →" : "See my results →") + '</button>';
@@ -529,28 +530,31 @@
     var pct = Math.round(100 * g / n), t = tier(pct), sp = "";
     S.fix = S.P.exercises.filter(function(e){ return S.res[e.id].miss.length; });   /* below 80%: fix rounds are compulsory; from 80% they are the optional road to 100% */
     var need80 = pct < 80;
+    if (S.firstPct == null){ S.firstPct = pct; saveProg(); }
+    flushLog("lis", {first: S.firstPct, fr: S.fixRound || 0, now: pct});
     if (pct >= 90) for (var q = 0; q < 34; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 2.5).toFixed(2) + 's;animation-duration:' + (2.4 + Math.random() * 2).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#ff9f43"][q % 5] + ';width:' + (5 + Math.random() * 6).toFixed(1) + 'px;height:' + (8 + Math.random() * 10).toFixed(1) + 'px"></i>';
     var miss = S.fix.reduce(function(a, e){ return a + S.res[e.id].miss.length; }, 0), left80 = Math.max(1, Math.ceil(0.8 * n) - g);
     page(top() + '<div class="fbk"><div class="spk">' + sp + '</div><small class="wu">WARM-UP FINISHED</small><div class="ring" style="--c:' + t[2] + ';--a:' + Math.round(3.6 * pct) + 'deg"><div><b>' + pct + '%</b><small>' + g + ' of ' + n + ' correct</small></div></div><div class="verd" style="color:' + t[2] + '">' + t[1] + ' ' + t[0] + '</div></div>'
       + '<div class="gr g2 fr">' + rows + '</div>'
       + (S.fix.length && need80 ? '<div class="card warn" style="margin:14px 0 4px;text-align:center"><b>You need 80% to move on.</b> You are at ' + pct + '%. Win back at least ' + left80 + ' more item' + (left80 > 1 ? 's' : '') + '. The fix rounds repeat until you get there.</div><button class="go fixgo" id="cfix">🛠 Start the fix round: ' + miss + ' item' + (miss > 1 ? "s" : "") + ' to win back →</button>' : S.fix.length ? '<button class="go fixgo" id="cfix" style="font-size:19px">🏆 Reach 100%: win back the last ' + miss + ' item' + (miss > 1 ? "s" : "") + ' →</button><button class="pill" id="cdone" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button><p class="sub" style="text-align:center;margin:8px 0 0">You passed with ' + pct + '%. The 100% round is your choice: perfect scores are what the best students bring home.</p>' : '<button class="go" id="cdone" style="margin-top:6px">Continue →</button>'));
     el("cb").onclick = hub;
-    if (el("cfix")) el("cfix").onclick = function(){ S.fi = 0; S.fres = {}; S.fixRound = (S.fixRound || 0) + 1; fixEx(); };   /* every fix round has its own single play */
+    if (el("cfix")) el("cfix").onclick = function(){ S.fi = 0; S.fres = {}; S.fixRound = (S.fixRound || 0) + 1; saveProg(); flushLog("lis", {first: S.firstPct, fr: S.fixRound, now: pct}); fixEx(); };   /* every fix round has its own single play */
     if (el("cdone")) el("cdone").onclick = listeningDone;
   }
   function fixEx(){
-    if (S.fi >= S.fix.length){ S.inFix = false; S.P.exercises.forEach(function(e){ var f = S.fres && S.fres[e.id]; if (f && f.ks && S.res[e.id]){ S.res[e.id].good += f.ks.length; S.res[e.id].miss = S.res[e.id].miss.filter(function(k){ return f.ks.indexOf(k) < 0; }); } }); S.fres = {}; saveProg(); return summary(); }
+    if (S.fi >= S.fix.length){ S.inFix = false; S.P.exercises.forEach(function(e){ var f = S.fres && S.fres[e.id]; if (f && f.ks && S.res[e.id]){ if (e.long && f.txt){ S.res[e.id].txt = S.res[e.id].txt || {}; Object.keys(f.txt).forEach(function(k){ S.res[e.id].txt[k] = f.txt[k]; }); } S.res[e.id].good += f.ks.length; S.res[e.id].miss = S.res[e.id].miss.filter(function(k){ return f.ks.indexOf(k) < 0; }); } }); S.fres = {}; saveProg(); return summary(); }
     S.inFix = true; var ex = S.fix[S.fi], miss = S.res[ex.id].miss, ml = Math.max.apply(null, miss.map(function(k){ return ex.items[k].length; })), gc = ex.long ? "" : ml <= 13 ? "g4" : ml <= 22 ? "g3" : "g2";
-    var inputs = miss.map(function(k){ return ex.long ? '<div class="it"><span>' + (k + 1) + '</span><textarea class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>'
+    var TX = (S.res[ex.id] && S.res[ex.id].txt) || {};
+    var inputs = miss.map(function(k){ return ex.long ? '<div class="it"><span>' + (k + 1) + '</span><textarea class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off">' + esc(TX[k] || "") + '</textarea></div>'
       : '<div class="it"><span>' + (k + 1) + '</span><input class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off" style="max-width:' + Math.min(36, Math.max(8, ml + 4)) + 'ch"></div>'; }).join("");
     page(top("Exit") + '<div class="fxtag">🛠 FIX ROUND · ' + (S.fi + 1) + ' of ' + S.fix.length + '</div>' + stepperOf(S.fix, S.fi, function(e){ var r = S.fres && S.fres[e.id]; return r ? r.good + "/" + r.n : ""; }, true)
       + '<h2 style="margin:8px 0 0">' + esc(ex.id + " · " + ex.name) + '</h2>'
-      + '<div class="ins fixc"><span class="ii">🎯</span><div><small>WIN THEM BACK</small><strong>Listen once more and rewrite only the ' + miss.length + ' item' + (miss.length > 1 ? "s" : "") + ' you missed. The answers stay hidden until you check.</strong></div></div>' + player(ex)
+      + '<div class="ins fixc"><span class="ii">🎯</span><div><small>WIN THEM BACK</small><strong>' + (ex.long ? 'Your last version of the dictation is already in the box' + (miss.length > 1 ? 'es' : '') + '. Listen again and EDIT it: change only what does not match the recording. You do not start from zero. The answer stays hidden until you check.' : 'Listen once more and rewrite only the ' + miss.length + ' item' + (miss.length > 1 ? "s" : "") + ' you missed. The answers stay hidden until you check.') + '</strong></div></div>' + player(ex)
       + '<div id="cin" class="' + (gc ? "gr " + gc : "") + '">' + inputs + '</div><button class="go" id="cchk" style="margin-top:6px">Check my fixes</button><div id="cout"></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; wirePlayer(ex);
     el("cchk").onclick = function(){
       stopAudio(); var rows = [], fixed = 0, ks = []; [].forEach.call(document.querySelectorAll("#cin .a"), function(x){ var k = +x.getAttribute("data-k"), j = judge(ex, k, x.value); if (j.ok){ fixed++; ks.push(k); } rows.push({k: k, said: x.value.trim(), ok: j.ok, pct: j.pct}); });
-      S.fres = S.fres || {}; S.fres[ex.id] = {good: fixed, n: miss.length, ks: ks};
+      S.fres = S.fres || {}; S.fres[ex.id] = {good: fixed, n: miss.length, ks: ks, txt: {}}; rows.forEach(function(r){ S.fres[ex.id].txt[r.k] = r.said; });
       el("cchk").remove(); el("cin").style.display = "none"; if (el("cpc")) el("cpc").remove(); el("cout").innerHTML = feedback(ex, rows, fixed, miss.length, "fixed") + '<button class="go" id="cnx" style="margin-top:14px">' + (S.fi + 1 < S.fix.length ? "Next fix →" : "Finish the fix round →") + '</button>';
       el("cnx").onclick = function(){ S.fi++; fixEx(); };
       el("cout").scrollIntoView && el("cout").scrollIntoView({behavior: "smooth"});
@@ -741,12 +745,12 @@
   function l4Drill(){
     var L = S.L, items = [];
     S.P.exercises.forEach(function(e){ L.a3[e.id].rows.forEach(function(w){ if (!w.ok) items.push({ex: e, w: w}); }); });
-    L.drill = true; L.dq = items; L.di = 0; L.dn = items.length; L.dfix = 0; L.try = {}; saveProg4(); l4DrillQ();
+    L.drill = true; L.dq = items; L.di = 0; L.dn = items.length; L.dfix = 0; L.try = {}; L.rounds = 1; if (L.first == null) L.first = l4Pct(); saveProg4(); flushLog("lis", {first: L.first, fr: 1, dtry: 0, now: Math.round(l4Run() * 100)}); l4DrillQ();
   }
   function l4DrillQ(){
     var L = S.L;
     if (!L.dq.length || (!L.full && l4Run() >= 0.8)){ return l4DrillEnd(); }
-    if (L.di >= L.dq.length) L.di = 0;
+    if (L.di >= L.dq.length){ L.di = 0; L.rounds = (L.rounds || 1) + 1; }
     var it = L.dq[L.di], ex = it.ex, w = it.w, key = ex.id + ":" + w.n, tr = L.try[key] || 0;
     var pct = Math.round(100 * (L.dn - L.dq.length) / L.dn);
     var gi = ex.kind === "grid" ? Math.floor((w.n - 1) / ex.cols.length) : 0, ci = ex.kind === "grid" ? (w.n - 1) % ex.cols.length : 0;
@@ -764,6 +768,7 @@
       else if (ex.kind === "grid"){ var s2 = root.querySelector(".l4tk.on"); ok = !!s2 && +s2.getAttribute("data-r") === ex.groups[gi].ans[ci]; }
       else { ans = qRead(root, {kind: "fix", qs: [ex.qs[w.n - 1]]}); ok = qMark({kind: "fix", qs: [ex.qs[w.n - 1]]}, ans)[0].ok; }
       L.try[key] = (L.try[key] || 0) + 1; var m = el("l4m");
+      setTimeout(function(){ flushLog("lis", {first: L.first, fr: L.rounds || 1, dtry: Object.keys(L.try).reduce(function(a, k){ return a + L.try[k]; }, 0), now: Math.round(l4Run() * 100)}); }, 0);
       if (ok){ m.className = "wrm gd"; m.textContent = "✔ Yes! That is the one."; L.dq.splice(L.di, 1); L.dfix++; el("l4ck").textContent = "Next →"; el("l4ck").onclick = l4DrillQ; [].forEach.call(root.querySelectorAll("button,input"), function(x){ x.disabled = true; }); }
       else if (L.try[key] >= 2){ m.className = "wrm bd"; m.innerHTML = "Not yet. The answer is <b>" + esc(w.right) + "</b>. Read the sentence again, then it will come back to you."; el("l4ck").textContent = "Next →"; L.di++; [].forEach.call(root.querySelectorAll("button,input"), function(x){ x.disabled = true; }); el("l4ck").onclick = l4DrillQ; }
       else { m.className = "wrm bd"; m.textContent = "✖ Not quite. Read the sentence above once more and try again."; }
@@ -822,7 +827,7 @@
       return Promise.all([syncP(), fetch(O.base + "readx.json", {cache: "no-store"}).then(function(r){ return r.json(); }).catch(function(){ return {}; })]).then(function(z){ D.x = (z[1] && z[1][S.unit]) || []; return D; });
     }).then(function(D){
       S.R = {D: D, ans: {}, first: null, second: null, t0: Date.now(), phase: 0, step: "test", mist: 0};
-      var dr = loadDraft("read"), st0 = "test"; if (dr && dr.x && Date.now() - (dr.at || 0) < 12 * 3600 * 1000){ if (dr.x.t0) S.R.t0 = dr.x.t0; S.R.ans = dr.x.ans || {}; st0 = dr.x.step || "test"; S.R.mist = dr.x.mist || 0; }
+      var dr = loadDraft("read"), st0 = "test"; if (dr && dr.x && Date.now() - (dr.at || 0) < 12 * 3600 * 1000){ if (dr.x.t0) S.R.t0 = dr.x.t0; S.R.ans = dr.x.ans || {}; st0 = dr.x.step || "test"; S.R.mist = dr.x.mist || 0; S.R.rounds = dr.x.rr || 0; }
       if (st0 === "vocab" || st0 === "quiz"){ S.R.last = {bad: new Array(Math.max(1, S.R.mist)), good: [], ans: {}}; S.R.first = S.R.last; S.R.ans = {}; rdVocab(); return; }
       if (st0 === "retake"){ S.R.first = {bad: new Array(Math.max(1, S.R.mist)), good: [], ans: {}}; S.R.hl = true; S.R.step = "retake"; rdTest(true); }
       else rdTest(false);
@@ -924,7 +929,7 @@
     el("rck").onclick = function(){ rdCheck(need); };
   }
   function rdSave(){
-    var R_ = S.R; if (!R_) return; var d = {sig: "rd", vals: [], at: Date.now(), x: {t0: R_.t0, ans: R_.ans || {}, step: R_.step, mist: R_.mist || 0}};
+    var R_ = S.R; if (!R_) return; var d = {sig: "rd", vals: [], at: Date.now(), x: {t0: R_.t0, ans: R_.ans || {}, step: R_.step, mist: R_.mist || 0, rr: R_.rounds || 0}};
     try { localStorage.setItem(dKey("read"), JSON.stringify(d)); } catch (e) {}
     flushLog("read", {draft: d});
   }
@@ -932,8 +937,9 @@
   function rdCheck(need){
     var R_ = S.R, D = R_.D, all = rdAll(D), bad = [], good = [];
     need.forEach(function(n){ var q = all.filter(function(x){ return x.n === n; })[0]; (rdJudge(q, R_.ans[n]) ? good : bad).push(n); });
-    R_.last = {bad: bad, good: good, ans: JSON.parse(JSON.stringify(R_.ans))}; if (!R_.first) R_.first = R_.last;
+    R_.last = {bad: bad, good: good, ans: JSON.parse(JSON.stringify(R_.ans))}; var firstTime = !R_.first; if (!R_.first) R_.first = R_.last;
     R_.rounds = (R_.rounds || 0) + 1; R_.mist = bad.length;
+    flushLog("read", firstTime ? {r1: Math.round(100 * good.length / Math.max(1, all.length)), rr: R_.rounds} : {rr: R_.rounds, rl: Math.round(100 * good.length / Math.max(1, all.length))});
     if (S.bt) clearInterval(S.bt);
     if (!bad.length){ R_.second = R_.last; rdAnswers(); } else { rdStep("vocab"); rdResults(); }
   }
@@ -1204,7 +1210,7 @@
   function saveProg(){
     if (!S.dict || !S.P || S.cur !== "lis") return;
     var ei = 0; S.P.exercises.forEach(function(e, i){ if (S.res[e.id] && ei === i) ei = i + 1; });
-    var snap = {ei: ei, res: S.res, pl: S.pl || {}, at: Date.now()};
+    var snap = {ei: ei, res: S.res, pl: S.pl || {}, first: S.firstPct, fr: S.fixRound || 0, at: Date.now()};
     try { localStorage.setItem(progKey(), JSON.stringify(snap)); } catch (e) {}
     flushLog("lis", {prog: snap});
   }
