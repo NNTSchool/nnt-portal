@@ -33,6 +33,12 @@
   window.nvSave = function(trk, sc, tot, miss, ans, lv){ return call("nv_save_test", {tok: P.tok, u: P.nvunit, trk: trk, sc: sc, tot: tot, miss: miss, ans: ans, lv: lv || 0}).then(function(r){ if (!r || !r.ok) throw new Error((r && r.err) || "not saved"); return r; }); };
   window.nvGrade = function(trk, ans, lv, used){ return call("nv_grade_test", {tok: P.tok, u: P.nvunit, trk: trk, ans: ans || {}, lv: lv || 0, used: used || 0}).then(function(r){ if (!r || !r.ok) throw new Error((r && r.err) || "not graded"); return r; }); };
   window.nvSaveEssay = function(body, words, band, lv){ return call("nv_save_essay", {tok: P.tok, u: P.nvunit, body: body, words: words, band: band, lv: lv || 0}).then(function(r){ if (!r || !r.ok) throw new Error((r && r.err) || "not saved"); return r; }); };
+  window.nvEssayTry = function(){ return call("nv_essay_try", {tok: P.tok, u: P.nvunit}).catch(function(){}); };
+  /* time on the unit: counted only while the page is open and the student is active (typing, tapping, moving) */
+  if (HOME && P.nvunit){
+    var lastAct = Date.now(); ["keydown", "pointerdown", "pointermove", "touchstart", "scroll"].forEach(function(ev){ document.addEventListener(ev, function(){ lastAct = Date.now(); }, {passive: true, capture: true}); });
+    setInterval(function(){ if (document.hidden || Date.now() - lastAct > 120000) return; call("nv_tick", {tok: P.tok, u: P.nvunit, s: 15}).catch(function(){}); }, 15000);
+  }
   window.nvSaveSpeaking = function(tasks, secs){ return call("nv_save_speaking", {tok: P.tok, u: P.nvunit, tasks: tasks, secs: secs}).then(function(r){ if (!r || !r.ok) throw new Error((r && r.err) || "not saved"); return r; }); };
   function banner(msg){
     var d = document.createElement("div"); d.style.cssText = "position:fixed;inset:0;z-index:99999;background:rgba(14,42,71,.92);color:#fff;display:flex;align-items:center;justify-content:center;font:600 22px system-ui,sans-serif;text-align:center;padding:30px";
