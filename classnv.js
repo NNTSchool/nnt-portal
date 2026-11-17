@@ -748,7 +748,7 @@
     if (pct >= 90) for (var q = 0; q < 34; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 2.5).toFixed(2) + 's;animation-duration:' + (2.4 + Math.random() * 2).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#ff9f43"][q % 5] + ';width:' + (5 + Math.random() * 6).toFixed(1) + 'px;height:' + (8 + Math.random() * 10).toFixed(1) + 'px"></i>';
     var miss = n - g;
     page(top("Exit") + stgBar(4) + '<div class="fbk"><div class="spk">' + sp + '</div><small class="wu">EXAM RESULT</small><div class="ring" style="--c:' + t[2] + ';--a:' + Math.round(3.6 * pct) + 'deg"><div><b>' + pct + '%</b><small>' + g + ' of ' + n + ' correct</small></div></div><div class="verd" style="color:' + t[2] + '">' + t[1] + ' ' + t[0] + '</div></div>'
-      + '<div class="gr g2 fr l4sm">' + rows + '</div>' + (pct < 80 ? '<div class="card warn" style="margin:12px 0 0;text-align:center"><b>You need 80% to move on.</b> You are at ' + pct + '%. Study every mistake, then win them back. The fix rounds repeat until you reach 80%.</div>' : '') + '<button class="go" id="l4rv" style="margin-top:6px">' + (miss ? '🔎 See every mistake and the sentence behind it →' : 'Read the scripts →') + '</button>');
+      + '<div class="gr g2 fr l4sm">' + rows + '</div>' + (pct < L4MIN ? '<div class="card warn" style="margin:12px 0 0;text-align:center"><b>You need ' + L4MIN + '% to move on.</b> You are at ' + pct + '%. Study every mistake, then win them back. The fix rounds repeat until you reach ' + L4MIN + '%.</div>' : '') + '<button class="go" id="l4rv" style="margin-top:6px">' + (miss ? '🔎 See every mistake and the sentence behind it →' : 'Read the scripts →') + '</button>');
     el("cb").onclick = hub; el("l4rv").onclick = function(){ L.ri = 0; l4Review(); };
   }
   function hiEv(tape, ev){
@@ -764,51 +764,75 @@
         + (w.ev && !w.ok ? '<div class="l4evb">🎧 <em>“' + esc(w.ev.replace(/ \.\.\. /g, " … ")) + '”</em></div>' : "") + '</div>'; });
     page(top("Exit") + stgBar(4) + '<div class="l4ph">Analysis · recording ' + (L.ri + 1) + ' of ' + S.P.exercises.length + '</div><h2 style="margin:4px 0 8px">' + esc(ex.id + " · " + ex.name) + ' · ' + r.good + ' of ' + r.n + '</h2>'
       + '<div class="l4two rv"><div class="l4rvl">' + h + '</div><div class="l4tp"><h3>Script <small>the sentences you needed are highlighted</small></h3><div class="l4tx" id="l4tx">' + hiEv(ex.tape, r.rows.filter(function(w){ return !w.ok && w.ev; }).map(function(w){ return w.ev; }).join(" ... ")) + '</div><div class="l4au"><button class="pill" id="l4pl">▶ Listen again</button><span class="sub" id="l4ps">Pause, rewind and replay freely here.</span></div></div></div>'
-      + '<button class="go" id="l4nx" style="margin-top:14px">' + (last ? (S.fix.length && l4Pct() < 80 ? "🛠 Win your mistakes back →" : S.fix.length ? "🏆 Reach 100%: win the rest back →" : "Finish the listening →") : "Next recording →") + '</button>' + (last && S.fix.length && l4Pct() >= 80 ? '<button class="pill" id="l4fin" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button>' : ''));
+      + '<button class="go" id="l4nx" style="margin-top:14px">' + (last ? (S.fix.length && l4Pct() < L4MIN ? "🛠 Win your mistakes back →" : S.fix.length ? "🏆 Reach 100%: win the rest back →" : "Finish the listening →") : "Next recording →") + '</button>' + (last && S.fix.length && l4Pct() >= L4MIN ? '<button class="pill" id="l4fin" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button>' : ''));
     el("cb").onclick = function(){ stopAudio(); hub(); };
     var tok = S.pgn, pl = el("l4pl"), B = null;
     pl.onclick = function(){ if (B){ if (B.paused){ B.play(); pl.textContent = "❚❚ Pause"; } else { B.pause(); pl.textContent = "▶ Continue"; } return; } pl.textContent = "Loading…"; var sn = S.stopN; audioUrl(ex).then(function(u){ if (tok !== S.pgn || sn !== S.stopN) return; B = new Audio(u); B.controls = false; B.onended = function(){ B = null; pl.textContent = "▶ Listen again"; }; A = B; B.play(); pl.textContent = "❚❚ Pause"; }); };
-    el("l4nx").onclick = function(){ stopAudio(); if (!last){ L.ri++; l4Review(); } else if (S.fix.length){ S.L.full = l4Pct() >= 80; l4Drill(); } else listeningDone(); }; if (el("l4fin")) el("l4fin").onclick = function(){ stopAudio(); listeningDone(); };
+    el("l4nx").onclick = function(){ stopAudio(); if (!last){ L.ri++; l4Review(); } else if (S.fix.length){ l4Drill(); } else listeningDone(); }; if (el("l4fin")) el("l4fin").onclick = function(){ stopAudio(); listeningDone(); };
   }
   /* win the mistakes back: re-answer each missed question after seeing the sentence, until all are right */
+  var L4MIN = 90;
   function l4Pct(){ var g = 0, n = 0; S.P.exercises.forEach(function(e){ var r = S.L.a3[e.id]; if (r){ g += r.good; n += r.n; } }); return n ? Math.round(100 * g / n) : 100; }
   function l4Run(){ var g = 0, n = 0; S.P.exercises.forEach(function(e){ var r = S.L.a3[e.id]; if (r){ g += r.good; n += r.n; } }); return n ? (g + (S.L.dfix || 0)) / n : 1; }
   function l4Drill(){
     var L = S.L, items = [];
     S.P.exercises.forEach(function(e){ L.a3[e.id].rows.forEach(function(w){ if (!w.ok) items.push({ex: e, w: w}); }); });
-    L.drill = true; L.dq = items; L.di = 0; L.dn = items.length; L.dfix = 0; L.try = {}; L.rounds = 1; if (L.first == null) L.first = l4Pct(); saveProg4(); flushLog("lis", {first: L.first, fr: 1, dtry: 0, now: Math.round(l4Run() * 100)}); l4DrillQ();
+    L.drill = true; L.dq = items; L.dn = items.length; L.dfix = 0; L.try = {}; L.tries = 0; L.rounds = 1; if (L.first == null) L.first = l4Pct(); saveProg4();
+    flushLog("lis", {first: L.first, fr: 1, dtry: 0, now: Math.round(l4Run() * 100)});
+    if (!L.dq.length) return l4DrillEnd();
+    l4Pass();
   }
+  /* one pass over everything still wrong: no answer is revealed while it runs, every answer is locked */
+  function l4Pass(){ var L = S.L; L.pq = L.dq.slice(); L.pi = 0; L.pr = []; l4DrillQ(); }
   function l4DrillQ(){
     var L = S.L;
-    if (!L.dq.length || (!L.full && l4Run() >= 0.8)){ return l4DrillEnd(); }
-    if (L.di >= L.dq.length){ L.di = 0; L.rounds = (L.rounds || 1) + 1; }
-    var it = L.dq[L.di], ex = it.ex, w = it.w, key = ex.id + ":" + w.n, tr = L.try[key] || 0;
-    var pct = Math.round(100 * (L.dn - L.dq.length) / L.dn);
+    if (L.pi >= L.pq.length) return l4RoundEnd();
+    var it = L.pq[L.pi], ex = it.ex, w = it.w;
     var gi = ex.kind === "grid" ? Math.floor((w.n - 1) / ex.cols.length) : 0, ci = ex.kind === "grid" ? (w.n - 1) % ex.cols.length : 0;
     var wid = "";
     if (ex.kind === "tf") wid = '<div class="l4q"><div class="l4r" data-k="0"><b class="qn">' + w.n + '</b><span class="qt">' + esc(ex.qs[w.n - 1].t) + '</span><div class="l4t"><button type="button" class="l4tf" data-v="T">True</button><button type="button" class="l4tf" data-v="F">False</button></div></div></div>';
     else if (ex.kind === "grid"){ var g = ex.groups[gi]; wid = '<div class="l4g"><div class="l4gh">' + esc(ex.cols[ci]) + ': ' + esc(g.title) + '<small>Tick one item.</small></div><div class="l4gt">' + g.rows.map(function(r, ri){ return '<div class="l4gr one"><span>' + esc(r) + '</span><button type="button" class="l4tk" data-g="0" data-c="0" data-r="' + ri + '"></button></div>'; }).join("") + '</div></div>'; }
     else { var q = ex.qs[w.n - 1]; wid = '<div class="l4q"><div class="l4r fx" data-k="0"><b class="qn">' + w.n + '</b><span class="qt">' + esc(q.l) + (q.s ? ' <strong>' + esc(q.s) + '</strong>' : "") + '</span><div class="l4t">' + (q.nt ? '' : '<button type="button" class="l4ok">✔ correct</button>') + '<input class="a l4in" type="text" placeholder="' + (q.nt ? 'write your answer' : 'or write the correction') + '" spellcheck="false" autocomplete="off" autocapitalize="off"></div></div></div>'; }
-    page(top("Exit") + stgBar(4) + '<div class="fxtag">🛠 WIN IT BACK · ' + (L.dn - L.dq.length) + ' of ' + L.dn + ' won · accuracy ' + Math.round(l4Run() * 100) + '% of 80%</div><div class="drb"><i style="width:' + pct + '%"></i></div>'
-      + '<div class="ins fixc"><span class="ii">🎯</span><div><small>THE SENTENCE YOU NEEDED</small><strong>“' + esc((w.ev || "").replace(/ \.\.\. /g, " … ")) + '”</strong></div></div>'
-      + l4Player(ex) + '<div class="l4ans" id="l4a"><div class="l4qh">' + esc(ex.id + " · " + ex.name) + '</div>' + wid + '</div><div class="l4bar"><span class="wrm" id="l4m"></span><button class="go" id="l4ck">Check</button></div>');
+    var pct = Math.round(100 * L.pi / L.pq.length);
+    page(top("Exit") + stgBar(4) + '<div class="fxtag">🛠 WIN IT BACK · round ' + (L.rounds || 1) + ' · ' + (L.pi + 1) + ' of ' + L.pq.length + '</div><div class="drb"><i style="width:' + pct + '%"></i></div>'
+      + '<div class="ins fixc"><span class="ii">🎯</span><div><small>NO HINTS THIS TIME</small><strong>Listen once and answer from what you hear. Your answer is locked when you press the button. The full review comes at the end of the round.</strong></div></div>'
+      + l4Player(ex) + '<div class="l4ans" id="l4a"><div class="l4qh">' + esc(ex.id + " · " + ex.name) + '</div>' + wid + '</div><div class="l4bar"><span class="wrm" id="l4m"></span><button class="go" id="l4ck">Lock my answer</button></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; qWire(el("l4a"), {kind: ex.kind});
-    l4Wire(ex, 1, "d" + ex.id + ":" + w.n + ":" + (L.rounds || 1), "This step: one fresh play of the recording. Listen to the end. Every new step and every new fix round gives you a new play.");
+    l4Wire(ex, 1, "d" + ex.id + ":" + w.n + ":" + (L.rounds || 1), "One fresh play for this question. Listen to the end. Every new round gives you a new play.");
     el("l4ck").onclick = function(){
-      var root = el("l4a"), ok = false, ans;
-      if (ex.kind === "tf"){ var s = root.querySelector(".l4tf[data-sel='1']"); ok = !!s && s.getAttribute("data-v") === ex.qs[w.n - 1].a; }
-      else if (ex.kind === "grid"){ var s2 = root.querySelector(".l4tk.on"); ok = !!s2 && +s2.getAttribute("data-r") === ex.groups[gi].ans[ci]; }
-      else { ans = qRead(root, {kind: "fix", qs: [ex.qs[w.n - 1]]}); ok = qMark({kind: "fix", qs: [ex.qs[w.n - 1]]}, ans)[0].ok; }
-      L.try[key] = (L.try[key] || 0) + 1; var m = el("l4m");
-      setTimeout(function(){ flushLog("lis", {first: L.first, fr: L.rounds || 1, dtry: Object.keys(L.try).reduce(function(a, k){ return a + L.try[k]; }, 0), now: Math.round(l4Run() * 100)}); }, 0);
-      if (ok){ m.className = "wrm gd"; m.textContent = "✔ Yes! That is the one."; L.dq.splice(L.di, 1); L.dfix++; el("l4ck").textContent = "Next →"; el("l4ck").onclick = l4DrillQ; [].forEach.call(root.querySelectorAll("button,input"), function(x){ x.disabled = true; }); }
-      else if (L.try[key] >= 2){ m.className = "wrm bd"; m.innerHTML = "Not yet. The answer is <b>" + esc(w.right) + "</b>. Read the sentence again, then it will come back to you."; el("l4ck").textContent = "Next →"; L.di++; [].forEach.call(root.querySelectorAll("button,input"), function(x){ x.disabled = true; }); el("l4ck").onclick = l4DrillQ; }
-      else { m.className = "wrm bd"; m.textContent = "✖ Not quite. Read the sentence above once more and try again."; }
+      var root = el("l4a"), ok = false, ans, said = "";
+      if (ex.kind === "tf"){ var s = root.querySelector(".l4tf[data-sel='1']"); if (!s){ el("l4m").className = "wrm bd"; el("l4m").textContent = "Choose an answer first."; return; } ok = s.getAttribute("data-v") === ex.qs[w.n - 1].a; said = s.getAttribute("data-v") === "T" ? "True" : "False"; }
+      else if (ex.kind === "grid"){ var s2 = root.querySelector(".l4tk.on"); if (!s2){ el("l4m").className = "wrm bd"; el("l4m").textContent = "Tick an item first."; return; } ok = +s2.getAttribute("data-r") === ex.groups[gi].ans[ci]; said = ex.groups[gi].rows[+s2.getAttribute("data-r")]; }
+      else { ans = qRead(root, {kind: "fix", qs: [ex.qs[w.n - 1]]}); if (!l4Effort(ans, "l4m")) return; var mk = qMark({kind: "fix", qs: [ex.qs[w.n - 1]]}, ans)[0]; ok = mk.ok; said = mk.said; }
+      stopAudio(); L = S.L; L.pr.push({it: it, ok: ok, said: said}); L.tries = (L.tries || 0) + 1; L.try[ex.id + ":" + w.n] = (L.try[ex.id + ":" + w.n] || 0) + 1;
+      var m = el("l4m"); m.className = "wrm"; m.textContent = "🔒 Answer locked."; [].forEach.call(root.querySelectorAll("button,input"), function(x){ x.disabled = true; });
+      var b = el("l4ck"); b.textContent = L.pi + 1 < L.pq.length ? "Next →" : "Finish the round →"; b.onclick = function(){ L.pi++; l4DrillQ(); };
     };
   }
+  /* end of a round: one full review of what is still wrong, with the sentence from the script */
+  function l4RoundEnd(){
+    var L = S.L, won = L.pr.filter(function(r){ return r.ok; }), lost = L.pr.filter(function(r){ return !r.ok; });
+    L.dfix = (L.dfix || 0) + won.length;
+    L.dq = L.dq.filter(function(it){ return !won.some(function(r){ return r.it === it; }); });
+    var pct = Math.round(l4Run() * 100), t = tier(pct), left = L.dq.length, ok = pct >= L4MIN, rnd = L.rounds || 1;
+    flushLog("lis", {first: L.first, fr: rnd, dtry: L.tries || 0, now: pct});
+    var h = lost.map(function(r){ var w = r.it.w;
+      return '<div class="l4rv b"><div class="l4rh"><b class="qn">' + w.n + '</b><span>' + esc(r.it.ex.id + " · " + w.text) + '</span><i>✖</i></div>'
+        + '<div class="l4ro"><small>You wrote</small><s>' + esc(r.said || "(empty)") + '</s><small>Correct</small><strong>' + esc(w.right) + '</strong></div>'
+        + (w.ev ? '<div class="l4evb">🎧 <em>“' + esc(w.ev.replace(/ \.\.\. /g, " … ")) + '”</em></div>' : "") + '</div>'; }).join("");
+    page(top("Exit") + stgBar(4) + '<div class="fbk"><small class="wu">ROUND ' + rnd + ' · REVIEW</small><div class="ring" style="--c:' + t[2] + ';--a:' + Math.round(3.6 * pct) + 'deg"><div><b>' + pct + '%</b><small>listening score now</small></div></div><div class="verd" style="color:' + t[2] + '">' + t[1] + ' ' + t[0] + '</div></div>'
+      + '<p class="sub" style="text-align:center;margin:6px 0 12px">' + won.length + ' won back this round · ' + left + ' still to win</p>'
+      + (lost.length ? '<div class="l4rvl">' + h + '</div>' : '')
+      + (!left ? '' : ok ? '<div class="card" style="margin:12px 0 4px;text-align:center"><b>You reached ' + L4MIN + '%!</b> You can move on, or keep going to 100%.</div>' : '<div class="card warn" style="margin:12px 0 4px;text-align:center"><b>You need ' + L4MIN + '% to move on.</b> You are at ' + pct + '%. Read every mistake above. The next round only asks what is still wrong.</div>')
+      + (!left ? '<button class="go" id="l4nx" style="margin-top:14px">Continue →</button>' : '<button class="go fixgo" id="l4mo" style="margin-top:14px;font-size:19px">' + (ok ? '🏆 Reach 100%: win the last ' + left + ' back →' : '🛠 Next round: win back the ' + left + ' left →') + '</button>' + (ok ? '<button class="pill" id="l4fin" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button>' : '')));
+    el("cb").onclick = hub;
+    if (el("l4mo")) el("l4mo").onclick = function(){ L.rounds = rnd + 1; l4Pass(); };
+    if (el("l4fin")) el("l4fin").onclick = listeningDone;
+    if (el("l4nx")) el("l4nx").onclick = l4DrillEnd;
+  }
   function l4DrillEnd(){
-    page(top("Exit") + '<div class="brk"><div class="bk good"><div class="be">🏆</div><h1 class="bh">' + (S.L.dq.length ? "80% reached!" : "100%! Perfect!") + '</h1><p class="sub">' + (S.L.dq.length ? "You won back enough mistakes to pass this listening. " + S.L.dq.length + " left: finish them for a perfect score." : "You fixed every mistake from the exam. That is exactly how listening scores go up.") + '</p></div>' + (S.L.dq.length ? '<button class="go fixgo" id="l4mo" style="margin-top:20px;font-size:19px">🏆 Reach 100%: win the last ' + S.L.dq.length + ' back →</button><button class="pill" id="l4nx" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button>' : '<button class="go" id="l4nx" style="margin-top:20px">Finish the listening →</button>') + '</div>');
-    el("cb").onclick = hub; el("l4nx").onclick = listeningDone; if (el("l4mo")) el("l4mo").onclick = function(){ S.L.full = true; l4DrillQ(); };
+    page(top("Exit") + '<div class="brk"><div class="bk good"><div class="be">🏆</div><h1 class="bh">100%! Perfect!</h1><p class="sub">You fixed every mistake from the exam. That is exactly how listening scores go up.</p></div><button class="go" id="l4nx" style="margin-top:20px">Finish the listening →</button></div>');
+    el("cb").onclick = hub; el("l4nx").onclick = listeningDone;
   }
   var BRK = 600;
   function mmss(t){ t = Math.max(0, Math.floor(t)); return ("0" + Math.floor(t / 60)).slice(-2) + ":" + ("0" + t % 60).slice(-2); }
@@ -1166,7 +1190,7 @@
   function writingDone(){ if (!floorOk("write", wrFeedback)) return; clearDrafts("write"); S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
 
   /* ---------- supervision: active time per stage, minimum floors ---------- */
-  var FLOOR = {lis: 1800, read: 0, write: 1200}, SHOWF = {lis: 3000}, SNAME = {lis: "listening", read: "reading", write: "writing"};
+  var FLOOR = {lis: 1800, read: 0, write: 1200}, SHOWF = {}, SNAME = {lis: "listening", read: "reading", write: "writing"};
   function trk(){
     if (S.trkOn) return; S.trkOn = true; S.tm = {}; S.srv = {}; S.act = Date.now(); S.pend = {};
     ["mousemove", "keydown", "mousedown", "touchstart", "scroll"].forEach(function(ev){ document.addEventListener(ev, function(){ S.act = Date.now(); }, true); });
@@ -1236,7 +1260,7 @@
   function prog4Key(){ return "nnt_clsprog4_" + ((O && O.name) || "") + "_" + S.unit; }
   function saveProg4(){
     if (S.dict || !S.L || !S.P || S.cur !== "lis") return;
-    var L2 = {}; Object.keys(S.L).forEach(function(k){ if (["dq", "di", "dn", "dfix", "try"].indexOf(k) < 0) L2[k] = S.L[k]; });
+    var L2 = {}; Object.keys(S.L).forEach(function(k){ if (["dq", "di", "dn", "dfix", "try", "pq", "pi", "pr", "tries"].indexOf(k) < 0) L2[k] = S.L[k]; });
     var snap = {v: 4, L: L2, res: S.res || {}, pl: S.pl || {}, fix: (S.fix || []).map(function(e){ return e.id; }), at: Date.now()};
     try { localStorage.setItem(prog4Key(), JSON.stringify(snap)); } catch (e) {}
     flushLog("lis", {prog4: snap});
