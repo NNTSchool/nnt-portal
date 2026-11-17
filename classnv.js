@@ -825,7 +825,7 @@
     Promise.resolve(R("nv_stage", {tok: O.tok, u: S.unit})).then(function(r){ return r && r.track === "ml" ? "ml" : "ie"; }, function(){ return "ie"; }).then(function(tr){
       return getFile("c" + S.unit + (tr === "ml" ? "_readm" : "_read"), (tr === "ml" ? "readm" : "read") + S.unit + ".json");
     }).then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }).then(function(D){
-      return Promise.all([syncP(), fetch(O.base + "readx.json", {cache: "no-store"}).then(function(r){ return r.json(); }).catch(function(){ return {}; })]).then(function(z){ D.x = (z[1] && z[1][S.unit]) || []; return D; });
+      return Promise.all([syncP(), fetch(O.base + "readx.json", {cache: "no-store"}).then(function(r){ return r.json(); }).catch(function(){ return {}; }), fetch(O.base + "readp.json", {cache: "no-store"}).then(function(r){ return r.json(); }).catch(function(){ return {}; })]).then(function(z){ D.x = (z[1] && z[1][S.unit]) || []; var pp = z[2] && z[2][D.parts ? "ml" : "ie"]; D.p = (pp && pp[S.unit]) || []; if (D.p.length) D.x = []; return D; });
     }).then(function(D){
       S.R = {D: D, ans: {}, first: null, second: null, t0: Date.now(), phase: 0, step: "test", mist: 0};
       var dr = loadDraft("read"), st0 = "test"; if (dr && dr.x && Date.now() - (dr.at || 0) < 12 * 3600 * 1000){ if (dr.x.t0) S.R.t0 = dr.x.t0; S.R.ans = dr.x.ans || {}; st0 = dr.x.step || "test"; S.R.mist = dr.x.mist || 0; S.R.rounds = dr.x.rr || 0; }
@@ -960,11 +960,12 @@
   function rdVocab(){
     var D = S.R.D; rdStep("vocab");
     function card(x, c){ return '<div class="vc ' + c + '"><b>' + esc(x[0]) + '</b><span>' + esc(x[1]) + '</span><em>' + esc(x[2]) + '</em></div>'; }
-    var xs = D.x || [];
+    var xs = D.x || [], ps = D.p || [];
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · study</h2>' + rdSteps(2) + '</div>'
-      + '<p class="sub" style="text-align:left;margin:4px 0">Learn every word and chunk below, the ones from the passage <b>and</b> the extra ones. The quiz has 20 questions and you need <b>18</b>.</p>'
+      + '<p class="sub" style="text-align:left;margin:4px 0">Learn every word and chunk below, the ones from the book <b>and</b> the new ones. The quiz has 20 questions and you need <b>18</b>.</p>'
       + '<div class="vh">Vocabulary from your Unit ' + S.unit + ' book</div><div class="vgrid">' + D.v.map(function(x){ return card(x, ""); }).join("") + '</div>'
       + '<div class="vh">Unit ' + S.unit + ' power chunks' + (D.topic ? ' · ' + esc(D.topic) : '') + '</div><div class="vgrid">' + D.c.map(function(x){ return card(x, "c"); }).join("") + '</div>'
+      + (ps.length ? '<div class="vh">⭐ New words and chunks from your passage · not in the book</div><div class="vgrid">' + ps.map(function(x){ return card(x, "c"); }).join("") + '</div>' : "")
       + (xs.length ? '<div class="vh">⭐ Extra words, collocations and chunks · new for you</div><div class="vgrid">' + xs.map(function(x){ return card(x, "c"); }).join("") + '</div>' : "")
       + '<div style="text-align:center;margin:22px 0 10px"><button class="go" id="rrt">I am ready: start the 20-question quiz →</button></div>');
     wide(false); el("cb").onclick = hub; el("rrt").onclick = function(){ rdQuiz(); };
@@ -972,8 +973,8 @@
   function shuf(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function rdQuiz(){
     var R_ = S.R, D = R_.D; rdStep("quiz");
-    var bk = D.v.concat(D.c), xs = D.x || [], pool = bk.concat(xs);
-    var nx = Math.min(xs.length, 11), pick = shuf(xs).slice(0, nx).concat(shuf(bk).slice(0, 20 - nx));
+    var bk = D.v.concat(D.c), ps = D.p || [], xs = ps.length ? ps : (D.x || []), pool = bk.concat(xs);
+    var nx = Math.min(xs.length, ps.length ? 10 : 11), pick = shuf(xs).slice(0, nx).concat(shuf(bk).slice(0, 20 - nx));
     if (pick.length < 20) pick = pick.concat(shuf(pool.filter(function(p){ return pick.indexOf(p) < 0; })).slice(0, 20 - pick.length));
     pick = shuf(pick);
     var Q = pick.map(function(it, i){
