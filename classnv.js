@@ -1089,6 +1089,7 @@
   }
   function wrCheck(){
     var W = S.W, r = W.FB.analyseEssay(W.text, W.tr, W.ideas); ["good", "better"].forEach(function(k){ if (r[k]) r[k] = r[k].map(function(x){ return wrSan(W.tr, x); }); });
+    if (!r.m75) r.m75 = {ta: 0, cc: 0, gr: 0, lr: 0, total: 0};  /* junk or empty text returns early without the 75-mark scores */
     W.att.push({W: r, sc: wrScore(r, W.tr), text: W.text}); W.mode = "fb"; wrFeedback();
   }
   function gvP(ttl, emo, G){
@@ -1099,6 +1100,9 @@
     else h += '<ul>' + G.fix.map(function(f){ return '<li><b>' + esc(f.cat) + (f.count ? ' (' + f.count + ')' : '') + '</b><br><span class="wbd">' + esc(f.bad) + '</span> → <span class="wfx">' + esc(f.fix) + '</span>' + (f.extra ? '<br><span class="wbd">' + esc(f.extra.bad) + '</span> → <span class="wfx">' + esc(f.extra.fix) + '</span>' : '') + '<small>' + esc(f.why) + '</small></li>'; }).join("") + '</ul>';
     return h + '<div class="wgh">➡️ Next time</div><p>' + esc(G.next) + '</p></div>';
   }
+  function wrNeed(Wd){ return Wd.tr === "ml" ? {n: 51, show: "51 / 75"} : {n: 6.5, show: "6.5 / 9"}; }
+  function wrBest(A){ var b = 0; A.forEach(function(x){ if (x.sc > b) b = x.sc; }); return b; }
+  function wrCanFinish(){ var Wd = S.W, A = Wd.att; if (O.nofloor) return A.length >= 1; return A.length >= 2 && wrBest(A) >= wrNeed(Wd).n; }
   function wrDetail(a){
     var W = a.W, NEED = S.W.need, h = "", nt = [];
     if (W.junk) nt.push("This does not look like real English writing, so the mark is 0 and there are no corrections. Write real sentences about the topic."); else if (W.empty) nt.push("You wrote nothing, so the mark is 0."); else if (W.tooShort) nt.push("Only " + W.n + " words. Under 10 words cannot be marked, so the mark is 0."); else if (W.n < NEED) nt.push(W.n + " of " + NEED + " words, so the mark was lowered.");
@@ -1113,19 +1117,20 @@
     var Wd = S.W, A = Wd.att, a = A[A.length - 1], W = a.W, ml = Wd.tr === "ml", n = W.n, enough = n >= Wd.need;
     var big = ml ? W.m75.total + '<small> / 75</small>' : W.total + '<small> / 9</small>';
     var crit = ml ? [["TA", W.m75.ta, 19], ["CC", W.m75.cc, 19], ["GR", W.m75.gr, 19], ["LR", W.m75.lr, 18]] : [["TA", W.ta, 9], ["CC", W.cc, 9], ["GR", W.gr, 9], ["LR", W.lr, 9]];
-    var prev = A.length > 1 ? A[A.length - 2] : null, d = prev ? a.sc - prev.sc : 0;
+    var prev = A.length > 1 ? A[A.length - 2] : null, d = prev ? a.sc - prev.sc : 0, nd = wrNeed(Wd), fin = wrCanFinish();
     var hist = A.map(function(x, i){ var dd = i ? x.sc - A[i - 1].sc : 0; return '<span class="wat ' + (i && dd < 0 ? "dw" : "up") + '"><i>' + (i ? "Rewrite " + i : "First try") + '</i><b>' + x.sc + '</b>' + (i ? '<em>' + (dd >= 0 ? "▲ +" + dd : "▼ " + dd) + '</em>' : "") + '</span>'; }).join('<span class="war">→</span>');
     page(top("← Unit") + '<div class="rdh"><h2>✍️ Writing · feedback</h2>' + wrSteps() + hlTip() + '</div>'
       + '<div class="wsc"><div class="wbg">' + (enough ? big : "–") + '</div>' + (enough ? '<div class="wcr">' + crit.map(function(c){ return '<span>' + c[0] + ' <b>' + c[1] + '</b> / ' + c[2] + '</span>'; }).join("") + '</div><div class="sub" style="margin:2px 0 8px">TA = task · CC = organisation · GR = grammar · LR = vocabulary</div>' : '<div class="sub" style="color:#b2334f;font-weight:700">Write at least ' + Wd.need + ' words to get a mark.</div>')
       + '<div class="wah">' + hist + '</div>' + (prev ? '<p class="sub" style="margin:8px 0 0">' + (d > 0 ? "🔥 You improved by " + d + ". Keep going!" : d === 0 ? "Same mark. Fix the red words below to move up." : "A little lower this time. Check what changed in the red words.") + '</p>' : '<p class="sub" style="margin:8px 0 0">Now fix the mistakes and rewrite. Each rewrite should raise your mark.</p>') + '</div>'
       + '<div class="hlz" id="rdp" style="max-width:1100px;margin:0 auto">' + wrDetail(a) + '</div>'
-      + '<div class="rbar rbfix"><button class="go fixgo" id="wrw">↻ Rewrite my essay</button><button class="pill" id="wfin"' + (A.length < 2 ? ' disabled style="opacity:.5;cursor:not-allowed"' : '') + '>Finish writing ✓</button><small>' + (A.length < 2 ? "Finish unlocks after one rewrite." : "You can finish, or rewrite again to push your mark higher.") + '</small></div>');
+      + '<div class="rbar rbfix"><button class="go fixgo" id="wrw">↻ Rewrite my essay</button><button class="pill" id="wfin"' + (!fin ? ' disabled style="opacity:.5;cursor:not-allowed"' : '') + '>Finish writing ✓</button><small>' + (A.length < 2 ? "Finish unlocks after one rewrite and a mark of " + nd.show + "." : !fin ? "You need " + nd.show + " to finish. Your best so far: " + wrBest(A) + ". Rewrite again." : "You reached " + nd.show + ". You can finish, or rewrite again to push your mark higher.") + '</small></div>');
     wide(false); el("cb").onclick = hub;
-    el("wrw").onclick = wrRewrite; el("wfin").onclick = function(){ if (S.W.att.length >= 2) startDrill(); };
+    el("wrw").onclick = wrRewrite; el("wfin").onclick = function(){ if (wrCanFinish()) startDrill(); };
   }
   function wrRewrite(){
     var Wd = S.W, a = Wd.att[Wd.att.length - 1]; Wd.mode = "rw";
-    wrEditor('<h1 class="rpt" style="font-size:26px">Your feedback</h1><p class="rpi">Use it while you rewrite. Fix every red word, then press Check.</p>' + wrDetail(a), a.text);
+    var P = Wd.P, need = wrNeed(Wd);
+    wrEditor('<h1 class="rpt" style="font-size:30px">' + esc(P.title) + '</h1><div class="qgh"><span class="qi">📝</span><div><b>' + esc(P.q) + '</b><small>Your essay is on the right. Improve it, then press Check. You need <b>' + need.show + '</b> to finish.</small></div></div>', a.text);
   }
   function writingDone(){ if (!floorOk("write", wrFeedback)) return; clearDrafts("write"); S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
 
