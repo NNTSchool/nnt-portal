@@ -762,7 +762,7 @@
       + '<div class="ins fixc"><span class="ii">🎯</span><div><small>THE SENTENCE YOU NEEDED</small><strong>“' + esc((w.ev || "").replace(/ \.\.\. /g, " … ")) + '”</strong></div></div>'
       + l4Player(ex) + '<div class="l4ans" id="l4a"><div class="l4qh">' + esc(ex.id + " · " + ex.name) + '</div>' + wid + '</div><div class="l4bar"><span class="wrm" id="l4m"></span><button class="go" id="l4ck">Check</button></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; qWire(el("l4a"), {kind: ex.kind});
-    l4Wire(ex, 1, "d" + ex.id + ":" + (L.rounds || 1), "Fix round " + (L.rounds || 1) + ": one fresh play of this recording. Listen to the end. It resets every new fix round.");
+    l4Wire(ex, 1, "d" + ex.id + ":" + w.n + ":" + (L.rounds || 1), "This step: one fresh play of the recording. Listen to the end. Every new step and every new fix round gives you a new play.");
     el("l4ck").onclick = function(){
       var root = el("l4a"), ok = false, ans;
       if (ex.kind === "tf"){ var s = root.querySelector(".l4tf[data-sel='1']"); ok = !!s && s.getAttribute("data-v") === ex.qs[w.n - 1].a; }
