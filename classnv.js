@@ -701,7 +701,7 @@
     var ta = el("l4n"), nx = el("l4nx"), c = el("l4wc");
     function up(){ L.notes[ex.id] = ta.value; var w = wc(ta.value); c.innerHTML = '<b>' + w + '</b> / ' + ex.min + ' words at least'; nx.disabled = w < ex.min && !O.nofloor; c.classList.toggle("ok", w >= ex.min); }
     ta.oninput = up; up(); ta.focus();
-    nx.onclick = function(){ stopAudio(); L.ei++; if (L.ei < S.P.exercises.length) l4Notes(); else { L.stage = 2; L.ei = 0; upG(l4Answer); } };
+    nx.onclick = function(){ stopAudio(); L.ei++; if (L.ei < S.P.exercises.length) l4Notes(); else { L.stage = 2; L.ei = 0; l4Answer(); } };
   }
   function l4Answer(){
     var ex = S.P.exercises[S.L.ei], L = S.L;
@@ -716,7 +716,7 @@
       el("l4ck").remove(); el("l4a").classList.add("lk"); [].forEach.call(el("l4a").querySelectorAll("button,input"), function(x){ x.disabled = true; });
       el("cout").innerHTML = '<div class="l4sc" style="--c:' + t[2] + '"><b>' + g + ' / ' + rows.length + '</b><span>' + t[1] + ' ' + (pct >= 85 ? "Your notes are strong." : pct >= 55 ? "Decent notes. Next time catch more of the small details." : "Your notes missed a lot. Write more key words, numbers and names while you listen.") + '</span><small>The answers stay hidden. You will meet these recordings again in the exam.</small></div>'
         + '<button class="go" id="l4nx" style="margin-top:12px">' + (L.ei + 1 < S.P.exercises.length ? "Next recording →" : "Go to the exam →") + '</button>';
-      el("l4nx").onclick = function(){ L.ei++; if (L.ei < S.P.exercises.length) l4Answer(); else { L.stage = 3; L.ei = 0; upG(l4Exam); } };
+      el("l4nx").onclick = function(){ L.ei++; if (L.ei < S.P.exercises.length) l4Answer(); else { L.stage = 3; L.ei = 0; l4Exam(); } };
       el("cout").scrollIntoView && el("cout").scrollIntoView({behavior: "smooth"});
     };
   }
@@ -730,7 +730,7 @@
       stopAudio(); var ans = qRead(el("l4a"), ex); if (!l4Effort(ans)) return;
       var rows = qMark(ex, ans), g = rows.filter(function(r){ return r.ok; }).length;
       L.a3[ex.id] = {ans: ans, rows: rows, good: g, n: rows.length}; S.res[ex.id] = {good: g, n: rows.length, miss: rows.filter(function(r){ return !r.ok; }).map(function(r){ return r.n - 1; })};
-      L.ei++; if (L.ei < S.P.exercises.length){ l4ExamGap(); } else { L.stage = 4; upG(l4Analysis); }
+      L.ei++; if (L.ei < S.P.exercises.length){ l4ExamGap(); } else { L.stage = 4; l4Analysis(); }
     };
   }
   function l4ExamGap(){
@@ -772,7 +772,6 @@
   function l4Pct(){ var g = 0, n = 0; S.P.exercises.forEach(function(e){ var r = S.L.a3[e.id]; if (r){ g += r.good; n += r.n; } }); return n ? Math.round(100 * g / n) : 100; }
   function l4Run(){ var g = 0, n = 0; S.P.exercises.forEach(function(e){ var r = S.L.a3[e.id]; if (r){ g += r.good; n += r.n; } }); return n ? (g + (S.L.dfix || 0)) / n : 1; }
   function l4Drill(){
-    if (!S.L.drill && S.upd && updNow()) return;
     var L = S.L, items = [];
     S.P.exercises.forEach(function(e){ L.a3[e.id].rows.forEach(function(w){ if (!w.ok) items.push({ex: e, w: w}); }); });
     L.drill = true; L.dq = items; L.di = 0; L.dn = items.length; L.dfix = 0; L.try = {}; L.rounds = 1; if (L.first == null) L.first = l4Pct(); saveProg4(); flushLog("lis", {first: L.first, fr: 1, dtry: 0, now: Math.round(l4Run() * 100)}); l4DrillQ();
@@ -1359,7 +1358,7 @@
   /* ---------- automatic update: a new version is installed when the current step is finished ---------- */
   var MYV = (function(){ try { var ss = document.getElementsByTagName("script"); for (var i = 0; i < ss.length; i++){ var m = /classnv\.js\?v=(\d+)/.exec(ss[i].getAttribute("src") || ""); if (m) return +m[1]; } } catch (e) {} return 0; })();
   function updNow(){
-    if (!S.upd) return false;
+    if (!S.upd || S.unit !== 1) return false;   /* the automatic update is for Unit 1 only */
     try { var g = sessionStorage.getItem("nvu"); if (g && g.split(":")[0] === String(S.upd) && Date.now() - +g.split(":")[1] < 600000) return false; sessionStorage.setItem("nvu", S.upd + ":" + Date.now()); } catch (e) {}
     try { if (S.cur === "lis"){ if (S.dict) saveProg(); else saveProg4(); } } catch (e) {}
     try { stopAudio(); } catch (e) {}
@@ -1370,7 +1369,7 @@
   }
   function upG(fn){ if (!updNow()) fn(); }
   function updPoll(){
-    if (!MYV || S.upd) return;
+    if (!MYV || S.upd || S.unit !== 1) return;
     fetch("ver.json?t=" + Date.now(), {cache: "no-store"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
       if (!j || !(j.v > MYV) || S.upd) return; S.upd = j.v;
       var b = document.createElement("div"); b.id = "nvupd"; b.style.cssText = "position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:9998;background:#10204a;color:#fff;padding:9px 16px;border-radius:999px;font:700 13px system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.3);max-width:92vw;text-align:center";
