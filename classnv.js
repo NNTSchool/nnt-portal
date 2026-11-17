@@ -363,6 +363,7 @@
       + '<div class="fch">' + card("hl", "🎧", "Listening drilling", (S.lisDone && S.lisDone[S.unit]) ? "Done ✔ · you can redo it" : "Start here", "about 60 min", true, 1) + link()
       + card("hr", "📖", "Reading drilling", (S.rdDone && S.rdDone[S.unit]) ? "Done ✔ · you can redo it" : "Passage + questions", "about 30 min", RW[S.unit] && opn("read"), 2) + link()
       + card("hw", "✍️", "Writing drilling", (S.wrDone && S.wrDone[S.unit]) ? "Done ✔ · you can redo it" : "Write · feedback · rewrite", "about 40 min", RW[S.unit] && opn("write"), 3) + '</div><p class="sub" id="hlk" style="text-align:center;margin-top:14px;min-height:22px"></p>');
+    if (S.lisDone && S.lisDone[S.unit] && S.rdDone && S.rdDone[S.unit] && S.wrDone && S.wrDone[S.unit]){ var kb = document.createElement("div"); kb.style.cssText = "text-align:center;margin:18px 0 6px"; kb.innerHTML = '<button class="go" id="hkey" style="font-size:20px;padding:16px 28px">🔑 Get my class key</button>'; el("hlk").parentNode.insertBefore(kb, el("hlk")); el("hkey").onclick = function(){ unitDone(); }; }
     el("cb").onclick = path; el("hl").onclick = function(){ goFS(); (S.unit > 1 ? startPart4 : startPart)(); };
     el("hr").onclick = RW[S.unit] && opn("read") ? function(){ goFS(); startReading(); } : function(){ lockMsg(this, RW[S.unit] ? "🔒 Finish the listening drilling first." : ""); };
     el("hw").onclick = RW[S.unit] && opn("write") ? function(){ goFS(); startWriting(); } : function(){ lockMsg(this, RW[S.unit] ? "🔒 Finish the reading drilling first." : ""); };
@@ -1249,22 +1250,36 @@
     W.att.forEach(function(a){
       var text = String(a.text || ""), iss = (a.W && a.W.iss) || [], sents = [], re = /[^.!?\n]+[.!?]*/g, m, by = {};
       while ((m = re.exec(text))) sents.push({s: m.index, e: m.index + m[0].length});
-      iss.forEach(function(i){ if (i.t !== "err" || i.nd || !i.alts || !i.alts.length) return; for (var j = 0; j < sents.length; j++){ if (i.s >= sents[j].s && i.e <= sents[j].e){ (by[j] = by[j] || []).push(i); break; } } });
+      iss.forEach(function(i){ if (i.t !== "err") return; if (!i.alts || !i.alts.length){ var fx0 = String(i.fix || ""); if (!i.nd || !fx0 || fx0.charAt(0) === "(") return; i = {s: i.s, e: i.e, t: i.t, fix: fx0, why: i.why, nd: true, alts: fx0.split(/\s*\/\s*/).filter(Boolean)}; } else if (i.nd) return; for (var j = 0; j < sents.length; j++){ if (i.s >= sents[j].s && i.e <= sents[j].e){ (by[j] = by[j] || []).push(i); break; } } });
       Object.keys(by).forEach(function(j){
         var g = by[j].sort(function(x, y){ return x.s - y.s; }), sd = sents[j], base = text.slice(sd.s, sd.e), key = base.replace(/\s+/g, " ").trim().toLowerCase(); if (seen[key]) return; seen[key] = 1;
         function build(pick){ var o = base; g.slice().reverse().forEach(function(i, k){ var idx = g.length - 1 - k, sp = text.slice(i.s, i.e), ld = /^\s*/.exec(sp)[0], tr = /\s*$/.exec(sp)[0]; o = o.slice(0, i.s - sd.s) + ld + i.alts[pick[idx] || 0] + tr + o.slice(i.e - sd.s); }); return o.replace(/\s+/g, " ").trim(); }
         var combos = [[]]; g.forEach(function(i){ var nx = []; combos.forEach(function(c){ i.alts.forEach(function(x, xi){ if (nx.length < 24) nx.push(c.concat([xi])); }); }); combos = nx; });
-        var all = g.map(function(i){ var bad = text.slice(i.s, i.e).trim(), info = null; ["gvG", "gvV"].forEach(function(gk){ var G = a.W[gk]; if (G && G.fix) G.fix.forEach(function(f){ if (!info && (f.bad && f.bad.toLowerCase() === bad.toLowerCase() || f.extra && f.extra.bad && f.extra.bad.toLowerCase() === bad.toLowerCase())) info = f; }); }); return {bad: bad, fix: i.alts.join(" / "), cat: info ? info.cat : "Correct form", why: info ? info.why : (i.why || "")}; });
+        var all = g.map(function(i){ var bad = text.slice(i.s, i.e).trim(), info = null; ["gvG", "gvV"].forEach(function(gk){ var G = a.W[gk]; if (G && G.fix) G.fix.forEach(function(f){ if (!info && (f.bad && f.bad.toLowerCase() === bad.toLowerCase() || f.extra && f.extra.bad && f.extra.bad.toLowerCase() === bad.toLowerCase())) info = f; }); }); return {bad: bad, fix: i.alts.join(" / "), nd: !!i.nd, cat: info ? info.cat : "Correct form", why: info ? info.why : (i.why || "")}; });
         out.push({sn: base.replace(/\s+/g, " ").trim(), bad: all[0].bad, fix: all[0].fix, good: build([]), combos: combos.map(function(c){ return drNorm(build(c)); }), cat: all[0].cat, why: all[0].why, fails: 0, ok: false, all: all, nm: all.length});
       });
     });
-    return out.slice(0, 10);
+    return out.slice(0, 24);
   }
   function drExp(it){ return (it.all || [it]).map(function(o){ return '<div class="drl"><b>' + esc(o.cat) + '</b>' + (o.why ? ' · ' + esc(o.why) : '') + '<br><span class="wbd">' + esc(o.bad) + '</span> → <span class="wfx">' + esc(o.fix) + '</span></div>'; }).join(""); }
   function drNorm(x){ return String(x).toLowerCase().replace(/[“”"']/g, "").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim(); }
+  function drLev(x, y){ var m = x.length, n = y.length, d = [], i, j; if (Math.abs(m - n) > 2) return 9; for (i = 0; i <= m; i++){ d[i] = [i]; } for (j = 1; j <= n; j++) d[0][j] = j;
+    for (i = 1; i <= m; i++) for (j = 1; j <= n; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (x.charAt(i - 1) === y.charAt(j - 1) ? 0 : 1)); return d[m][n]; }
+  /* a paraphrase is fine when the mistake is gone, the engine finds no error, and the sentence is still the student's own sentence */
+  function drFree(it, ans){
+    var a = drNorm(ans), F = S.FB, all = it.all || [it]; if (!F || !F.errsOf || F.errsOf(String(ans)) !== 0) return false;
+    var aw = a.split(" ").filter(Boolean), ow = drNorm(it.sn).split(" ").filter(Boolean), gw = drNorm(it.good).split(" ").filter(Boolean);
+    var gone = all.every(function(o){ var b = drNorm(o.bad); return b && (" " + a + " ").indexOf(" " + b + " ") < 0; }); if (!gone) return false;
+    var set = {}; aw.forEach(function(w){ set[w] = 1; }); var common = ow.filter(function(w){ return set[w]; }).length;
+    if (common / Math.max(ow.length, 1) < 0.55) return false;
+    var near = all.every(function(o){ return String(o.fix).split(/\s*\/\s*/).some(function(x){ return drNorm(x).split(" ").some(function(fw){ return fw.length > 2 && aw.some(function(w){ return drLev(fw, w) <= 1; }); }); }); });
+    if (near) return Math.abs(aw.length - gw.length) <= 3;
+    return !all.some(function(o){ return o.nd; }) && aw.length === gw.length;
+  }
   function drJudge(it, ans){
     var a = drNorm(ans), g = drNorm(it.good);
     if (a === g || (it.combos || []).indexOf(a) > -1) return true;
+    if (drFree(it, ans)) return true;
     var extra = 0, near = (it.all || [it]).every(function(o){ var b = drNorm(o.bad), al = String(o.fix).split(/\s*\/\s*/); extra += al.length - 1; return al.some(function(x){ var f = drNorm(x); return f && a.indexOf(f) > -1 && (f.indexOf(b) > -1 || a.indexOf(b) < 0); }); }) && Math.abs(a.split(" ").length - g.split(" ").length) <= 2 + 2 * extra;
     var F = S.FB; return near && (!(F && F.errsOf) || F.errsOf(String(ans)) === 0);
   }
