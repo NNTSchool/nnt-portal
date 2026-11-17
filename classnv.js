@@ -920,9 +920,11 @@
     function upd(){ var f = filled(), ok = f >= minFill, b = el("rck"); if (!b) return; b.disabled = !ok; el("rhint").textContent = ok ? "Ready. You can still change answers." : "Answer " + (minFill - f) + " more to unlock the check (" + f + "/" + need_n + ")."; }
     [].forEach.call(document.querySelectorAll("#rdp input.rin"), function(i){ var n = +i.getAttribute("data-n"); i.oninput = function(){ R_.ans[n] = i.value; upd(); }; i.onpaste = function(e){ e.preventDefault(); }; i.oncontextmenu = function(e){ e.preventDefault(); }; });
     function crossOut(){
-      D.parts.forEach(function(p, pi){ if (p.qs[0].t !== "sel") return; var used = {}; p.qs.forEach(function(q){ var v = R_.ans[q.n]; if (v) used[v] = 1; });
+      /* what is "used" is read from the boxes on the screen, never from remembered answers: a letter is crossed in the list above only while some box really holds it. The boxes themselves show plain letters. */
+      D.parts.forEach(function(p, pi){ if (p.qs[0].t !== "sel") return; var used = {}, sels = [];
+        p.qs.forEach(function(q){ var c = document.querySelector('select[data-n="' + q.n + '"]'); if (!c) return; sels.push(c); if (c.value) used[c.value] = 1; });
         var pe = document.querySelectorAll('.rpart[data-p="' + pi + '"] [data-l]'); [].forEach.call(pe, function(x){ x.classList.toggle("used", !!used[x.getAttribute("data-l")]); });
-        p.qs.forEach(function(q){ var c = document.querySelector('select[data-n="' + q.n + '"]'); if (!c) return; [].forEach.call(c.options, function(o){ if (!o.value) return; o.disabled = !!used[o.value] && R_.ans[q.n] !== o.value; o.textContent = o.value + (used[o.value] && R_.ans[q.n] !== o.value ? "  ✗ used" : ""); }); }); });
+        sels.forEach(function(c){ [].forEach.call(c.options, function(o){ if (!o.value) return; o.disabled = false; o.textContent = o.value; }); }); });
     }
     [].forEach.call(document.querySelectorAll("#rdq select.rsel"), function(c){ var n = +c.getAttribute("data-n"); c.onchange = function(){ R_.ans[n] = c.value; c.closest(".qr").classList.toggle("fld", !!c.value); crossOut(); upd(); }; });
     crossOut();
