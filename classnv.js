@@ -505,7 +505,12 @@
   }
   function dictPct(r){ if (!r) return 0; if (r.pa){ var s = 0; for (var k = 0; k < r.n; k++) s += (r.pa[k] || 0); return r.n ? s / r.n : 0; } return r.n ? r.good / r.n : 0; }
   /* listening score of Unit 1: 85% the item exercises, 15% the dictation (word accuracy) */
+  /* progress saved before this version has no word accuracy yet: work it out again from the text the student wrote */
+  function dictFill(){ (S.P && S.P.exercises || []).forEach(function(e){ var r = S.res && S.res[e.id]; if (!e.long || !r) return; r.pa = r.pa || {};
+    for (var k = 0; k < r.n; k++){ if (r.pa[k] != null) continue; var t = r.txt && r.txt[k]; if (t != null) r.pa[k] = judge(e, k, t).pa || 0; else r.pa[k] = (r.miss || []).indexOf(k) < 0 ? 0.95 : 0; }
+    r.miss = []; for (var q = 0; q < r.n; q++) if (r.pa[q] < 0.9) r.miss.push(q); r.good = r.n - r.miss.length; }); }
   function lisPct(){
+    dictFill();
     var og = 0, on = 0, df = null; S.P.exercises.forEach(function(e){ var r = S.res && S.res[e.id]; if (!r) return; if (e.long) df = dictPct(r); else { og += r.good; on += r.n; } });
     var wo = on ? 0.85 : 0, wd = df == null ? 0 : 0.15; if (!wo && !wd) return 0;
     return Math.round(100 * (wo * (on ? og / on : 0) + wd * (df || 0)) / (wo + wd));
@@ -549,7 +554,7 @@
     el("cout").scrollIntoView && el("cout").scrollIntoView({behavior: "smooth"});
   }
   function summary(){
-    var g = 0, n = 0, rows = ""; S.P.exercises.forEach(function(e, i){ var r = S.res[e.id]; g += r.good; n += r.n; var pc = Math.round(100 * (e.long ? dictPct(r) : r.good / r.n));
+    var g = 0, n = 0, rows = ""; S.P.exercises.forEach(function(e, i){ dictFill(); var r = S.res[e.id]; g += r.good; n += r.n; var pc = Math.round(100 * (e.long ? dictPct(r) : r.good / r.n));
       rows += '<div class="rc ' + (r.miss.length ? "b" : "g") + '" style="animation-delay:' + (0.4 + i * 0.08).toFixed(2) + 's"><span class="rn">' + (ICO[e.id.slice(-2)] || i + 1) + '</span><div><b>' + esc(e.name) + '</b><small style="color:#bcd0ff">' + (e.long ? pc + '% word accuracy · counts 15%' : r.good + ' of ' + r.n + ' · ' + pc + '%') + '</small></div><i>' + (r.miss.length ? "✖" : "✔") + '</i></div>'; });
     var pct = lisPct(), t = tier(pct), sp = "";
     S.fix = S.P.exercises.filter(function(e){ return S.res[e.id].miss.length; });   /* below 80%: fix rounds are compulsory; from 80% they are the optional road to 100% */
