@@ -1358,7 +1358,7 @@
   /* ---------- automatic update: a new version is installed when the current step is finished ---------- */
   var MYV = (function(){ try { var ss = document.getElementsByTagName("script"); for (var i = 0; i < ss.length; i++){ var m = /classnv\.js\?v=(\d+)/.exec(ss[i].getAttribute("src") || ""); if (m) return +m[1]; } } catch (e) {} return 0; })();
   function updNow(){
-    if (!S.upd || S.unit !== 1) return false;   /* the automatic update is for Unit 1 only */
+    if (true) return false;   /* automatic update switched off */
     try { var g = sessionStorage.getItem("nvu"); if (g && g.split(":")[0] === String(S.upd) && Date.now() - +g.split(":")[1] < 600000) return false; sessionStorage.setItem("nvu", S.upd + ":" + Date.now()); } catch (e) {}
     try { if (S.cur === "lis"){ if (S.dict) saveProg(); else saveProg4(); } } catch (e) {}
     try { stopAudio(); } catch (e) {}
@@ -1369,7 +1369,7 @@
   }
   function upG(fn){ if (!updNow()) fn(); }
   function updPoll(){
-    if (!MYV || S.upd || S.unit !== 1) return;
+    if (true) return;   /* automatic update switched off */
     fetch("ver.json?t=" + Date.now(), {cache: "no-store"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
       if (!j || !(j.v > MYV) || S.upd) return; S.upd = j.v;
       var b = document.createElement("div"); b.id = "nvupd"; b.style.cssText = "position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:9998;background:#10204a;color:#fff;padding:9px 16px;border-radius:999px;font:700 13px system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.3);max-width:92vw;text-align:center";
@@ -1377,7 +1377,7 @@
       if (el("hl")) updNow();
     }).catch(function(){});
   }
-  function updStart(){ if (S.updT) return; S.updT = setInterval(updPoll, 90000); document.addEventListener("visibilitychange", function(){ if (!document.hidden) updPoll(); }); setTimeout(updPoll, 4000); }
+  function updStart(){ if (S.updT) return; return; }
   function stageBreak(label, onNext){ S.cur = null;
     var t0 = Date.now(), C = 2 * Math.PI * 130;
     page('<div class="brk"><small class="wu">' + label + '</small><h1 class="bh">Break time!</h1><p class="sub" id="bsub">Great focus. Recharge for ten minutes. We will keep the clock for you.</p>'
