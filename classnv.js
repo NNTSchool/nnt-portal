@@ -365,10 +365,10 @@
       + card("hw", "✍️", "Writing drilling", (S.wrDone && S.wrDone[S.unit]) ? "Done ✔ · you can redo it" : "Write · feedback · rewrite", "about 40 min", RW[S.unit] && opn("write"), 3) + '</div><p class="sub" id="hlk" style="text-align:center;margin-top:14px;min-height:22px"></p>');
     if (S.lisDone && S.lisDone[S.unit] && S.rdDone && S.rdDone[S.unit] && S.wrDone && S.wrDone[S.unit]){ var kb = document.createElement("div"); kb.style.cssText = "text-align:center;margin:18px 0 6px"; kb.innerHTML = '<button class="go" id="hkey" style="font-size:20px;padding:16px 28px">🔑 Get my class key</button>'; el("hlk").parentNode.insertBefore(kb, el("hlk")); el("hkey").onclick = function(){ unitDone(); }; }
     /* never start a stage before the saved progress has arrived: a student must not begin from zero because the answer was slow */
-    function wait_(f){ return function(){ if (O.nofloor || (S.stOk && S.stOk[S.unit])) return f.call(this); var b = this; lockMsg(b, "⏳ Loading your saved progress… try again in a few seconds."); S.stU = null; statusSync(); }; }
+    function wait_(f){ return f; }   /* no waiting gate: a slow answer must never lock a student out */
     el("cb").onclick = path; el("hl").onclick = wait_(function(){ goFS(); (S.unit > 1 ? startPart4 : startPart)(); });
-    el("hr").onclick = RW[S.unit] && opn("read") ? wait_(function(){ goFS(); startReading(); }) : function(){ if (!O.nofloor && !(S.stOk && S.stOk[S.unit])){ lockMsg(this, "⏳ Loading your saved progress… try again in a few seconds."); S.stU = null; statusSync(); return; } lockMsg(this, RW[S.unit] ? "🔒 Finish the listening drilling first." : ""); };
-    el("hw").onclick = RW[S.unit] && opn("write") ? wait_(function(){ goFS(); startWriting(); }) : function(){ if (!O.nofloor && !(S.stOk && S.stOk[S.unit])){ lockMsg(this, "⏳ Loading your saved progress… try again in a few seconds."); S.stU = null; statusSync(); return; } lockMsg(this, RW[S.unit] ? "🔒 Finish the reading drilling first." : ""); };
+    el("hr").onclick = RW[S.unit] && opn("read") ? wait_(function(){ goFS(); startReading(); }) : function(){ lockMsg(this, RW[S.unit] ? "🔒 Finish the listening drilling first." : ""); };
+    el("hw").onclick = RW[S.unit] && opn("write") ? wait_(function(){ goFS(); startWriting(); }) : function(){ lockMsg(this, RW[S.unit] ? "🔒 Finish the reading drilling first." : ""); };
     if (S.testacct){
       var tb = document.createElement("div"); tb.style.cssText = "text-align:center;margin:18px auto 0;max-width:640px;padding:12px;border:2px dashed #9aa8d6;border-radius:14px;color:#10204a";
       tb.innerHTML = '<b>🧪 Test account: skip</b><div style="font-size:13px;margin:2px 0 8px;opacity:.75">Only this account can skip. Everything else works like for a student.</div>'
