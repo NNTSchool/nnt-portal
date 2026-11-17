@@ -263,7 +263,7 @@
       + '<button class="hmg" id="cstart"><span>START DRILLING</span><b>→</b></button></div>'
       + '<div class="hmR"><div class="orb"><div class="rg"></div><div class="rg r2"></div><div class="core"><small>YOUR UNIT</small><b id="hmu">…</b></div><i class="o1"></i><i class="o2"></i><i class="o3"></i></div></div></div>');
     el("cb").onclick = close; el("clo").onclick = function(){ close(); var o = document.getElementById("out"); if (o) o.click(); }; el("cstart").onclick = path;
-    R("nv_nav", {tok: O.tok}).then(function(n){ if (!n || !n.ok) return; var open = (n.open || []).map(Number).filter(function(u){ return u <= 7; }), ck = (n.ckeys || []).map(Number), c = null;
+    R("nv_nav", {tok: O.tok}).then(function(n){ if (!n || !n.ok) return; var open = (n.open || []).map(Number).filter(function(u){ return u <= 8; }), ck = (n.ckeys || []).map(Number), c = null;
       for (var i = 0; i < open.length; i++) if (ck.indexOf(open[i]) < 0){ c = open[i]; break; } if (c === null && open.length) c = open[open.length - 1]; if (el("hmu") && c !== null) el("hmu").textContent = c; }).catch(function(){});
   }
   var FLAG = '<svg viewBox="0 0 64 64" width="52" height="52"><path d="M16 8v50" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M20 12c10-6 16 6 28 0v24c-12 6-18-6-28 0z" fill="#fff"/></svg>', STAR = '<svg viewBox="0 0 64 64" width="52" height="52"><path d="M32 6l7.6 16.4 17.9 2.1-13.2 12.3 3.5 17.7L32 45.2 16.2 54.5l3.5-17.7L6.5 24.5l17.9-2.1z" fill="#fff"/></svg>';
@@ -281,7 +281,7 @@
     page(top() + '<div id="cnbody"><p class="sub" id="cnsub" style="text-align:center">Opening…</p></div>'); el("cb").onclick = home;
     R("nv_nav", {tok: O.tok}).then(function(n){
       if (!n || !n.ok){ el("cnsub").textContent = "Please try again in a moment."; return; }
-      S.nav = n; var ck = (n.ckeys || []).map(Number), lim = 7 + ck.filter(function(u){ return u <= 7 + ck.length; }).length, open = (n.open || []).map(Number).filter(function(u){ return u <= lim; }), cur = null;
+      S.nav = n; var ck = (n.ckeys || []).map(Number), lim = 8 + ck.filter(function(u){ return u <= 8 + ck.length; }).length, open = (n.open || []).map(Number).filter(function(u){ return u <= lim; }), cur = null;
       for (var i = 0; i < open.length; i++) if (ck.indexOf(open[i]) < 0){ cur = open[i]; break; }
       var hint = cur === null ? "Everything open is complete. Well done!" : "Tap your stage to begin";
       var H = 170, tot = open.length * H + 330, h = '<div class="pth" style="height:' + tot + 'px">';
@@ -337,7 +337,7 @@
   }
   function syncP(){ var p = statusSync(); return p ? Promise.race([p.catch(function(){}), new Promise(function(r){ setTimeout(r, 8000); })]) : Promise.resolve(); }
   function synced(fn){ var d = false, g = function(){ if (!d){ d = true; fn(); } }; var p = statusSync(); if (!p){ g(); return; } p.then(g, g); setTimeout(g, 8000); }
-  var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1};
+  var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1};
   /* the drilling takes the whole screen, like the classic tests; the hub gives it back */
   function goFS(){ var d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen || d.msRequestFullscreen; try { var p = f && f.call(d); if (p && p.then) p.then(function(){ try { if (navigator.keyboard && navigator.keyboard.lock) navigator.keyboard.lock(["Escape"]).catch(function(){}); } catch (e) {} }, function(){}); } catch (e) {} }
   /* Esc cannot be fully blocked by a web page (Chrome lets a long press out), so if the student gets out, the drilling is covered until they return to full screen */
