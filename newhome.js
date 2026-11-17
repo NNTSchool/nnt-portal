@@ -68,6 +68,10 @@
   + '#newv .hm.day .hmbrand{color:#0b2a55}#newv .hm.day .hmbrand span{color:#1c5fb4}#newv .hm.day .hmbtns button{color:#0b2a55;background:rgba(255,255,255,.55);border-color:rgba(11,42,85,.3)}#newv .hm.day .hmbtns button:hover{background:rgba(255,255,255,.85)}#newv .hm.day .hmbtns button.paybtn{color:#fff}'
   + '#newv .hm.day .hmname{color:#0b2a55}#newv .hm.day .hmgreet{color:#0b4f8c}#newv .hm.day .hmring .c small{color:#1c5fb4}#newv .hm.day .hmring .c b{color:#0b2a55}'
   + '#newv .hm.day .hmq{background:rgba(255,255,255,.72);border-color:rgba(11,42,85,.18)}#newv .hm.day .hmq p{color:#0b2a55}#newv .hm.day .hmq cite{color:#1c5fb4}#newv .hm.day .hmgo{background:linear-gradient(135deg,#2f80ff,#1749c9);color:#fff;border:0;box-shadow:0 18px 44px -14px rgba(23,73,201,.7)}'
+  + '#newv:has(.hm.dusk){background:radial-gradient(circle at 50% 80%,#fff1c2 0,#ffb347 6%,rgba(255,150,70,.55) 14%,rgba(255,120,80,0) 38%),linear-gradient(180deg,#2b1d5e 0%,#7a3b8f 40%,#e0627f 72%,#ffa65c 100%)}'
+  + '#newv .hm.dusk .hmbrand,#newv .hm.dusk .hmname,#newv .hm.dusk .hmgreet,#newv .hm.dusk .hmring .c b,#newv .hm.dusk .hmring .c small{text-shadow:0 2px 10px rgba(25,5,45,.85)}#newv .hm.dusk .hmgreet{color:#ffe9b0}#newv .hm.dusk .hmring .c small{color:#ffe0b0}#newv .hm.dusk .hmbrand span{color:#ffd9a8}'
+  + '#newv .hm.dusk .hmq{background:rgba(25,10,50,.6);border-color:rgba(255,217,168,.35)}#newv .hm.dusk .hmq p{color:#fff}#newv .hm.dusk .hmq cite{color:#ffd9a8}#newv .hm.dusk .hmbtns button{color:#fff;background:rgba(25,10,50,.45);border-color:rgba(255,217,168,.5)}'
+  + '#newv .hm .hmq p,#newv .hm .hmname{text-shadow:0 1px 6px rgba(0,0,30,.35)}#newv .hm.day .hmq p,#newv .hm.day .hmname{text-shadow:none}'
   + '#newv .nw:has(.hm){max-width:1000px}#newv .nvdbg{text-align:center;font:600 11px system-ui;color:#8f8bb8;padding:0 0 8px;margin-top:-6px;position:sticky;bottom:0;background:rgba(8,10,34,.96)}'
 
   + '#newv .nd.wait .dot{background:#12102e;border-color:rgba(185,176,255,.35);color:#b9b0ff}#newv .nd.wait .bx{opacity:.88}#newv .nd.open .dot{background:#12102e;border-color:rgba(185,176,255,.5);color:#f2f0ff}'
@@ -293,7 +297,7 @@
     S.sub = false; S.chose = null; S.review = false;
     var fu = frontUnit(), fn = ""; try{ if (typeof ME !== "undefined" && ME && ME.name) fn = String(ME.name).split(" ")[0]; }catch(e){}
     var pb = document.getElementById("paybtn"), hasPay = pb && !pb.classList.contains("hide"), q = pickQuote();
-    var hr = new Date().getHours(), dayCls = (hr >= 6 && hr < 18) ? " day" : "";
+    var hr = +new Intl.DateTimeFormat("en-GB", {hour: "numeric", hour12: false, timeZone: "Asia/Tashkent"}).format(new Date()) % 24, dayCls = (hr >= 7 && hr < 17) ? " day" : ((hr >= 5 && hr < 7) || (hr >= 17 && hr < 19)) ? " dusk" : "";
     var h = '<div class="hm' + dayCls + '"><div class="hmtop"><div class="hmbrand">NNT <span>School Academy</span></div><div class="hmbtns"><button id="nvhsw" type="button">⇄ Switch</button>'
       + (hasPay ? '<button id="nvhpay" type="button" class="' + pb.className.replace(/\bhide\b/, '') + '">' + pb.innerHTML + '</button>' : '') + '<button id="nvhout" type="button">Log out</button></div></div>'
       + '<div class="hmc"><div class="hmgreet">Welcome back</div><div class="hmname" id="nvhname">' + esc(fnFull()) + '</div>'
