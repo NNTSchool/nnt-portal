@@ -222,10 +222,10 @@
   + '#cnv .l4how .rc,#cnv .l4sm .rc{animation:none}#cnv .l4how .rc small,#cnv .l4sm .rc small{color:#3d5a78!important;font-size:14.5px!important}#cnv .l4how .rc b,#cnv .l4sm .rc b{color:#10204a!important;font-size:19px}#cnv .l4gr.hd b{color:#fff}#cnv .l4sm .rc.g i{color:#0c9c84}#cnv .l4sm .rc.b i{color:#d6395f}#cnv .l4how .rc .rn,#cnv .l4sm .rc .rn{background:#3e63d8;color:#fff}@media(max-width:1100px){#cnv .l4two,#cnv .l4two.rv{grid-template-columns:1fr}}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
-  function page(h){ try{ document.body.classList.toggle("nvfocus", h.indexOf('id="cnbody"') < 0 && h.indexOf('class="hm"') < 0); }catch(e){} stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; try { hideExit(); } catch (e) {} try { restoreDraft(); } catch (e) {} }
+  function page(h){ S.pgn = (S.pgn || 0) + 1; try{ document.body.classList.toggle("nvfocus", h.indexOf('id="cnbody"') < 0 && h.indexOf('class="hm"') < 0); }catch(e){} stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; try { hideExit(); } catch (e) {} try { restoreDraft(); } catch (e) {} }
   function hideExit(){ var b = el("cb"); if (!b || !S.cur || ["lis", "read", "write"].indexOf(S.cur) < 0 || O.nofloor || root().querySelector(".card.warn")) return; b.style.display = "none"; }
   function top(back){ return '<div class="tb"><button class="pill" id="cb">' + (back || "← Back") + '</button><div class="sp"></div><b>NNT · Classroom</b></div>'; }
-  function stopAudio(){ if (A){ try{ A.pause(); }catch(e){} A = null; } }
+  function stopAudio(){ S.stopN = (S.stopN || 0) + 1; if (A){ try{ A.pause(); }catch(e){} A = null; } }
   function close(){ try{ document.body.classList.remove("nvfocus"); }catch(e){} stopAudio(); var r = el("cnv"); if (r) r.remove(); if (O && O.onExit) O.onExit(); }
 
   /* the exotic class key: a hexagonal crystal key (different shape from the yellow home key) */
@@ -426,11 +426,11 @@
       + '<p class="sub" style="margin:8px 0 0">You cannot skip or rewind. Once it starts, listen to the end. ' + (S.inFix ? "You get one more play to check what you missed." : "You can play it twice.") + '</p></div>';
   }
   function wireFull(ex){
-    var b = el("cplay"), sk = el("cseek"), tm = el("ctm"), spd = 1, drag = false;
+    var tok = S.pgn, b = el("cplay"), sk = el("cseek"), tm = el("ctm"), spd = 1, drag = false;
     function fmt(t){ t = Math.floor(t); return Math.floor(t / 60) + ":" + ("0" + t % 60).slice(-2); }
     function ensure(){ if (A) return Promise.resolve(); b.disabled = true; b.textContent = "Loading…";
-      return audioUrl(ex).then(function(url){ A = new Audio(url); A.playbackRate = spd; b.disabled = false;
-        A.ontimeupdate = function(){ if (A && A.duration && !drag){ sk.value = 1000 * A.currentTime / A.duration; } tm.textContent = fmt(A.currentTime) + " / " + fmt(A.duration || 0); };
+      var sn = S.stopN; return audioUrl(ex).then(function(url){ if (tok !== S.pgn || sn !== S.stopN) throw 0; A = new Audio(url); A.playbackRate = spd; b.disabled = false;
+        A.ontimeupdate = function(){ if (!A) return; if (A.duration && !drag){ sk.value = 1000 * A.currentTime / A.duration; } tm.textContent = fmt(A.currentTime) + " / " + fmt(A.duration || 0); };
         A.onended = function(){ b.textContent = "▶ Play again"; };
       }); }
     b.onclick = function(){ ensure().then(function(){ if (A.paused){ A.playbackRate = spd; var p = A.play(); if (p && p.catch) p.catch(function(){}); b.textContent = "❚❚ Pause"; } else { A.pause(); b.textContent = "▶ Play"; } }).catch(function(){ b.disabled = false; b.textContent = "▶ Try again"; }); };
@@ -440,14 +440,14 @@
   }
   function wirePlayer(ex){
     if (ex.long) return wireFull(ex);
-    var b = el("cplay"), bar = el("cbar"), tm = el("ctm"), key = ex.audio + (S.inFix ? "f" + (S.fixRound || 0) : ""), lim = S.inFix ? 1 : 2; S.pl = S.pl || {};
+    var tok = S.pgn, b = el("cplay"), bar = el("cbar"), tm = el("ctm"), key = ex.audio + (S.inFix ? "f" + (S.fixRound || 0) : ""), lim = S.inFix ? 1 : 2; S.pl = S.pl || {};
     function left(){ return lim - (S.pl[key] || 0); }
     function label(){ var l = left(); b.disabled = l <= 0; b.textContent = l <= 0 ? "✔ Played" : S.pl[key] ? "▶ Play again (" + l + " left)" : "▶ Play (" + lim + (lim > 1 ? " plays" : " play") + ")"; }
     label();
     b.onclick = function(){
       if (left() <= 0) return;
-      stopAudio(); S.pl[key] = (S.pl[key] || 0) + 1; b.disabled = true; b.textContent = "Loading…";
-      audioUrl(ex).then(function(url){ A = new Audio(url); b.textContent = "Playing…";
+      stopAudio(); var sn = S.stopN; S.pl[key] = (S.pl[key] || 0) + 1; b.disabled = true; b.textContent = "Loading…";
+      audioUrl(ex).then(function(url){ if (tok !== S.pgn || sn !== S.stopN){ S.pl[key]--; return; } A = new Audio(url); b.textContent = "Playing…";
         A.ontimeupdate = function(){ if (A && A.duration){ bar.style.width = (100 * A.currentTime / A.duration) + "%"; var t = Math.floor(A.currentTime); tm.textContent = Math.floor(t / 60) + ":" + ("0" + t % 60).slice(-2); } };
         A.onended = function(){ bar.style.width = "0"; label(); };
         A.onerror = function(){ S.pl[key]--; label(); };
@@ -614,13 +614,13 @@
     return '<div class="card" id="cpc"><div class="pl"><button class="go" id="cplay">▶ Play</button><div class="bar"><b id="cbar"></b></div><span id="ctm" class="sub">0:00</span></div><p class="sub" id="cplm" style="margin:8px 0 0"></p></div>';
   }
   function l4Wire(ex, lim, key, note){
-    var b = el("cplay"), bar = el("cbar"), tm = el("ctm"), m = el("cplm"); S.pl = S.pl || {}; var busy = false;
+    var tok = S.pgn, b = el("cplay"), bar = el("cbar"), tm = el("ctm"), m = el("cplm"); S.pl = S.pl || {}; var busy = false;
     function left(){ return lim === 0 ? 99 : lim - (S.pl[key] || 0); }
     function label(){ var l = left(); b.disabled = l <= 0 || busy; b.textContent = l <= 0 ? "✔ Played" : lim === 0 ? (S.pl[key] ? "▶ Play again" : "▶ Play") : S.pl[key] ? "▶ Play again (" + l + " left)" : "▶ Play (" + lim + (lim > 1 ? " plays" : " play") + ")"; m.textContent = note + (lim === 0 ? "" : ""); }
     label();
     b.onclick = function(){
-      if (left() <= 0 || busy) return; busy = true; stopAudio(); S.pl[key] = (S.pl[key] || 0) + 1; b.disabled = true; b.textContent = "Loading…";
-      audioUrl(ex).then(function(url){ A = new Audio(url); b.textContent = "Playing… listen to the end";
+      if (left() <= 0 || busy) return; busy = true; stopAudio(); var sn = S.stopN; S.pl[key] = (S.pl[key] || 0) + 1; b.disabled = true; b.textContent = "Loading…";
+      audioUrl(ex).then(function(url){ if (tok !== S.pgn || sn !== S.stopN){ S.pl[key]--; return; } A = new Audio(url); b.textContent = "Playing… listen to the end";
         A.ontimeupdate = function(){ if (A && A.duration){ bar.style.width = (100 * A.currentTime / A.duration) + "%"; var t = Math.floor(A.currentTime); tm.textContent = Math.floor(t / 60) + ":" + ("0" + t % 60).slice(-2); } };
         A.onended = function(){ busy = false; bar.style.width = "0"; label(); };
         A.onerror = function(){ busy = false; S.pl[key]--; label(); };
@@ -735,8 +735,8 @@
       + '<div class="l4two rv"><div class="l4rvl">' + h + '</div><div class="l4tp"><h3>Script <small>the sentences you needed are highlighted</small></h3><div class="l4tx" id="l4tx">' + hiEv(ex.tape, r.rows.filter(function(w){ return !w.ok && w.ev; }).map(function(w){ return w.ev; }).join(" ... ")) + '</div><div class="l4au"><button class="pill" id="l4pl">▶ Listen again</button><span class="sub" id="l4ps">Pause, rewind and replay freely here.</span></div></div></div>'
       + '<button class="go" id="l4nx" style="margin-top:14px">' + (last ? (S.fix.length && l4Pct() < 80 ? "🛠 Win your mistakes back →" : S.fix.length ? "🏆 Reach 100%: win the rest back →" : "Finish the listening →") : "Next recording →") + '</button>' + (last && S.fix.length && l4Pct() >= 80 ? '<button class="pill" id="l4fin" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button>' : ''));
     el("cb").onclick = function(){ stopAudio(); hub(); };
-    var pl = el("l4pl"), B = null;
-    pl.onclick = function(){ if (B){ if (B.paused){ B.play(); pl.textContent = "❚❚ Pause"; } else { B.pause(); pl.textContent = "▶ Continue"; } return; } pl.textContent = "Loading…"; audioUrl(ex).then(function(u){ B = new Audio(u); B.controls = false; B.onended = function(){ B = null; pl.textContent = "▶ Listen again"; }; A = B; B.play(); pl.textContent = "❚❚ Pause"; }); };
+    var tok = S.pgn, pl = el("l4pl"), B = null;
+    pl.onclick = function(){ if (B){ if (B.paused){ B.play(); pl.textContent = "❚❚ Pause"; } else { B.pause(); pl.textContent = "▶ Continue"; } return; } pl.textContent = "Loading…"; var sn = S.stopN; audioUrl(ex).then(function(u){ if (tok !== S.pgn || sn !== S.stopN) return; B = new Audio(u); B.controls = false; B.onended = function(){ B = null; pl.textContent = "▶ Listen again"; }; A = B; B.play(); pl.textContent = "❚❚ Pause"; }); };
     el("l4nx").onclick = function(){ stopAudio(); if (!last){ L.ri++; l4Review(); } else if (S.fix.length){ S.L.full = l4Pct() >= 80; l4Drill(); } else listeningDone(); }; if (el("l4fin")) el("l4fin").onclick = function(){ stopAudio(); listeningDone(); };
   }
   /* win the mistakes back: re-answer each missed question after seeing the sentence, until all are right */
