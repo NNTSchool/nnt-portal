@@ -707,7 +707,8 @@
     l4Wire(ex, 0, "n" + ex.id, "Play it as many times as you need. You cannot skip ahead or rewind: that is the exam skill.");
     var ta = el("l4n"), nx = el("l4nx"), c = el("l4wc");
     function up(){ L.notes[ex.id] = ta.value; var w = wc(ta.value); c.innerHTML = '<b>' + w + '</b> / ' + ex.min + ' words at least'; nx.disabled = w < ex.min && !O.nofloor; c.classList.toggle("ok", w >= ex.min); }
-    ta.oninput = up; up(); ta.focus();
+    ta.oninput = function(){ up(); clearTimeout(S.ntm); S.ntm = setTimeout(saveProg4, 1200); }; up(); ta.focus();
+    window.addEventListener("pagehide", function(){ try { if (S.cur === "lis" && !S.dict) saveProg4(); } catch (e) {} });
     nx.onclick = function(){ stopAudio(); L.ei++; if (L.ei < S.P.exercises.length) l4Notes(); else { L.stage = 2; L.ei = 0; l4Answer(); } };
   }
   function l4Answer(){
