@@ -708,7 +708,7 @@
     if (S.free) return;
     if (!S.cur || !S.pl || !S.pl.getCurrentTime || S.busy) return;
     var st = state(), pos = S.pl.getCurrentTime(), spd = S.pl.getPlaybackRate ? S.pl.getPlaybackRate() : 1;
-    if (st === "play" && Date.now() - (S.tk || 0) > 14000){ S.tk = Date.now(); rpc("nv_tick", {tok: tok(), u: S.unit, s: 15}, 8000).catch(function(){}); }
+    if (st === "play" && Date.now() - (S.tk || 0) > 14000){ S.tk = Date.now(); rpc("nv_tick_s", {tok: tok(), u: S.unit, s: 15, st: "video"}, 8000).catch(function(){ rpc("nv_tick", {tok: tok(), u: S.unit, s: 15}, 8000).catch(function(){}); }); }
     S.busy = true;
     rpc("nv_beat", {tok: tok(), u: S.unit, i: S.cur.idx, pos: pos, st: st, spd: Math.min(spd, 1.25), ack: S.ack, mack: S.mack}, 12000).then(function(r){
       S.busy = false; S.fails = 0; el("nvov").classList.contains("off");
