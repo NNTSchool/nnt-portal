@@ -36,8 +36,11 @@
   window.nvEssayTry = function(){ return call("nv_essay_try", {tok: P.tok, u: P.nvunit}).catch(function(){}); };
   /* time on the unit: counted only while the page is open and the student is active (typing, tapping, moving) */
   if (HOME && P.nvunit){
-    var lastAct = Date.now(); ["keydown", "pointerdown", "pointermove", "touchstart", "scroll"].forEach(function(ev){ document.addEventListener(ev, function(){ lastAct = Date.now(); }, {passive: true, capture: true}); });
-    setInterval(function(){ if (document.hidden || Date.now() - lastAct > 120000) return; call("nv_tick_s", {tok: P.tok, u: P.nvunit, s: 15, st: P.mode === "write" ? "write" : P.mode === "speak" ? "speak" : "home"}).catch(function(){ call("nv_tick", {tok: P.tok, u: P.nvunit, s: 15}).catch(function(){}); }); }, 15000);
+    var lastAct = Date.now(), media = [], op = window.HTMLMediaElement && HTMLMediaElement.prototype.play;
+    if (op) HTMLMediaElement.prototype.play = function(){ if (media.indexOf(this) < 0) media.push(this); return op.apply(this, arguments); };
+    function playing(){ return media.some(function(m){ return !m.paused && !m.ended && m.readyState > 2; }); }
+    ["keydown", "pointerdown", "pointermove", "touchstart", "scroll"].forEach(function(ev){ document.addEventListener(ev, function(){ lastAct = Date.now(); }, {passive: true, capture: true}); });
+    setInterval(function(){ if (document.hidden || (Date.now() - lastAct > 120000 && !playing())) return; call("nv_tick_s", {tok: P.tok, u: P.nvunit, s: 15, st: P.mode === "write" ? "write" : P.mode === "speak" ? "speak" : "home"}).catch(function(){ call("nv_tick", {tok: P.tok, u: P.nvunit, s: 15}).catch(function(){}); }); }, 15000);
   }
   window.nvSaveSpeaking = function(tasks, secs){ return call("nv_save_speaking", {tok: P.tok, u: P.nvunit, tasks: tasks, secs: secs}).then(function(r){ if (!r || !r.ok) throw new Error((r && r.err) || "not saved"); return r; }); };
   function banner(msg){
