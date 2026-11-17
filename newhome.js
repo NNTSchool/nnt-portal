@@ -64,6 +64,10 @@
   + '#newv .hmring .ring{width:min(46vw,200px);height:min(46vw,200px);position:relative;margin:0 auto}#newv .hmring .ring svg{width:100%;height:100%}#newv .hmring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}#newv .hmring .c small{font:700 13px system-ui;letter-spacing:.18em;text-transform:uppercase;color:#b9b0ff}#newv .hmring .c b{font:800 64px/1 system-ui;color:#fff;letter-spacing:-.03em}'
   + '#newv .hmlvl{margin:16px 0 4px}#newv .hmq{margin:26px auto 30px;max-width:620px;padding:22px 26px;border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(185,176,255,.22);}#newv .hmq p{margin:0;font:600 clamp(19px,2.6vw,25px)/1.4 Georgia,serif;font-style:italic;color:#f2f0ff}#newv .hmq cite{display:block;margin-top:10px;font:700 14px system-ui;font-style:normal;color:#b9b0ff;letter-spacing:.04em}'
   + '#newv .hmgo{width:min(480px,100%);padding:22px 28px;font-size:23px;border-radius:20px;letter-spacing:.01em;box-shadow:0 18px 50px -12px rgba(255,111,145,.75);}@keyframes nvglow{50%{box-shadow:0 18px 64px -6px rgba(255,111,145,.95)}}@media (prefers-reduced-motion:reduce){#newv .hmgo{animation:none}}'
+  + '#newv:has(.hm.day){background:radial-gradient(circle at 86% 9%,#fffbe0 0,#ffe27a 5%,rgba(255,226,122,.55) 9%,rgba(255,226,122,0) 24%),radial-gradient(ellipse 60% 30% at 18% 14%,rgba(255,255,255,.75),rgba(255,255,255,0) 70%),radial-gradient(ellipse 50% 24% at 62% 30%,rgba(255,255,255,.55),rgba(255,255,255,0) 70%),linear-gradient(180deg,#4aa3f5 0%,#8cc9ff 48%,#dff1ff 100%)}'
+  + '#newv .hm.day .hmbrand{color:#0b2a55}#newv .hm.day .hmbrand span{color:#1c5fb4}#newv .hm.day .hmbtns button{color:#0b2a55;background:rgba(255,255,255,.55);border-color:rgba(11,42,85,.3)}#newv .hm.day .hmbtns button:hover{background:rgba(255,255,255,.85)}#newv .hm.day .hmbtns button.paybtn{color:#fff}'
+  + '#newv .hm.day .hmname{color:#0b2a55}#newv .hm.day .hmgreet{color:#0b4f8c}#newv .hm.day .hmring .c small{color:#1c5fb4}#newv .hm.day .hmring .c b{color:#0b2a55}'
+  + '#newv .hm.day .hmq{background:rgba(255,255,255,.72);border-color:rgba(11,42,85,.18)}#newv .hm.day .hmq p{color:#0b2a55}#newv .hm.day .hmq cite{color:#1c5fb4}#newv .hm.day .hmgo{background:linear-gradient(135deg,#2f80ff,#1749c9);color:#fff;border:0;box-shadow:0 18px 44px -14px rgba(23,73,201,.7)}'
   + '#newv .nw:has(.hm){max-width:1000px}#newv .nvdbg{text-align:center;font:600 11px system-ui;color:#8f8bb8;padding:0 0 8px;margin-top:-6px;position:sticky;bottom:0;background:rgba(8,10,34,.96)}'
 
   + '#newv .nd.wait .dot{background:#12102e;border-color:rgba(185,176,255,.35);color:#b9b0ff}#newv .nd.wait .bx{opacity:.88}#newv .nd.open .dot{background:#12102e;border-color:rgba(185,176,255,.5);color:#f2f0ff}'
@@ -280,7 +284,7 @@
   }
   function frontUnit(){
     var o = (S.nav && S.nav.open) || [];
-    for (var i = 0; i < o.length; i++) if (!nvDone(o[i])) return o[i];
+    for (var i = 0; i < o.length; i++) if (!nvDone(o[i]) || !nvCDone(o[i])) return o[i];
     return o.length ? o[o.length - 1] : 1;
   }
   function fnFull(){ try{ if (typeof ME !== "undefined" && ME){ var n = ME.name || ME.full_name || ""; if (String(n).trim()) return String(n).trim(); } var h = document.getElementById("hi"); if (h && h.textContent.trim()) return h.textContent.trim(); }catch(e){} return ""; }
@@ -289,7 +293,8 @@
     S.sub = false; S.chose = null; S.review = false;
     var fu = frontUnit(), fn = ""; try{ if (typeof ME !== "undefined" && ME && ME.name) fn = String(ME.name).split(" ")[0]; }catch(e){}
     var pb = document.getElementById("paybtn"), hasPay = pb && !pb.classList.contains("hide"), q = pickQuote();
-    var h = '<div class="hm"><div class="hmtop"><div class="hmbrand">NNT <span>School Academy</span></div><div class="hmbtns"><button id="nvhsw" type="button">⇄ Switch</button>'
+    var hr = new Date().getHours(), dayCls = (hr >= 6 && hr < 18) ? " day" : "";
+    var h = '<div class="hm' + dayCls + '"><div class="hmtop"><div class="hmbrand">NNT <span>School Academy</span></div><div class="hmbtns"><button id="nvhsw" type="button">⇄ Switch</button>'
       + (hasPay ? '<button id="nvhpay" type="button" class="' + pb.className.replace(/\bhide\b/, '') + '">' + pb.innerHTML + '</button>' : '') + '<button id="nvhout" type="button">Log out</button></div></div>'
       + '<div class="hmc"><div class="hmgreet">Welcome back</div><div class="hmname" id="nvhname">' + esc(fnFull()) + '</div>'
       + '<div class="hmring"><div class="ring">' + ringSvg(Math.min(1, ((S.nav ? S.nav.keys.length : 0)) / 20)) + '<div class="c"><small>Unit</small><b>' + fu + '</b></div></div></div>'
@@ -357,7 +362,7 @@
     navLoad().then(function(n){
       if (!n || n.err){ page('<h2>Novel</h2><p class="sub">' + (n && n.err === "unpaid" ? "" : "Novel is not open for you yet.") + '</p>', "exit"); return; }
       var o = n.open; if (!o.length){ page('<h2>Novel</h2><p class="sub">Your units will appear here soon.</p>', "exit"); return; }
-      var f = null; for (var i = 0; i < o.length; i++) if (n.keys.indexOf(o[i]) < 0){ f = o[i]; break; }
+      var f = null; for (var i = 0; i < o.length; i++) if (n.keys.indexOf(o[i]) < 0 || !(o[i] <= (n.cfree == null ? 1 : n.cfree) || (n.ckeys || []).indexOf(o[i]) >= 0)){ f = o[i]; break; }
       var ret = false, cur = 0; try{ ret = sessionStorage.getItem("nnt_ret") === "1"; cur = +sessionStorage.getItem("nvcur") || 0; }catch(e){}
       S.unit = (ret && o.indexOf(cur) >= 0) ? cur : (f !== null ? f : o[o.length - 1]);
       try{ sessionStorage.setItem("nvcur", String(S.unit)); }catch(e){}
@@ -521,7 +526,7 @@
   function paintUnit(x, r, F){
     S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); S.jump = !!(x && x.ok && x.jump); S.testacct = !!(x && x.ok && x.testacct); S.jpct = x && x.ok ? x.jpct : 80;
     {
-      if (!r || !r.ok){ page('<h2>Unit ' + S.unit + '</h2><p class="sub">' + (r && r.err === "closed" ? "This unit is not open yet. Your teacher will open it soon." : r && r.err === "locked" ? "Finish the earlier unit first." : "Not available right now.") + ' <small style="opacity:.6">(' + esc((r && r.err) || "error") + ')</small></p>' + (S.testacct && r && r.err === "locked" ? skipBox(false) : ""), true); if (S.testacct && r && r.err === "locked") skipWire(); return; }
+      if (!r || !r.ok){ page('<h2>Unit ' + S.unit + '</h2><p class="sub">' + (r && r.err === "closed" ? "This unit is not open yet. Your teacher will open it soon." : r && r.err === "locked" ? "Finish the earlier unit and its class test first." : "Not available right now.") + ' <small style="opacity:.6">(' + esc((r && r.err) || "error") + ')</small></p>' + (S.testacct && r && r.err === "locked" ? skipBox(false) : ""), true); if (S.testacct && r && r.err === "locked") skipWire(); return; }
       S.vids = r.videos;
       var kseen = F.kseen, ret = F.ret, auto = F.auto;
       if (S.st && S.st.key && S.nav && S.nav.keys.indexOf(S.unit) < 0) S.nav.keys.push(S.unit);

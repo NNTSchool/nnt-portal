@@ -84,6 +84,7 @@ function payWall(){
    Not a blocking popup: the student can finish and SAVE what they are doing (the server allows saving for 60 minutes). */
 var __kicked = false;
 function kicked(){
+  return;   /* the "opened on another device" banner is switched off: any number of devices may use an account */
   if (__kicked) return; __kicked = true;
   var o = document.createElement("div");
   o.style.cssText = "position:fixed;left:0;right:0;top:0;z-index:99999;background:#8a1c1c;color:#fff;padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;font:600 15px/1.4 system-ui,sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3)";

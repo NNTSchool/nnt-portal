@@ -141,7 +141,7 @@
   + '#cnv .card{background:#f6f9ff;border-color:#b9c9e6;box-shadow:0 6px 18px rgba(40,60,120,.08)}#cnv .card.ok{background:#d9f5ee;border-color:#2bb59b;color:#0b4a3e}#cnv .card.warn{background:#ffe9cf;border-color:#e0953c;color:#5a3300}#cnv .card.ok h2,#cnv .card.warn h2{color:inherit}'
   + '#cnv input.a,#cnv textarea.a{background:#fff;color:#10204a;border:2px solid #8fa6d6;font-weight:600}#cnv input.a:focus,#cnv textarea.a:focus{outline:none;border-color:#3e63d8;box-shadow:0 0 0 4px rgba(62,99,216,.2)}'
   + '#cnv .gr .it span,#cnv .rc .rn{background:rgba(16,32,74,.1);color:#10204a}#cnv .bar{background:rgba(16,32,74,.15)}'
-  + '#cnv .rc.g{background:#d9f5ee;border-color:#2bb59b}#cnv .rc.g b{color:#0b4a3e}#cnv .rc.g i{color:#0c9c84}#cnv .rc.b{background:#fde3e9;border-color:#e0607f}#cnv .rc.b s{color:#b2334f}#cnv .rc.b strong{color:#7a4a00}#cnv .rc.b small{color:#a03355}#cnv .rc.b i{color:#d6395f}#cnv .rc small{color:#3d4f80}'
+  + '#cnv .rc.g{background:#d9f5ee;border-color:#2bb59b}#cnv .rc.g b{color:#0b4a3e}#cnv .rc.g i{color:#0c9c84}#cnv .rc.b{background:#fde3e9;border-color:#e0607f}#cnv .rc.b s{color:#b2334f}#cnv .rc.b strong{color:#7a4a00}#cnv .rc.b small{color:#a03355}#cnv .rc.b i{color:#d6395f}#cnv .rc small{color:#2b3a69!important;font-weight:600}#cnv .rc.b b{color:#5e1228!important}#cnv .rc.b small{color:#7d1f3a!important}#cnv .rc.b s{color:#a82a48!important}#cnv .rc.g small{color:#1b5a4c!important}'
   + '#cnv .ins{background:linear-gradient(120deg,#d7f5ef,#d9e6ff 55%,#eadcff);border-color:#7f9de0;box-shadow:0 6px 20px rgba(60,90,180,.14)}#cnv .ins strong{color:#10204a}#cnv .ins small{color:#a35b00}#cnv .ins.fixc{background:linear-gradient(120deg,#fff0cf,#ffdce4);border-color:#f0a060;box-shadow:0 6px 20px rgba(220,120,60,.16)}#cnv .ins.fixc small{color:#b25400}'
   + '#cnv .stp u{background:#b3c3e3}#cnv .sn{opacity:.85}#cnv .sn .sb{background:#c4d3ec;box-shadow:0 5px 0 #a3b6dc}#cnv .sn small{color:#10204a}#cnv .sn em{color:#4d5f93}#cnv .sn.dn em{color:#0c8a73}#cnv .stp.fx .sn.dn em{color:#b25400}#cnv .sn.cu small{color:#10204a}#cnv .sn.cu em{color:#b25400}'
   + '#cnv .ring{background:conic-gradient(var(--c) var(--a),rgba(16,32,74,.12) 0)}#cnv .ring>div{background:#f6f9ff}#cnv .ring small{color:#3d4f80}#cnv .wu{color:#b25400}#cnv .fxtag{color:#2b1200}'
@@ -164,6 +164,7 @@
   + '#cnv .qr{display:flex;gap:12px;padding:12px 14px;border-radius:14px;background:#fff;border:2px solid #d3dcf0;margin-bottom:10px;transition:border-color .15s,background .15s}#cnv .qr.fld{background:#f1fbf8;border-color:#7fd6c3}#cnv .qr.gd{background:#e3f8f1;border-color:#2bb59b}#cnv .qr.bd{background:#fde8ed;border-color:#e0607f}#cnv .qr.lk{opacity:.55}'
   + '#cnv .qn{flex:0 0 34px;height:34px;border-radius:10px;background:#3e63d8;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}#cnv .qr.gd .qn{background:#0c9c84}#cnv .qr.bd .qn{background:#d6395f}#cnv .qb{flex:1;min-width:0}#cnv .qt{font-size:16.5px;line-height:1.45;color:#10204a;font-weight:600;margin:3px 0 9px}'
   + '#cnv .tf{display:flex;gap:8px;flex-wrap:wrap}#cnv .tf button{flex:1;min-width:96px;padding:10px 8px;border-radius:12px;border:2px solid #9fb2dc;background:#fff;color:#2d3f73;font-weight:800;font-size:14px;cursor:pointer;letter-spacing:.02em;transition:transform .1s}#cnv .tf button:hover{transform:translateY(-2px)}#cnv .tf button.sel{background:#3e63d8;border-color:#3e63d8;color:#fff;box-shadow:0 4px 0 #27409b}#cnv .tf button:disabled{cursor:default;transform:none}'
+  + '#cnv .mq{display:grid;gap:8px;grid-template-columns:1fr 1fr}@media(max-width:640px){#cnv .mq{grid-template-columns:1fr}}#cnv .mo{padding:10px 12px;border-radius:12px;border:2px solid #9fb2dc;background:#fff;color:#2d3f73;font-weight:700;font-size:14px;cursor:pointer;text-align:left}#cnv .mo.sel{background:#3e63d8;border-color:#3e63d8;color:#fff}'
   + '#cnv input.rin{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:12px;border:2px solid #8fa6d6;background:#fff;color:#10204a;font:700 17px system-ui;outline:none}#cnv input.rin:focus{border-color:#3e63d8;box-shadow:0 0 0 4px rgba(62,99,216,.2)}#cnv input.rin.rt{width:150px;padding:6px 8px;font-size:15px;display:inline-block;margin:2px 4px}'
   + '#cnv table.rtb{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5;color:#1b2a52;border:2px solid #b9c9e6;border-radius:14px;overflow:hidden;background:#fff}#cnv .rtb th{background:#dfe8fb;text-align:left;padding:9px 10px;font-weight:800;color:#10204a}#cnv .rtb td{padding:10px;border-top:1px solid #d3dcf0;vertical-align:top}#cnv .rtb td:first-child{font-weight:800;font-style:italic}#cnv .rtb td+td{border-left:1px solid #e1e8f7}'
   + '#cnv .tqn{display:inline-block;min-width:22px;text-align:center;padding:1px 6px;margin-right:2px;border-radius:7px;background:#3e63d8;color:#fff;font-weight:800;font-size:13px}#cnv .tqn.gd{background:#0c9c84}#cnv .tqn.bd{background:#d6395f}#cnv .tw{display:inline-block;white-space:nowrap}'
@@ -324,16 +325,18 @@
   function opn(st){ if (O.nofloor) return true; return st === "read" ? !!(S.lisDone && S.lisDone[S.unit]) : !!(S.rdDone && S.rdDone[S.unit]); }
   function lockMsg(el_, txt){ el_.classList.add("shk"); setTimeout(function(){ el_.classList.remove("shk"); }, 400); var m = el("hlk"); if (m) m.textContent = txt; }
   function statusSync(){
-    if (S.stU === S.unit) return; S.stU = S.unit;
-    try { Promise.resolve(R("nv_class_status", {tok: O.tok, u: S.unit})).then(function(r){
+    if (S.stU === S.unit) return S.stP; S.stU = S.unit;
+    try { S.stP = Promise.resolve(R("nv_class_status", {tok: O.tok, u: S.unit})).then(function(r){
       if (!r || !r.ok || !r.lis) return; var ch = false, u = S.unit; S.lisDone = S.lisDone || {}; S.rdDone = S.rdDone || {}; S.wrDone = S.wrDone || {};
       if (r.lis && r.lis.prog){ S.prog0 = S.prog0 || {}; S.prog0[u] = r.lis.prog; }
       if (r.lis && r.lis.prog4){ S.prog4 = S.prog4 || {}; S.prog4[u] = r.lis.prog4; }
       ["lis", "read", "write"].forEach(function(st){ if (r[st] && r[st].draft){ S.draft0 = S.draft0 || {}; S.draft0[u + ":" + st] = r[st].draft; } });
       [["lis", S.lisDone], ["read", S.rdDone], ["write", S.wrDone]].forEach(function(p){ var x = r[p[0]]; if (!x) return; S.srv[u + ":" + p[0]] = Math.max(S.srv[u + ":" + p[0]] || 0, x.secs || 0); if (x.done && !p[1][u]){ p[1][u] = true; ch = true; } });
       if (ch && !S.cur && el("hl")) hub();
-    }, function(){}); } catch (x) {}
+    }, function(){}); return S.stP; } catch (x) {}
   }
+  function syncP(){ var p = statusSync(); return p ? Promise.race([p.catch(function(){}), new Promise(function(r){ setTimeout(r, 5000); })]) : Promise.resolve(); }
+  function synced(fn){ var d = false, g = function(){ if (!d){ d = true; fn(); } }; var p = statusSync(); if (!p){ g(); return; } p.then(g, g); setTimeout(g, 5000); }
   var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1};
   /* the drilling takes the whole screen, like the classic tests; the hub gives it back */
   function goFS(){ var d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen || d.msRequestFullscreen; try { var p = f && f.call(d); if (p && p.then) p.then(function(){ try { if (navigator.keyboard && navigator.keyboard.lock) navigator.keyboard.lock(["Escape"]).catch(function(){}); } catch (e) {} }, function(){}); } catch (e) {} }
@@ -399,7 +402,7 @@
   }
   function startPart(){
     page(top() + '<div class="hero"><h2>Loading Part ' + S.unit + '…</h2></div>');
-    getFile("c" + S.unit + "_part", "part" + S.unit + ".json").then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }).then(function(P){
+    Promise.all([getFile("c" + S.unit + "_part", "part" + S.unit + ".json").then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }), syncP()]).then(function(rr){ var P = rr[0];
       S.cur = "lis"; S.P = P; S.dict = true; S.ei = 0; S.res = {}; S.pl = {}; if (!S.t0) S.t0 = Date.now();
       var sv = (S.lisDone && S.lisDone[S.unit]) ? null : loadProg();
       if (sv && sv.res && typeof sv.ei === "number"){ S.ei = Math.min(sv.ei, P.exercises.length); S.res = sv.res; S.pl = sv.pl || {}; }
@@ -437,7 +440,7 @@
   }
   function wirePlayer(ex){
     if (ex.long) return wireFull(ex);
-    var b = el("cplay"), bar = el("cbar"), tm = el("ctm"), key = ex.audio + (S.inFix ? "f" : ""), lim = S.inFix ? 1 : 2; S.pl = S.pl || {};
+    var b = el("cplay"), bar = el("cbar"), tm = el("ctm"), key = ex.audio + (S.inFix ? "f" + (S.fixRound || 0) : ""), lim = S.inFix ? 1 : 2; S.pl = S.pl || {};
     function left(){ return lim - (S.pl[key] || 0); }
     function label(){ var l = left(); b.disabled = l <= 0; b.textContent = l <= 0 ? "✔ Played" : S.pl[key] ? "▶ Play again (" + l + " left)" : "▶ Play (" + lim + (lim > 1 ? " plays" : " play") + ")"; }
     label();
@@ -532,7 +535,7 @@
       + '<div class="gr g2 fr">' + rows + '</div>'
       + (S.fix.length && need80 ? '<div class="card warn" style="margin:14px 0 4px;text-align:center"><b>You need 80% to move on.</b> You are at ' + pct + '%. Win back at least ' + left80 + ' more item' + (left80 > 1 ? 's' : '') + '. The fix rounds repeat until you get there.</div><button class="go fixgo" id="cfix">🛠 Start the fix round: ' + miss + ' item' + (miss > 1 ? "s" : "") + ' to win back →</button>' : S.fix.length ? '<button class="go fixgo" id="cfix" style="font-size:19px">🏆 Reach 100%: win back the last ' + miss + ' item' + (miss > 1 ? "s" : "") + ' →</button><button class="pill" id="cdone" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button><p class="sub" style="text-align:center;margin:8px 0 0">You passed with ' + pct + '%. The 100% round is your choice: perfect scores are what the best students bring home.</p>' : '<button class="go" id="cdone" style="margin-top:6px">Continue →</button>'));
     el("cb").onclick = hub;
-    if (el("cfix")) el("cfix").onclick = function(){ S.fi = 0; S.fres = {}; fixEx(); };
+    if (el("cfix")) el("cfix").onclick = function(){ S.fi = 0; S.fres = {}; S.fixRound = (S.fixRound || 0) + 1; fixEx(); };   /* every fix round has its own single play */
     if (el("cdone")) el("cdone").onclick = listeningDone;
   }
   function fixEx(){
@@ -623,7 +626,7 @@
   }
   function startPart4(){
     page(top() + '<div class="hero"><h2>Loading Part ' + S.unit + '…</h2></div>'); el("cb").onclick = hub;
-    Promise.all([getFile("c" + S.unit + "_part", "part" + S.unit + ".json").then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }), wrTrack()]).then(function(r){
+    Promise.all([getFile("c" + S.unit + "_part", "part" + S.unit + ".json").then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }), wrTrack(), syncP()]).then(function(r){
       S.P = r[0]; S.dict = false; S.cur = "lis"; S.L = {stage: 1, ei: 0, notes: {}, a2: {}, a3: {}, track: r[1]}; S.res = {}; S.pl = {}; S.fix = []; if (!S.t0) S.t0 = Date.now();
       var sv = stDone("lis") ? null : loadProg4();
       if (sv && sv.L && sv.L.stage >= 1 && S.P.exercises[sv.L.ei || 0]){
@@ -816,16 +819,20 @@
     Promise.resolve(R("nv_stage", {tok: O.tok, u: S.unit})).then(function(r){ return r && r.track === "ml" ? "ml" : "ie"; }, function(){ return "ie"; }).then(function(tr){
       return getFile("c" + S.unit + (tr === "ml" ? "_readm" : "_read"), (tr === "ml" ? "readm" : "read") + S.unit + ".json");
     }).then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }).then(function(D){
-      S.R = {D: D, ans: {}, first: null, second: null, t0: Date.now(), phase: 0};
-      var dr = loadDraft("read"); if (dr && dr.x && Date.now() - (dr.at || 0) < 12 * 3600 * 1000){ if (dr.x.t0) S.R.t0 = dr.x.t0; S.R.ans = dr.x.ans || {}; }
-      rdTest(false);
+      return Promise.all([syncP(), fetch(O.base + "readx.json", {cache: "no-store"}).then(function(r){ return r.json(); }).catch(function(){ return {}; })]).then(function(z){ D.x = (z[1] && z[1][S.unit]) || []; return D; });
+    }).then(function(D){
+      S.R = {D: D, ans: {}, first: null, second: null, t0: Date.now(), phase: 0, step: "test", mist: 0};
+      var dr = loadDraft("read"), st0 = "test"; if (dr && dr.x && Date.now() - (dr.at || 0) < 12 * 3600 * 1000){ if (dr.x.t0) S.R.t0 = dr.x.t0; S.R.ans = dr.x.ans || {}; st0 = dr.x.step || "test"; S.R.mist = dr.x.mist || 0; }
+      if (st0 === "vocab" || st0 === "quiz"){ S.R.last = {bad: new Array(Math.max(1, S.R.mist)), good: [], ans: {}}; S.R.first = S.R.last; S.R.ans = {}; rdVocab(); return; }
+      if (st0 === "retake"){ S.R.first = {bad: new Array(Math.max(1, S.R.mist)), good: [], ans: {}}; S.R.hl = true; S.R.step = "retake"; rdTest(true); }
+      else rdTest(false);
       try { var A = S.R.ans; [].forEach.call(document.querySelectorAll("#rdq .tf"), function(g){ var n = +g.parentNode.parentNode.getAttribute("data-n"); if (A[n]) [].forEach.call(g.children, function(b){ if (b.getAttribute("data-v") === A[n]) b.onclick(); }); });
         [].forEach.call(document.querySelectorAll("#rdq select.rsel"), function(c){ var n = +c.getAttribute("data-n"); if (A[n]){ c.value = A[n]; if (c.onchange) c.onchange(); } });
         [].forEach.call(document.querySelectorAll("input.rin[data-n]"), function(i){ var n = +i.getAttribute("data-n"); if (A[n] && !i.value) i.value = A[n]; if (i.value && i.oninput) i.oninput(); }); } catch (e) {}
     }).catch(function(){ page(top() + '<div class="card warn"><h2>The reading is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
   }
   function rdSteps(cur){
-    var L = ["1 · Test", "2 · Results", "3 · Vocabulary", "4 · Retake", "5 · Answers"];
+    var L = ["1 · Test", "2 · Mistakes", "3 · Study", "4 · Quiz", "5 · Retake", "6 · Feedback"];
     return '<div class="rds">' + L.map(function(t, i){ return '<span class="' + (i < cur ? "dn" : i === cur ? "cu" : "") + '">' + (i < cur ? "✔ " : "") + t + '</span>'; }).join("") + '</div>';
   }
   function rdPassage(){
@@ -841,14 +848,14 @@
   }
   function rdTest(retake){
     if (S.R.D.parts) return rdTestML(retake);
-    var R_ = S.R, D = R_.D, wrongSet = retake ? R_.first.bad : null;
-    function on(n){ return !wrongSet || wrongSet.indexOf(n) >= 0; }
-    if (retake) wrongSet.forEach(function(n){ delete R_.ans[n]; });
+    var R_ = S.R, D = R_.D, wrongSet = null;
+    function on(n){ return true; }
+    if (retake && R_.step !== 'retake'){ R_.ans = {}; } rdStep(retake ? 'retake' : 'test');
     var h = '';
     var tfs = D.q.filter(function(q){ return q.t === "tf" && on(q.n); }), ws = D.q.filter(function(q){ return q.t === "w" && on(q.n); }), ts = D.t.filter(function(q){ return on(q.n); });
     function qrow(q){ return '<div class="qr" data-n="' + q.n + '"><div class="qn">' + q.n + '</div><div class="qb"><div class="qt">' + esc(q.q) + '</div>'
       + (q.t === "tf" ? '<div class="tf">' + ["TRUE", "FALSE", "NOT GIVEN"].map(function(v){ return '<button type="button" data-v="' + v + '">' + v + '</button>'; }).join("") + '</div>' : '<input class="rin" type="text" autocomplete="off" spellcheck="false" placeholder="Your answer" data-n="' + q.n + '">') + '</div></div>'; }
-    if (retake) h += '<div class="qgh"><span class="qi">🔁</span><div><b>Retake: only the questions you missed</b><small>You have seen the vocabulary now. Read the passage again and fix your answers. The answers will be shown after this round.</small></div></div>';
+    if (retake) h += '<div class="qgh"><span class="qi">🔁</span><div><b>Full retake: every question again</b><small>You studied the vocabulary and passed the quiz. Now answer ALL the questions. You need every one correct to see the feedback.</small></div></div>';
     function rg(list){ var ns = list.map(function(q){ return q.n; }); return ns.length > 1 ? Math.min.apply(null, ns) + "–" + Math.max.apply(null, ns) : String(ns[0]); }
     var gtf = tfs.length ? '<div class="qg"><div class="qgh"><span class="qi">🧭</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "tf"; })) + ' · True / False / Not Given</b><small>Do the statements agree with the information in the passage?</small></div></div>'
       + '<div class="qd"><span><b>TRUE</b> = agrees with the passage</span><span><b>FALSE</b> = contradicts the passage</span><span><b>NOT GIVEN</b> = no information on this</span></div>' + tfs.map(qrow).join("") + '</div>' : "";
@@ -862,7 +869,7 @@
       gts = '<div class="qg"><div class="qgh"><span class="qi">🧩</span><div><b>Questions ' + rg(D.t) + ' · Table completion</b><small>Complete the table. Choose <b>' + (D.tl || "ONE WORD AND/OR A NUMBER") + '</b> from the passage for each answer.</small></div></div>' + tb + '</div>'; }
     var GR = {tf: gtf, w: gws, tb: gts}; (D.order || ["tf", "w", "tb"]).forEach(function(k){ h += GR[k]; });
     var need = [].concat(tfs, ws, ts).map(function(q){ return q.n; });
-    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 3 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
+    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 4 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
       + '<div class="rsp">' + rdPassage() + '<div class="rpn q hlz" id="rdq">' + h + '<div class="rbar"><button class="go" id="rck" disabled>Check my answers</button><small id="rhint"></small></div></div></div>');
     wide(true); rdTimer();
     el("cb").onclick = function(){ if (S.bt) clearInterval(S.bt); wide(false); hub(); };
@@ -875,19 +882,14 @@
       i.oninput = function(){ R_.ans[n] = i.value; var r = i.closest(".qr"); if (r) r.classList.toggle("fld", !!i.value.trim()); upd(); };
       i.onpaste = function(e){ e.preventDefault(); }; i.oncontextmenu = function(e){ e.preventDefault(); }; });
     upd();
-    el("rck").onclick = function(){
-      var all = rdAll(D), bad = [], good = [];
-      need.forEach(function(n){ var q = all.filter(function(x){ return x.n === n; })[0]; (rdJudge(q, R_.ans[n]) ? good : bad).push(n); });
-      if (!retake){ R_.first = {bad: bad, good: good, ans: JSON.parse(JSON.stringify(R_.ans))}; rdResults(); }
-      else { R_.second = {bad: bad, good: good, ans: JSON.parse(JSON.stringify(R_.ans))}; rdAnswers(); }
-    };
+    el("rck").onclick = function(){ rdCheck(need); };
   }
 
   /* multi-level reading: tabs for the three parts, each with its own left panel and question list */
   function rdTestML(retake){
-    var R_ = S.R, D = R_.D, wrongSet = retake ? R_.first.bad : null;
-    function on(n){ return !wrongSet || wrongSet.indexOf(n) >= 0; }
-    if (retake) wrongSet.forEach(function(n){ delete R_.ans[n]; });
+    var R_ = S.R, D = R_.D, wrongSet = null;
+    function on(n){ return true; }
+    if (retake && R_.step !== 'retake'){ R_.ans = {}; } rdStep(retake ? 'retake' : 'test');
     var need = [], tabs = "", lefts = "", rights = "", firstP = -1, fullP = {};
     D.parts.forEach(function(p, pi){
       var qs = p.qs.filter(function(q){ return on(q.n); }); if (!qs.length) return; if (firstP < 0) firstP = pi;
@@ -901,7 +903,7 @@
       else rr += qs.map(function(q){ return '<div class="qr" data-n="' + q.n + '"><div class="qn">' + q.n + '</div><div class="qb"><div class="qt">' + esc(q.q) + '</div><select class="rsel" data-n="' + q.n + '"><option value="">Choose…</option>' + q.opts.map(function(o){ return '<option>' + o + '</option>'; }).join("") + '</select></div></div>'; }).join("");
       rights += rr + '</div>';
     });
-    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 3 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
+    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 4 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
       + '<div class="rtabs">' + tabs + '</div><div class="rsp"><div id="rdp">' + lefts + '</div><div class="rpn q hlz" id="rdq">' + rights + '</div></div><div class="rbar rbfix"><button class="go" id="rck" disabled>Check my answers</button><small id="rhint"></small></div>');
     wide(true); rdTimer();
     el("cb").onclick = function(){ if (S.bt) clearInterval(S.bt); wide(false); hub(); };
@@ -919,34 +921,78 @@
     [].forEach.call(document.querySelectorAll("#rdq select.rsel"), function(c){ var n = +c.getAttribute("data-n"); c.onchange = function(){ R_.ans[n] = c.value; c.closest(".qr").classList.toggle("fld", !!c.value); crossOut(); upd(); }; });
     crossOut();
     upd();
-    el("rck").onclick = function(){
-      var all = rdAll(D), bad = [], good = [];
-      need.forEach(function(n){ var q = all.filter(function(x){ return x.n === n; })[0]; (rdJudge(q, R_.ans[n]) ? good : bad).push(n); });
-      if (!retake){ R_.first = {bad: bad, good: good, ans: JSON.parse(JSON.stringify(R_.ans))}; rdResults(); }
-      else { R_.second = {bad: bad, good: good, ans: JSON.parse(JSON.stringify(R_.ans))}; rdAnswers(); }
-    };
+    el("rck").onclick = function(){ rdCheck(need); };
   }
+  function rdSave(){
+    var R_ = S.R; if (!R_) return; var d = {sig: "rd", vals: [], at: Date.now(), x: {t0: R_.t0, ans: R_.ans || {}, step: R_.step, mist: R_.mist || 0}};
+    try { localStorage.setItem(dKey("read"), JSON.stringify(d)); } catch (e) {}
+    flushLog("read", {draft: d});
+  }
+  function rdStep(st){ if (!S.R) return; S.R.step = st; if (st !== "test") rdSave(); }
+  function rdCheck(need){
+    var R_ = S.R, D = R_.D, all = rdAll(D), bad = [], good = [];
+    need.forEach(function(n){ var q = all.filter(function(x){ return x.n === n; })[0]; (rdJudge(q, R_.ans[n]) ? good : bad).push(n); });
+    R_.last = {bad: bad, good: good, ans: JSON.parse(JSON.stringify(R_.ans))}; if (!R_.first) R_.first = R_.last;
+    R_.rounds = (R_.rounds || 0) + 1; R_.mist = bad.length;
+    if (S.bt) clearInterval(S.bt);
+    if (!bad.length){ R_.second = R_.last; rdAnswers(); } else { rdStep("vocab"); rdResults(); }
+  }
+  /* after each check the student sees ONLY how many mistakes they made, never which ones and never the answers */
   function rdResults(){
-    var R_ = S.R, D = R_.D, r = R_.first, g = r.good.length, tot = rdAll(D).length, pct = Math.round(100 * g / tot), col = pct >= 85 ? "#0c9c84" : pct >= 60 ? "#e0953c" : "#d6395f";
-    var msg = pct >= 85 ? "Superb reading! Look at that accuracy." : pct >= 60 ? "Solid start. A few traps got you, and we will fix them." : "Good effort. This passage hides tricks, and you are about to learn them.";
-    var chips = ""; for (var i = 1; i <= tot; i++) chips += '<i class="' + (r.good.indexOf(i) >= 0 ? "g" : "b") + '" style="animation-delay:' + (i * 0.05).toFixed(2) + 's">' + i + '</i>';
-    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · results</h2>' + rdSteps(1) + '</div><div class="brk" style="padding-top:6px">'
-      + '<div class="rsc"><div class="ring" style="--c:' + col + ';--a:' + pct + '%"><div><b style="font-size:46px;color:' + col + '">' + g + '/' + tot + '</b><small>' + pct + '% correct</small></div></div></div>'
-      + '<h1 class="bh" style="font-size:40px">' + msg + '</h1><p class="sub">Green = correct, red = needs another look. The answers stay hidden until you have studied the vocabulary and tried again.</p>'
-      + '<div class="qchips">' + chips + '</div>'
-      + '<div style="margin-top:22px"><button class="go" id="rvo">' + (r.bad.length ? "Study the vocabulary →" : "Perfect! See the explanations →") + '</button></div></div>');
+    var R_ = S.R, D = R_.D, n = R_.last.bad.length, tot = rdAll(D).length;
+    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · result</h2>' + rdSteps(1) + '</div><div class="brk" style="padding-top:6px">'
+      + '<div class="rsc"><div class="ring" style="--c:#d6395f;--a:' + Math.round(100 * (tot - n) / tot) + '%"><div><b style="font-size:46px;color:#d6395f">' + n + '</b><small>mistake' + (n > 1 ? "s" : "") + '</small></div></div></div>'
+      + '<h1 class="bh" style="font-size:36px">You made ' + n + ' mistake' + (n > 1 ? "s" : "") + '.</h1>'
+      + '<p class="sub">To see the feedback you need <b>all ' + tot + ' correct</b>. The answers stay hidden. Study the vocabulary, pass the 20-question quiz, then take the whole test again.</p>'
+      + '<div style="margin-top:22px"><button class="go" id="rvo">Study the vocabulary →</button></div></div>');
     wide(false); el("cb").onclick = hub;
-    el("rvo").onclick = function(){ if (r.bad.length) rdVocab(); else { R_.second = {bad: [], good: r.good, ans: r.ans}; rdAnswers(); } };
+    el("rvo").onclick = function(){ rdVocab(); };
   }
   function rdVocab(){
-    var D = S.R.D, r = S.R.first;
+    var D = S.R.D; rdStep("vocab");
     function card(x, c){ return '<div class="vc ' + c + '"><b>' + esc(x[0]) + '</b><span>' + esc(x[1]) + '</span><em>' + esc(x[2]) + '</em></div>'; }
-    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · vocabulary</h2>' + rdSteps(2) + '</div>'
-      + '<p class="sub" style="text-align:left;margin:4px 0">Every word and chunk below is used in the passage. Study them, then read the passage again: they will be highlighted for you.</p>'
+    var xs = D.x || [];
+    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · study</h2>' + rdSteps(2) + '</div>'
+      + '<p class="sub" style="text-align:left;margin:4px 0">Learn every word and chunk below, the ones from the passage <b>and</b> the extra ones. The quiz has 20 questions and you need <b>18</b>.</p>'
       + '<div class="vh">Vocabulary from your Unit ' + S.unit + ' book</div><div class="vgrid">' + D.v.map(function(x){ return card(x, ""); }).join("") + '</div>'
-      + '<div class="vh">Unit ' + S.unit + ' power chunks' + (D.topic || S.unit === 1 ? ' · ' + esc(D.topic || 'Growing Up') : '') + '</div><div class="vgrid">' + D.c.map(function(x){ return card(x, "c"); }).join("") + '</div>'
-      + '<div style="text-align:center;margin:22px 0 10px"><button class="go" id="rrt">Retake the ' + r.bad.length + ' question' + (r.bad.length > 1 ? "s" : "") + ' I missed →</button></div>');
-    wide(false); el("cb").onclick = rdResults; el("rrt").onclick = function(){ S.R.t0 = Date.now(); S.R.hl = true; rdTest(true); };
+      + '<div class="vh">Unit ' + S.unit + ' power chunks' + (D.topic ? ' · ' + esc(D.topic) : '') + '</div><div class="vgrid">' + D.c.map(function(x){ return card(x, "c"); }).join("") + '</div>'
+      + (xs.length ? '<div class="vh">⭐ Extra words, collocations and chunks · new for you</div><div class="vgrid">' + xs.map(function(x){ return card(x, "c"); }).join("") + '</div>' : "")
+      + '<div style="text-align:center;margin:22px 0 10px"><button class="go" id="rrt">I am ready: start the 20-question quiz →</button></div>');
+    wide(false); el("cb").onclick = hub; el("rrt").onclick = function(){ rdQuiz(); };
+  }
+  function shuf(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function rdQuiz(){
+    var R_ = S.R, D = R_.D; rdStep("quiz");
+    var bk = D.v.concat(D.c), xs = D.x || [], pool = bk.concat(xs);
+    var nx = Math.min(xs.length, 11), pick = shuf(xs).slice(0, nx).concat(shuf(bk).slice(0, 20 - nx));
+    if (pick.length < 20) pick = pick.concat(shuf(pool.filter(function(p){ return pick.indexOf(p) < 0; })).slice(0, 20 - pick.length));
+    pick = shuf(pick);
+    var Q = pick.map(function(it, i){
+      var ty = i % 3, others = shuf(pool.filter(function(p){ return p !== it; })).slice(0, 3);
+      var stem, ans, opts;
+      if (ty === 0){ stem = 'What does <b>“' + esc(it[0]) + '”</b> mean?'; ans = it[1]; opts = others.map(function(o){ return o[1]; }); }
+      else if (ty === 1){ stem = 'Which word or phrase means: <b>“' + esc(it[1]) + '”</b>?'; ans = it[0]; opts = others.map(function(o){ return o[0]; }); }
+      else { stem = 'Which word or phrase matches the Uzbek: <b>“' + esc(it[2]) + '”</b>?'; ans = it[0]; opts = others.map(function(o){ return o[0]; }); }
+      opts.push(ans); return {stem: stem, ans: ans, opts: shuf(opts)};
+    });
+    var A = {};
+    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · vocabulary quiz</h2>' + rdSteps(3) + '</div>'
+      + '<p class="sub" style="text-align:left;margin:4px 0">20 questions. You need <b>18</b> to move on. You will see only your score.</p>'
+      + Q.map(function(q, i){ return '<div class="qr" data-i="' + i + '"><div class="qn">' + (i + 1) + '</div><div class="qb"><div class="qt">' + q.stem + '</div><div class="mq">' + q.opts.map(function(o, k){ return '<button type="button" class="mo" data-k="' + k + '">' + esc(o) + '</button>'; }).join("") + '</div></div></div>'; }).join("")
+      + '<div class="rbar"><button class="go" id="rqs" disabled>Submit the quiz</button><small id="rqh"></small></div>');
+    wide(false); el("cb").onclick = hub;
+    [].forEach.call(document.querySelectorAll(".qr .mq"), function(g){ var i = +g.parentNode.parentNode.getAttribute("data-i");
+      [].forEach.call(g.children, function(b){ b.onclick = function(){ A[i] = +b.getAttribute("data-k"); [].forEach.call(g.children, function(x){ x.classList.toggle("sel", x === b); }); var n = Object.keys(A).length; el("rqs").disabled = n < 20; el("rqh").textContent = n < 20 ? (20 - n) + " left" : "Ready."; }; }); });
+    el("rqs").onclick = function(){
+      var sc = 0; Q.forEach(function(q, i){ if (q.opts[A[i]] === q.ans) sc++; });
+      var ok = sc >= 18;
+      page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · quiz result</h2>' + rdSteps(3) + '</div><div class="brk" style="padding-top:6px"><div class="rsc"><div class="ring" style="--c:' + (ok ? "#0c9c84" : "#d6395f") + ';--a:' + (sc * 5) + '%"><div><b style="font-size:46px;color:' + (ok ? "#0c9c84" : "#d6395f") + '">' + sc + '/20</b><small>need 18</small></div></div></div>'
+        + '<h1 class="bh" style="font-size:34px">' + (ok ? "Quiz passed! Now the whole reading test again." : "Not yet. Learn the words once more and try again.") + '</h1>'
+        + '<p class="sub">' + (ok ? "Answer ALL the questions. You need every one correct to see the feedback." : "You need 18 out of 20. Study the list again, then take a new quiz.") + '</p>'
+        + '<div style="margin-top:22px"><button class="go" id="rnx">' + (ok ? "Start the full retake →" : "Study again →") + '</button></div></div>');
+      wide(false); el("cb").onclick = hub;
+      el("rnx").onclick = function(){ if (ok){ R_.t0 = Date.now(); R_.hl = true; R_.ans = {}; R_.step = "quiz"; rdTest(true); } else rdVocab(); };
+    };
   }
   function rdAnswers(){
     var R_ = S.R, D = R_.D, all = rdAll(D), f = R_.first, s2 = R_.second, tot = all.length;
@@ -961,7 +1007,7 @@
       return '<div class="acard ' + cls + '"><div class="qn">' + q.n + '</div><div><p><b>' + esc(q.q || "") + '</b></p>'
         + (ok2 ? '' : '<span class="yr">' + esc(ya || "no answer") + '</span>') + '<span class="ky">' + esc(q.a[0]) + '</span>' + (q.a.length > 1 ? '<small style="color:#3d4f80;font-weight:600">also accepted: ' + esc(q.a.slice(1).join(", ")) + '</small>' : "")
         + '<p>' + esc(q.ex) + '</p>' + (!ok1 && ok2 ? '<p style="color:#0b7a66;font-weight:700">✔ Fixed in the retake. Nice!</p>' : '') + '</div></div>'; }).join("");
-    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · answers & explanations</h2>' + rdSteps(4) + '</div>'
+    page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · answers & explanations</h2>' + rdSteps(5) + '</div>'
       + '<div class="brk" style="padding:4px 0 8px"><div class="fst" style="opacity:1;animation:none"><div><b>' + g1 + '/' + tot + '</b><span>first try</span></div><div><b style="color:#0c9c84">' + g2 + '/' + tot + '</b><span>after the retake</span></div><div><b>' + (g2 - g1 >= 0 ? "+" + (g2 - g1) : g2 - g1) + '</b><span>improvement</span></div></div></div>'
       + cards + '<div style="text-align:center;margin:20px 0 30px"><button class="go" id="rfin">Finish the reading →</button></div>');
     wide(false); el("cb").onclick = hub;
@@ -978,7 +1024,7 @@
   function wrSan(tr, x){ return tr === "ml" ? String(x).replace(/band\s*\d+(\.\d)?\+?/ig, "the top mark").replace(/\bband\b/ig, "mark") : x; }
   function startWriting(){ if (!opn("write")) return hub(); S.cur = "write";
     page(top() + '<div class="hero"><h2>Loading the writing…</h2></div>'); el("cb").onclick = hub;
-    Promise.all([wrLoad(), wrTrack()]).then(function(r){
+    Promise.all([wrLoad(), wrTrack(), syncP()]).then(function(r){
       var FB = r[0], tr = r[1], P = FB.ESSAY[tr];
       S.W = {need: tr === "ml" ? 180 : 250, FB: FB, P: P, tr: tr, ideas: [-1, -1], own: ["", ""], text: "", att: [], t0: Date.now(), mins: tr === "ml" ? 30 : 40};
       var dw = loadDraft("write"); if (dw && dw.x && Date.now() - (dw.at || 0) < 12 * 3600 * 1000){ if (dw.x.t0) S.W.t0 = dw.x.t0; if (dw.x.ideas) S.W.ideas = dw.x.ideas; if (dw.x.own) S.W.own = dw.x.own; if (dw.x.text) S.W.text = dw.x.text; }
@@ -1045,7 +1091,7 @@
   }
   function wrDetail(a){
     var W = a.W, NEED = S.W.need, h = "", nt = [];
-    if (W.empty) nt.push("You wrote nothing, so the mark is 0."); else if (W.tooShort) nt.push("Only " + W.n + " words. Under 10 words cannot be marked, so the mark is 0."); else if (W.n < NEED) nt.push(W.n + " of " + NEED + " words, so the mark was lowered.");
+    if (W.junk) nt.push("This does not look like real English writing, so the mark is 0 and there are no corrections. Write real sentences about the topic."); else if (W.empty) nt.push("You wrote nothing, so the mark is 0."); else if (W.tooShort) nt.push("Only " + W.n + " words. Under 10 words cannot be marked, so the mark is 0."); else if (W.n < NEED) nt.push(W.n + " of " + NEED + " words, so the mark was lowered.");
     if (nt.length) h += '<div class="card warn">' + nt.map(esc).join("<br>") + '</div>';
     if (!W.empty && !W.tooShort){
       h += '<div class="wsec" style="padding:14px 16px">' + nntCrit(W, S.W.tr === "ml", ESC0, function(x){ return wrSan(S.W.tr, x); }) + '</div>';
@@ -1074,7 +1120,7 @@
   function writingDone(){ if (!floorOk("write", wrFeedback)) return; clearDrafts("write"); S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
 
   /* ---------- supervision: active time per stage, minimum floors ---------- */
-  var FLOOR = {lis: 3000, read: 900, write: 1200}, SNAME = {lis: "listening", read: "reading", write: "writing"};
+  var FLOOR = {lis: 3000, read: 0, write: 1200}, SNAME = {lis: "listening", read: "reading", write: "writing"};
   function trk(){
     if (S.trkOn) return; S.trkOn = true; S.tm = {}; S.srv = {}; S.act = Date.now(); S.pend = {};
     ["mousemove", "keydown", "mousedown", "touchstart", "scroll"].forEach(function(ev){ document.addEventListener(ev, function(){ S.act = Date.now(); }, true); });
@@ -1211,7 +1257,7 @@
   function drJudge(it, ans){
     var a = drNorm(ans), g = drNorm(it.good);
     if (a === g) return true;
-    return (it.all || [it]).every(function(o){ var b = drNorm(o.bad), f = drNorm(o.fix); return a.indexOf(f) > -1 && (f.indexOf(b) > -1 || a.indexOf(b) < 0); }) && Math.abs(a.split(" ").length - g.split(" ").length) <= 2;
+    var extra = 0; return (it.all || [it]).every(function(o){ var b = drNorm(o.bad), al = String(o.fix).split(/\s*\/\s*/); extra += al.length - 1; return al.some(function(x){ var f = drNorm(x); return f && a.indexOf(f) > -1 && (f.indexOf(b) > -1 || a.indexOf(b) < 0); }); }) && Math.abs(a.split(" ").length - g.split(" ").length) <= 2 + 2 * extra;
   }
   function startDrill(){
     var W = S.W; W.dr = {q: drItems(), t0: Date.now()};
@@ -1256,7 +1302,7 @@
     return Math.round(100 * l4Run());
   } catch (e) { return 0; } }
   function listeningDone(){ if (!floorOk("lis")) return; clearDrafts("lis"); flushLog("lis", {done: true, acc: lisAcc(), prog: null, prog4: null, draft: null}); S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
-  function readingDone(){ if (!floorOk("read")) return; clearDrafts("read"); flushLog("read", {done: true, draft: null}); S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
+  function readingDone(){ if (!floorOk("read")) return; clearDrafts("read"); flushLog("read", {done: true, acc: 100, draft: null}); S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
   function stageBreak(label, onNext){ S.cur = null;
     var t0 = Date.now(), C = 2 * Math.PI * 130;
     page('<div class="brk"><small class="wu">' + label + '</small><h1 class="bh">Break time!</h1><p class="sub" id="bsub">Great focus. Recharge for ten minutes. We will keep the clock for you.</p>'
