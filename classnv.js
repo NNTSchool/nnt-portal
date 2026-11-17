@@ -335,7 +335,7 @@
       if (ch && !S.cur && el("hl")) hub();
     }, function(){}); return S.stP; } catch (x) {}
   }
-  function syncP(){ var p = statusSync(); return p ? Promise.race([p.catch(function(){}), new Promise(function(r){ setTimeout(r, 5000); })]) : Promise.resolve(); }
+  function syncP(){ var p = statusSync(); return p ? Promise.race([p.catch(function(){}), new Promise(function(r){ setTimeout(r, 2000); })]) : Promise.resolve(); }
   function synced(fn){ var d = false, g = function(){ if (!d){ d = true; fn(); } }; var p = statusSync(); if (!p){ g(); return; } p.then(g, g); setTimeout(g, 5000); }
   var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1};
   /* the drilling takes the whole screen, like the classic tests; the hub gives it back */
