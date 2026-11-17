@@ -436,6 +436,11 @@
     return '<div class="card" id="cpc"><div class="pl"><button class="go" id="cplay">▶ Play</button><div class="bar"><b id="cbar"></b></div><span id="ctm" class="sub">0:00</span></div>'
       + '<p class="sub" style="margin:8px 0 0">You cannot skip or rewind. Once it starts, listen to the end. ' + (S.inFix ? "You get one more play to check what you missed." : "You can play it twice.") + '</p></div>';
   }
+  function fullPlayer(note){
+    return '<div class="card" id="cpc"><div class="pl"><button class="go" id="cplay">▶ Play</button><input type="range" id="cseek" min="0" max="1000" value="0" class="seek"><span id="ctm" class="sub">0:00</span></div>'
+      + '<div class="spd"><span class="sub">Speed</span><button class="pill sp5" data-s="0.6">0.6×</button><button class="pill sp5" data-s="0.8">0.8×</button><button class="pill sp5 on" data-s="1">1×</button><button class="pill sp5" data-s="1.25">1.25×</button></div>'
+      + '<p class="sub" style="margin:8px 0 0">' + note + '</p></div>';
+  }
   function wireFull(ex){
     var tok = S.pgn, b = el("cplay"), sk = el("cseek"), tm = el("ctm"), spd = 1, drag = false;
     function fmt(t){ t = Math.floor(t); return Math.floor(t / 60) + ":" + ("0" + t % 60).slice(-2); }
@@ -795,10 +800,10 @@
     else { var q = ex.qs[w.n - 1]; wid = '<div class="l4q"><div class="l4r fx" data-k="0"><b class="qn">' + w.n + '</b><span class="qt">' + esc(q.l) + (q.s ? ' <strong>' + esc(q.s) + '</strong>' : "") + '</span><div class="l4t">' + (q.nt ? '' : '<button type="button" class="l4ok">✔ correct</button>') + '<input class="a l4in" type="text" placeholder="' + (q.nt ? 'write your answer' : 'or write the correction') + '" spellcheck="false" autocomplete="off" autocapitalize="off"></div></div></div>'; }
     var pct = Math.round(100 * L.pi / L.pq.length);
     page(top("Exit") + stgBar(4) + '<div class="fxtag">🛠 WIN IT BACK · round ' + (L.rounds || 1) + ' · ' + (L.pi + 1) + ' of ' + L.pq.length + '</div><div class="drb"><i style="width:' + pct + '%"></i></div>'
-      + '<div class="ins fixc"><span class="ii">🎯</span><div><small>NO HINTS THIS TIME</small><strong>Listen once and answer from what you hear. Your answer is locked when you press the button. The full review comes at the end of the round.</strong></div></div>'
-      + l4Player(ex) + '<div class="l4ans" id="l4a"><div class="l4qh">' + esc(ex.id + " · " + ex.name) + '</div>' + wid + '</div><div class="l4bar"><span class="wrm" id="l4m"></span><button class="go" id="l4ck">Lock my answer</button></div>');
+      + '<div class="ins fixc"><span class="ii">🎯</span><div><small>NO HINTS THIS TIME</small><strong>Play the recording as often as you like. Pause it, move around in it and change the speed. Your answer is locked when you press the button. The full review comes at the end of the round.</strong></div></div>'
+      + fullPlayer("Fix round: you can pause, move around the recording and replay it. This is not the exam.") + '<div class="l4ans" id="l4a"><div class="l4qh">' + esc(ex.id + " · " + ex.name) + '</div>' + wid + '</div><div class="l4bar"><span class="wrm" id="l4m"></span><button class="go" id="l4ck">Lock my answer</button></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; qWire(el("l4a"), {kind: ex.kind});
-    l4Wire(ex, 1, "d" + ex.id + ":" + w.n + ":" + (L.rounds || 1), "One fresh play for this question. Listen to the end. Every new round gives you a new play.");
+    wireFull(ex);
     el("l4ck").onclick = function(){
       var root = el("l4a"), ok = false, ans, said = "";
       if (ex.kind === "tf"){ var s = root.querySelector(".l4tf[data-sel='1']"); if (!s){ el("l4m").className = "wrm bd"; el("l4m").textContent = "Choose an answer first."; return; } ok = s.getAttribute("data-v") === ex.qs[w.n - 1].a; said = s.getAttribute("data-v") === "T" ? "True" : "False"; }
