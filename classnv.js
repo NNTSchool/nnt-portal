@@ -356,7 +356,7 @@
   }
   fsWatch(); draftWatch();
   function leaveFS(){ if (document.fullscreenElement || document.webkitFullscreenElement){ try { (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) {} } }
-  function hub(){ S.cur = null; leaveFS(); statusSync();
+  function hub(){ S.cur = null; leaveFS(); statusSync(); if (S.upd) setTimeout(updNow, 400);
     function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
     function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
     page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Unit ' + S.unit + '</h2><p class="sub">Your path today: three drillings, with a break between them</p></div>'
@@ -378,10 +378,18 @@
 
   /* ---------- Part runner (listening) ---------- */
   function norm(s){ return String(s).toLowerCase().replace(/[‐-―]/g, "-").replace(/\s*-\s*/g, "-").replace(/[.,;:!?"'‘’]/g, "").replace(/\s+/g, " ").trim(); }
+  /* spelling variants that are not mistakes in a dictation: US/UK forms, OK/okay */
+  function canon(w){
+    if (w === "okay") return "ok";
+    if (w === "mum") return "mom"; if (w === "grey") return "gray";
+    w = w.replace(/(\w{2,})our(s|ed|ing|ite|ful|able)?$/, "$1or$2").replace(/(\w{1,})tre(s)?$/, "$1ter$2").replace(/(\w{2,})is(e|ed|es|ing|ation|ations)$/, "$1iz$2").replace(/(\w)ll(ing|ed|er|ers)$/, "$1l$2").replace(/(\w{2,})yse(s|d)?$/, "$1yze$2");
+    return w;
+  }
   function words(s){ return norm(s).replace(/-/g, " ").split(" ").filter(Boolean); }
+  function cwords(s){ return words(s).map(canon); }
   function lcs(a, b){ var m = a.length, n = b.length, d = [], i, j; for (i = 0; i <= m; i++){ d[i] = []; for (j = 0; j <= n; j++) d[i][j] = 0; }
     for (i = 1; i <= m; i++) for (j = 1; j <= n; j++) d[i][j] = a[i-1] === b[j-1] ? d[i-1][j-1] + 1 : Math.max(d[i-1][j], d[i][j-1]); return d[m][n]; }
-  function judge(ex, k, said){ if (ex.long){ var c = words(ex.items[k]), g = words(said); var l = lcs(c, g); return {ok: c.length > 0 && l / Math.max(c.length, g.length) >= 0.9, pct: Math.round(100 * l / c.length)}; }
+  function judge(ex, k, said){ if (ex.long){ var c = cwords(ex.items[k]), g = cwords(said); var l = lcs(c, g), pa = c.length ? l / Math.max(c.length, g.length, 1) : 0; return {ok: c.length > 0 && pa >= 0.9, pct: Math.round(100 * pa), pa: pa}; }
     return {ok: norm(said) === norm(ex.items[k]) || norm(said).replace(/[ -]/g, "") === norm(ex.items[k]).replace(/[ -]/g, "")}; }
 
   /* encrypted files: the server releases the key only to an allowed student who holds the unit's home key */
@@ -468,32 +476,47 @@
   }
   function layoutCls(ex){ var ml = Math.max.apply(null, ex.items.map(function(t){ return t.length; })); return ex.long ? "" : ml <= 13 ? "g4" : ml <= 22 ? "g3" : "g2"; }
   function tier(pct){ return pct === 100 ? ["PERFECT", "✨", "#d98b00"] : pct >= 85 ? ["EXCELLENT", "🔥", "#0c9c84"] : pct >= 65 ? ["GOOD JOB", "👏", "#3e63d8"] : pct >= 40 ? ["KEEP GOING", "💪", "#e0710f"] : ["LET'S FIX IT", "🎯", "#d6395f"]; }
-  /* word-level mistakes only: what was written wrongly, left out, or added, with two words of context */
-  function diffErrs(ref, said){
-    var A = words(ref), B = words(said), m = A.length, n = B.length, d = [], i, j;
+  /* the student's own text, wrong words in red, the correction in green brackets right after; right words stay plain */
+  function dictInline(ref, said){
+    var toks = String(said).split(/\s+/).filter(Boolean), rtoks = String(ref).split(/\s+/).filter(Boolean), A = [], B = [], i, j;
+    rtoks.forEach(function(t, ti){ cwords(t).forEach(function(w){ A.push({w: w, t: ti}); }); });
+    toks.forEach(function(t, ti){ cwords(t).forEach(function(w){ B.push({w: w, t: ti}); }); });
     if (!B.length) return '<div class="dfe">You wrote nothing for this part. Listen again and write what you hear.</div>';
+    var m = A.length, n = B.length, d = [];
     for (i = 0; i <= m; i++){ d[i] = []; for (j = 0; j <= n; j++) d[i][j] = 0; }
-    for (i = m - 1; i >= 0; i--) for (j = n - 1; j >= 0; j--) d[i][j] = A[i] === B[j] ? d[i+1][j+1] + 1 : Math.max(d[i+1][j], d[i][j+1]);
+    for (i = m - 1; i >= 0; i--) for (j = n - 1; j >= 0; j--) d[i][j] = A[i].w === B[j].w ? d[i+1][j+1] + 1 : Math.max(d[i+1][j], d[i][j+1]);
     var ops = [], x = 0, y = 0;
-    while (x < m && y < n){ if (A[x] === B[y]){ ops.push(["=", A[x]]); x++; y++; } else if (d[x+1][y] >= d[x][y+1]){ ops.push(["-", A[x]]); x++; } else { ops.push(["+", B[y]]); y++; } }
-    while (x < m){ ops.push(["-", A[x++]]); } while (y < n){ ops.push(["+", B[y++]]); }
-    var out = [], k = 0, ctx = [];
+    while (x < m && y < n){ if (A[x].w === B[y].w){ ops.push(["=", x, y]); x++; y++; } else if (d[x+1][y] >= d[x][y+1]){ ops.push(["-", x++, -1]); } else { ops.push(["+", -1, y++]); } }
+    while (x < m) ops.push(["-", x++, -1]); while (y < n) ops.push(["+", -1, y++]);
+    var bad = {}; ops.forEach(function(o){ if (o[0] === "+") bad[B[o[2]].t] = 1; });
+    var done = {}, out = [], k = 0, errs = 0;
+    function strip(t){ return String(t).replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, ""); }
+    var R = 'color:#c62846;background:#ffe3e8;border-radius:4px;padding:0 3px;font-weight:700', G = 'color:#0a7a5f;font-weight:800';
     while (k < ops.length){
-      if (ops[k][0] === "="){ ctx.push(ops[k][1]); k++; continue; }
-      var del = [], ins = []; while (k < ops.length && ops[k][0] !== "="){ (ops[k][0] === "-" ? del : ins).push(ops[k][1]); k++; }
-      var before = ctx.slice(-2).join(" "); ctx = [];
-      out.push({b: before, w: ins.join(" "), r: del.join(" ")});
+      if (ops[k][0] === "="){ var tt = B[ops[k][2]].t; if (!done[tt]){ done[tt] = 1; out.push(bad[tt] ? '<span style="' + R + '">' + esc(toks[tt]) + '</span>' : esc(toks[tt])); } k++; continue; }
+      var dels = [], ins = []; while (k < ops.length && ops[k][0] !== "="){ if (ops[k][0] === "-") dels.push(ops[k][1]); else ins.push(ops[k][2]); k++; }
+      errs++;
+      var ts = []; ins.forEach(function(bi){ var t = B[bi].t; if (!done[t]){ done[t] = 1; ts.push(t); } });
+      if (ts.length) out.push('<span style="' + R + '">' + ts.map(function(t){ return esc(toks[t]); }).join(" ") + '</span>');
+      if (dels.length){ var rt = [], seen = {}; dels.forEach(function(ai){ var t = A[ai].t; if (!seen[t]){ seen[t] = 1; rt.push(strip(rtoks[t])); } });
+        out.push('<span style="' + G + '">(' + esc(rt.join(" ")) + ')</span>'); }
     }
-    if (!out.length) return '<div class="dfe">No mistakes. Well done.</div>';
-    if (out.length > 14) { var extra = out.length - 14; out = out.slice(0, 14); out.push({more: extra}); }
-    return out.map(function(o){ if (o.more) return '<div class="dfe" style="opacity:.8">…and ' + o.more + ' more mistake' + (o.more > 1 ? "s" : "") + '. Listen again and check the whole passage.</div>';
-      return '<div class="dfe" style="margin:4px 0">' + (o.b ? '<span style="opacity:.65">…' + esc(o.b) + '</span> ' : '') + (o.w ? '<s>' + esc(o.w) + '</s>' : '<em style="opacity:.8">(left out)</em>') + ' → ' + (o.r ? '<strong>' + esc(o.r) + '</strong>' : '<em style="opacity:.8">(not in the audio)</em>') + '</div>'; }).join("");
+    return '<div class="dfe" style="background:#fff;color:#1d2433;padding:11px 13px;border-radius:12px;line-height:1.85;font-size:15.5px;font-weight:500">' + (errs ? out.join(" ") : '✔ No mistakes. Well done.') + '</div>';
+  }
+  function dictPct(r){ if (!r) return 0; if (r.pa){ var s = 0; for (var k = 0; k < r.n; k++) s += (r.pa[k] || 0); return r.n ? s / r.n : 0; } return r.n ? r.good / r.n : 0; }
+  /* listening score of Unit 1: 85% the item exercises, 15% the dictation (word accuracy) */
+  function lisPct(){
+    var og = 0, on = 0, df = null; S.P.exercises.forEach(function(e){ var r = S.res && S.res[e.id]; if (!r) return; if (e.long) df = dictPct(r); else { og += r.good; on += r.n; } });
+    var wo = on ? 0.85 : 0, wd = df == null ? 0 : 0.15; if (!wo && !wd) return 0;
+    return Math.round(100 * (wo * (on ? og / on : 0) + wd * (df || 0)) / (wo + wd));
   }
   /* rows: [{k, said, ok, pct}] */
   function feedback(ex, rows, good, total, what){
-    var pct = total ? Math.round(100 * good / total) : 100, t = tier(pct), ang = Math.round(3.6 * pct), sp = "";
+    var pct = total ? Math.round(100 * good / total) : 100, sm = good + ' of ' + total + ' ' + what;
+    if (ex.long){ pct = rows.length ? Math.round(rows.reduce(function(a, r){ return a + (r.pa || 0); }, 0) / rows.length * 100) : 0; sm = good + ' of ' + total + ' passages at 90%+'; }
+    var t = tier(pct), ang = Math.round(3.6 * pct), sp = "";
     if (pct >= 90) for (var q = 0; q < 34; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 2.5).toFixed(2) + 's;animation-duration:' + (2.4 + Math.random() * 2).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#ff9f43"][q % 5] + ';width:' + (5 + Math.random() * 6).toFixed(1) + 'px;height:' + (8 + Math.random() * 10).toFixed(1) + 'px"></i>';
-    var h = '<div class="fbk"><div class="spk">' + sp + '</div><div class="ring" style="--c:' + t[2] + ';--a:' + ang + 'deg"><div><b>' + pct + '%</b><small>' + good + ' of ' + total + ' ' + what + '</small></div></div>'
+    var h = '<div class="fbk"><div class="spk">' + sp + '</div><div class="ring" style="--c:' + t[2] + ';--a:' + ang + 'deg"><div><b>' + pct + '%</b><small>' + sm + '</small></div></div>'
       + '<div class="verd" style="color:' + t[2] + '">' + t[1] + ' ' + t[0] + '</div></div>'
       + (ex.long ? "" : (function(){ var okn = rows.filter(function(r){ return r.ok; }).map(function(r){ return r.k + 1; }); return okn.length ? '<div class="okln" style="margin:10px 0 0;padding:9px 14px;border-radius:12px;background:#d9f5ee;color:#0b4a3e;font-weight:700">✔ ' + okn.length + ' correct: ' + okn.join(", ") + '</div>' : ""; })())
       + '<div class="' + (ex.long ? "rl" : "gr " + layoutCls(ex)) + ' fr">';
@@ -501,9 +524,9 @@
     rows.forEach(function(r, n){
       if (!ex.long){ if (r.ok) return;
         h += '<div class="rc b" style="animation-delay:' + (0.35 + n * 0.06).toFixed(2) + 's"><span class="rn">' + (r.k + 1) + '</span><div><s>' + esc(r.said || "(empty)") + '</s><strong>' + esc(ex.items[r.k]) + '</strong></div><i>✖</i></div>'; return; }
-      var d = (r.pct != null && r.pct < 30) ? '<div class="dfe">Only a small part of this passage was written. Listen again and write everything you hear.</div>' : diffErrs(ex.items[r.k], r.said);
+      var d = (r.pct != null && r.pct < 30) ? '<div class="dfe">Only a small part of this passage was written. Listen again and write everything you hear.</div>' : dictInline(ex.items[r.k], r.said);
       h += '<div class="rc ' + (r.ok ? "g" : "b") + '" style="animation-delay:' + (0.35 + n * 0.06).toFixed(2) + 's;align-items:flex-start"><span class="rn">' + (r.k + 1) + '</span><div style="flex:1">'
-        + '<small style="display:block;margin:0 0 6px;font-weight:800">' + (r.ok ? "Nearly all correct" : "Not correct yet") + ' · ' + (r.pct == null ? 0 : r.pct) + '% of the words</small>' + d + '</div><i>' + (r.ok ? "✔" : "✖") + '</i></div>'; });
+        + '<small style="display:block;margin:0 0 6px;font-weight:800">' + (r.ok ? "Passed (90%+)" : "Below 90% yet") + ' · ' + (r.pct == null ? 0 : r.pct) + '% word accuracy</small>' + d + '</div><i>' + (r.ok ? "✔" : "✖") + '</i></div>'; });
     return h + '</div>';
   }
   function checkEx(ex){
@@ -516,34 +539,34 @@
       return;
     }
     stopAudio();
-    ins.forEach(function(x, k){ var j = judge(ex, k, x.value); if (j.ok) good++; rows.push({k: k, said: x.value.trim(), ok: j.ok, pct: j.pct}); });
+    ins.forEach(function(x, k){ var j = judge(ex, k, x.value); if (j.ok) good++; rows.push({k: k, said: x.value.trim(), ok: j.ok, pct: j.pct, pa: j.pa}); });
     S.res[ex.id] = {good: good, n: ex.items.length, miss: rows.filter(function(r){ return !r.ok; }).map(function(r){ return r.k; })};
-    if (ex.long){ S.res[ex.id].txt = {}; rows.forEach(function(r){ S.res[ex.id].txt[r.k] = r.said; }); }   /* dictation: the fix rounds bring this text back to be edited */
+    if (ex.long){ S.res[ex.id].txt = {}; S.res[ex.id].pa = {}; rows.forEach(function(r){ S.res[ex.id].txt[r.k] = r.said; S.res[ex.id].pa[r.k] = r.pa || 0; }); }   /* dictation: the fix rounds bring this text back to be edited */
     saveProg();
     el("cchk").remove(); el("cin").style.display = "none"; if (el("cpc")) el("cpc").remove();
     el("cout").innerHTML = feedback(ex, rows, good, ex.items.length, "correct") + '<button class="go" id="cnext" style="margin-top:14px">' + (S.ei + 1 < S.P.exercises.length ? "Next exercise →" : "See my results →") + '</button>';
-    el("cnext").onclick = function(){ S.ei++; if (S.ei < S.P.exercises.length) runEx(); else summary(); };
+    el("cnext").onclick = function(){ S.ei++; saveProg(); upG(function(){ if (S.ei < S.P.exercises.length) runEx(); else summary(); }); };
     el("cout").scrollIntoView && el("cout").scrollIntoView({behavior: "smooth"});
   }
   function summary(){
-    var g = 0, n = 0, rows = ""; S.P.exercises.forEach(function(e, i){ var r = S.res[e.id]; g += r.good; n += r.n; var pc = Math.round(100 * r.good / r.n);
-      rows += '<div class="rc ' + (r.miss.length ? "b" : "g") + '" style="animation-delay:' + (0.4 + i * 0.08).toFixed(2) + 's"><span class="rn">' + (ICO[e.id.slice(-2)] || i + 1) + '</span><div><b>' + esc(e.name) + '</b><small style="color:#bcd0ff">' + r.good + ' of ' + r.n + ' · ' + pc + '%</small></div><i>' + (r.miss.length ? "✖" : "✔") + '</i></div>'; });
-    var pct = Math.round(100 * g / n), t = tier(pct), sp = "";
+    var g = 0, n = 0, rows = ""; S.P.exercises.forEach(function(e, i){ var r = S.res[e.id]; g += r.good; n += r.n; var pc = Math.round(100 * (e.long ? dictPct(r) : r.good / r.n));
+      rows += '<div class="rc ' + (r.miss.length ? "b" : "g") + '" style="animation-delay:' + (0.4 + i * 0.08).toFixed(2) + 's"><span class="rn">' + (ICO[e.id.slice(-2)] || i + 1) + '</span><div><b>' + esc(e.name) + '</b><small style="color:#bcd0ff">' + (e.long ? pc + '% word accuracy · counts 15%' : r.good + ' of ' + r.n + ' · ' + pc + '%') + '</small></div><i>' + (r.miss.length ? "✖" : "✔") + '</i></div>'; });
+    var pct = lisPct(), t = tier(pct), sp = "";
     S.fix = S.P.exercises.filter(function(e){ return S.res[e.id].miss.length; });   /* below 80%: fix rounds are compulsory; from 80% they are the optional road to 100% */
     var need80 = pct < 80;
     if (S.firstPct == null){ S.firstPct = pct; saveProg(); }
     flushLog("lis", {first: S.firstPct, fr: S.fixRound || 0, now: pct});
     if (pct >= 90) for (var q = 0; q < 34; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 2.5).toFixed(2) + 's;animation-duration:' + (2.4 + Math.random() * 2).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#ff9f43"][q % 5] + ';width:' + (5 + Math.random() * 6).toFixed(1) + 'px;height:' + (8 + Math.random() * 10).toFixed(1) + 'px"></i>';
-    var miss = S.fix.reduce(function(a, e){ return a + S.res[e.id].miss.length; }, 0), left80 = Math.max(1, Math.ceil(0.8 * n) - g);
-    page(top() + '<div class="fbk"><div class="spk">' + sp + '</div><small class="wu">WARM-UP FINISHED</small><div class="ring" style="--c:' + t[2] + ';--a:' + Math.round(3.6 * pct) + 'deg"><div><b>' + pct + '%</b><small>' + g + ' of ' + n + ' correct</small></div></div><div class="verd" style="color:' + t[2] + '">' + t[1] + ' ' + t[0] + '</div></div>'
+    var miss = S.fix.reduce(function(a, e){ return a + S.res[e.id].miss.length; }, 0), left80 = 0;
+    page(top() + '<div class="fbk"><div class="spk">' + sp + '</div><small class="wu">WARM-UP FINISHED</small><div class="ring" style="--c:' + t[2] + ';--a:' + Math.round(3.6 * pct) + 'deg"><div><b>' + pct + '%</b><small>listening score</small></div></div><div class="verd" style="color:' + t[2] + '">' + t[1] + ' ' + t[0] + '</div></div>'
       + '<div class="gr g2 fr">' + rows + '</div>'
-      + (S.fix.length && need80 ? '<div class="card warn" style="margin:14px 0 4px;text-align:center"><b>You need 80% to move on.</b> You are at ' + pct + '%. Win back at least ' + left80 + ' more item' + (left80 > 1 ? 's' : '') + '. The fix rounds repeat until you get there.</div><button class="go fixgo" id="cfix">🛠 Start the fix round: ' + miss + ' item' + (miss > 1 ? "s" : "") + ' to win back →</button>' : S.fix.length ? '<button class="go fixgo" id="cfix" style="font-size:19px">🏆 Reach 100%: win back the last ' + miss + ' item' + (miss > 1 ? "s" : "") + ' →</button><button class="pill" id="cdone" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button><p class="sub" style="text-align:center;margin:8px 0 0">You passed with ' + pct + '%. The 100% round is your choice: perfect scores are what the best students bring home.</p>' : '<button class="go" id="cdone" style="margin-top:6px">Continue →</button>'));
+      + (S.fix.length && need80 ? '<div class="card warn" style="margin:14px 0 4px;text-align:center"><b>You need 80% to move on.</b> You are at ' + pct + '%. The dictation counts 15% of the score and each dictation passage needs 90% word accuracy to be won back. The fix rounds repeat until you get there.</div><button class="go fixgo" id="cfix">🛠 Start the fix round: ' + miss + ' item' + (miss > 1 ? "s" : "") + ' to win back →</button>' : S.fix.length ? '<button class="go fixgo" id="cfix" style="font-size:19px">🏆 Reach 100%: win back the last ' + miss + ' item' + (miss > 1 ? "s" : "") + ' →</button><button class="pill" id="cdone" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button><p class="sub" style="text-align:center;margin:8px 0 0">You passed with ' + pct + '%. The 100% round is your choice: perfect scores are what the best students bring home.</p>' : '<button class="go" id="cdone" style="margin-top:6px">Continue →</button>'));
     el("cb").onclick = hub;
     if (el("cfix")) el("cfix").onclick = function(){ S.fi = 0; S.fres = {}; S.fixRound = (S.fixRound || 0) + 1; saveProg(); flushLog("lis", {first: S.firstPct, fr: S.fixRound, now: pct}); fixEx(); };   /* every fix round has its own single play */
     if (el("cdone")) el("cdone").onclick = listeningDone;
   }
   function fixEx(){
-    if (S.fi >= S.fix.length){ S.inFix = false; S.P.exercises.forEach(function(e){ var f = S.fres && S.fres[e.id]; if (f && f.ks && S.res[e.id]){ if (e.long && f.txt){ S.res[e.id].txt = S.res[e.id].txt || {}; Object.keys(f.txt).forEach(function(k){ S.res[e.id].txt[k] = f.txt[k]; }); } S.res[e.id].good += f.ks.length; S.res[e.id].miss = S.res[e.id].miss.filter(function(k){ return f.ks.indexOf(k) < 0; }); } }); S.fres = {}; saveProg(); return summary(); }
+    if (S.fi >= S.fix.length){ S.inFix = false; S.P.exercises.forEach(function(e){ var f = S.fres && S.fres[e.id]; if (f && f.ks && S.res[e.id]){ if (e.long && f.txt){ S.res[e.id].txt = S.res[e.id].txt || {}; Object.keys(f.txt).forEach(function(k){ S.res[e.id].txt[k] = f.txt[k]; }); if (f.pa){ S.res[e.id].pa = S.res[e.id].pa || {}; Object.keys(f.pa).forEach(function(k){ S.res[e.id].pa[k] = Math.max(S.res[e.id].pa[k] || 0, f.pa[k]); }); } } S.res[e.id].good += f.ks.length; S.res[e.id].miss = S.res[e.id].miss.filter(function(k){ return f.ks.indexOf(k) < 0; }); } }); S.fres = {}; saveProg(); return summary(); }
     S.inFix = true; var ex = S.fix[S.fi], miss = S.res[ex.id].miss, ml = Math.max.apply(null, miss.map(function(k){ return ex.items[k].length; })), gc = ex.long ? "" : ml <= 13 ? "g4" : ml <= 22 ? "g3" : "g2";
     var TX = (S.res[ex.id] && S.res[ex.id].txt) || {};
     var inputs = miss.map(function(k){ return ex.long ? '<div class="it"><span>' + (k + 1) + '</span><textarea class="a" data-k="' + k + '" spellcheck="false" autocomplete="off" autocapitalize="off">' + esc(TX[k] || "") + '</textarea></div>'
@@ -554,8 +577,8 @@
       + '<div id="cin" class="' + (gc ? "gr " + gc : "") + '">' + inputs + '</div><button class="go" id="cchk" style="margin-top:6px">Check my fixes</button><div id="cout"></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; wirePlayer(ex);
     el("cchk").onclick = function(){
-      stopAudio(); var rows = [], fixed = 0, ks = []; [].forEach.call(document.querySelectorAll("#cin .a"), function(x){ var k = +x.getAttribute("data-k"), j = judge(ex, k, x.value); if (j.ok){ fixed++; ks.push(k); } rows.push({k: k, said: x.value.trim(), ok: j.ok, pct: j.pct}); });
-      S.fres = S.fres || {}; S.fres[ex.id] = {good: fixed, n: miss.length, ks: ks, txt: {}}; rows.forEach(function(r){ S.fres[ex.id].txt[r.k] = r.said; });
+      stopAudio(); var rows = [], fixed = 0, ks = []; [].forEach.call(document.querySelectorAll("#cin .a"), function(x){ var k = +x.getAttribute("data-k"), j = judge(ex, k, x.value); if (j.ok){ fixed++; ks.push(k); } rows.push({k: k, said: x.value.trim(), ok: j.ok, pct: j.pct, pa: j.pa}); });
+      S.fres = S.fres || {}; S.fres[ex.id] = {good: fixed, n: miss.length, ks: ks, txt: {}, pa: {}}; rows.forEach(function(r){ S.fres[ex.id].txt[r.k] = r.said; S.fres[ex.id].pa[r.k] = r.pa || 0; });
       el("cchk").remove(); el("cin").style.display = "none"; if (el("cpc")) el("cpc").remove(); el("cout").innerHTML = feedback(ex, rows, fixed, miss.length, "fixed") + '<button class="go" id="cnx" style="margin-top:14px">' + (S.fi + 1 < S.fix.length ? "Next fix →" : "Finish the fix round →") + '</button>';
       el("cnx").onclick = function(){ S.fi++; fixEx(); };
       el("cout").scrollIntoView && el("cout").scrollIntoView({behavior: "smooth"});
@@ -673,7 +696,7 @@
     var ta = el("l4n"), nx = el("l4nx"), c = el("l4wc");
     function up(){ L.notes[ex.id] = ta.value; var w = wc(ta.value); c.innerHTML = '<b>' + w + '</b> / ' + ex.min + ' words at least'; nx.disabled = w < ex.min && !O.nofloor; c.classList.toggle("ok", w >= ex.min); }
     ta.oninput = up; up(); ta.focus();
-    nx.onclick = function(){ stopAudio(); L.ei++; if (L.ei < S.P.exercises.length) l4Notes(); else { L.stage = 2; L.ei = 0; l4Answer(); } };
+    nx.onclick = function(){ stopAudio(); L.ei++; if (L.ei < S.P.exercises.length) l4Notes(); else { L.stage = 2; L.ei = 0; upG(l4Answer); } };
   }
   function l4Answer(){
     var ex = S.P.exercises[S.L.ei], L = S.L;
@@ -688,7 +711,7 @@
       el("l4ck").remove(); el("l4a").classList.add("lk"); [].forEach.call(el("l4a").querySelectorAll("button,input"), function(x){ x.disabled = true; });
       el("cout").innerHTML = '<div class="l4sc" style="--c:' + t[2] + '"><b>' + g + ' / ' + rows.length + '</b><span>' + t[1] + ' ' + (pct >= 85 ? "Your notes are strong." : pct >= 55 ? "Decent notes. Next time catch more of the small details." : "Your notes missed a lot. Write more key words, numbers and names while you listen.") + '</span><small>The answers stay hidden. You will meet these recordings again in the exam.</small></div>'
         + '<button class="go" id="l4nx" style="margin-top:12px">' + (L.ei + 1 < S.P.exercises.length ? "Next recording →" : "Go to the exam →") + '</button>';
-      el("l4nx").onclick = function(){ L.ei++; if (L.ei < S.P.exercises.length) l4Answer(); else { L.stage = 3; L.ei = 0; l4Exam(); } };
+      el("l4nx").onclick = function(){ L.ei++; if (L.ei < S.P.exercises.length) l4Answer(); else { L.stage = 3; L.ei = 0; upG(l4Exam); } };
       el("cout").scrollIntoView && el("cout").scrollIntoView({behavior: "smooth"});
     };
   }
@@ -702,7 +725,7 @@
       stopAudio(); var ans = qRead(el("l4a"), ex); if (!l4Effort(ans)) return;
       var rows = qMark(ex, ans), g = rows.filter(function(r){ return r.ok; }).length;
       L.a3[ex.id] = {ans: ans, rows: rows, good: g, n: rows.length}; S.res[ex.id] = {good: g, n: rows.length, miss: rows.filter(function(r){ return !r.ok; }).map(function(r){ return r.n - 1; })};
-      L.ei++; if (L.ei < S.P.exercises.length){ l4ExamGap(); } else { L.stage = 4; l4Analysis(); }
+      L.ei++; if (L.ei < S.P.exercises.length){ l4ExamGap(); } else { L.stage = 4; upG(l4Analysis); }
     };
   }
   function l4ExamGap(){
@@ -744,6 +767,7 @@
   function l4Pct(){ var g = 0, n = 0; S.P.exercises.forEach(function(e){ var r = S.L.a3[e.id]; if (r){ g += r.good; n += r.n; } }); return n ? Math.round(100 * g / n) : 100; }
   function l4Run(){ var g = 0, n = 0; S.P.exercises.forEach(function(e){ var r = S.L.a3[e.id]; if (r){ g += r.good; n += r.n; } }); return n ? (g + (S.L.dfix || 0)) / n : 1; }
   function l4Drill(){
+    if (!S.L.drill && S.upd && updNow()) return;
     var L = S.L, items = [];
     S.P.exercises.forEach(function(e){ L.a3[e.id].rows.forEach(function(w){ if (!w.ok) items.push({ex: e, w: w}); }); });
     L.drill = true; L.dq = items; L.di = 0; L.dn = items.length; L.dfix = 0; L.try = {}; L.rounds = 1; if (L.first == null) L.first = l4Pct(); saveProg4(); flushLog("lis", {first: L.first, fr: 1, dtry: 0, now: Math.round(l4Run() * 100)}); l4DrillQ();
@@ -1322,11 +1346,34 @@
   /* one break screen for every stage: listening, reading, writing... */
   /* accuracy the student has reached in this listening, sent to the server with "done" */
   function lisAcc(){ try {
-    if (S.dict){ var g = 0, n = 0; S.P.exercises.forEach(function(e){ var r = S.res[e.id]; if (r){ g += r.good; n += r.n; } }); return n ? Math.round(100 * g / n) : 0; }
+    if (S.dict) return lisPct();
     return Math.round(100 * l4Run());
   } catch (e) { return 0; } }
   function listeningDone(){ if (!floorOk("lis")) return; clearDrafts("lis"); flushLog("lis", {done: true, acc: lisAcc(), prog: null, prog4: null, draft: null}); S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
   function readingDone(){ if (!floorOk("read")) return; clearDrafts("read"); flushLog("read", {done: true, acc: 100, draft: null}); S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
+  /* ---------- automatic update: a new version is installed when the current step is finished ---------- */
+  var MYV = (function(){ try { var ss = document.getElementsByTagName("script"); for (var i = 0; i < ss.length; i++){ var m = /classnv\.js\?v=(\d+)/.exec(ss[i].getAttribute("src") || ""); if (m) return +m[1]; } } catch (e) {} return 0; })();
+  function updNow(){
+    if (!S.upd) return false;
+    try { var g = sessionStorage.getItem("nvu"); if (g && g.split(":")[0] === String(S.upd) && Date.now() - +g.split(":")[1] < 600000) return false; sessionStorage.setItem("nvu", S.upd + ":" + Date.now()); } catch (e) {}
+    try { if (S.cur === "lis"){ if (S.dict) saveProg(); else saveProg4(); } } catch (e) {}
+    try { stopAudio(); } catch (e) {}
+    var o = document.createElement("div"); o.style.cssText = "position:fixed;inset:0;z-index:99999;background:rgba(16,32,74,.94);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font:700 18px system-ui,sans-serif;text-align:center;padding:24px";
+    o.innerHTML = '✨ Installing the new version…<small style="font-weight:500;opacity:.8;margin-top:8px">Your progress is saved. This takes a second.</small>'; document.body.appendChild(o);
+    setTimeout(function(){ var q = location.search.replace(/([?&])_u=\d+&?/, "$1").replace(/[?&]$/, ""); location.replace(location.pathname + (q ? q + "&" : "?") + "_u=" + S.upd + location.hash); }, 1000);
+    return true;
+  }
+  function upG(fn){ if (!updNow()) fn(); }
+  function updPoll(){
+    if (!MYV || S.upd) return;
+    fetch("ver.json?t=" + Date.now(), {cache: "no-store"}).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
+      if (!j || !(j.v > MYV) || S.upd) return; S.upd = j.v;
+      var b = document.createElement("div"); b.id = "nvupd"; b.style.cssText = "position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:9998;background:#10204a;color:#fff;padding:9px 16px;border-radius:999px;font:700 13px system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.3);max-width:92vw;text-align:center";
+      b.textContent = "✨ A new version is ready. It installs when you finish this step."; document.body.appendChild(b);
+      if (el("hl")) updNow();
+    }).catch(function(){});
+  }
+  function updStart(){ if (S.updT) return; S.updT = setInterval(updPoll, 90000); document.addEventListener("visibilitychange", function(){ if (!document.hidden) updPoll(); }); setTimeout(updPoll, 4000); }
   function stageBreak(label, onNext){ S.cur = null;
     var t0 = Date.now(), C = 2 * Math.PI * 130;
     page('<div class="brk"><small class="wu">' + label + '</small><h1 class="bh">Break time!</h1><p class="sub" id="bsub">Great focus. Recharge for ten minutes. We will keep the clock for you.</p>'
@@ -1365,7 +1412,7 @@
   function unitShow(){
     var g = 0, n = 0, ex = 0, secs = Math.max(1, Math.round((Date.now() - (S.t0 || Date.now())) / 1000));
     if (S.P) S.P.exercises.forEach(function(e){ var r = S.res && S.res[e.id]; if (r){ g += r.good; n += r.n; ex++; } });
-    var pct = n ? Math.round(100 * g / n) : 100, fx = S.fix ? S.fix.length : 0, mins = Math.max(1, Math.round(secs / 60)), u = S.unit, nx = u + 1, sp = "";
+    var pct = S.dict ? lisPct() : n ? Math.round(100 * g / n) : 100, fx = S.fix ? S.fix.length : 0, mins = Math.max(1, Math.round(secs / 60)), u = S.unit, nx = u + 1, sp = "";
     for (var q = 0; q < 46; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 3.5).toFixed(2) + 's;animation-duration:' + (2.6 + Math.random() * 2.4).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#ff9f43"][q % 5] + ';width:' + (5 + Math.random() * 7).toFixed(1) + 'px;height:' + (8 + Math.random() * 12).toFixed(1) + 'px"></i>';
     page('<div class="fin"><div class="spk">' + sp + '</div><div class="flash"></div><div class="kdrop">' + keySvg() + '</div>'
       + '<h1 class="fh">Unit ' + u + ' conquered</h1><p class="fn">' + esc(O.name || "") + ', your class key is yours.</p>'
@@ -1376,7 +1423,7 @@
   }
 
   window.CNV = {
-    open: function(o){ O = o; R = o.rpc; css(); hlWire(); trk(); home(); },
+    open: function(o){ O = o; R = o.rpc; css(); hlWire(); trk(); updStart(); home(); },
     _unitDone: function(){ unitDone(); }
   };
 })();
