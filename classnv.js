@@ -760,8 +760,9 @@
     else { var q = ex.qs[w.n - 1]; wid = '<div class="l4q"><div class="l4r fx" data-k="0"><b class="qn">' + w.n + '</b><span class="qt">' + esc(q.l) + (q.s ? ' <strong>' + esc(q.s) + '</strong>' : "") + '</span><div class="l4t">' + (q.nt ? '' : '<button type="button" class="l4ok">✔ correct</button>') + '<input class="a l4in" type="text" placeholder="' + (q.nt ? 'write your answer' : 'or write the correction') + '" spellcheck="false" autocomplete="off" autocapitalize="off"></div></div></div>'; }
     page(top("Exit") + stgBar(4) + '<div class="fxtag">🛠 WIN IT BACK · ' + (L.dn - L.dq.length) + ' of ' + L.dn + ' won · accuracy ' + Math.round(l4Run() * 100) + '% of 80%</div><div class="drb"><i style="width:' + pct + '%"></i></div>'
       + '<div class="ins fixc"><span class="ii">🎯</span><div><small>THE SENTENCE YOU NEEDED</small><strong>“' + esc((w.ev || "").replace(/ \.\.\. /g, " … ")) + '”</strong></div></div>'
-      + '<div class="l4ans" id="l4a"><div class="l4qh">' + esc(ex.id + " · " + ex.name) + '</div>' + wid + '</div><div class="l4bar"><span class="wrm" id="l4m"></span><button class="go" id="l4ck">Check</button></div>');
+      + l4Player(ex) + '<div class="l4ans" id="l4a"><div class="l4qh">' + esc(ex.id + " · " + ex.name) + '</div>' + wid + '</div><div class="l4bar"><span class="wrm" id="l4m"></span><button class="go" id="l4ck">Check</button></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; qWire(el("l4a"), {kind: ex.kind});
+    l4Wire(ex, 1, "d" + ex.id + ":" + (L.rounds || 1), "Fix round " + (L.rounds || 1) + ": one fresh play of this recording. Listen to the end. It resets every new fix round.");
     el("l4ck").onclick = function(){
       var root = el("l4a"), ok = false, ans;
       if (ex.kind === "tf"){ var s = root.querySelector(".l4tf[data-sel='1']"); ok = !!s && s.getAttribute("data-v") === ex.qs[w.n - 1].a; }
