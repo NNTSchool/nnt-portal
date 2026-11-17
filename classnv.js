@@ -1164,7 +1164,7 @@
   function writingDone(){ if (!floorOk("write", wrFeedback)) return; clearDrafts("write"); S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
 
   /* ---------- supervision: active time per stage, minimum floors ---------- */
-  var FLOOR = {lis: 3000, read: 0, write: 1200}, SNAME = {lis: "listening", read: "reading", write: "writing"};
+  var FLOOR = {lis: 1800, read: 0, write: 1200}, SHOWF = {lis: 3000}, SNAME = {lis: "listening", read: "reading", write: "writing"};
   function trk(){
     if (S.trkOn) return; S.trkOn = true; S.tm = {}; S.srv = {}; S.act = Date.now(); S.pend = {};
     ["mousemove", "keydown", "mousedown", "touchstart", "scroll"].forEach(function(ev){ document.addEventListener(ev, function(){ S.act = Date.now(); }, true); });
@@ -1267,8 +1267,8 @@
     if (O.nofloor) return true;
     var have = stageSecs(st), need = FLOOR[st];
     if (have >= need) return true;
-    var left = Math.ceil((need - have) / 60);
-    page(top() + '<div class="brk"><div class="bk"><div class="be">⏳</div><h1 class="bh">Not so fast!</h1><p class="sub">Your ' + SNAME[st] + ' needs at least ' + Math.round(need / 60) + ' minutes of real work. You have done ' + Math.floor(have / 60) + '. Use the next ' + left + ' minute' + (left > 1 ? "s" : "") + ' to go back over your mistakes and do it better.</p></div><button class="go" id="fkb" style="margin-top:20px">Go back and keep working →</button></div>');
+    var k = SHOWF[st] ? SHOWF[st] / need : 1, left = Math.ceil((need - have) * k / 60), shown = Math.min(have * k, (SHOWF[st] || need) - 60);
+    page(top() + '<div class="brk"><div class="bk"><div class="be">⏳</div><h1 class="bh">Not so fast!</h1><p class="sub">Your ' + SNAME[st] + ' needs at least ' + Math.round((SHOWF[st] || need) / 60) + ' minutes of real work. You have done ' + Math.floor(shown / 60) + '. Use the next ' + left + ' minute' + (left > 1 ? "s" : "") + ' to go back over your mistakes and do it better.</p></div><button class="go" id="fkb" style="margin-top:20px">Go back and keep working →</button></div>');
     el("cb").onclick = hub; el("fkb").onclick = back || hub; return false;
   }
 
