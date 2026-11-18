@@ -20,13 +20,13 @@
   var P = window.__PORTAL__; if (!P) return;
   var of = window.fetch.bind(window), started = false, pinged = null, HOME = P.mode === "home" || P.mode === "write" || P.mode === "speak", PRAC = P.mode === "practice" || HOME;
   /* a result must reach the server: a network hiccup is retried (1 s, 3 s, 6 s) before the student sees an error; the reason is kept for the error card */
-  function call(name, args, once){
+  function call(name, args, once, long){
     function go(n){
       return of(P.url + "/rest/v1/rpc/" + name, {method:"POST", headers:{"Content-Type":"application/json","apikey":P.key,"Authorization":"Bearer " + P.key}, body: JSON.stringify(args)})
         .then(function(r){ return r.json().then(function(j){ if (!r.ok){ var er = new Error((j && j.message) || r.status); er.http = r.status; throw er; } return j; }, function(){ var er = new Error("bad reply " + r.status); er.http = r.status; throw er; }); })
-        .catch(function(er){ var retry = !once && n < 5 && (!er.http || er.http >= 500 || er.http === 429);
+        .catch(function(er){ var retry = !once && n < (long ? 8 : 5) && (!er.http || er.http >= 500 || er.http === 429);
           if (!retry){ window.__nvErr = (er && er.message) || String(er); throw er; }
-          return new Promise(function(ok){ setTimeout(ok, [1000, 3000, 6000, 10000, 15000][n]); }).then(function(){ return go(n + 1); }); });
+          return new Promise(function(ok){ setTimeout(ok, [1000, 3000, 6000, 10000, 15000, 20000, 30000, 40000][n]); }).then(function(){ return go(n + 1); }); });
     }
     return go(0);
   }
@@ -39,9 +39,9 @@
   }
   if (!PRAC) pinged = setInterval(ping, 15000);
   /* New home test: the page saves its result through this */
-  window.nvSave = function(trk, sc, tot, miss, ans, lv){ return call("nv_save_test", {tok: P.tok, u: P.nvunit, trk: trk, sc: sc, tot: tot, miss: miss, ans: ans, lv: lv || 0}).then(function(r){ if (!r || !r.ok) window.__nvErr = "server said: " + ((r && r.err) || "not saved"); throw new Error(window.__nvErr); return r; }); };
-  window.nvGrade = function(trk, ans, lv, used){ return call("nv_grade_test", {tok: P.tok, u: P.nvunit, trk: trk, ans: ans || {}, lv: lv || 0, used: used || 0}).then(function(r){ if (!r || !r.ok) window.__nvErr = "server said: " + ((r && r.err) || "not graded"); throw new Error(window.__nvErr); return r; }); };
-  window.nvSaveEssay = function(body, words, band, lv){ return call("nv_save_essay", {tok: P.tok, u: P.nvunit, body: body, words: words, band: band, lv: lv || 0}).then(function(r){ if (!r || !r.ok) window.__nvErr = "server said: " + ((r && r.err) || "not saved"); throw new Error(window.__nvErr); return r; }); };
+  window.nvSave = function(trk, sc, tot, miss, ans, lv){ return call("nv_save_test", {tok: P.tok, u: P.nvunit, trk: trk, sc: sc, tot: tot, miss: miss, ans: ans, lv: lv || 0}, false, true).then(function(r){ if (!r || !r.ok) window.__nvErr = "server said: " + ((r && r.err) || "not saved"); throw new Error(window.__nvErr); return r; }); };
+  window.nvGrade = function(trk, ans, lv, used){ return call("nv_grade_test", {tok: P.tok, u: P.nvunit, trk: trk, ans: ans || {}, lv: lv || 0, used: used || 0}, false, true).then(function(r){ if (!r || !r.ok) window.__nvErr = "server said: " + ((r && r.err) || "not graded"); throw new Error(window.__nvErr); return r; }); };
+  window.nvSaveEssay = function(body, words, band, lv){ return call("nv_save_essay", {tok: P.tok, u: P.nvunit, body: body, words: words, band: band, lv: lv || 0}, false, true).then(function(r){ if (!r || !r.ok) window.__nvErr = "server said: " + ((r && r.err) || "not saved"); throw new Error(window.__nvErr); return r; }); };
   window.nvEssayTry = function(){ return call("nv_essay_try", {tok: P.tok, u: P.nvunit}).catch(function(){}); };
   /* time on the unit: counted only while the page is open and the student is active (typing, tapping, moving) */
   if (HOME && P.nvunit){
