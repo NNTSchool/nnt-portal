@@ -1,3 +1,12 @@
+/* one recording at a time: starting any audio stops whichever other one is still playing */
+(function(){
+  if (window.__nntOneAudio) return; window.__nntOneAudio = 1;
+  var P = HTMLMediaElement.prototype.play, cur = null;
+  HTMLMediaElement.prototype.play = function(){
+    if (cur && cur !== this){ try { cur.pause(); } catch (e) {} }
+    cur = this; return P.apply(this, arguments);
+  };
+})();
 /* writing feedback: one button per marking criterion, each explains the score */
 (function(){
   if (window.nntCrit) return;
