@@ -984,15 +984,15 @@
     D.parts.forEach(function(p, pi){
       var qs = p.qs.filter(function(q){ return on(q.n); }); if (!qs.length) return; if (firstP < 0) firstP = pi;
       qs.forEach(function(q){ need.push(q.n); });
-      if (p.qs[0].t === "gap") fullP[pi] = 1;
+      var gapL = p.qs[0].t === "gap" && p.left.indexOf("gapw") > -1; if (gapL) fullP[pi] = 1;
       tabs += '<button type="button" class="rtab" data-p="' + pi + '">' + p.ic + ' ' + p.tab + ' <small>(' + qs.length + ')</small></button>';
       var lf = p.left.replace(/<span class="gapw">.*?data-n="(\d+)"><\/span>/g, function(m, n){ n = +n; if (on(n)) return m; var q = p.qs.filter(function(x){ return x.n === n; })[0]; return '<span class="tqn gd">' + n + '</span> <b class="gdn">' + esc(q.a[0]) + '</b>'; });
       lefts += '<div class="rpn hlz' + (R_.hl ? " hl" : "") + ' rpart" data-p="' + pi + '">' + (retake ? "" : "") + '<h1 class="rpt" style="font-size:30px">' + esc(p.head) + '</h1><p class="rpi">' + esc(p.instr) + '</p>' + lf + '</div>';
       var rr = '<div class="rpart" data-p="' + pi + '"><div class="qgh"><span class="qi">' + p.ic + '</span><div><b>' + esc(p.head) + '</b><small>Questions ' + p.qs[0].n + '–' + p.qs[p.qs.length - 1].n + '</small></div></div>' + (p.legend ? '<div class="qd" style="display:block">' + p.legend + '</div>' : "");
-      if (p.qs[0].t === "gap") rr += '<p class="sub" style="text-align:left">Type the missing words into the gaps in the text on the left.</p>';
+      if (gapL) rr += '<p class="sub" style="text-align:left">Type the missing words into the gaps in the text on the left.</p>';
       else rr += qs.map(function(q){ return (q.sh ? '<div class="qd" style="display:block;margin:14px 0 6px"><b>' + esc(q.sh) + '</b></div>' : "") + '<div class="qr" data-n="' + q.n + '"><div class="qn">' + q.n + '</div><div class="qb"><div class="qt">' + esc(q.q) + '</div>'
         + (q.t === "tf" ? '<div class="tf">' + (p.vals || ["TRUE", "FALSE", "NOT GIVEN"]).map(function(v){ return '<button type="button" data-v="' + v + '">' + v + '</button>'; }).join("") + '</div>'
-          : q.t === "mcq" ? '<div class="mq one">' + q.opts.map(function(o, k){ return '<button type="button" class="mo" data-v="' + "ABCDEFGH".charAt(k) + '"><b>' + "ABCDEFGH".charAt(k) + '</b> ' + esc(o) + '</button>'; }).join("") + '</div>'
+          : q.t === "gap" ? '<input class="rin rt" type="text" autocomplete="off" spellcheck="false" data-n="' + q.n + '" placeholder="Your answer">' : q.t === "mcq" ? '<div class="mq one">' + q.opts.map(function(o, k){ return '<button type="button" class="mo" data-v="' + "ABCDEFGH".charAt(k) + '"><b>' + "ABCDEFGH".charAt(k) + '</b> ' + esc(o) + '</button>'; }).join("") + '</div>'
           : '<select class="rsel" data-n="' + q.n + '"><option value="">Choose…</option>' + q.opts.map(function(o){ return '<option>' + o + '</option>'; }).join("") + '</select>') + '</div></div>'; }).join("");
       rights += rr + '</div>';
     });
@@ -1005,7 +1005,7 @@
     var need_n = need.length, minFill = Math.max(1, Math.ceil(need_n * 0.7));
     function filled(){ return need.filter(function(n){ return (R_.ans[n] || "").trim(); }).length; }
     function upd(){ var f = filled(), ok = f >= minFill, b = el("rck"); if (!b) return; b.disabled = !ok; el("rhint").textContent = ok ? "Ready. You can still change answers." : "Answer " + (minFill - f) + " more to unlock the check (" + f + "/" + need_n + ")."; }
-    [].forEach.call(document.querySelectorAll("#rdp input.rin"), function(i){ var n = +i.getAttribute("data-n"); i.oninput = function(){ R_.ans[n] = i.value; upd(); }; i.onpaste = function(e){ e.preventDefault(); }; i.oncontextmenu = function(e){ e.preventDefault(); }; });
+    [].forEach.call(document.querySelectorAll("#rdp input.rin, #rdq input.rin"), function(i){ var n = +i.getAttribute("data-n"); i.oninput = function(){ R_.ans[n] = i.value; upd(); }; i.onpaste = function(e){ e.preventDefault(); }; i.oncontextmenu = function(e){ e.preventDefault(); }; });
     function crossOut(){
       /* what is "used" is read from the boxes on the screen, never from remembered answers: a letter is crossed in the list above only while some box really holds it. The boxes themselves show plain letters. */
       D.parts.forEach(function(p, pi){ if (p.qs[0].t !== "sel") return; var used = {}, sels = [];
