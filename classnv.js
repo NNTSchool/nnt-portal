@@ -164,7 +164,7 @@
   + '#cnv .qr{display:flex;gap:12px;padding:12px 14px;border-radius:14px;background:#fff;border:2px solid #d3dcf0;margin-bottom:10px;transition:border-color .15s,background .15s}#cnv .qr.fld{background:#f1fbf8;border-color:#7fd6c3}#cnv .qr.gd{background:#e3f8f1;border-color:#2bb59b}#cnv .qr.bd{background:#fde8ed;border-color:#e0607f}#cnv .qr.lk{opacity:.55}'
   + '#cnv .qn{flex:0 0 34px;height:34px;border-radius:10px;background:#3e63d8;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}#cnv .qr.gd .qn{background:#0c9c84}#cnv .qr.bd .qn{background:#d6395f}#cnv .qb{flex:1;min-width:0}#cnv .qt{font-size:16.5px;line-height:1.45;color:#10204a;font-weight:600;margin:3px 0 9px}'
   + '#cnv .tf{display:flex;gap:8px;flex-wrap:wrap}#cnv .tf button{flex:1;min-width:96px;padding:10px 8px;border-radius:12px;border:2px solid #9fb2dc;background:#fff;color:#2d3f73;font-weight:800;font-size:14px;cursor:pointer;letter-spacing:.02em;transition:transform .1s}#cnv .tf button:hover{transform:translateY(-2px)}#cnv .tf button.sel{background:#3e63d8;border-color:#3e63d8;color:#fff;box-shadow:0 4px 0 #27409b}#cnv .tf button:disabled{cursor:default;transform:none}'
-  + '#cnv .mq{display:grid;gap:8px;grid-template-columns:1fr 1fr}@media(max-width:640px){#cnv .mq{grid-template-columns:1fr}}#cnv .mo{padding:10px 12px;border-radius:12px;border:2px solid #9fb2dc;background:#fff;color:#2d3f73;font-weight:700;font-size:14px;cursor:pointer;text-align:left}#cnv .mo.sel{background:#3e63d8;border-color:#3e63d8;color:#fff}'
+  + '#cnv .mq{display:grid;gap:8px;grid-template-columns:1fr 1fr}@media(max-width:640px){#cnv .mq{grid-template-columns:1fr}}#cnv .mq.one{grid-template-columns:1fr}#cnv .mo b{margin-right:6px;color:#3e63d8}#cnv .mo.sel b{color:#fff}#cnv .mo{padding:10px 12px;border-radius:12px;border:2px solid #9fb2dc;background:#fff;color:#2d3f73;font-weight:700;font-size:14px;cursor:pointer;text-align:left}#cnv .mo.sel{background:#3e63d8;border-color:#3e63d8;color:#fff}'
   + '#cnv input.rin{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:12px;border:2px solid #8fa6d6;background:#fff;color:#10204a;font:700 17px system-ui;outline:none}#cnv input.rin:focus{border-color:#3e63d8;box-shadow:0 0 0 4px rgba(62,99,216,.2)}#cnv input.rin.rt{width:150px;padding:6px 8px;font-size:15px;display:inline-block;margin:2px 4px}'
   + '#cnv table.rtb{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5;color:#1b2a52;border:2px solid #b9c9e6;border-radius:14px;overflow:hidden;background:#fff}#cnv .rtb th{background:#dfe8fb;text-align:left;padding:9px 10px;font-weight:800;color:#10204a}#cnv .rtb td{padding:10px;border-top:1px solid #d3dcf0;vertical-align:top}#cnv .rtb td:first-child{font-weight:800;font-style:italic}#cnv .rtb td+td{border-left:1px solid #e1e8f7}'
   + '#cnv .tqn{display:inline-block;min-width:22px;text-align:center;padding:1px 6px;margin-right:2px;border-radius:7px;background:#3e63d8;color:#fff;font-weight:800;font-size:13px}#cnv .tqn.gd{background:#0c9c84}#cnv .tqn.bd{background:#d6395f}#cnv .tw{display:inline-block;white-space:nowrap}'
@@ -884,7 +884,7 @@
   function wide(on){ var w = document.querySelector("#cnv .w"); if (w) w.classList.toggle("rdw", !!on); }
   function rdJudge(q, said){
     said = String(said || "").trim(); if (!said) return false;
-    if (q.t === "tf" || q.t === "sel") return said.toUpperCase() === q.a[0];
+    if (q.t === "tf" || q.t === "sel" || q.t === "mcq" || q.t === "mp") return said.toUpperCase() === q.a[0];
     var n = norm(said).replace(/-/g, " "); return q.a.some(function(a){ return norm(a).replace(/-/g, " ") === n; });
   }
   function rdAll(D){ if (D.parts){ var o = []; D.parts.forEach(function(p){ o = o.concat(p.qs); }); return o; } return D.q.concat(D.t); }
@@ -900,7 +900,7 @@
       if (st0 === "vocab" || st0 === "quiz"){ S.R.last = {bad: new Array(Math.max(1, S.R.mist)), good: [], ans: {}}; S.R.first = S.R.last; S.R.ans = {}; rdVocab(); return; }
       if (st0 === "retake"){ S.R.first = {bad: new Array(Math.max(1, S.R.mist)), good: [], ans: {}}; S.R.hl = true; S.R.step = "retake"; rdTest(true); }
       else rdTest(false);
-      try { var A = S.R.ans; [].forEach.call(document.querySelectorAll("#rdq .tf"), function(g){ var n = +g.parentNode.parentNode.getAttribute("data-n"); if (A[n]) [].forEach.call(g.children, function(b){ if (b.getAttribute("data-v") === A[n]) b.onclick(); }); });
+      try { var A = S.R.ans; [].forEach.call(document.querySelectorAll("#rdq .tf, #rdq .mq"), function(g){ var n = +g.parentNode.parentNode.getAttribute("data-n"); if (A[n]) [].forEach.call(g.children, function(b){ if (b.getAttribute("data-v") === A[n]) b.onclick(); }); });
         [].forEach.call(document.querySelectorAll("#rdq select.rsel"), function(c){ var n = +c.getAttribute("data-n"); if (A[n]){ c.value = A[n]; if (c.onchange) c.onchange(); } });
         [].forEach.call(document.querySelectorAll("input.rin[data-n]"), function(i){ var n = +i.getAttribute("data-n"); if (A[n] && !i.value) i.value = A[n]; if (i.value && i.oninput) i.oninput(); }); } catch (e) {}
     }).catch(function(){ page(top() + '<div class="card warn"><h2>The reading is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
@@ -928,12 +928,15 @@
     var h = '';
     var tfs = D.q.filter(function(q){ return q.t === "tf" && on(q.n); }), ws = D.q.filter(function(q){ return q.t === "w" && on(q.n); }), ts = D.t.filter(function(q){ return on(q.n); });
     function qrow(q){ return '<div class="qr" data-n="' + q.n + '"><div class="qn">' + q.n + '</div><div class="qb"><div class="qt">' + esc(q.q) + '</div>'
-      + (q.t === "tf" ? '<div class="tf">' + ["TRUE", "FALSE", "NOT GIVEN"].map(function(v){ return '<button type="button" data-v="' + v + '">' + v + '</button>'; }).join("") + '</div>' : '<input class="rin" type="text" autocomplete="off" spellcheck="false" placeholder="Your answer" data-n="' + q.n + '">') + '</div></div>'; }
+      + (q.t === "mp" ? '<select class="rsel" data-n="' + q.n + '"><option value="">Choose…</option>' + (D.people || []).map(function(p){ return '<option>' + p[0] + '</option>'; }).join("") + '</select>' : q.t === "tf" ? '<div class="tf">' + ["TRUE", "FALSE", "NOT GIVEN"].map(function(v){ return '<button type="button" data-v="' + v + '">' + v + '</button>'; }).join("") + '</div>' : '<input class="rin" type="text" autocomplete="off" spellcheck="false" placeholder="Your answer" data-n="' + q.n + '">') + '</div></div>'; }
     if (retake) h += '<div class="qgh"><span class="qi">🔁</span><div><b>Full retake: every question again</b><small>You studied the vocabulary and passed the quiz. Now answer ALL the questions. You need every one correct to see the feedback.</small></div></div>';
     function rg(list){ var ns = list.map(function(q){ return q.n; }); return ns.length > 1 ? Math.min.apply(null, ns) + "–" + Math.max.apply(null, ns) : String(ns[0]); }
     var gtf = tfs.length ? '<div class="qg"><div class="qgh"><span class="qi">🧭</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "tf"; })) + ' · True / False / Not Given</b><small>Do the statements agree with the information in the passage?</small></div></div>'
       + '<div class="qd"><span><b>TRUE</b> = agrees with the passage</span><span><b>FALSE</b> = contradicts the passage</span><span><b>NOT GIVEN</b> = no information on this</span></div>' + tfs.map(qrow).join("") + '</div>' : "";
     var gws = ws.length ? '<div class="qg"><div class="qgh"><span class="qi">✏️</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "w"; })) + ' · Short answers</b><small>Choose <b>' + (D.wl || "ONE WORD ONLY") + '</b> from the passage for each answer.</small></div></div>' + ws.map(qrow).join("") + '</div>' : "";
+    var mps = D.q.filter(function(q){ return q.t === "mp" && on(q.n); });
+    var gmp = mps.length ? '<div class="qg"><div class="qgh"><span class="qi">👥</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "mp"; })) + ' · Matching</b><small>' + (D.mpi || "Match each statement with the correct person. You may use any letter more than once.") + '</small></div></div>'
+      + '<div class="qd" style="display:block">' + (D.people || []).map(function(p){ return '<div><b>' + p[0] + '</b> ' + esc(p[1]) + '</div>'; }).join("") + '</div>' + mps.map(qrow).join("") + '</div>' : "";
     var gts = "";
     if (ts.length){
       var tb = '<table class="rtb"><tr>' + D.th.map(function(x){ return '<th>' + x + '</th>'; }).join('') + '</tr>' + D.tb.map(function(r){
@@ -941,8 +944,8 @@
           return '<span class="tw"><span class="tqn" data-t="' + n + '">' + n + '</span><input class="rin rt" type="text" autocomplete="off" spellcheck="false" data-n="' + n + '"></span>'; }); }
         return '<tr><td>' + r.name + '</td><td>' + r.date + '</td><td>' + cell(r.feat) + '</td><td>' + cell(r.note) + '</td></tr>'; }).join("") + '</table>';
       gts = '<div class="qg"><div class="qgh"><span class="qi">🧩</span><div><b>Questions ' + rg(D.t) + ' · Table completion</b><small>Complete the table. Choose <b>' + (D.tl || "ONE WORD AND/OR A NUMBER") + '</b> from the passage for each answer.</small></div></div>' + tb + '</div>'; }
-    var GR = {tf: gtf, w: gws, tb: gts}; (D.order || ["tf", "w", "tb"]).forEach(function(k){ h += GR[k]; });
-    var need = [].concat(tfs, ws, ts).map(function(q){ return q.n; });
+    var GR = {tf: gtf, w: gws, tb: gts, mp: gmp}; (D.order || ["tf", "w", "tb"]).forEach(function(k){ h += GR[k]; });
+    var need = [].concat(tfs, ws, ts, mps).map(function(q){ return q.n; });
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 4 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
       + '<div class="rsp">' + rdPassage() + '<div class="rpn q hlz" id="rdq">' + h + '<div class="rbar"><button class="go" id="rck" disabled>Check my answers</button><small id="rhint"></small></div></div></div>');
     wide(true); rdTimer();
@@ -955,6 +958,7 @@
     [].forEach.call(document.querySelectorAll("#rdq input.rin"), function(i){ var n = +i.getAttribute("data-n");
       i.oninput = function(){ R_.ans[n] = i.value; var r = i.closest(".qr"); if (r) r.classList.toggle("fld", !!i.value.trim()); upd(); };
       i.onpaste = function(e){ e.preventDefault(); }; i.oncontextmenu = function(e){ e.preventDefault(); }; });
+    [].forEach.call(document.querySelectorAll("#rdq select.rsel"), function(c){ var n = +c.getAttribute("data-n"); c.onchange = function(){ R_.ans[n] = c.value; c.closest(".qr").classList.toggle("fld", !!c.value); upd(); }; });
     upd();
     el("rck").onclick = function(){ rdCheck(need); };
   }
@@ -974,7 +978,10 @@
       lefts += '<div class="rpn hlz' + (R_.hl ? " hl" : "") + ' rpart" data-p="' + pi + '">' + (retake ? "" : "") + '<h1 class="rpt" style="font-size:30px">' + esc(p.head) + '</h1><p class="rpi">' + esc(p.instr) + '</p>' + lf + '</div>';
       var rr = '<div class="rpart" data-p="' + pi + '"><div class="qgh"><span class="qi">' + p.ic + '</span><div><b>' + esc(p.head) + '</b><small>Questions ' + p.qs[0].n + '–' + p.qs[p.qs.length - 1].n + '</small></div></div>' + (p.legend ? '<div class="qd" style="display:block">' + p.legend + '</div>' : "");
       if (p.qs[0].t === "gap") rr += '<p class="sub" style="text-align:left">Type the missing words into the gaps in the text on the left.</p>';
-      else rr += qs.map(function(q){ return '<div class="qr" data-n="' + q.n + '"><div class="qn">' + q.n + '</div><div class="qb"><div class="qt">' + esc(q.q) + '</div><select class="rsel" data-n="' + q.n + '"><option value="">Choose…</option>' + q.opts.map(function(o){ return '<option>' + o + '</option>'; }).join("") + '</select></div></div>'; }).join("");
+      else rr += qs.map(function(q){ return (q.sh ? '<div class="qd" style="display:block;margin:14px 0 6px"><b>' + esc(q.sh) + '</b></div>' : "") + '<div class="qr" data-n="' + q.n + '"><div class="qn">' + q.n + '</div><div class="qb"><div class="qt">' + esc(q.q) + '</div>'
+        + (q.t === "tf" ? '<div class="tf">' + (p.vals || ["TRUE", "FALSE", "NOT GIVEN"]).map(function(v){ return '<button type="button" data-v="' + v + '">' + v + '</button>'; }).join("") + '</div>'
+          : q.t === "mcq" ? '<div class="mq one">' + q.opts.map(function(o, k){ return '<button type="button" class="mo" data-v="' + "ABCDEFGH".charAt(k) + '"><b>' + "ABCDEFGH".charAt(k) + '</b> ' + esc(o) + '</button>'; }).join("") + '</div>'
+          : '<select class="rsel" data-n="' + q.n + '"><option value="">Choose…</option>' + q.opts.map(function(o){ return '<option>' + o + '</option>'; }).join("") + '</select>') + '</div></div>'; }).join("");
       rights += rr + '</div>';
     });
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 4 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
@@ -995,6 +1002,8 @@
         sels.forEach(function(c){ [].forEach.call(c.options, function(o){ if (!o.value) return; o.disabled = false; o.textContent = o.value; }); }); });
     }
     [].forEach.call(document.querySelectorAll("#rdq select.rsel"), function(c){ var n = +c.getAttribute("data-n"); c.onchange = function(){ R_.ans[n] = c.value; c.closest(".qr").classList.toggle("fld", !!c.value); crossOut(); upd(); }; });
+    [].forEach.call(document.querySelectorAll("#rdq .tf, #rdq .mq"), function(g){ var row = g.closest(".qr"), n = +row.getAttribute("data-n");
+      [].forEach.call(g.children, function(b){ b.onclick = function(){ R_.ans[n] = b.getAttribute("data-v"); [].forEach.call(g.children, function(x){ x.classList.toggle("sel", x === b); }); row.classList.add("fld"); upd(); }; }); });
     crossOut();
     upd();
     el("rck").onclick = function(){ rdCheck(need); };
