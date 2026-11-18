@@ -893,7 +893,7 @@
   function wide(on){ var w = document.querySelector("#cnv .w"); if (w) w.classList.toggle("rdw", !!on); }
   function rdJudge(q, said){
     said = String(said || "").trim(); if (!said) return false;
-    if (q.t === "tf" || q.t === "sel" || q.t === "mcq" || q.t === "mp") return said.toUpperCase() === q.a[0];
+    if (q.t === "tf" || q.t === "sel" || q.t === "mcq" || q.t === "mp" || q.t === "pm") return said.toUpperCase() === q.a[0];
     var n = norm(said).replace(/-/g, " "); return q.a.some(function(a){ return norm(a).replace(/-/g, " ") === n; });
   }
   function keyTxt(q, D){ var a = q.a[0]; if (q.t === "mcq" && q.opts){ var i = "ABCDEFGH".indexOf(a); return i >= 0 && q.opts[i] ? a + " · " + q.opts[i] : a; } if (q.t === "mp" && D && D.people){ var p = D.people.filter(function(x){ return x[0] === a; })[0]; return p && p[1] && String(p[1]).length > 2 ? a + " · " + p[1] : a; } return a; }
@@ -938,8 +938,8 @@
     var h = '';
     var tfs = D.q.filter(function(q){ return q.t === "tf" && on(q.n); }), ws = D.q.filter(function(q){ return q.t === "w" && on(q.n); }), ts = D.t.filter(function(q){ return on(q.n); });
     function qrow(q){ return '<div class="qr" data-n="' + q.n + '"><div class="qn">' + q.n + '</div><div class="qb"><div class="qt">' + esc(q.q) + '</div>'
-      + (q.t === "mp" ? '<select class="rsel" data-n="' + q.n + '"><option value="">Choose…</option>' + (D.people || []).map(function(p){ return '<option>' + p[0] + '</option>'; }).join("") + '</select>' : q.t === "tf" ? '<div class="tf">' + (D.tfv || ["TRUE", "FALSE", "NOT GIVEN"]).map(function(v){ return '<button type="button" data-v="' + v + '">' + v + '</button>'; }).join("") + '</div>' : q.t === "mcq" ? '<div class="mq one">' + q.opts.map(function(o, k){ return '<button type="button" class="mo" data-v="' + "ABCDEFGH".charAt(k) + '"><b>' + "ABCDEFGH".charAt(k) + '</b> ' + esc(o) + '</button>'; }).join("") + '</div>' : '<input class="rin" type="text" autocomplete="off" spellcheck="false" placeholder="Your answer" data-n="' + q.n + '">') + '</div></div>'; }
-    if (retake) h += '<div class="qgh"><span class="qi">🔁</span><div><b>Full retake: every question again</b><small>You studied the vocabulary and passed the quiz. Now answer ALL the questions. On the retake, ' + (rdAllow() === 2 ? 'two mistakes are' : 'one mistake is') + ' allowed: you can see the feedback with all correct or with ' + (rdAllow() === 2 ? 'up to two' : 'just one') + ' wrong.</small></div></div>';
+      + (q.t === "pm" ? '<select class="rsel" data-n="' + q.n + '"><option value="">Choose…</option>' + D.p.map(function(_, k){ return '<option>' + "ABCDEFGHIJKLMNOP".charAt(k) + '</option>'; }).join("") + '</select>' : q.t === "mp" ? '<select class="rsel" data-n="' + q.n + '"><option value="">Choose…</option>' + (D.people || []).map(function(p){ return '<option>' + p[0] + '</option>'; }).join("") + '</select>' : q.t === "tf" ? '<div class="tf">' + (D.tfv || ["TRUE", "FALSE", "NOT GIVEN"]).map(function(v){ return '<button type="button" data-v="' + v + '">' + v + '</button>'; }).join("") + '</div>' : q.t === "mcq" ? '<div class="mq one">' + q.opts.map(function(o, k){ return '<button type="button" class="mo" data-v="' + "ABCDEFGH".charAt(k) + '"><b>' + "ABCDEFGH".charAt(k) + '</b> ' + esc(o) + '</button>'; }).join("") + '</div>' : '<input class="rin" type="text" autocomplete="off" spellcheck="false" placeholder="Your answer" data-n="' + q.n + '">') + '</div></div>'; }
+    if (retake) h += '<div class="qgh"><span class="qi">🔁</span><div><b>Full retake: this time you need at least ' + (rdAll(D).length - rdAllow()) + ' of ' + rdAll(D).length + ' correct</b><small>You studied the vocabulary and passed the quiz. Now answer ALL the questions. On the retake, ' + (rdAllow() === 2 ? 'two mistakes are' : 'one mistake is') + ' allowed: you see the feedback with all correct or with ' + (rdAllow() === 2 ? 'up to two' : 'just one') + ' wrong. (All correct is needed only on the first try.)</small></div></div>';
     function rg(list){ var ns = list.map(function(q){ return q.n; }); return ns.length > 1 ? Math.min.apply(null, ns) + "–" + Math.max.apply(null, ns) : String(ns[0]); }
     var gtf = tfs.length ? '<div class="qg"><div class="qgh"><span class="qi">🧭</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "tf"; })) + ' · ' + (D.tfv ? 'Yes / No / Not Given' : 'True / False / Not Given') + '</b><small>' + (D.tfv ? 'Do the statements agree with the claims of the writer?' : 'Do the statements agree with the information in the passage?') + '</small></div></div>'
       + (D.tfv ? '<div class="qd"><span><b>YES</b> = agrees with the claims of the writer</span><span><b>NO</b> = contradicts the claims of the writer</span><span><b>NOT GIVEN</b> = impossible to say what the writer thinks</span></div>' : '<div class="qd"><span><b>TRUE</b> = agrees with the passage</span><span><b>FALSE</b> = contradicts the passage</span><span><b>NOT GIVEN</b> = no information on this</span></div>') + tfs.map(qrow).join("") + '</div>' : "";
@@ -947,6 +947,8 @@
     var mps = D.q.filter(function(q){ return q.t === "mp" && on(q.n); });
     var gmp = mps.length ? '<div class="qg"><div class="qgh"><span class="qi">👥</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "mp"; })) + ' · Matching</b><small>' + (D.mpi || "Match each statement with the correct person. You may use any letter more than once.") + '</small></div></div>'
       + '<div class="qd" style="display:block">' + (D.people || []).map(function(p){ return '<div><b>' + p[0] + '</b> ' + esc(p[1]) + '</div>'; }).join("") + '</div>' + mps.map(qrow).join("") + '</div>' : "";
+    var pms = D.q.filter(function(q){ return q.t === "pm" && on(q.n); });
+    var gpm = pms.length ? '<div class="qg"><div class="qgh"><span class="qi">📍</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "pm"; })) + ' · Which paragraph?</b><small>The passage has paragraphs A–' + "ABCDEFGHIJKLMNOP".charAt(D.p.length - 1) + '. Which paragraph contains the following information? You may use any letter more than once.</small></div></div>' + pms.map(qrow).join("") + '</div>' : "";
     var mcs = D.q.filter(function(q){ return q.t === "mcq" && on(q.n); });
     var gmc = mcs.length ? '<div class="qg"><div class="qgh"><span class="qi">🔤</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "mcq"; })) + ' · Multiple choice</b><small>Choose the correct letter, A, B, C or D.</small></div></div>' + mcs.map(qrow).join("") + '</div>' : "";
     var gts = "";
@@ -956,8 +958,8 @@
           return '<span class="tw"><span class="tqn" data-t="' + n + '">' + n + '</span><input class="rin rt" type="text" autocomplete="off" spellcheck="false" data-n="' + n + '"></span>'; }); }
         return '<tr><td>' + r.name + '</td><td>' + r.date + '</td><td>' + cell(r.feat) + '</td><td>' + cell(r.note) + '</td></tr>'; }).join("") + '</table>';
       gts = '<div class="qg"><div class="qgh"><span class="qi">🧩</span><div><b>Questions ' + rg(D.t) + ' · Table completion</b><small>Complete the table. Choose <b>' + (D.tl || "ONE WORD AND/OR A NUMBER") + '</b> from the passage for each answer.</small></div></div>' + tb + '</div>'; }
-    var GR = {tf: gtf, w: gws, tb: gts, mp: gmp, mcq: gmc}; (D.order || ["tf", "w", "tb"]).forEach(function(k){ h += GR[k]; });
-    var need = [].concat(tfs, ws, ts, mps, mcs).map(function(q){ return q.n; });
+    var GR = {tf: gtf, w: gws, tb: gts, mp: gmp, mcq: gmc, pm: gpm}; (D.order || ["tf", "w", "tb"]).forEach(function(k){ h += GR[k]; });
+    var need = [].concat(tfs, ws, ts, mps, pms, mcs).map(function(q){ return q.n; });
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 4 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
       + '<div class="rsp">' + rdPassage() + '<div class="rpn q hlz" id="rdq">' + h + '<div class="rbar"><button class="go" id="rck" disabled>Check my answers</button><small id="rhint"></small></div></div></div>');
     wide(true); rdTimer();
@@ -997,6 +999,7 @@
       rights += rr + '</div>';
     });
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 4 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
+      + '<div style="margin:6px 0 2px;padding:8px 14px;border-radius:12px;font-weight:800;font-size:15px;color:#fff;background:' + (retake ? 'linear-gradient(90deg,#0c9c84,#3e63d8)' : 'linear-gradient(90deg,#b25400,#d6395f)') + '">' + (retake ? '🔁 Retake: this time you need at least ' + (rdAll(D).length - rdAllow()) + ' of ' + rdAll(D).length + ' correct to see the feedback.' : '🎯 First try: you need all ' + rdAll(D).length + ' correct to see the feedback. (On the retake, at least ' + (rdAll(D).length - rdAllow()) + ' of ' + rdAll(D).length + '.)') + '</div>'
       + '<div class="rtabs">' + tabs + '</div><div class="rsp"><div id="rdp">' + lefts + '</div><div class="rpn q hlz" id="rdq">' + rights + '</div></div><div class="rbar rbfix"><button class="go" id="rck" disabled>Check my answers</button><small id="rhint"></small></div>');
     wide(true); rdTimer();
     el("cb").onclick = function(){ if (S.bt) clearInterval(S.bt); wide(false); hub(); };
@@ -1043,7 +1046,7 @@
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · result</h2>' + rdSteps(1) + '</div><div class="brk" style="padding-top:6px">'
       + '<div class="rsc"><div class="ring" style="--c:#d6395f;--a:' + Math.round(100 * (tot - n) / tot) + '%"><div><b style="font-size:46px;color:#d6395f">' + n + '</b><small>mistake' + (n > 1 ? "s" : "") + '</small></div></div></div>'
       + '<h1 class="bh" style="font-size:36px">You made ' + n + ' mistake' + (n > 1 ? "s" : "") + '.</h1>'
-      + '<p class="sub">' + ((R_.rounds > 1 || R_.retaken) ? 'On the retake you need <b>at least ' + (tot - rdAllow()) + ' of ' + tot + ' correct</b> (' + (rdAllow() === 2 ? 'two mistakes are' : 'one mistake is') + ' allowed).' : 'To see the feedback you need <b>all ' + tot + ' correct</b>.') + ' The answers stay hidden. Study the vocabulary, pass the 20-question quiz, then take the whole test again.</p>'
+      + '<p class="sub">' + ((R_.rounds > 1 || R_.retaken) ? 'On the retake you need <b>at least ' + (tot - rdAllow()) + ' of ' + tot + ' correct</b> (' + (rdAllow() === 2 ? 'two mistakes are' : 'one mistake is') + ' allowed).' : 'To see the feedback on this <b>first try</b> you need <b>all ' + tot + ' correct</b>. <b>On the retake you will need at least ' + (tot - rdAllow()) + ' of ' + tot + '.</b>') + ' The answers stay hidden. Study the vocabulary, pass the 20-question quiz, then take the whole test again.</p>'
       + '<div style="margin-top:22px"><button class="go" id="rvo">Study the vocabulary →</button></div></div>');
     wide(false); el("cb").onclick = hub;
     el("rvo").onclick = function(){ rdVocab(); };
@@ -1053,7 +1056,7 @@
     function card(x, c){ var eg = (D.eg && D.eg[String(x[0]).toLowerCase()]) || ""; return '<div class="vc ' + c + '"><b>' + esc(x[0]) + '</b><span>' + esc(x[1]) + '</span><em>' + esc(x[2]) + '</em>' + (eg ? '<i>“' + esc(eg) + '”</i>' : "") + '</div>'; }
     var xs = D.x || [], ps = D.pw || [];
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · study</h2>' + rdSteps(2) + '</div>'
-      + '<p class="sub" style="text-align:left;margin:4px 0">Learn every word and chunk below, the ones from the book <b>and</b> the new ones. The quiz has 20 questions and you need <b>18</b>.</p>'
+      + '<p class="sub" style="text-align:left;margin:4px 0">Learn every word and chunk below, the ones from the book <b>and</b> the new ones. The quiz has 20 questions and you need <b>18</b>. On the reading retake you will need at least <b>' + (rdAll(D).length - rdAllow()) + ' of ' + rdAll(D).length + '</b> correct.</p>'
       + '<div class="vh">Vocabulary from your Unit ' + S.unit + ' book</div><div class="vgrid">' + D.v.map(function(x){ return card(x, ""); }).join("") + '</div>'
       + '<div class="vh">Unit ' + S.unit + ' power chunks' + (D.topic ? ' · ' + esc(D.topic) : '') + '</div><div class="vgrid">' + D.c.map(function(x){ return card(x, "c"); }).join("") + '</div>'
       + (ps.length ? '<div class="vh">⭐ New words and chunks from your passage · not in the book</div><div class="vgrid">' + ps.map(function(x){ return card(x, "c"); }).join("") + '</div>' : "")
@@ -1089,7 +1092,7 @@
       var ok = sc >= 18;
       page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · quiz result</h2>' + rdSteps(3) + '</div><div class="brk" style="padding-top:6px"><div class="rsc"><div class="ring" style="--c:' + (ok ? "#0c9c84" : "#d6395f") + ';--a:' + (sc * 5) + '%"><div><b style="font-size:46px;color:' + (ok ? "#0c9c84" : "#d6395f") + '">' + sc + '/20</b><small>need 18</small></div></div></div>'
         + '<h1 class="bh" style="font-size:34px">' + (ok ? "Quiz passed! Now the whole reading test again." : "Not yet. Learn the words once more and try again.") + '</h1>'
-        + '<p class="sub">' + (ok ? 'Answer ALL the questions. You can have ' + (rdAllow() === 2 ? 'two mistakes' : 'one mistake') + ' at most to see the feedback.' : "You need 18 out of 20. Study the list again, then take a new quiz.") + '</p>'
+        + '<p class="sub">' + (ok ? 'Answer ALL the questions. This time you need at least ' + (rdAll(S.R.D).length - rdAllow()) + ' of ' + rdAll(S.R.D).length + ' correct (' + (rdAllow() === 2 ? 'two mistakes' : 'one mistake') + ' at most) to see the feedback.' : "You need 18 out of 20. Study the list again, then take a new quiz.") + '</p>'
         + '<div style="margin-top:22px"><button class="go" id="rnx">' + (ok ? "Start the full retake →" : "Study again →") + '</button></div></div>');
       wide(false); el("cb").onclick = hub;
       el("rnx").onclick = function(){ if (ok){ R_.t0 = Date.now(); R_.hl = true; R_.ans = {}; R_.step = "quiz"; rdTest(true); } else rdVocab(); };
