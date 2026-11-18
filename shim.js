@@ -31,7 +31,10 @@
     return go(0);
   }
   /* the error card of the home test says why the result could not be sent */
-  try { new MutationObserver(function(){ var d = document.getElementById("endcard"); if (d && /Could not send/.test(d.textContent) && !d.querySelector(".nverr") && window.__nvErr){ var p = d.querySelector("p"); if (p) p.insertAdjacentHTML("afterend", '<p class="nverr" style="font-size:14px;opacity:.8;margin-top:6px">Reason: ' + String(window.__nvErr).replace(/[<>&]/g, "") + '. Tell your teacher if it keeps happening.</p>'); } }).observe(document.documentElement, {childList: true, subtree: true}); } catch (e) {}
+  try { new MutationObserver(function(){
+    var d = document.getElementById("endcard"); if (d && /Could not send/.test(d.textContent) && !d.querySelector(".nverr") && window.__nvErr){ var p = d.querySelector("p"); if (p) p.insertAdjacentHTML("afterend", '<p class="nverr" style="font-size:14px;opacity:.8;margin-top:6px">Reason: ' + String(window.__nvErr).replace(/[<>&]/g, "") + '. Tell your teacher if it keeps happening.</p>'); }
+    ["homemsg", "smsg"].forEach(function(id){ var m = document.getElementById(id); if (m && /Could not save/.test(m.textContent) && !/Reason:/.test(m.textContent) && !m.__nvR){ m.__nvR = 1; m.textContent = m.textContent + " Reason: " + String(window.__nvErr || "no answer from the server").replace(/[<>&]/g, ""); setTimeout(function(){ m.__nvR = 0; }, 500); } });
+  }).observe(document.documentElement, {childList: true, subtree: true, characterData: true}); } catch (e) {}
   function ping(){
     var a = {tok: P.tok}, e = document.getElementById("progtxt");
     if (started && e && e.textContent) a.prog = e.textContent.replace(/\s+/g, " ").trim();
