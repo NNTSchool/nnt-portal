@@ -1032,7 +1032,7 @@
     var R_ = S.R, D = R_.D, all = rdAll(D), bad = [], good = [];
     need.forEach(function(n){ var q = all.filter(function(x){ return x.n === n; })[0]; (rdJudge(q, R_.ans[n]) ? good : bad).push(n); });
     R_.last = {bad: bad, good: good, ans: JSON.parse(JSON.stringify(R_.ans))}; var firstTime = !R_.first; if (!R_.first) R_.first = R_.last;
-    R_.rounds = (R_.rounds || 0) + 1; R_.mist = bad.length;
+    R_.rounds = (R_.rounds || 0) + 1; R_.mist = bad.length; if (!firstTime) R_.retaken = true;
     flushLog("read", firstTime ? {r1: Math.round(100 * good.length / Math.max(1, all.length)), rr: R_.rounds} : {rr: R_.rounds, rl: Math.round(100 * good.length / Math.max(1, all.length))});
     if (S.bt) clearInterval(S.bt);
     if (!bad.length || (!firstTime && bad.length <= rdAllow())){ R_.second = R_.last; rdAnswers(); } else { rdStep("vocab"); rdResults(); }
@@ -1043,7 +1043,7 @@
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · result</h2>' + rdSteps(1) + '</div><div class="brk" style="padding-top:6px">'
       + '<div class="rsc"><div class="ring" style="--c:#d6395f;--a:' + Math.round(100 * (tot - n) / tot) + '%"><div><b style="font-size:46px;color:#d6395f">' + n + '</b><small>mistake' + (n > 1 ? "s" : "") + '</small></div></div></div>'
       + '<h1 class="bh" style="font-size:36px">You made ' + n + ' mistake' + (n > 1 ? "s" : "") + '.</h1>'
-      + '<p class="sub">' + (R_.rounds > 1 ? 'On the retake you need <b>at least ' + (tot - rdAllow()) + ' of ' + tot + ' correct</b> (' + (rdAllow() === 2 ? 'two mistakes are' : 'one mistake is') + ' allowed).' : 'To see the feedback you need <b>all ' + tot + ' correct</b>.') + ' The answers stay hidden. Study the vocabulary, pass the 20-question quiz, then take the whole test again.</p>'
+      + '<p class="sub">' + ((R_.rounds > 1 || R_.retaken) ? 'On the retake you need <b>at least ' + (tot - rdAllow()) + ' of ' + tot + ' correct</b> (' + (rdAllow() === 2 ? 'two mistakes are' : 'one mistake is') + ' allowed).' : 'To see the feedback you need <b>all ' + tot + ' correct</b>.') + ' The answers stay hidden. Study the vocabulary, pass the 20-question quiz, then take the whole test again.</p>'
       + '<div style="margin-top:22px"><button class="go" id="rvo">Study the vocabulary →</button></div></div>');
     wide(false); el("cb").onclick = hub;
     el("rvo").onclick = function(){ rdVocab(); };
@@ -1089,7 +1089,7 @@
       var ok = sc >= 18;
       page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · quiz result</h2>' + rdSteps(3) + '</div><div class="brk" style="padding-top:6px"><div class="rsc"><div class="ring" style="--c:' + (ok ? "#0c9c84" : "#d6395f") + ';--a:' + (sc * 5) + '%"><div><b style="font-size:46px;color:' + (ok ? "#0c9c84" : "#d6395f") + '">' + sc + '/20</b><small>need 18</small></div></div></div>'
         + '<h1 class="bh" style="font-size:34px">' + (ok ? "Quiz passed! Now the whole reading test again." : "Not yet. Learn the words once more and try again.") + '</h1>'
-        + '<p class="sub">' + (ok ? "Answer ALL the questions. You can have ' + (rdAllow() === 2 ? 'two mistakes' : 'one mistake') + ' at most to see the feedback." : "You need 18 out of 20. Study the list again, then take a new quiz.") + '</p>'
+        + '<p class="sub">' + (ok ? 'Answer ALL the questions. You can have ' + (rdAllow() === 2 ? 'two mistakes' : 'one mistake') + ' at most to see the feedback.' : "You need 18 out of 20. Study the list again, then take a new quiz.") + '</p>'
         + '<div style="margin-top:22px"><button class="go" id="rnx">' + (ok ? "Start the full retake →" : "Study again →") + '</button></div></div>');
       wide(false); el("cb").onclick = hub;
       el("rnx").onclick = function(){ if (ok){ R_.t0 = Date.now(); R_.hl = true; R_.ans = {}; R_.step = "quiz"; rdTest(true); } else rdVocab(); };
