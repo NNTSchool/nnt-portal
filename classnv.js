@@ -1208,15 +1208,96 @@
   }
   /* what holds the mark back: the two weakest criteria with one concrete job each, and the change since the last try */
   function wrCrit(W, ml){ return ml ? [["TA", W.m75.ta, 19], ["CC", W.m75.cc, 19], ["GR", W.m75.gr, 19], ["LR", W.m75.lr, 18]] : [["TA", W.ta, 9], ["CC", W.cc, 9], ["GR", W.gr, 9], ["LR", W.lr, 9]]; }
+/* NNT coach: concrete, personal advice from the student's own text. Shared by the class writing and the home summary.
+   NNTcoach(text, r, o) -> html.  r = FB.analyseEssay result; o = {kind: "essay"|"summary", ml: bool, FB: engine, prev: {text, r}|null, esc: fn} */
+function NNTcoach(text, r, o){
+  var esc = o.esc || function(x){ return String(x).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }, ml = !!o.ml, FB = o.FB, sum = o.kind === "summary";
+  if (!r || r.empty || r.tooShort || r.junk) return "";
+  function words(s){ return (String(s).match(/[A-Za-z’'-]+/g) || []).length; }
+  function q(s, k){ s = String(s).replace(/\s+/g, " ").trim(); var w = s.split(" "); return "«" + esc(w.length > (k || 9) ? w.slice(0, k || 9).join(" ") + " …" : s) + "»"; }
+  function cnt(re, s){ return (s.match(re) || []).length; }
+  function facts(text, r){
+    var T = String(text || ""), F = {};
+    F.paras = T.split(/\n+/).map(function(x){ return x.trim(); }).filter(function(x){ return words(x) > 0; });
+    F.pw = F.paras.map(words);
+    F.sents = (T.replace(/\s+/g, " ").match(/[^.!?]+[.!?]*/g) || []).map(function(x){ return x.trim(); }).filter(function(x){ return words(x) > 0; });
+    F.n = words(T); F.avg = F.n / Math.max(1, F.sents.length);
+    F.op = /\b(in my (opinion|view)|i (firmly |strongly )?(believe|think|agree|disagree|feel|would argue)|to my mind|personally)\b/i.test(T);
+    F.ex = /\b(for example|for instance|such as|e\.g\.)\b/i.test(T);
+    F.co = /\b(in conclusion|to conclude|to sum up|in summary|overall|all in all)\b/i.test(F.paras.length ? F.paras[F.paras.length - 1] : "");
+    F.rsn = cnt(/\b(because|since|as a result|therefore|which means|this means|so that|due to|leads? to|thanks to|consequently)\b/gi, T);
+    var LK = ["however", "moreover", "furthermore", "in addition", "as a result", "therefore", "although", "while", "whereas", "for example", "for instance", "on the other hand", "in contrast", "nevertheless", "consequently", "besides", "meanwhile", "firstly", "secondly", "finally", "in conclusion", "because", "so that", "which"];
+    F.lk = LK.filter(function(l){ return new RegExp("\\b" + l + "\\b", "i").test(T); }); F.lkNo = LK.filter(function(l){ return F.lk.indexOf(l) < 0; });
+    F.struct = {"a sentence with although / while / whereas": /\b(although|though|while|whereas)\b/i.test(T), "a sentence with “which” or “who” adding information": /,\s*(which|who)\b/i.test(T), "an if-sentence (if … would / will …)": /\bif\b[^.!?]*\b(would|will|could|can)\b/i.test(T), "a passive sentence (is / are / was / were + past participle)": /\b(is|are|was|were|been|be)\s+(\w+ed|made|done|given|seen|known|built|taken|written|used)\b/i.test(T), "a sentence with not only … but also": /\bnot only\b/i.test(T)};
+    F.unit = (FB && FB.used) ? FB.used(T) : (r.u || []);
+    var uc = (FB && FB.CHUNKS) ? FB.CHUNKS.map(function(c){ return c[0]; }).filter(function(c){ return !/handy|however|important \/ essential|on the other hand/i.test(c); }) : [];
+    F.unitNo = uc.filter(function(c){ return F.unit.indexOf(c) < 0; });
+    var STOP = /^(that|this|these|those|with|have|from|they|their|there|which|would|could|should|about|because|where|while|when|what|were|been|being|also|other|than|then|them|into|more|most|some|very|just|only|such|even|much|many|each|both|does|dont|children's)$/;
+    var fq = {}; (T.toLowerCase().match(/[a-z’']+/g) || []).forEach(function(w){ if (w.length >= 5 && !STOP.test(w)) fq[w] = (fq[w] || 0) + 1; });
+    F.rep = Object.keys(fq).filter(function(w){ return fq[w] >= 4; }).sort(function(a, b){ return fq[b] - fq[a]; }).slice(0, 2).map(function(w){ return [w, fq[w]]; });
+    var BASIC = {good: "beneficial, positive, effective", bad: "harmful, damaging, negative", very: "extremely, highly (or just delete it)", thing: "name the exact thing", things: "name the exact things", "a lot of": "a great deal of, numerous", nice: "pleasant, enjoyable", big: "significant, major", important: "essential, crucial", help: "support, assist, benefit", get: "obtain, receive, gain", make: "create, produce, cause", people: "individuals, citizens, the public"};
+    F.basic = Object.keys(BASIC).map(function(w){ var c = cnt(new RegExp("\\b" + w + "\\b", "gi"), T); return c >= 2 ? [w, c, BASIC[w]] : null; }).filter(Boolean).sort(function(a, b){ return b[1] - a[1]; }).slice(0, 3);
+    var st = {}; F.sents.forEach(function(s){ var w = (s.match(/^[A-Za-z’']+/) || [""])[0].toLowerCase(); if (w) st[w] = (st[w] || 0) + 1; });
+    F.start = Object.keys(st).filter(function(w){ return st[w] >= 3 && !/^(the|in)$/.test(w); }).map(function(w){ return [w, st[w]]; })[0] || null;
+    F.shortPair = null; for (var i = 0; i + 1 < F.sents.length; i++){ if (words(F.sents[i]) <= 9 && words(F.sents[i + 1]) <= 9 && !/\b(because|although|however|which|while|so)\b/i.test(F.sents[i] + " " + F.sents[i + 1])){ F.shortPair = i; break; } }
+    return F;
+  }
+  var F = facts(text, r), P = r.P || {}, ih = [], A = {TA: [], CC: [], GR: [], LR: []};
+  /* ----- TA ----- */
+  var ideas = P.ideas || []; ideas.forEach(function(d, i){ ih[i] = (d.re || []).filter(function(x){ return x.test(text); }).length; });
+  if (sum){
+    var miss = [], hit = 0; ideas.forEach(function(d, i){ if ((ih[i] || 0) < 2) miss.push(i); else hit++; });
+    miss.slice(0, 2).forEach(function(i){ A.TA.push("The article's idea " + (i + 1) + " is missing or too thin: " + q(ideas[i].t, 16) + " Write one sentence about it."); });
+    if (hit === ideas.length) A.TA.push("All the main ideas are there. To score higher, give each one a detail from the article (a year, a name, a number)." );
+  } else {
+    var sa = 0, sb = 0; ideas.forEach(function(d, i){ if (i < 2) sa = Math.max(sa, ih[i]); else sb = Math.max(sb, ih[i]); }); var sl = P.sl || ["one side", "the other side"];
+    function weak(sideIdx){ var ch = o.ideas && o.ideas[sideIdx] >= 0 ? o.ideas[sideIdx] : -1; if (ch >= 0 && ideas[ch]) return ideas[ch].t; var b = -1, t = ""; ideas.forEach(function(d, i){ if ((i < 2 ? 0 : 1) === sideIdx && ih[i] > b){ b = ih[i]; t = d.t; } }); return t; }
+    if (sa < 2 && ideas.length) A.TA.push("Side “" + esc(sl[0].replace(/^[^A-Za-z]+/, "")) + "” is not developed. Add a paragraph on this idea: " + q(weak(0), 18) + " Give a reason and an example.");
+    if (sb < 2 && ideas.length) A.TA.push("Side “" + esc(sl[1].replace(/^[^A-Za-z]+/, "")) + "” is not developed. Add a paragraph on this idea: " + q(weak(1), 18) + " Give a reason and an example.");
+    if (!F.op) A.TA.push("You never say what YOU think. After your first paragraph add: «In my opinion, … because …».");
+    if (!F.co) A.TA.push("Your last paragraph does not conclude. Start it with «In conclusion, …» and repeat your opinion in one sentence.");
+    if (r.rel != null && r.rel < 0.75 && P.topic){ var KW = P.topic.slice(0, 4).concat(ideas.reduce(function(a, d){ return a.concat(d.re || []); }, [])); var off = F.sents.filter(function(s){ return !KW.some(function(k){ return k.test(s); }); }).slice(0, 2); if (off.length) A.TA.push("Check whether these sentences really answer the question: " + off.map(function(s){ return q(s, 10); }).join(" ") + " If not, connect them to the question or replace them."); }
+  }
+  if (F.rsn < 3){ var wi = 0, wm = 1e9; F.paras.forEach(function(p, i){ if (i === 0 || i === F.paras.length - 1) return; var c = cnt(/\b(because|since|as a result|therefore|which means|this means)\b/gi, p); if (c < wm){ wm = c; wi = i; } }); if (F.paras.length > 2) A.TA.push("Paragraph " + (wi + 1) + " (" + q(F.paras[wi], 6) + ") states ideas but gives no reasons. Add a sentence starting with «This is because …» or «As a result, …».");
+    else A.TA.push("Ideas need reasons. After each main point add «because …» or «As a result, …» (you have " + F.rsn + " so far, aim for 3 or more)."); }
+  if (!F.ex){ var li = 0; F.pw.forEach(function(w, i){ if (w > F.pw[li] && i > 0 && i < F.pw.length - 1) li = i; }); A.TA.push("There is no example. In paragraph " + (F.paras.length > 2 ? li + 1 : 1) + " add «For example, …» with a real situation (a student, a family, a school, a town).") ; }
+  /* ----- CC ----- */
+  if (F.paras.length < 3) A.CC.push("Write 3 or 4 paragraphs (you have " + F.paras.length + "): introduction, one or two body paragraphs, conclusion. Press Enter twice between them.");
+  F.pw.forEach(function(w, i){ if (w < 50 && F.paras.length >= 3) A.CC.push("Paragraph " + (i + 1) + " has only " + w + " words (" + q(F.paras[i], 6) + "). Add " + (i === 0 ? "the main idea of your answer" : i === F.paras.length - 1 ? "your opinion and one final thought" : "a reason and an example") + " to reach 50 words."); });
+  if (F.lk.length < 4) A.CC.push("You use only " + F.lk.length + " linking word" + (F.lk.length === 1 ? "" : "s") + " (" + (F.lk.length ? F.lk.map(esc).join(", ") : "none") + "). Add at least 2 of these: " + F.lkNo.filter(function(l){ return /^(however|moreover|furthermore|in addition|as a result|therefore|for instance|in contrast|whereas)$/.test(l); }).slice(0, 4).map(esc).join(", ") + ".");
+  if (F.shortPair != null) A.CC.push("Join these two short sentences with « because », « so » or « although »: " + q(F.sents[F.shortPair] + " " + F.sents[F.shortPair + 1], 20));
+  ["because", "however", "also", "but", "so"].forEach(function(l){ var c = cnt(new RegExp("\\b" + l + "\\b", "gi"), text); if (c > 4) A.CC.push("You use “" + l + "” " + c + " times. Replace some with " + ({because: "since / as / due to", however: "nevertheless / yet", also: "moreover / in addition / besides", but: "although / whereas / yet", so: "therefore / as a result"})[l] + "."); });
+  if (F.start) A.CC.push(F.start[1] + " sentences begin with “" + esc(F.start[0]) + "”. Start some with a linking word or a different subject.");
+  /* ----- GR ----- */
+  var gv = (r.gvG && r.gvG.fix) || []; gv.slice().sort(function(a, b){ return (b.count || 1) - (a.count || 1); }).slice(0, 2).forEach(function(f){ A.GR.push("Your most frequent mistake: " + esc(f.cat) + (f.count ? " (" + f.count + "×)" : "") + ", for example " + q(f.bad, 8) + " → " + q(f.fix, 8) + "."); });
+  var absent = Object.keys(F.struct).filter(function(k){ return !F.struct[k]; });
+  if (absent.length > 1) A.GR.push("Your grammar range is narrow. Add " + esc(absent[0]) + " and " + esc(absent[1]) + ". Build them from sentences you already have" + (F.shortPair != null ? ", for example " + q(F.sents[F.shortPair], 9) : "") + ".");
+  if (F.avg < 12) A.GR.push("Your average sentence is only " + Math.round(F.avg) + " words. Write at least 3 sentences of 20 words or more (main idea + because / although + detail).");
+  /* ----- LR ----- */
+  var unitN = F.unit.length;
+  if (unitN < 5 && F.unitNo.length) A.LR.push("You used " + unitN + " unit word" + (unitN === 1 ? "" : "s") + "; the top marks need 5 or more, used where they fit. Not used yet: " + F.unitNo.slice(0, 4).map(function(c){ return "«" + esc(c) + "»"; }).join(", ") + ". Choose the ones that fit your ideas.");
+  F.rep.forEach(function(p){ A.LR.push("“" + esc(p[0]) + "” appears " + p[1] + " times. Replace at least " + Math.ceil(p[1] / 2) + " of them with a different word or a pronoun."); });
+  F.basic.forEach(function(b){ A.LR.push("“" + esc(b[0]) + "” ×" + b[1] + " is a basic word. Try: " + esc(b[2]) + "."); });
+  /* ----- checklist and the weakest criteria ----- */
+  var g = r.gate || {}, CK = [["Every paragraph has 50+ words", F.pw.length >= 3 && F.pw.every(function(x){ return x >= 50; })], ["5 or more unit words used", unitN >= 5], ["Fewer than 5 mistakes found", (r.errs || 0) < 5], [sum ? "All the article's ideas are covered" : "Both sides are discussed", sum ? (ideas.length && ideas.every(function(d, i){ return (ih[i] || 0) >= 2; })) : (sa >= 2 && sb >= 2)], ["At least 3 reasons (because / as a result …)", F.rsn >= 3], ["An example is given", F.ex], ["A clear conclusion", F.co]];
+  if (!sum) CK.splice(4, 0, ["Your opinion is stated", F.op]);
+  var P0 = o.prev ? facts(o.prev.text, o.prev.r) : null, pih = [], prevOk = null; if (o.prev) ideas.forEach(function(d, i){ pih[i] = (d.re || []).filter(function(x){ return x.test(o.prev.text); }).length; });
+  if (P0){ var gp = o.prev.r.gate || {}, pu = P0.unit.length; prevOk = [P0.pw.length >= 3 && P0.pw.every(function(x){ return x >= 50; }), pu >= 5, (o.prev.r.errs || 0) < 5, sum ? (ideas.length && ideas.every(function(d, i){ return (pih[i] || 0) >= 2; })) : ((function(){ var x = 0, y = 0; ideas.forEach(function(d, i){ if (i < 2) x = Math.max(x, pih[i]); else y = Math.max(y, pih[i]); }); return x >= 2 && y >= 2; })()), P0.rsn >= 3, P0.ex, P0.co]; if (!sum) prevOk.splice(4, 0, P0.op); }
+  var crit = ml ? [["TA", r.m75.ta, 19, "Task"], ["CC", r.m75.cc, 19, "Organisation"], ["GR", r.m75.gr, 19, "Grammar"], ["LR", r.m75.lr, 18, "Vocabulary"]] : [["TA", r.ta, 9, "Task"], ["CC", r.cc, 9, "Organisation"], ["GR", r.gr, 9, "Grammar"], ["LR", r.lr, 9, "Vocabulary"]];
+  var order = crit.map(function(c, i){ return {i: i, k: c[0], r: c[1] / c[2], n: A[c[0]].length}; }).filter(function(x){ return x.n; }).sort(function(a, b){ return a.r - b.r || a.i - b.i; });
+  var NAME = {TA: sum ? "Covering the article" : "Answering the question", CC: "Organisation", GR: "Grammar", LR: "Vocabulary"};
+  var h = '<div class="wsec" style="padding:14px 16px"><h3>🎯 What to do to raise your mark</h3>';
+  if (!order.length) h += '<p>No weak point found: keep your ideas, and make sure every paragraph has 50+ words and 5+ unit words.</p>';
+  order.slice(0, 2).forEach(function(x){ var c = crit[x.i]; h += '<div style="margin:10px 0"><b>' + NAME[x.k] + '</b> <span class="sub">(' + x.k + ' ' + c[1] + ' / ' + c[2] + ')</span><ol style="margin:4px 0 0 20px;padding:0">' + A[x.k].slice(0, 3).map(function(a){ return '<li style="margin:5px 0">' + a + '</li>'; }).join("") + '</ol></div>'; });
+  if (order.length > 2) h += '<details style="margin:8px 0"><summary class="sub" style="cursor:pointer">More to improve (' + order.slice(2).map(function(x){ return NAME[x.k]; }).join(", ") + ')</summary>' + order.slice(2).map(function(x){ return '<div style="margin:8px 0"><b>' + NAME[x.k] + '</b><ol style="margin:4px 0 0 20px;padding:0">' + A[x.k].slice(0, 2).map(function(a){ return '<li>' + a + '</li>'; }).join("") + '</ol></div>'; }).join("") + '</details>';
+  h += '<div style="margin-top:10px"><b>Checklist</b><div style="margin-top:4px">' + CK.map(function(c, i){ var was = prevOk ? prevOk[i] : null, tag = was === false && c[1] ? ' <b style="color:#0a8f3c">new ✓</b>' : was === true && !c[1] ? ' <b style="color:#b00020">lost</b>' : ""; return '<div style="margin:3px 0">' + (c[1] ? "✅" : "⬜") + " " + esc(c[0]) + tag + '</div>'; }).join("") + '</div></div>';
+  if (o.prev && o.prev.r){ var pc = ml ? [o.prev.r.m75.ta, o.prev.r.m75.cc, o.prev.r.m75.gr, o.prev.r.m75.lr] : [o.prev.r.ta, o.prev.r.cc, o.prev.r.gr, o.prev.r.lr]; h += '<div class="wcr" style="margin-top:8px">' + crit.map(function(c, i){ var d = Math.round((c[1] - pc[i]) * 10) / 10; return '<span>' + c[0] + ' <b>' + (d > 0 ? "▲ +" + d : d < 0 ? "▼ " + d : "same") + '</b></span>'; }).join("") + '</div>'; }
+  return h + '</div>';
+}
+
   function wrPrior(a, prev){
-    var Wd = S.W, ml = Wd.tr === "ml", W = a.W; if (W.empty || W.tooShort || W.junk) return "";
-    var TIP = {TA: ["Answer the whole question", "Cover every part of the question. Give each idea a reason and an example, not just a statement."], CC: ["Organise your paragraphs", "One clear idea in each paragraph, then join your sentences with linking words (because, however, for example)."], GR: ["Build longer correct sentences", "Add a few longer sentences with because, although or which, and check each one for mistakes."], LR: ["Use more exact words", "Replace repeated basic words (good, bad, make, thing) with exact ones, and use the unit words."]};
-    var c = wrCrit(W, ml), pc = prev ? wrCrit(prev.W, ml) : null, low = c.map(function(x, i){ return {i: i, r: x[1] / x[2]}; }).sort(function(x, y){ return x.r - y.r || x.i - y.i; }).slice(0, 2);
-    var h = '<div class="wsec" style="padding:14px 16px"><h3>🎯 What holds your mark back</h3>';
-    low.forEach(function(l){ var k = c[l.i][0]; h += '<div style="margin:8px 0"><b>' + TIP[k][0] + '</b> <span class="sub">(' + k + ' ' + c[l.i][1] + ' / ' + c[l.i][2] + ')</span><br>' + TIP[k][1] + '</div>'; });
-    h += '<p class="sub" style="margin:8px 0 0">Next try: rewrite your weakest paragraph with this in mind. Fixing the red words alone will not move these.</p>';
-    if (pc){ h += '<div class="wcr" style="margin-top:8px">' + c.map(function(x, i){ var d = Math.round((x[1] - pc[i][1]) * 10) / 10; return '<span>' + x[0] + ' <b>' + (d > 0 ? "▲ +" + d : d < 0 ? "▼ " + d : "same") + '</b></span>'; }).join("") + '</div>'; }
-    return h + '</div>';
+    var Wd = S.W; if (a.W.empty || a.W.tooShort || a.W.junk) return "";
+    return NNTcoach(a.text, a.W, {kind: "essay", ml: Wd.tr === "ml", FB: Wd.FB, ideas: Wd.ideas, esc: esc, prev: prev ? {text: prev.text, r: prev.W} : null});
   }
   function wrFeedback(){
     var Wd = S.W, A = Wd.att, a = A[A.length - 1], W = a.W, ml = Wd.tr === "ml", n = W.n, enough = n >= Wd.need;
@@ -1226,7 +1307,7 @@
     var hist = A.map(function(x, i){ var dd = i ? x.sc - A[i - 1].sc : 0; return '<span class="wat ' + (i && dd < 0 ? "dw" : "up") + '"><i>' + (i ? "Rewrite " + i : "First try") + '</i><b>' + x.sc + '</b>' + (i ? '<em>' + (dd >= 0 ? "▲ +" + dd : "▼ " + dd) + '</em>' : "") + '</span>'; }).join('<span class="war">→</span>');
     page(top("← Unit") + '<div class="rdh"><h2>✍️ Writing · feedback</h2>' + wrSteps() + hlTip() + '</div>'
       + '<div class="wsc"><div class="wbg">' + (enough ? big : "–") + '</div>' + (enough ? '<div class="wcr">' + crit.map(function(c){ return '<span>' + c[0] + ' <b>' + c[1] + '</b> / ' + c[2] + '</span>'; }).join("") + '</div><div class="sub" style="margin:2px 0 8px">TA = task · CC = organisation · GR = grammar · LR = vocabulary</div>' : '<div class="sub" style="color:#b2334f;font-weight:700">Write at least ' + Wd.need + ' words to get a mark.</div>')
-      + '<div class="wah">' + hist + '</div>' + (prev ? '<p class="sub" style="margin:8px 0 0">' + (d > 0 ? "🔥 You improved by " + d + ". Keep going!" : d === 0 ? "Same mark. Work on the priorities below to move up." : "A little lower this time. Check what changed in the red words.") + '</p>' : '<p class="sub" style="margin:8px 0 0">Now fix the mistakes and rewrite. Each rewrite should raise your mark.</p>') + '</div>'
+      + '<div class="wah">' + hist + '</div>' + (prev ? '<p class="sub" style="margin:8px 0 0">' + (d > 0 ? "🔥 You improved by " + d + ". Keep going!" : d === 0 ? "Same mark. Do the first action in the list below to move up." : "A little lower this time. Check what changed in the red words.") + '</p>' : '<p class="sub" style="margin:8px 0 0">Now fix the mistakes and rewrite. Each rewrite should raise your mark.</p>') + '</div>'
       + '<div class="hlz" id="rdp" style="max-width:1100px;margin:0 auto">' + wrPrior(a, prev) + wrDetail(a) + '</div>'
       + '<div class="rbar rbfix"><button class="go fixgo" id="wrw">↻ Rewrite my essay</button><button class="pill" id="wdr" style="margin-right:6px">🔧 Practise my mistakes (optional)</button><button class="pill" id="wfin"' + (!fin ? ' disabled style="opacity:.5;cursor:not-allowed"' : '') + '>Finish writing ✓</button><small>' + (A.length < 2 ? "Finish unlocks after one rewrite and a mark of " + nd.show + "." : !fin ? "You need " + nd.show + " to finish. Your best so far: " + wrBest(A) + ". Rewrite again." : "You reached " + nd.show + ". You can finish, or rewrite again to push your mark higher.") + '</small></div>');
     wide(false); el("cb").onclick = hub;
