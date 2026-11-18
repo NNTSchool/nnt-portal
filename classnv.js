@@ -999,7 +999,7 @@
       rights += rr + '</div>';
     });
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 4 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
-      + '<div style="margin:6px 0 2px;padding:8px 14px;border-radius:12px;font-weight:800;font-size:15px;color:#fff;background:' + (retake ? 'linear-gradient(90deg,#0c9c84,#3e63d8)' : 'linear-gradient(90deg,#b25400,#d6395f)') + '">' + (retake ? '🔁 Retake: this time you need at least ' + (rdAll(D).length - rdAllow()) + ' of ' + rdAll(D).length + ' correct to see the feedback.' : '🎯 First try: you need all ' + rdAll(D).length + ' correct to see the feedback. (On the retake, at least ' + (rdAll(D).length - rdAllow()) + ' of ' + rdAll(D).length + '.)') + '</div>'
+      + '<div style="margin:6px 0 2px;padding:8px 14px;border-radius:12px;font-weight:800;font-size:15px;color:#fff;background:' + (retake ? 'linear-gradient(90deg,#0c9c84,#3e63d8)' : 'linear-gradient(90deg,#b25400,#d6395f)') + '">' + (retake ? '🔁 Retake: this time you need at least ' + (rdAll(D).length - rdAllow()) + ' of ' + rdAll(D).length + ' correct to see the feedback.' : '🎯 First try: you need all ' + rdAll(D).length + ' correct to see the feedback.') + '</div>'
       + '<div class="rtabs">' + tabs + '</div><div class="rsp"><div id="rdp">' + lefts + '</div><div class="rpn q hlz" id="rdq">' + rights + '</div></div><div class="rbar rbfix"><button class="go" id="rck" disabled>Check my answers</button><small id="rhint"></small></div>');
     wide(true); rdTimer();
     el("cb").onclick = function(){ if (S.bt) clearInterval(S.bt); wide(false); hub(); };
@@ -1046,7 +1046,7 @@
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · result</h2>' + rdSteps(1) + '</div><div class="brk" style="padding-top:6px">'
       + '<div class="rsc"><div class="ring" style="--c:#d6395f;--a:' + Math.round(100 * (tot - n) / tot) + '%"><div><b style="font-size:46px;color:#d6395f">' + n + '</b><small>mistake' + (n > 1 ? "s" : "") + '</small></div></div></div>'
       + '<h1 class="bh" style="font-size:36px">You made ' + n + ' mistake' + (n > 1 ? "s" : "") + '.</h1>'
-      + '<p class="sub">' + ((R_.rounds > 1 || R_.retaken) ? 'On the retake you need <b>at least ' + (tot - rdAllow()) + ' of ' + tot + ' correct</b> (' + (rdAllow() === 2 ? 'two mistakes are' : 'one mistake is') + ' allowed).' : 'To see the feedback on this <b>first try</b> you need <b>all ' + tot + ' correct</b>. <b>On the retake you will need at least ' + (tot - rdAllow()) + ' of ' + tot + '.</b>') + ' The answers stay hidden. Study the vocabulary, pass the 20-question quiz, then take the whole test again.</p>'
+      + '<p class="sub">' + ((R_.rounds > 1 || R_.retaken) ? 'On the retake you need <b>at least ' + (tot - rdAllow()) + ' of ' + tot + ' correct</b> (' + (rdAllow() === 2 ? 'two mistakes are' : 'one mistake is') + ' allowed).' : '<b>On the retake you will need at least ' + (tot - rdAllow()) + ' of ' + tot + ' correct</b> to see the feedback.') + ' The answers stay hidden. Study the vocabulary, pass the 20-question quiz, then take the whole test again.</p>'
       + '<div style="margin-top:22px"><button class="go" id="rvo">Study the vocabulary →</button></div></div>');
     wide(false); el("cb").onclick = hub;
     el("rvo").onclick = function(){ rdVocab(); };
