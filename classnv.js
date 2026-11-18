@@ -896,6 +896,7 @@
     if (q.t === "tf" || q.t === "sel" || q.t === "mcq" || q.t === "mp") return said.toUpperCase() === q.a[0];
     var n = norm(said).replace(/-/g, " "); return q.a.some(function(a){ return norm(a).replace(/-/g, " ") === n; });
   }
+  function keyTxt(q, D){ var a = q.a[0]; if (q.t === "mcq" && q.opts){ var i = "ABCDEFGH".indexOf(a); return i >= 0 && q.opts[i] ? a + " · " + q.opts[i] : a; } if (q.t === "mp" && D && D.people){ var p = D.people.filter(function(x){ return x[0] === a; })[0]; return p && p[1] && String(p[1]).length > 2 ? a + " · " + p[1] : a; } return a; }
   function rdAll(D){ if (D.parts){ var o = []; D.parts.forEach(function(p){ o = o.concat(p.qs); }); return o; } return D.q.concat(D.t); }
   function startReading(){ if (!opn("read")) return hub(); S.cur = "read";
     page(top() + '<div class="hero"><h2>Loading the reading…</h2></div>'); el("cb").onclick = hub;
@@ -937,15 +938,17 @@
     var h = '';
     var tfs = D.q.filter(function(q){ return q.t === "tf" && on(q.n); }), ws = D.q.filter(function(q){ return q.t === "w" && on(q.n); }), ts = D.t.filter(function(q){ return on(q.n); });
     function qrow(q){ return '<div class="qr" data-n="' + q.n + '"><div class="qn">' + q.n + '</div><div class="qb"><div class="qt">' + esc(q.q) + '</div>'
-      + (q.t === "mp" ? '<select class="rsel" data-n="' + q.n + '"><option value="">Choose…</option>' + (D.people || []).map(function(p){ return '<option>' + p[0] + '</option>'; }).join("") + '</select>' : q.t === "tf" ? '<div class="tf">' + ["TRUE", "FALSE", "NOT GIVEN"].map(function(v){ return '<button type="button" data-v="' + v + '">' + v + '</button>'; }).join("") + '</div>' : '<input class="rin" type="text" autocomplete="off" spellcheck="false" placeholder="Your answer" data-n="' + q.n + '">') + '</div></div>'; }
+      + (q.t === "mp" ? '<select class="rsel" data-n="' + q.n + '"><option value="">Choose…</option>' + (D.people || []).map(function(p){ return '<option>' + p[0] + '</option>'; }).join("") + '</select>' : q.t === "tf" ? '<div class="tf">' + (D.tfv || ["TRUE", "FALSE", "NOT GIVEN"]).map(function(v){ return '<button type="button" data-v="' + v + '">' + v + '</button>'; }).join("") + '</div>' : q.t === "mcq" ? '<div class="mq one">' + q.opts.map(function(o, k){ return '<button type="button" class="mo" data-v="' + "ABCDEFGH".charAt(k) + '"><b>' + "ABCDEFGH".charAt(k) + '</b> ' + esc(o) + '</button>'; }).join("") + '</div>' : '<input class="rin" type="text" autocomplete="off" spellcheck="false" placeholder="Your answer" data-n="' + q.n + '">') + '</div></div>'; }
     if (retake) h += '<div class="qgh"><span class="qi">🔁</span><div><b>Full retake: every question again</b><small>You studied the vocabulary and passed the quiz. Now answer ALL the questions. You need every one correct to see the feedback.</small></div></div>';
     function rg(list){ var ns = list.map(function(q){ return q.n; }); return ns.length > 1 ? Math.min.apply(null, ns) + "–" + Math.max.apply(null, ns) : String(ns[0]); }
-    var gtf = tfs.length ? '<div class="qg"><div class="qgh"><span class="qi">🧭</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "tf"; })) + ' · True / False / Not Given</b><small>Do the statements agree with the information in the passage?</small></div></div>'
-      + '<div class="qd"><span><b>TRUE</b> = agrees with the passage</span><span><b>FALSE</b> = contradicts the passage</span><span><b>NOT GIVEN</b> = no information on this</span></div>' + tfs.map(qrow).join("") + '</div>' : "";
+    var gtf = tfs.length ? '<div class="qg"><div class="qgh"><span class="qi">🧭</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "tf"; })) + ' · ' + (D.tfv ? 'Yes / No / Not Given' : 'True / False / Not Given') + '</b><small>' + (D.tfv ? 'Do the statements agree with the claims of the writer?' : 'Do the statements agree with the information in the passage?') + '</small></div></div>'
+      + (D.tfv ? '<div class="qd"><span><b>YES</b> = agrees with the claims of the writer</span><span><b>NO</b> = contradicts the claims of the writer</span><span><b>NOT GIVEN</b> = impossible to say what the writer thinks</span></div>' : '<div class="qd"><span><b>TRUE</b> = agrees with the passage</span><span><b>FALSE</b> = contradicts the passage</span><span><b>NOT GIVEN</b> = no information on this</span></div>') + tfs.map(qrow).join("") + '</div>' : "";
     var gws = ws.length ? '<div class="qg"><div class="qgh"><span class="qi">✏️</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "w"; })) + ' · Short answers</b><small>Choose <b>' + (D.wl || "ONE WORD ONLY") + '</b> from the passage for each answer.</small></div></div>' + ws.map(qrow).join("") + '</div>' : "";
     var mps = D.q.filter(function(q){ return q.t === "mp" && on(q.n); });
     var gmp = mps.length ? '<div class="qg"><div class="qgh"><span class="qi">👥</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "mp"; })) + ' · Matching</b><small>' + (D.mpi || "Match each statement with the correct person. You may use any letter more than once.") + '</small></div></div>'
       + '<div class="qd" style="display:block">' + (D.people || []).map(function(p){ return '<div><b>' + p[0] + '</b> ' + esc(p[1]) + '</div>'; }).join("") + '</div>' + mps.map(qrow).join("") + '</div>' : "";
+    var mcs = D.q.filter(function(q){ return q.t === "mcq" && on(q.n); });
+    var gmc = mcs.length ? '<div class="qg"><div class="qgh"><span class="qi">🔤</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "mcq"; })) + ' · Multiple choice</b><small>Choose the correct letter, A, B, C or D.</small></div></div>' + mcs.map(qrow).join("") + '</div>' : "";
     var gts = "";
     if (ts.length){
       var tb = '<table class="rtb"><tr>' + D.th.map(function(x){ return '<th>' + x + '</th>'; }).join('') + '</tr>' + D.tb.map(function(r){
@@ -953,8 +956,8 @@
           return '<span class="tw"><span class="tqn" data-t="' + n + '">' + n + '</span><input class="rin rt" type="text" autocomplete="off" spellcheck="false" data-n="' + n + '"></span>'; }); }
         return '<tr><td>' + r.name + '</td><td>' + r.date + '</td><td>' + cell(r.feat) + '</td><td>' + cell(r.note) + '</td></tr>'; }).join("") + '</table>';
       gts = '<div class="qg"><div class="qgh"><span class="qi">🧩</span><div><b>Questions ' + rg(D.t) + ' · Table completion</b><small>Complete the table. Choose <b>' + (D.tl || "ONE WORD AND/OR A NUMBER") + '</b> from the passage for each answer.</small></div></div>' + tb + '</div>'; }
-    var GR = {tf: gtf, w: gws, tb: gts, mp: gmp}; (D.order || ["tf", "w", "tb"]).forEach(function(k){ h += GR[k]; });
-    var need = [].concat(tfs, ws, ts, mps).map(function(q){ return q.n; });
+    var GR = {tf: gtf, w: gws, tb: gts, mp: gmp, mcq: gmc}; (D.order || ["tf", "w", "tb"]).forEach(function(k){ h += GR[k]; });
+    var need = [].concat(tfs, ws, ts, mps, mcs).map(function(q){ return q.n; });
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 4 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
       + '<div class="rsp">' + rdPassage() + '<div class="rpn q hlz" id="rdq">' + h + '<div class="rbar"><button class="go" id="rck" disabled>Check my answers</button><small id="rhint"></small></div></div></div>');
     wide(true); rdTimer();
@@ -962,7 +965,7 @@
     var need_n = need.length, minFill = Math.max(1, Math.ceil(need_n * 0.7));
     function filled(){ return need.filter(function(n){ return (R_.ans[n] || "").trim(); }).length; }
     function upd(){ var f = filled(), ok = f >= minFill, b = el("rck"); if (!b) return; b.disabled = !ok; el("rhint").textContent = ok ? "Ready. You can still change answers." : "Answer " + (minFill - f) + " more to unlock the check (" + f + "/" + need_n + ")."; }
-    [].forEach.call(document.querySelectorAll("#rdq .tf"), function(g){ var n = +g.parentNode.parentNode.getAttribute("data-n");
+    [].forEach.call(document.querySelectorAll("#rdq .tf, #rdq .mq"), function(g){ var n = +g.parentNode.parentNode.getAttribute("data-n");
       [].forEach.call(g.children, function(b){ b.onclick = function(){ R_.ans[n] = b.getAttribute("data-v"); [].forEach.call(g.children, function(x){ x.classList.toggle("sel", x === b); }); g.parentNode.parentNode.classList.add("fld"); upd(); }; }); });
     [].forEach.call(document.querySelectorAll("#rdq input.rin"), function(i){ var n = +i.getAttribute("data-n");
       i.oninput = function(){ R_.ans[n] = i.value; var r = i.closest(".qr"); if (r) r.classList.toggle("fld", !!i.value.trim()); upd(); };
@@ -1096,12 +1099,12 @@
     var g1 = f.good.length, g2 = Object.keys(fin).filter(function(k){ return fin[k]; }).length;
     var cards = all.map(function(q){ var ok1 = f.good.indexOf(q.n) >= 0, ok2 = fin[q.n], ya = (s2.ans && s2.ans[q.n]) || f.ans[q.n] || "", cls = ok2 ? "gd" : "bd";
       return '<div class="acard ' + cls + '"><div class="qn">' + q.n + '</div><div><p>' + (q.q ? '<b>' + esc(q.q) + '</b>' : "") + '</p>'
-        + (ok2 ? '' : '<span class="yr">' + esc(ya || "no answer") + '</span>') + '<span class="ky">' + esc(q.a[0].toUpperCase() === q.a[0] ? q.a[0] : q.a[0]) + (q.a.length > 1 ? ' <small style="font-weight:600">(also: ' + esc(q.a.slice(1).join(", ")) + ')</small>' : "") + '</span>'
+        + (ok2 ? '' : '<span class="yr">' + esc(ya || "no answer") + '</span>') + '<span class="ky">' + esc(keyTxt(q, D)) + (q.a.length > 1 ? ' <small style="font-weight:600">(also: ' + esc(q.a.slice(1).join(", ")) + ')</small>' : "") + '</span>'
         + '<p>' + esc(q.ex) + '</p>' + (ok1 ? '' : ok2 ? '<p style="color:#0b7a66;font-weight:700">✔ Fixed in the retake. Nice!</p>' : '') + '</div></div>'; }).join("");
     (D.t || []).forEach(function(q){ var m = D.tb.filter(function(r){ return (r.feat + r.note).indexOf("{" + q.n + "}") >= 0; })[0]; if (m) q.q = m.name + ": " + (m.feat + " / " + m.note).replace(/<br>/g, " / ").replace(/<[^>]+>/g, "").replace(/\{(\d+)\}/g, "(" + "$1" + ") ____"); });
     cards = all.map(function(q){ var ok1 = f.good.indexOf(q.n) >= 0, ok2 = fin[q.n], ya = (s2.ans && s2.ans[q.n]) || f.ans[q.n] || "", cls = ok2 ? "gd" : "bd";
       return '<div class="acard ' + cls + '"><div class="qn">' + q.n + '</div><div><p><b>' + esc(q.q || "") + '</b></p>'
-        + (ok2 ? '' : '<span class="yr">' + esc(ya || "no answer") + '</span>') + '<span class="ky">' + esc(q.a[0]) + '</span>' + (q.a.length > 1 ? '<small style="color:#3d4f80;font-weight:600">also accepted: ' + esc(q.a.slice(1).join(", ")) + '</small>' : "")
+        + (ok2 ? '' : '<span class="yr">' + esc(ya || "no answer") + '</span>') + '<span class="ky">' + esc(keyTxt(q, D)) + '</span>' + (q.a.length > 1 ? '<small style="color:#3d4f80;font-weight:600">also accepted: ' + esc(q.a.slice(1).join(", ")) + '</small>' : "")
         + '<p>' + esc(q.ex) + '</p>' + (!ok1 && ok2 ? '<p style="color:#0b7a66;font-weight:700">✔ Fixed in the retake. Nice!</p>' : '') + '</div></div>'; }).join("");
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · answers & explanations</h2>' + rdSteps(5) + '</div>'
       + '<div class="brk" style="padding:4px 0 8px"><div class="fst" style="opacity:1;animation:none"><div><b>' + g1 + '/' + tot + '</b><span>first try</span></div><div><b style="color:#0c9c84">' + g2 + '/' + tot + '</b><span>after the retake</span></div><div><b>' + (g2 - g1 >= 0 ? "+" + (g2 - g1) : g2 - g1) + '</b><span>improvement</span></div></div></div>'
