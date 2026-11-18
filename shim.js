@@ -19,14 +19,23 @@
 (function(){
   var P = window.__PORTAL__; if (!P) return;
   var of = window.fetch.bind(window), started = false, pinged = null, HOME = P.mode === "home" || P.mode === "write" || P.mode === "speak", PRAC = P.mode === "practice" || HOME;
-  function call(name, args){
-    return of(P.url + "/rest/v1/rpc/" + name, {method:"POST", headers:{"Content-Type":"application/json","apikey":P.key,"Authorization":"Bearer " + P.key}, body: JSON.stringify(args)})
-      .then(function(r){ return r.json().then(function(j){ if (!r.ok) throw new Error((j && j.message) || r.status); return j; }); });
+  /* a result must reach the server: a network hiccup is retried (1 s, 3 s, 6 s) before the student sees an error; the reason is kept for the error card */
+  function call(name, args, once){
+    function go(n){
+      return of(P.url + "/rest/v1/rpc/" + name, {method:"POST", headers:{"Content-Type":"application/json","apikey":P.key,"Authorization":"Bearer " + P.key}, body: JSON.stringify(args)})
+        .then(function(r){ return r.json().then(function(j){ if (!r.ok){ var er = new Error((j && j.message) || r.status); er.http = r.status; throw er; } return j; }, function(){ var er = new Error("bad reply " + r.status); er.http = r.status; throw er; }); })
+        .catch(function(er){ var retry = !once && n < 3 && (!er.http || er.http >= 500 || er.http === 429);
+          if (!retry){ window.__nvErr = (er && er.message) || String(er); throw er; }
+          return new Promise(function(ok){ setTimeout(ok, [1000, 3000, 6000][n]); }).then(function(){ return go(n + 1); }); });
+    }
+    return go(0);
   }
+  /* the error card of the home test says why the result could not be sent */
+  try { new MutationObserver(function(){ var d = document.getElementById("endcard"); if (d && /Could not send/.test(d.textContent) && !d.querySelector(".nverr") && window.__nvErr){ var p = d.querySelector("p"); if (p) p.insertAdjacentHTML("afterend", '<p class="nverr" style="font-size:14px;opacity:.8;margin-top:6px">Reason: ' + String(window.__nvErr).replace(/[<>&]/g, "") + '. Tell your teacher if it keeps happening.</p>'); } }).observe(document.documentElement, {childList: true, subtree: true}); } catch (e) {}
   function ping(){
     var a = {tok: P.tok}, e = document.getElementById("progtxt");
     if (started && e && e.textContent) a.prog = e.textContent.replace(/\s+/g, " ").trim();
-    call("ping", a).catch(function(){ if (a.prog) call("ping", {tok: P.tok}).catch(function(){}); });
+    call("ping", a, true).catch(function(){ if (a.prog) call("ping", {tok: P.tok}, true).catch(function(){}); });
   }
   if (!PRAC) pinged = setInterval(ping, 15000);
   /* New home test: the page saves its result through this */

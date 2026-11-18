@@ -1206,6 +1206,18 @@
     h += '<div class="wsec"><h3>✍️ Your writing</h3><div class="wlg"><u>red</u> = mistake <span>(green = correct version)</span> · amber dotted = please check · green highlight = unit word</div>' + (a.text.trim() ? '<div class="wess">' + W.html + '</div>' : '<p>Nothing written.</p>') + '</div>';
     return h;
   }
+  /* what holds the mark back: the two weakest criteria with one concrete job each, and the change since the last try */
+  function wrCrit(W, ml){ return ml ? [["TA", W.m75.ta, 19], ["CC", W.m75.cc, 19], ["GR", W.m75.gr, 19], ["LR", W.m75.lr, 18]] : [["TA", W.ta, 9], ["CC", W.cc, 9], ["GR", W.gr, 9], ["LR", W.lr, 9]]; }
+  function wrPrior(a, prev){
+    var Wd = S.W, ml = Wd.tr === "ml", W = a.W; if (W.empty || W.tooShort || W.junk) return "";
+    var TIP = {TA: ["Answer the whole question", "Cover every part of the question. Give each idea a reason and an example, not just a statement."], CC: ["Organise your paragraphs", "One clear idea in each paragraph, then join your sentences with linking words (because, however, for example)."], GR: ["Build longer correct sentences", "Add a few longer sentences with because, although or which, and check each one for mistakes."], LR: ["Use more exact words", "Replace repeated basic words (good, bad, make, thing) with exact ones, and use the unit words."]};
+    var c = wrCrit(W, ml), pc = prev ? wrCrit(prev.W, ml) : null, low = c.map(function(x, i){ return {i: i, r: x[1] / x[2]}; }).sort(function(x, y){ return x.r - y.r || x.i - y.i; }).slice(0, 2);
+    var h = '<div class="wsec" style="padding:14px 16px"><h3>🎯 What holds your mark back</h3>';
+    low.forEach(function(l){ var k = c[l.i][0]; h += '<div style="margin:8px 0"><b>' + TIP[k][0] + '</b> <span class="sub">(' + k + ' ' + c[l.i][1] + ' / ' + c[l.i][2] + ')</span><br>' + TIP[k][1] + '</div>'; });
+    h += '<p class="sub" style="margin:8px 0 0">Next try: rewrite your weakest paragraph with this in mind. Fixing the red words alone will not move these.</p>';
+    if (pc){ h += '<div class="wcr" style="margin-top:8px">' + c.map(function(x, i){ var d = Math.round((x[1] - pc[i][1]) * 10) / 10; return '<span>' + x[0] + ' <b>' + (d > 0 ? "▲ +" + d : d < 0 ? "▼ " + d : "same") + '</b></span>'; }).join("") + '</div>'; }
+    return h + '</div>';
+  }
   function wrFeedback(){
     var Wd = S.W, A = Wd.att, a = A[A.length - 1], W = a.W, ml = Wd.tr === "ml", n = W.n, enough = n >= Wd.need;
     var big = ml ? W.m75.total + '<small> / 75</small>' : W.total + '<small> / 9</small>';
@@ -1214,11 +1226,11 @@
     var hist = A.map(function(x, i){ var dd = i ? x.sc - A[i - 1].sc : 0; return '<span class="wat ' + (i && dd < 0 ? "dw" : "up") + '"><i>' + (i ? "Rewrite " + i : "First try") + '</i><b>' + x.sc + '</b>' + (i ? '<em>' + (dd >= 0 ? "▲ +" + dd : "▼ " + dd) + '</em>' : "") + '</span>'; }).join('<span class="war">→</span>');
     page(top("← Unit") + '<div class="rdh"><h2>✍️ Writing · feedback</h2>' + wrSteps() + hlTip() + '</div>'
       + '<div class="wsc"><div class="wbg">' + (enough ? big : "–") + '</div>' + (enough ? '<div class="wcr">' + crit.map(function(c){ return '<span>' + c[0] + ' <b>' + c[1] + '</b> / ' + c[2] + '</span>'; }).join("") + '</div><div class="sub" style="margin:2px 0 8px">TA = task · CC = organisation · GR = grammar · LR = vocabulary</div>' : '<div class="sub" style="color:#b2334f;font-weight:700">Write at least ' + Wd.need + ' words to get a mark.</div>')
-      + '<div class="wah">' + hist + '</div>' + (prev ? '<p class="sub" style="margin:8px 0 0">' + (d > 0 ? "🔥 You improved by " + d + ". Keep going!" : d === 0 ? "Same mark. Fix the red words below to move up." : "A little lower this time. Check what changed in the red words.") + '</p>' : '<p class="sub" style="margin:8px 0 0">Now fix the mistakes and rewrite. Each rewrite should raise your mark.</p>') + '</div>'
-      + '<div class="hlz" id="rdp" style="max-width:1100px;margin:0 auto">' + wrDetail(a) + '</div>'
-      + '<div class="rbar rbfix"><button class="go fixgo" id="wrw">↻ Rewrite my essay</button><button class="pill" id="wfin"' + (!fin ? ' disabled style="opacity:.5;cursor:not-allowed"' : '') + '>Finish writing ✓</button><small>' + (A.length < 2 ? "Finish unlocks after one rewrite and a mark of " + nd.show + "." : !fin ? "You need " + nd.show + " to finish. Your best so far: " + wrBest(A) + ". Rewrite again." : "You reached " + nd.show + ". You can finish, or rewrite again to push your mark higher.") + '</small></div>');
+      + '<div class="wah">' + hist + '</div>' + (prev ? '<p class="sub" style="margin:8px 0 0">' + (d > 0 ? "🔥 You improved by " + d + ". Keep going!" : d === 0 ? "Same mark. Work on the priorities below to move up." : "A little lower this time. Check what changed in the red words.") + '</p>' : '<p class="sub" style="margin:8px 0 0">Now fix the mistakes and rewrite. Each rewrite should raise your mark.</p>') + '</div>'
+      + '<div class="hlz" id="rdp" style="max-width:1100px;margin:0 auto">' + wrPrior(a, prev) + wrDetail(a) + '</div>'
+      + '<div class="rbar rbfix"><button class="go fixgo" id="wrw">↻ Rewrite my essay</button><button class="pill" id="wdr" style="margin-right:6px">🔧 Practise my mistakes (optional)</button><button class="pill" id="wfin"' + (!fin ? ' disabled style="opacity:.5;cursor:not-allowed"' : '') + '>Finish writing ✓</button><small>' + (A.length < 2 ? "Finish unlocks after one rewrite and a mark of " + nd.show + "." : !fin ? "You need " + nd.show + " to finish. Your best so far: " + wrBest(A) + ". Rewrite again." : "You reached " + nd.show + ". You can finish, or rewrite again to push your mark higher.") + '</small></div>');
     wide(false); el("cb").onclick = hub;
-    el("wrw").onclick = wrRewrite; el("wfin").onclick = function(){ if (wrCanFinish()) startDrill(); };
+    el("wrw").onclick = wrRewrite; el("wfin").onclick = function(){ if (wrCanFinish()){ flushLog("write", {ok: true, tries: S.W.att.length, sc: S.W.att[S.W.att.length - 1].sc, drill: 0, fails: 0}); writingDone(); } }; if (el("wdr")) el("wdr").onclick = startDrill;
   }
   function wrRewrite(){
     var Wd = S.W, a = Wd.att[Wd.att.length - 1]; Wd.mode = "rw";
