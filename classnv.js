@@ -294,7 +294,7 @@
       for (var q = 0; q < n; q++){ var ty = Math.min(q * step, Math.max(0, top6 - ch + 30)); cs += '<img class="cli" src="' + (O.cloud || "cloud.png") + '" alt="" style="left:' + (q % 2 ? 18 : 6) + '%;top:' + ty + 'px;width:' + (cw - (q % 3) * 70) + 'px;animation-delay:-' + (q * 2.1) + 's">'; }
       h += '<div class="cld" style="height:' + top6 + 'px">' + cs + '</div></div>';
       el("cnbody").innerHTML = h; S.pop = null;
-      [].forEach.call(document.querySelectorAll(".nd"), function(b){ b.onclick = function(){ S.unit = +b.getAttribute("data-u"); keyCheck(); }; });
+      [].forEach.call(document.querySelectorAll(".nd"), function(b){ b.onclick = function(){ S.unit = +b.getAttribute("data-u"); try { statusSync(); } catch (e) {} keyCheck(); }; });
       var c = document.querySelector(".nd.cur") || document.querySelector(".nd"); if (c && c.scrollIntoView) c.scrollIntoView({block: "center"});
     }).catch(function(){ el("cnsub").textContent = "No internet connection. Please try again."; });
   }
@@ -324,14 +324,21 @@
   }
   function opn(st){ if (O.nofloor) return true; return st === "read" ? !!(S.lisDone && S.lisDone[S.unit]) : !!(S.rdDone && S.rdDone[S.unit]); }
   function lockMsg(el_, txt){ el_.classList.add("shk"); setTimeout(function(){ el_.classList.remove("shk"); }, 400); var m = el("hlk"); if (m) m.textContent = txt; }
+  function stKey(u){ return "nnt_clsst_" + ((O && O.name) || "") + "_" + u; }
+  function stPrime(){ var u = S.unit; if (S.stPr && S.stPr[u]) return; S.stPr = S.stPr || {}; S.stPr[u] = 1;
+    try { var c = JSON.parse(localStorage.getItem(stKey(u)) || "null"); if (!c) return; S.cdone = S.cdone || {}; S.lisDone = S.lisDone || {}; S.rdDone = S.rdDone || {}; S.wrDone = S.wrDone || {};
+      [["lis", S.lisDone], ["read", S.rdDone], ["write", S.wrDone]].forEach(function(p){ if (c[p[0]] && !p[1][u]){ p[1][u] = true; S.cdone[u + ":" + p[0]] = 1; } }); } catch (e) {} }
   function statusSync(){
-    if (S.stU === S.unit) return S.stP; S.stU = S.unit;
+    if (S.stU === S.unit) return S.stP; S.stU = S.unit; stPrime();
     try { S.stP = Promise.resolve(R("nv_class_status", {tok: O.tok, u: S.unit})).then(function(r){
       if (!r || !r.ok || !r.lis){ S.stU = null; S.stTry = (S.stTry || 0) + 1; if (S.stTry <= 6) setTimeout(function(){ if (O && O.tok) statusSync(); }, 1500 * S.stTry); return; } S.stTry = 0; S.stOk = S.stOk || {}; S.stOk[S.unit] = true; var ch = false, u = S.unit; S.lisDone = S.lisDone || {}; S.rdDone = S.rdDone || {}; S.wrDone = S.wrDone || {};
       if (r.lis && r.lis.prog){ S.prog0 = S.prog0 || {}; S.prog0[u] = r.lis.prog; }
       if (r.lis && r.lis.prog4){ S.prog4 = S.prog4 || {}; S.prog4[u] = r.lis.prog4; }
       ["lis", "read", "write"].forEach(function(st){ if (r[st] && r[st].draft){ S.draft0 = S.draft0 || {}; S.draft0[u + ":" + st] = r[st].draft; } });
       [["lis", S.lisDone], ["read", S.rdDone], ["write", S.wrDone]].forEach(function(p){ var x = r[p[0]]; if (!x) return; S.srv[u + ":" + p[0]] = Math.max(S.srv[u + ":" + p[0]] || 0, x.secs || 0); if (x.done && !p[1][u]){ p[1][u] = true; ch = true; } });
+      var sv = {}; [["lis", S.lisDone], ["read", S.rdDone], ["write", S.wrDone]].forEach(function(p){ var x = r[p[0]]; sv[p[0]] = !!(x && x.done);
+        if (S.cdone && S.cdone[u + ":" + p[0]]){ delete S.cdone[u + ":" + p[0]]; if (!sv[p[0]] && p[1][u]){ delete p[1][u]; ch = true; } } });
+      try { localStorage.setItem(stKey(u), JSON.stringify(sv)); } catch (e) {}
       if (ch && !S.cur && el("hl")) hub();
     }, function(){ S.stU = null; S.stTry = (S.stTry || 0) + 1; if (S.stTry <= 6) setTimeout(function(){ if (O && O.tok) statusSync(); }, 1500 * S.stTry); }); return S.stP; } catch (x) {}
   }
