@@ -20,7 +20,7 @@
   var P = window.__PORTAL__; if (!P) return;
   var of = window.fetch.bind(window), started = false, pinged = null, HOME = P.mode === "home" || P.mode === "write" || P.mode === "speak", PRAC = P.mode === "practice" || HOME;
   /* a result must reach the server: a network hiccup is retried (1 s, 3 s, 6 s) before the student sees an error; the reason is kept for the error card */
-  function call(name, args, once, long){
+  function rawcall(name, args, once, long){
     function go(n){
       return of(P.url + "/rest/v1/rpc/" + name, {method:"POST", headers:{"Content-Type":"application/json","apikey":P.key,"Authorization":"Bearer " + P.key}, body: JSON.stringify(args)})
         .then(function(r){ return r.json().then(function(j){ if (!r.ok){ var er = new Error((j && j.message) || r.status); er.http = r.status; throw er; } return j; }, function(){ var er = new Error("bad reply " + r.status); er.http = r.status; throw er; }); })
@@ -30,10 +30,33 @@
     }
     return go(0);
   }
+
+  /* safety net: a finished result is first kept on this device, then sent. If the send fails (bad internet, server hiccup),
+     it is sent again by itself every 45 s, when the internet returns, and the next time any test page is opened. It is removed only after the server has answered. */
+  var SAVES = {nv_save_test: 1, nv_grade_test: 1, nv_save_essay: 1, nv_save_speaking: 1}, PKEY = "nnt_pending_v1", busy = {};
+  function pRead(){ try { var a = JSON.parse(localStorage.getItem(PKEY) || "[]"); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+  function pWrite(a){ try { localStorage.setItem(PKEY, JSON.stringify(a)); } catch (e) {} }
+  function pPut(it){ var a = pRead().filter(function(x){ return x.id !== it.id; }); a.push(it); pWrite(a); }
+  function pDrop(id){ pWrite(pRead().filter(function(x){ return x.id !== id; })); }
+  function pBump(id){ var a = pRead(); a.forEach(function(x){ if (x.id === id) x.n = (x.n || 0) + 1; }); pWrite(a.filter(function(x){ return (x.n || 0) < 40 && Date.now() - x.t < 48 * 3600 * 1000; })); }
+  window.__nvPending = function(){ return pRead().length; };
+  function call(name, args, once, long){
+    if (!SAVES[name]) return rawcall(name, args, once, long);
+    var id = name + "|" + (args && args.u);
+    pPut({id: id, name: name, args: args, t: Date.now(), n: 0}); busy[id] = 1;
+    return rawcall(name, args, once, long).then(function(r){ delete busy[id]; pDrop(id); return r; }, function(er){ delete busy[id]; throw er; });
+  }
+  function flush(){
+    pRead().forEach(function(x){
+      if (busy[x.id] || !x.args) return; busy[x.id] = 1;
+      rawcall(x.name, x.args, true, false).then(function(){ delete busy[x.id]; pDrop(x.id); }, function(){ delete busy[x.id]; pBump(x.id); });
+    });
+  }
+  setTimeout(flush, 8000); setInterval(flush, 45000); window.addEventListener("online", function(){ setTimeout(flush, 1500); });
   /* the error card of the home test says why the result could not be sent */
   try { new MutationObserver(function(){
-    var d = document.getElementById("endcard"); if (d && /Could not send/.test(d.textContent) && !d.querySelector(".nverr") && window.__nvErr){ var p = d.querySelector("p"); if (p) p.insertAdjacentHTML("afterend", '<p class="nverr" style="font-size:14px;opacity:.8;margin-top:6px">Reason: ' + String(window.__nvErr).replace(/[<>&]/g, "") + '. Tell your teacher if it keeps happening.</p>'); }
-    ["homemsg", "smsg"].forEach(function(id){ var m = document.getElementById(id); if (m && /Could not save/.test(m.textContent) && !/Reason:/.test(m.textContent) && !m.__nvR){ m.__nvR = 1; m.textContent = m.textContent + " Reason: " + String(window.__nvErr || "no answer from the server").replace(/[<>&]/g, ""); setTimeout(function(){ m.__nvR = 0; }, 500); } });
+    var d = document.getElementById("endcard"); if (d && /Could not send/.test(d.textContent) && !d.querySelector(".nverr") && window.__nvErr){ var p = d.querySelector("p"); if (p) p.insertAdjacentHTML("afterend", '<p class="nverr" style="font-size:14px;opacity:.8;margin-top:6px">Reason: ' + String(window.__nvErr).replace(/[<>&]/g, "") + '. ' + (window.__nvPending && window.__nvPending() ? 'Your result is kept on this device and is sent again automatically. ' : '') + 'Tell your teacher if it keeps happening.</p>'); }
+    ["homemsg", "smsg"].forEach(function(id){ var m = document.getElementById(id); if (m && /Could not save/.test(m.textContent) && !/Reason:/.test(m.textContent) && !m.__nvR){ m.__nvR = 1; m.textContent = m.textContent + " Reason: " + String(window.__nvErr || "no answer from the server").replace(/[<>&]/g, "") + (window.__nvPending && window.__nvPending() ? ". Your result is kept on this device and is sent again automatically." : ""); setTimeout(function(){ m.__nvR = 0; }, 500); } });
   }).observe(document.documentElement, {childList: true, subtree: true, characterData: true}); } catch (e) {}
   function ping(){
     var a = {tok: P.tok}, e = document.getElementById("progtxt");
