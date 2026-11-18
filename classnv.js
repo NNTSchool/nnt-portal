@@ -1045,7 +1045,7 @@
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · result</h2>' + rdSteps(1) + '</div><div class="brk" style="padding-top:6px">'
       + '<div class="rsc"><div class="ring" style="--c:#d6395f;--a:' + Math.round(100 * (tot - n) / tot) + '%"><div><b style="font-size:46px;color:#d6395f">' + n + '</b><small>mistake' + (n > 1 ? "s" : "") + '</small></div></div></div>'
       + '<h1 class="bh" style="font-size:36px">You made ' + n + ' mistake' + (n > 1 ? "s" : "") + '.</h1>'
-      + '<p class="sub">' + ((R_.rounds > 1 || R_.retaken) ? 'On the retake you need <b>at least ' + (tot - rdAllow()) + ' of ' + tot + ' correct</b> (' + (rdAllow() === 2 ? 'two mistakes are' : 'one mistake is') + ' allowed).' : '<b>On the retake you will need at least ' + (tot - rdAllow()) + ' of ' + tot + ' correct</b> to see the feedback.') + ' The answers stay hidden. Study the vocabulary, pass the 20-question quiz, then take the whole test again.</p>'
+      + '<p class="sub">' + ((R_.rounds > 1 || R_.retaken) ? 'On the retake you need <b>at least ' + (tot - rdAllow()) + ' of ' + tot + ' correct</b>.' : '<b>On the retake you will need at least ' + (tot - rdAllow()) + ' of ' + tot + ' correct</b> to see the feedback.') + ' The answers stay hidden. Study the vocabulary, pass the 20-question quiz, then take the whole test again.</p>'
       + '<div style="margin-top:22px"><button class="go" id="rvo">Study the vocabulary →</button></div></div>');
     wide(false); el("cb").onclick = hub;
     el("rvo").onclick = function(){ rdVocab(); };
