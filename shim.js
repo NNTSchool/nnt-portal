@@ -25,7 +25,7 @@
       return of(P.url + "/rest/v1/rpc/" + name, {method:"POST", headers:{"Content-Type":"application/json","apikey":P.key,"Authorization":"Bearer " + P.key}, body: JSON.stringify(args)})
         .then(function(r){ return r.json().then(function(j){ if (!r.ok){ var er = new Error((j && j.message) || r.status); er.http = r.status; throw er; } return j; }, function(){ var er = new Error("bad reply " + r.status); er.http = r.status; throw er; }); })
         .catch(function(er){ var retry = !once && n < (long ? 8 : 5) && (!er.http || er.http >= 500 || er.http === 429);
-          if (!retry){ window.__nvErr = (er && er.message) || String(er); throw er; }
+          if (!retry){ if (!/^nv_tick/.test(name)) window.__nvErr = (er && er.message) || String(er); throw er; }
           return new Promise(function(ok){ setTimeout(ok, [1000, 3000, 6000, 10000, 15000, 20000, 30000, 40000][n]); }).then(function(){ return go(n + 1); }); });
     }
     return go(0);
