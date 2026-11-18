@@ -353,7 +353,7 @@
   }
   function syncP(){ var p = statusSync(); return p ? Promise.race([p.catch(function(){}), new Promise(function(r){ setTimeout(r, 8000); })]) : Promise.resolve(); }
   function synced(fn){ var d = false, g = function(){ if (!d){ d = true; fn(); } }; var p = statusSync(); if (!p){ g(); return; } p.then(g, g); setTimeout(g, 8000); }
-  var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1};
+  var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1};
   /* the drilling takes the whole screen, like the classic tests; the hub gives it back */
   function goFS(){ var d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen || d.msRequestFullscreen; try { var p = f && f.call(d); if (p && p.then) p.then(function(){ try { if (navigator.keyboard && navigator.keyboard.lock) navigator.keyboard.lock(["Escape"]).catch(function(){}); } catch (e) {} }, function(){}); } catch (e) {} }
   /* Esc cannot be fully blocked by a web page (Chrome lets a long press out), so if the student gets out, the drilling is covered until they return to full screen */
@@ -658,7 +658,7 @@
     if (ex.kind === "tf") ex.qs.forEach(function(q, k){ rows.push({n: k + 1, ok: ans[k] === q.a, said: ans[k] ? (ans[k] === "T" ? "True" : "False") : "", right: q.a === "T" ? "True" : "False", text: q.t, ev: q.ev}); });
     else if (ex.kind === "grid") ex.groups.forEach(function(g, gi){ ex.cols.forEach(function(c, ci){ var k = gi * ex.cols.length + ci, a = ans[k]; rows.push({n: k + 1, ok: a === g.ans[ci], said: a >= 0 ? g.rows[a] : "", right: g.rows[g.ans[ci]], text: c + ": " + g.title.replace(/^Which\s+/i, "").replace(/\?$/, ""), ev: g.ev[ci]}); }); });
     else ex.qs.forEach(function(q, k){ var a = ans[k], ok = false, right = q.a || "✔ correct (no change)";
-      if (!q.a) ok = a === "tick"; else if (a && a !== "tick"){ var f = " " + fnorm(a) + " "; ok = (q.acc || []).some(function(x){ return f.indexOf(" " + fnorm(x) + " ") > -1 || (/\d/.test(x) && f.replace(/ /g, "").indexOf(fnorm(x).replace(/ /g, "")) > -1); }); }
+      if (!q.a) ok = a === "tick"; else if (q.set){ if (a && a !== "tick"){ var L = String(a).toUpperCase().replace(/\bAND\b/g, " ").replace(/[^A-Z]/g, "").split("").filter(function(c, i, z){ return z.indexOf(c) === i; }).sort().join(""); ok = L === q.set.slice().sort().join(""); } } else if (a && a !== "tick"){ var f = " " + fnorm(a) + " "; ok = (q.acc || []).some(function(x){ return f.indexOf(" " + fnorm(x) + " ") > -1 || (/\d/.test(x) && f.replace(/ /g, "").indexOf(fnorm(x).replace(/ /g, "")) > -1); }); }
       rows.push({n: k + 1, ok: ok, said: a === "tick" ? "✔ correct" : a, right: right, text: q.l + (q.s ? " (" + q.s + ")" : ""), ev: q.ev}); });
     return rows;
   }
@@ -948,7 +948,7 @@
     var gmp = mps.length ? '<div class="qg"><div class="qgh"><span class="qi">👥</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "mp"; })) + ' · Matching</b><small>' + (D.mpi || "Match each statement with the correct person. You may use any letter more than once.") + '</small></div></div>'
       + '<div class="qd" style="display:block">' + (D.people || []).map(function(p){ return '<div><b>' + p[0] + '</b> ' + esc(p[1]) + '</div>'; }).join("") + '</div>' + mps.map(qrow).join("") + '</div>' : "";
     var pms = D.q.filter(function(q){ return q.t === "pm" && on(q.n); });
-    var gpm = pms.length ? '<div class="qg"><div class="qgh"><span class="qi">📍</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "pm"; })) + ' · Which paragraph?</b><small>The passage has paragraphs A–' + "ABCDEFGHIJKLMNOP".charAt(D.p.length - 1) + '. Which paragraph contains the following information? You may use any letter more than once.</small></div></div>' + pms.map(qrow).join("") + '</div>' : "";
+    var gpm = pms.length ? '<div class="qg"><div class="qgh"><span class="qi">📍</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "pm"; })) + ' · Which paragraph?</b><small>The passage has paragraphs A–' + "ABCDEFGHIJKLMNOP".charAt(D.p.length - 1) + '. Which paragraph contains the following information?' + (D.pmi === undefined ? " You may use any letter more than once." : D.pmi) + '</small></div></div>' + pms.map(qrow).join("") + '</div>' : "";
     var mcs = D.q.filter(function(q){ return q.t === "mcq" && on(q.n); });
     var gmc = mcs.length ? '<div class="qg"><div class="qgh"><span class="qi">🔤</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "mcq"; })) + ' · Multiple choice</b><small>Choose the correct letter, A, B, C or D.</small></div></div>' + mcs.map(qrow).join("") + '</div>' : "";
     var gts = "";
