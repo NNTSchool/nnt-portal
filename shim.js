@@ -24,9 +24,9 @@
     function go(n){
       return of(P.url + "/rest/v1/rpc/" + name, {method:"POST", headers:{"Content-Type":"application/json","apikey":P.key,"Authorization":"Bearer " + P.key}, body: JSON.stringify(args)})
         .then(function(r){ return r.json().then(function(j){ if (!r.ok){ var er = new Error((j && j.message) || r.status); er.http = r.status; throw er; } return j; }, function(){ var er = new Error("bad reply " + r.status); er.http = r.status; throw er; }); })
-        .catch(function(er){ var retry = !once && n < 3 && (!er.http || er.http >= 500 || er.http === 429);
+        .catch(function(er){ var retry = !once && n < 5 && (!er.http || er.http >= 500 || er.http === 429);
           if (!retry){ window.__nvErr = (er && er.message) || String(er); throw er; }
-          return new Promise(function(ok){ setTimeout(ok, [1000, 3000, 6000][n]); }).then(function(){ return go(n + 1); }); });
+          return new Promise(function(ok){ setTimeout(ok, [1000, 3000, 6000, 10000, 15000][n]); }).then(function(){ return go(n + 1); }); });
     }
     return go(0);
   }
@@ -39,9 +39,9 @@
   }
   if (!PRAC) pinged = setInterval(ping, 15000);
   /* New home test: the page saves its result through this */
-  window.nvSave = function(trk, sc, tot, miss, ans, lv){ return call("nv_save_test", {tok: P.tok, u: P.nvunit, trk: trk, sc: sc, tot: tot, miss: miss, ans: ans, lv: lv || 0}).then(function(r){ if (!r || !r.ok) throw new Error((r && r.err) || "not saved"); return r; }); };
-  window.nvGrade = function(trk, ans, lv, used){ return call("nv_grade_test", {tok: P.tok, u: P.nvunit, trk: trk, ans: ans || {}, lv: lv || 0, used: used || 0}).then(function(r){ if (!r || !r.ok) throw new Error((r && r.err) || "not graded"); return r; }); };
-  window.nvSaveEssay = function(body, words, band, lv){ return call("nv_save_essay", {tok: P.tok, u: P.nvunit, body: body, words: words, band: band, lv: lv || 0}).then(function(r){ if (!r || !r.ok) throw new Error((r && r.err) || "not saved"); return r; }); };
+  window.nvSave = function(trk, sc, tot, miss, ans, lv){ return call("nv_save_test", {tok: P.tok, u: P.nvunit, trk: trk, sc: sc, tot: tot, miss: miss, ans: ans, lv: lv || 0}).then(function(r){ if (!r || !r.ok) window.__nvErr = "server said: " + ((r && r.err) || "not saved"); throw new Error(window.__nvErr); return r; }); };
+  window.nvGrade = function(trk, ans, lv, used){ return call("nv_grade_test", {tok: P.tok, u: P.nvunit, trk: trk, ans: ans || {}, lv: lv || 0, used: used || 0}).then(function(r){ if (!r || !r.ok) window.__nvErr = "server said: " + ((r && r.err) || "not graded"); throw new Error(window.__nvErr); return r; }); };
+  window.nvSaveEssay = function(body, words, band, lv){ return call("nv_save_essay", {tok: P.tok, u: P.nvunit, body: body, words: words, band: band, lv: lv || 0}).then(function(r){ if (!r || !r.ok) window.__nvErr = "server said: " + ((r && r.err) || "not saved"); throw new Error(window.__nvErr); return r; }); };
   window.nvEssayTry = function(){ return call("nv_essay_try", {tok: P.tok, u: P.nvunit}).catch(function(){}); };
   /* time on the unit: counted only while the page is open and the student is active (typing, tapping, moving) */
   if (HOME && P.nvunit){
@@ -51,7 +51,7 @@
     ["keydown", "pointerdown", "pointermove", "touchstart", "scroll"].forEach(function(ev){ document.addEventListener(ev, function(){ lastAct = Date.now(); }, {passive: true, capture: true}); });
     setInterval(function(){ if (document.hidden || (Date.now() - lastAct > 120000 && !playing())) return; call("nv_tick_s", {tok: P.tok, u: P.nvunit, s: 15, st: P.mode === "write" ? "write" : P.mode === "speak" ? "speak" : "home"}).catch(function(){ call("nv_tick", {tok: P.tok, u: P.nvunit, s: 15}).catch(function(){}); }); }, 15000);
   }
-  window.nvSaveSpeaking = function(tasks, secs){ return call("nv_save_speaking", {tok: P.tok, u: P.nvunit, tasks: tasks, secs: secs}).then(function(r){ if (!r || !r.ok) throw new Error((r && r.err) || "not saved"); return r; }); };
+  window.nvSaveSpeaking = function(tasks, secs){ return call("nv_save_speaking", {tok: P.tok, u: P.nvunit, tasks: tasks, secs: secs}).then(function(r){ if (!r || !r.ok) window.__nvErr = "server said: " + ((r && r.err) || "not saved"); throw new Error(window.__nvErr); return r; }); };
   function banner(msg){
     var d = document.createElement("div"); d.style.cssText = "position:fixed;inset:0;z-index:99999;background:rgba(14,42,71,.92);color:#fff;display:flex;align-items:center;justify-content:center;font:600 22px system-ui,sans-serif;text-align:center;padding:30px";
     d.innerHTML = "<div>" + msg + "<br><br><button style='font:700 18px system-ui;padding:12px 22px;border-radius:12px;border:0;cursor:pointer'>OK</button></div>";
@@ -213,7 +213,7 @@
       if (PRAC) return call("practice_finish", {tok: P.tok, u: P.unit, rep: rep});
       return call("finish_attempt", {tok: P.tok, u: P.unit, rep: rep, pessay: essay, fb: grabFeedback()});
     }).then(function(r){
-      if (!r || !r.ok) throw new Error((r && r.err) || "not saved");
+      if (!r || !r.ok) window.__nvErr = "server said: " + ((r && r.err) || "not saved"); throw new Error(window.__nvErr);
       if (pinged) clearInterval(pinged); if (saveH) clearInterval(saveH); lsSet(null);
       if (PRAC) practiceDone();
       return new Response("ok", {status:200});
