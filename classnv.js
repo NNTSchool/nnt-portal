@@ -1330,6 +1330,7 @@ function NNTcoach(text, r, o){
     ["mousemove", "keydown", "mousedown", "touchstart", "scroll"].forEach(function(ev){ document.addEventListener(ev, function(){ S.act = Date.now(); }, true); });
     function ping(){ if (document.visibilityState !== "visible" || !O.tok) return; try { Promise.resolve(R("nv_class_ping", {tok: O.tok, u: S.unit || 0, cur: S.cur || "hub"})).catch(function(){}); } catch (x) {} }
     setInterval(ping, 45000); setTimeout(ping, 2500);
+    setInterval(function(){ try { skipWatch(); } catch (x) {} }, 20000);
     /* leaving the window is counted for every classroom stage (one count per trip away) */
     S.lvp = {}; S.away = false;
     function lvSend(){
@@ -1359,6 +1360,18 @@ function NNTcoach(text, r, o){
   }
   /* ---- drafts: whatever the student has typed on the current screen, and where they are in the four-stage listening, is kept on this phone AND on the server ---- */
   function stDone(st){ var m = st === "lis" ? S.lisDone : st === "read" ? S.rdDone : S.wrDone; return !!(m && m[S.unit]); }
+  /* the teacher can let a student through a stage from the dashboard: the server then shows that stage as done, and the open stage ends as if the student had finished it */
+  function skipWatch(){
+    if (document.visibilityState !== "visible" || !O.tok || S.skChk) return; var st = S.cur, u = S.unit;
+    if (st !== "lis" && st !== "read" && st !== "write") return; if (stDone(st)) return; S.skChk = true;
+    Promise.resolve(R("nv_class_status", {tok: O.tok, u: u})).then(function(r){ S.skChk = false; var x = r && r.ok && r[st];
+      if (!x || !x.done || S.cur !== st || S.unit !== u || stDone(st)) return;
+      clearDrafts(st);
+      if (st === "write"){ S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
+      else if (st === "read"){ S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
+      else { S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
+    }, function(){ S.skChk = false; });
+  }
   function dKey(st){ return "nnt_clsdraft_" + ((O && O.name) || "") + "_" + S.unit + "_" + st; }
   function draftFields(){ var r = root(); return r ? [].slice.call(r.querySelectorAll("textarea, input[type=text], input:not([type])")).filter(function(f){ return !f.disabled && f.type !== "password" && f.type !== "hidden"; }) : []; }
   function loadDraft(st){
