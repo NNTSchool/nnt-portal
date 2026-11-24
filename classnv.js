@@ -943,7 +943,7 @@
     function rg(list){ var ns = list.map(function(q){ return q.n; }); return ns.length > 1 ? Math.min.apply(null, ns) + "–" + Math.max.apply(null, ns) : String(ns[0]); }
     var gtf = tfs.length ? '<div class="qg"><div class="qgh"><span class="qi">🧭</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "tf"; })) + ' · ' + (D.tfv ? 'Yes / No / Not Given' : 'True / False / Not Given') + '</b><small>' + (D.tfv ? 'Do the statements agree with the claims of the writer?' : 'Do the statements agree with the information in the passage?') + '</small></div></div>'
       + (D.tfv ? '<div class="qd"><span><b>YES</b> = agrees with the claims of the writer</span><span><b>NO</b> = contradicts the claims of the writer</span><span><b>NOT GIVEN</b> = impossible to say what the writer thinks</span></div>' : '<div class="qd"><span><b>TRUE</b> = agrees with the passage</span><span><b>FALSE</b> = contradicts the passage</span><span><b>NOT GIVEN</b> = no information on this</span></div>') + tfs.map(qrow).join("") + '</div>' : "";
-    var gws = ws.length ? '<div class="qg"><div class="qgh"><span class="qi">✏️</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "w"; })) + ' · Short answers</b><small>Choose <b>' + (D.wl || "ONE WORD ONLY") + '</b> from the passage for each answer.</small></div></div>' + ws.map(qrow).join("") + '</div>' : "";
+    var gws = ws.length ? '<div class="qg"><div class="qgh"><span class="qi">✏️</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "w"; })) + ' · Short answers</b><small>Choose <b>' + (D.wl || wlim(D.q.filter(function(q){ return q.t === "w"; }), "ONE WORD ONLY")) + '</b> from the passage for each answer.</small></div></div>' + ws.map(qrow).join("") + '</div>' : "";
     var mps = D.q.filter(function(q){ return q.t === "mp" && on(q.n); });
     var gmp = mps.length ? '<div class="qg"><div class="qgh"><span class="qi">👥</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "mp"; })) + ' · Matching</b><small>' + (D.mpi || "Match each statement with the correct person. You may use any letter more than once.") + '</small></div></div>'
       + '<div class="qd" style="display:block">' + (D.people || []).map(function(p){ return '<div><b>' + p[0] + '</b> ' + esc(p[1]) + '</div>'; }).join("") + '</div>' + mps.map(qrow).join("") + '</div>' : "";
@@ -957,7 +957,7 @@
         function cell(t){ return t.replace(/\{(\d+)\}/g, function(m, n){ n = +n; if (!on(n)) return '<span class="tqn gd">' + n + '</span> <b>' + esc(D.t.filter(function(x){ return x.n === n; })[0].a[0]) + '</b>';
           return '<span class="tw"><span class="tqn" data-t="' + n + '">' + n + '</span><input class="rin rt" type="text" autocomplete="off" spellcheck="false" data-n="' + n + '"></span>'; }); }
         return '<tr><td>' + r.name + '</td><td>' + r.date + '</td><td>' + cell(r.feat) + '</td><td>' + cell(r.note) + '</td></tr>'; }).join("") + '</table>';
-      gts = '<div class="qg"><div class="qgh"><span class="qi">🧩</span><div><b>Questions ' + rg(D.t) + ' · Table completion</b><small>Complete the table. Choose <b>' + (D.tl || "ONE WORD AND/OR A NUMBER") + '</b> from the passage for each answer.</small></div></div>' + tb + '</div>'; }
+      gts = '<div class="qg"><div class="qgh"><span class="qi">🧩</span><div><b>Questions ' + rg(D.t) + ' · Table completion</b><small>Complete the table. Choose <b>' + (D.tl || wlim(D.t, "ONE WORD AND/OR A NUMBER")) + '</b> from the passage for each answer.</small></div></div>' + tb + '</div>'; }
     var GR = {tf: gtf, w: gws, tb: gts, mp: gmp, mcq: gmc, pm: gpm}; (D.order || ["tf", "w", "tb"]).forEach(function(k){ h += GR[k]; });
     var need = [].concat(tfs, ws, ts, mps, pms, mcs).map(function(q){ return q.n; });
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 4 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
@@ -1097,6 +1097,9 @@
       el("rnx").onclick = function(){ if (ok){ R_.t0 = Date.now(); R_.hl = true; R_.ans = {}; R_.step = "quiz"; rdTest(true); } else rdVocab(); };
     };
   }
+  /* safety net: the instruction can never allow fewer words than the longest correct answer needs */
+  function wlim(items, def){ var m = 1; (items || []).forEach(function(q){ var a = q.a && q.a[0] ? String(q.a[0]).split(/\s+/).filter(function(w){ return !/^[\d.,%]+$/.test(w); }).length : 1; if (a > m) m = a; });
+    if (m <= 1) return def; var n = m === 2 ? "TWO" : m === 3 ? "THREE" : String(m); return "NO MORE THAN " + n + " WORDS" + (/NUMBER/.test(def) ? " AND/OR A NUMBER" : ""); }
   function rdAnswers(){
     var R_ = S.R, D = R_.D, all = rdAll(D), f = R_.first, s2 = R_.second, tot = all.length;
     var fin = {}; all.forEach(function(q){ fin[q.n] = s2.good.indexOf(q.n) >= 0 || f.good.indexOf(q.n) >= 0; });
