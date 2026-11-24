@@ -638,7 +638,7 @@
     }).catch(function(){ if (!c) page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>', true); });
   }
   function paintUnit(x, r, F){
-    S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); if (S.teacher) window.__NNT_TEACHER = true; S.jump = !!(x && x.ok && x.jump); S.testacct = !!(x && x.ok && x.testacct); S.jpct = x && x.ok ? x.jpct : 80;
+    S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); if (S.teacher) window.__NNT_TEACHER = true; S.jump = !!(x && x.ok && x.jump); S.testacct = !!(x && x.ok && x.testacct); if (S.testacct) window.__NNT_TEACHER = true; S.jpct = x && x.ok ? x.jpct : 80;
     {
       if (!r || !r.ok){ page('<h2>Unit ' + S.unit + '</h2><p class="sub">' + (r && r.err === "closed" ? "This unit is not open yet. Your teacher will open it soon." : r && r.err === "locked" ? "Finish the earlier unit and its class test first." : "Not available right now.") + ' <small style="opacity:.6">(' + esc((r && r.err) || "error") + ')</small></p>' + (S.testacct && r && r.err === "locked" ? skipBox(false) : ""), true); if (S.testacct && r && r.err === "locked") skipWire(); return; }
       S.vids = r.videos;
@@ -723,7 +723,7 @@
       return fetchDecrypt(r.path, r.key).then(function(buf){
         var html = new TextDecoder("utf-8").decode(buf);
         return fetch("shim.js", {cache: "no-store"}).then(function(x){ return x.text(); }).then(function(shim){
-          var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, teacher: !!S.teacher, name: r.name, mode: "write", track: r.track}) + ";";
+          var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, teacher: !!(S.teacher || S.testacct), name: r.name, mode: "write", track: r.track}) + ";";
           var tag = "<script>" + cfg + "\n" + shim.replace(/<\/script/gi, "<\\/script") + "<\/script>";
           var m = html.match(/<head[^>]*>/i); html = m ? html.replace(m[0], m[0] + tag) : tag + html;
           document.open(); document.write(html); document.close();

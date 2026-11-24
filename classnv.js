@@ -310,7 +310,7 @@
   /* the teacher account may paste and copy: the server says who is the teacher (hidden, non-test account); students never get this */
   function teacherFlag(){
     if (window.__NNT_TEACHER) return Promise.resolve(true);
-    try { return Promise.resolve(R("nv_class_check", {tok: O.tok, u: S.unit || 1})).then(function(r){ if (r && r.ok && r.teacher) window.__NNT_TEACHER = true; return !!window.__NNT_TEACHER; }, function(){ return false; }); } catch (e) { return Promise.resolve(false); }
+    try { return Promise.resolve(R("nv_class_check", {tok: O.tok, u: S.unit || 1})).then(function(r){ if (r && r.ok && (r.teacher || r.testacct)) window.__NNT_TEACHER = true; return !!window.__NNT_TEACHER; }, function(){ return false; }); } catch (e) { return Promise.resolve(false); }
   }
   function keyCheck(){
     page(top() + '<div class="hero"><h2>Checking your key…</h2></div>'); el("cb").onclick = path;
@@ -318,7 +318,7 @@
       if (r && r.err === "classlocked"){ page(top() + '<div class="card warn"><h2>Novel is not open for you yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = path; return; }
       if (!r || !r.ok){ page(top() + '<div class="card warn"><h2>Please try again</h2><p>We could not check your key.</p></div>'); el("cb").onclick = path; return; }
       if (r.teacher){ O.nofloor = true; window.__NNT_TEACHER = true; } /* teacher: every stage open, no minimum times, may paste and copy */
-      S.testacct = !!r.testacct && !r.teacher; /* the Test Account may only SKIP steps (buttons); it has no other edge */
+      S.testacct = !!r.testacct && !r.teacher; if (r.testacct) window.__NNT_TEACHER = true; /* the test account may paste in the writing boxes too */ /* the Test Account may only SKIP steps (buttons); it has no other edge */
       if (!r.earned){
         var stp = function(n, ic, t){ return '<div style="flex:1;min-width:150px;background:#fff;border:2px solid #c9d6ee;border-radius:16px;padding:14px 12px;text-align:center"><div style="font-size:30px">' + ic + '</div><b style="display:block;color:#10204a;font-size:16px;margin-top:4px">' + t + '</b><small style="color:#5a6a86">Step ' + n + '</small></div>'; };
         page(top() + '<div style="text-align:center;padding:6px 0 0"><div style="position:relative;width:230px;max-width:60%;margin:0 auto;filter:grayscale(1) opacity(.55) drop-shadow(0 10px 22px rgba(40,60,120,.25))">' + portalKey() + '</div>'
@@ -1191,11 +1191,11 @@
   /* the AI marker (server side). Any failure returns null and the standard checker's marks are used, so a student is never blocked */
   function aiMark(){
     var P = window.PORTAL, Wd = S.W; if (!P || !O || !O.tok || !window.AbortController) return Promise.resolve(null);
-    var prev = Wd.att.length ? Wd.att[Wd.att.length - 1] : null, ctl = new AbortController(), t = setTimeout(function(){ ctl.abort(); }, 50000);
+    var prev = Wd.att.length ? Wd.att[Wd.att.length - 1] : null, ctl = new AbortController(), t = setTimeout(function(){ ctl.abort(); }, 60000);
     var sc = function(r){ return Wd.tr === "ml" ? {ta: r.m75.ta, cc: r.m75.cc, gr: r.m75.gr, lr: r.m75.lr, total: r.m75.total} : {ta: r.ta, cc: r.cc, gr: r.gr, lr: r.lr, total: r.total}; };
     return fetch(P.URL + "/functions/v1/essay-check", {method: "POST", signal: ctl.signal, headers: {"Content-Type": "application/json", "apikey": P.KEY},
       body: JSON.stringify({tok: O.tok, u: S.unit, track: Wd.tr, topic: Wd.P.q, text: Wd.text, units: (Wd.FB.CHUNKS || []).map(function(c){ return c[0]; }), prev: prev ? {text: prev.text, scores: sc(prev.W)} : null})})
-      .then(function(r){ return r.json(); }).then(function(j){ clearTimeout(t); return j && j.ok && j.scores && !j.junk ? j : null; }).catch(function(){ clearTimeout(t); return null; });
+      .then(function(r){ return r.json().then(function(j){ if (j) j._http = r.status; return j; }); }).then(function(j){ clearTimeout(t); window.__aiErr = j && j.ok ? "" : j ? ("http " + j._http + " · " + (j.err || "?") + (j.status ? " " + j.status : "") + (j.detail ? " · " + j.detail : "")) : "empty reply"; return j && j.ok && j.scores && !j.junk ? j : null; }).catch(function(e){ clearTimeout(t); window.__aiErr = "network: " + (e && e.name === "AbortError" ? "timeout" : e && e.message || "failed"); return null; });
   }
   function wrCheck(){
     var W = S.W; if (W.busy) return;
@@ -1203,7 +1203,7 @@
     if (!r.m75) r.m75 = {ta: 0, cc: 0, gr: 0, lr: 0, total: 0};  /* junk or empty text returns early without the 75-mark scores */
     function done(ai){
       if (ai){ var s = ai.scores; if (W.tr === "ml") r.m75 = {ta: s.ta, cc: s.cc, gr: s.gr, lr: s.lr, total: s.total}; else { r.ta = s.ta; r.cc = s.cc; r.gr = s.gr; r.lr = s.lr; r.total = s.total; } }
-      W.busy = false; W.att.push({W: r, sc: wrScore(r, W.tr), text: W.text, ai: ai || null}); W.mode = "fb"; wrFeedback();
+      W.busy = false; W.att.push({W: r, sc: wrScore(r, W.tr), text: W.text, ai: ai || null, aiErr: ai ? "" : (window.__aiErr || "")}); W.mode = "fb"; wrFeedback();
     }
     if (r.empty || r.tooShort || r.junk || O.nofloor && !/[a-z]/i.test(W.text)) return done(null);
     W.busy = true; var b = el("wck"); if (b){ b.disabled = true; b.textContent = "Marking your essay… this takes up to a minute"; }
@@ -1215,7 +1215,7 @@
     var crit = wrCrit(W, ml).map(function(c){ return {k: c[0], r: c[1] / c[2]}; }).sort(function(x, y){ return x.r - y.r; });
     var NAME = {TA: "Answering the question", CC: "Organisation", GR: "Grammar", LR: "Vocabulary"}, h = '<div class="wsec" style="padding:14px 16px"><h3>🎯 What to do to raise your mark</h3><p class="sub" style="margin:2px 0 6px">Start with the first item: it is what is holding your mark down.</p>';
     crit.forEach(function(c, i){ var L = (G.coach && G.coach[c.k]) || []; if (!L.length) return; if (i === 2) h += '<details style="margin:8px 0"><summary class="sub" style="cursor:pointer">More to improve</summary>';
-      h += '<div style="margin:10px 0"><b>' + NAME[c.k] + '</b><ol style="margin:4px 0 0 20px;padding:0">' + L.slice(0, i < 2 ? 3 : 2).map(function(x){ return '<li style="margin:5px 0">' + e(x) + '</li>'; }).join("") + '</ol></div>'; });
+      h += '<div style="margin:10px 0"><b>' + NAME[c.k] + '</b><ol style="margin:4px 0 0 20px;padding:0">' + L.slice(0, i < 2 ? 4 : 3).map(function(x){ return '<li style="margin:5px 0">' + e(x) + '</li>'; }).join("") + '</ol></div>'; });
     if (crit.length > 2) h += '</details>';
     if (G.good && G.good.length) h += '<div style="margin-top:10px"><b>✅ You did well</b><ul style="margin:4px 0 0 20px;padding:0">' + G.good.map(function(x){ return '<li>' + e(x) + '</li>'; }).join("") + '</ul></div>';
     if (G.fix && G.fix.length) h += '<div style="margin-top:10px"><b>🔧 Fix these</b><ul style="margin:4px 0 0 20px;padding:0">' + G.fix.map(function(f){ return '<li><span class="wbd">' + e(f.bad) + '</span> → <span class="wfx">' + e(f.fix) + '</span><small style="display:block">' + e(f.why) + '</small></li>'; }).join("") + '</ul></div>';
@@ -1352,6 +1352,7 @@ function NNTcoach(text, r, o){
       + '<div class="hlz" id="rdp" style="max-width:1100px;margin:0 auto">' + wrPrior(a, prev) + wrDetail(a) + '</div>'
       + '<div class="rbar rbfix"><button class="go fixgo" id="wrw">↻ Rewrite my essay</button><button class="pill" id="wdr" style="margin-right:6px">🔧 Practise my mistakes (optional)</button><button class="pill" id="wfin"' + (!fin ? ' disabled style="opacity:.5;cursor:not-allowed"' : '') + '>Finish writing ✓</button><small>' + (A.length < 2 ? "Finish unlocks after one rewrite and a mark of " + nd.show + "." : !fin ? "You need " + nd.show + " to finish. Your best so far: " + wrBest(A) + ". Rewrite again." : "You reached " + nd.show + ". You can finish, or rewrite again to push your mark higher.") + '</small></div>');
     wide(false); el("cb").onclick = hub;
+    if (!a.ai && a.aiErr && window.__NNT_TEACHER){ var rp0 = el("rdp"); if (rp0) rp0.insertAdjacentHTML("afterbegin", '<div class="card warn">👑 Teacher note: the AI marker was NOT used (' + esc(a.aiErr) + '). Students never see this note.</div>'); }
     el("wrw").onclick = wrRewrite; el("wfin").onclick = function(){ if (wrCanFinish()){ flushLog("write", {ok: true, tries: S.W.att.length, sc: S.W.att[S.W.att.length - 1].sc, drill: 0, fails: 0}); writingDone(); } }; if (el("wdr")) el("wdr").onclick = startDrill;
   }
   function wrRewrite(){
