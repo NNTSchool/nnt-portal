@@ -312,7 +312,7 @@
     R("nv_class_check", {tok: O.tok, u: S.unit}).then(function(r){
       if (r && r.err === "classlocked"){ page(top() + '<div class="card warn"><h2>Novel is not open for you yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = path; return; }
       if (!r || !r.ok){ page(top() + '<div class="card warn"><h2>Please try again</h2><p>We could not check your key.</p></div>'); el("cb").onclick = path; return; }
-      if (r.teacher) O.nofloor = true; /* teacher: every stage open, no minimum times */
+      if (r.teacher){ O.nofloor = true; window.__NNT_TEACHER = true; } /* teacher: every stage open, no minimum times, may paste and copy */
       S.testacct = !!r.testacct && !r.teacher; /* the Test Account may only SKIP steps (buttons); it has no other edge */
       if (!r.earned){
         var stp = function(n, ic, t){ return '<div style="flex:1;min-width:150px;background:#fff;border:2px solid #c9d6ee;border-radius:16px;padding:14px 12px;text-align:center"><div style="font-size:30px">' + ic + '</div><b style="display:block;color:#10204a;font-size:16px;margin-top:4px">' + t + '</b><small style="color:#5a6a86">Step ' + n + '</small></div>'; };
@@ -1356,6 +1356,7 @@ function NNTcoach(text, r, o){
   }
   /* nothing can be pasted, dropped or inserted in one go (also from a phone keyboard's clipboard bar): text must be typed */
   function noPaste(ta){
+    if (window.__NNT_TEACHER){ ta.onpaste = ta.ondrop = ta.oncontextmenu = null; return; }  /* the teacher account may paste */
     var last = ta.value || "";
     ta.addEventListener("focus", function(){ last = ta.value; });
     ta.addEventListener("keydown", function(e){ if ((e.ctrlKey || e.metaKey) && (e.key === "v" || e.key === "V" || e.key === "Insert") || e.shiftKey && e.key === "Insert") e.preventDefault(); });
