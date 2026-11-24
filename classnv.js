@@ -775,7 +775,7 @@
     if (pct >= 90) for (var q = 0; q < 34; q++) sp += '<i style="left:' + (Math.random() * 100) + '%;animation-delay:' + (Math.random() * 2.5).toFixed(2) + 's;animation-duration:' + (2.4 + Math.random() * 2).toFixed(2) + 's;background:' + ["#ffd23f", "#5df2d6", "#ff7ad9", "#7aa2ff", "#ff9f43"][q % 5] + ';width:' + (5 + Math.random() * 6).toFixed(1) + 'px;height:' + (8 + Math.random() * 10).toFixed(1) + 'px"></i>';
     var miss = n - g;
     page(top("Exit") + stgBar(4) + '<div class="fbk"><div class="spk">' + sp + '</div><small class="wu">EXAM RESULT</small><div class="ring" style="--c:' + t[2] + ';--a:' + Math.round(3.6 * pct) + 'deg"><div><b>' + pct + '%</b><small>' + g + ' of ' + n + ' correct</small></div></div><div class="verd" style="color:' + t[2] + '">' + t[1] + ' ' + t[0] + '</div></div>'
-      + '<div class="gr g2 fr l4sm">' + rows + '</div>' + (pct < L4MIN ? '<div class="card warn" style="margin:12px 0 0;text-align:center"><b>You need ' + L4MIN + '% to move on.</b> You are at ' + pct + '%. Study every mistake, then win them back. The fix rounds repeat until you reach ' + L4MIN + '%.</div>' : '') + '<button class="go" id="l4rv" style="margin-top:6px">' + (miss ? 'See every mistake and the sentence behind it →' : 'Read the scripts →') + '</button>');
+      + '<div class="gr g2 fr l4sm">' + rows + '</div>' + (S.lSkip === S.unit ? '<div class="card" style="margin:12px 0 0;text-align:center">Your teacher moved you on. This is your result so far. Go through every mistake and the sentence behind it.</div>' : pct < L4MIN ? '<div class="card warn" style="margin:12px 0 0;text-align:center"><b>You need ' + L4MIN + '% to move on.</b> You are at ' + pct + '%. Study every mistake, then win them back. The fix rounds repeat until you reach ' + L4MIN + '%.</div>' : '') + '<button class="go" id="l4rv" style="margin-top:6px">' + (miss ? 'See every mistake and the sentence behind it →' : 'Read the scripts →') + '</button>');
     el("cb").onclick = hub; el("l4rv").onclick = function(){ L.ri = 0; l4Review(); };
   }
   function hiEv(tape, ev){
@@ -791,11 +791,11 @@
         + (w.ev && !w.ok ? '<div class="l4evb">🎧 <em>“' + esc(w.ev.replace(/ \.\.\. /g, " … ")) + '”</em></div>' : "") + '</div>'; });
     page(top("Exit") + stgBar(4) + '<div class="l4ph">Analysis · recording ' + (L.ri + 1) + ' of ' + S.P.exercises.length + '</div><h2 style="margin:4px 0 8px">' + esc(ex.id + " · " + ex.name) + ' · ' + r.good + ' of ' + r.n + '</h2>'
       + '<div class="l4two rv"><div class="l4rvl">' + h + '</div><div class="l4tp"><h3>Script <small>the sentences you needed are highlighted</small></h3><div class="l4tx" id="l4tx">' + hiEv(ex.tape, r.rows.filter(function(w){ return !w.ok && w.ev; }).map(function(w){ return w.ev; }).join(" ... ")) + '</div><div class="l4au"><button class="pill" id="l4pl">▶ Listen again</button><span class="sub" id="l4ps">Pause, rewind and replay freely here.</span></div></div></div>'
-      + '<button class="go" id="l4nx" style="margin-top:14px">' + (last ? (S.fix.length && l4Pct() < L4MIN ? "🛠 Win your mistakes back →" : S.fix.length ? "🏆 Reach 100%: win the rest back →" : "Finish the listening →") : "Next recording →") + '</button>' + (last && S.fix.length && l4Pct() >= L4MIN ? '<button class="pill" id="l4fin" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button>' : ''));
+      + '<button class="go" id="l4nx" style="margin-top:14px">' + (last ? (S.lSkip === S.unit ? "Finish the listening →" : S.fix.length && l4Pct() < L4MIN ? "🛠 Win your mistakes back →" : S.fix.length ? "🏆 Reach 100%: win the rest back →" : "Finish the listening →") : "Next recording →") + '</button>' + (last && S.fix.length && l4Pct() >= L4MIN && S.lSkip !== S.unit ? '<button class="pill" id="l4fin" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button>' : ''));
     el("cb").onclick = function(){ stopAudio(); hub(); };
     var tok = S.pgn, pl = el("l4pl"), B = null;
     pl.onclick = function(){ if (B){ if (B.paused){ B.play(); pl.textContent = "❚❚ Pause"; } else { B.pause(); pl.textContent = "▶ Continue"; } return; } pl.textContent = "Loading…"; var sn = S.stopN; audioUrl(ex).then(function(u){ if (tok !== S.pgn || sn !== S.stopN) return; B = new Audio(u); B.controls = false; B.onended = function(){ B = null; pl.textContent = "▶ Listen again"; }; A = B; B.play(); pl.textContent = "❚❚ Pause"; }); };
-    el("l4nx").onclick = function(){ stopAudio(); if (!last){ L.ri++; l4Review(); } else if (S.fix.length){ l4Drill(); } else listeningDone(l4Review); }; if (el("l4fin")) el("l4fin").onclick = function(){ stopAudio(); listeningDone(l4Review); };
+    el("l4nx").onclick = function(){ stopAudio(); if (!last){ L.ri++; l4Review(); } else if (S.fix.length && S.lSkip !== S.unit){ l4Drill(); } else listeningDone(l4Review); }; if (el("l4fin")) el("l4fin").onclick = function(){ stopAudio(); listeningDone(l4Review); };
   }
   /* win the mistakes back: re-answer each missed question after seeing the sentence, until all are right */
   var L4MIN = 90;
@@ -1109,7 +1109,7 @@
     if (m <= 1) return def; var n = m === 2 ? "TWO" : m === 3 ? "THREE" : String(m); return "NO MORE THAN " + n + " WORDS" + (/NUMBER/.test(def) ? " AND/OR A NUMBER" : ""); }
   function rdAnswers(){
     var R_ = S.R, D = R_.D, all = rdAll(D), f = R_.first, s2 = R_.second, tot = all.length;
-    var fin = {}; all.forEach(function(q){ fin[q.n] = s2.good.indexOf(q.n) >= 0 || f.good.indexOf(q.n) >= 0; });
+    var fin = {}; all.forEach(function(q){ fin[q.n] = R_.skBest ? s2.good.indexOf(q.n) >= 0 : (s2.good.indexOf(q.n) >= 0 || f.good.indexOf(q.n) >= 0); });
     var g1 = f.good.length, g2 = Object.keys(fin).filter(function(k){ return fin[k]; }).length;
     var cards = all.map(function(q){ var ok1 = f.good.indexOf(q.n) >= 0, ok2 = fin[q.n], ya = (s2.ans && s2.ans[q.n]) || f.ans[q.n] || "", cls = ok2 ? "gd" : "bd";
       return '<div class="acard ' + cls + '"><div class="qn">' + q.n + '</div><div><p>' + (q.q ? '<b>' + esc(q.q) + '</b>' : "") + '</p>'
@@ -1121,7 +1121,8 @@
         + (ok2 ? '' : '<span class="yr">' + esc(ya || "no answer") + '</span>') + '<span class="ky">' + esc(keyTxt(q, D)) + '</span>' + (q.a.length > 1 ? '<small style="color:#3d4f80;font-weight:600">also accepted: ' + esc(q.a.slice(1).join(", ")) + '</small>' : "")
         + '<p>' + esc(q.ex) + '</p>' + (!ok1 && ok2 ? '<p style="color:#0b7a66;font-weight:700">✔ Fixed in the retake. Nice!</p>' : '') + '</div></div>'; }).join("");
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · answers & explanations</h2>' + rdSteps(5) + '</div>'
-      + '<div class="brk" style="padding:4px 0 8px"><div class="fst" style="opacity:1;animation:none"><div><b>' + g1 + '/' + tot + '</b><span>first try</span></div><div><b style="color:#0c9c84">' + g2 + '/' + tot + '</b><span>after the retake</span></div><div><b>' + (g2 - g1 >= 0 ? "+" + (g2 - g1) : g2 - g1) + '</b><span>improvement</span></div></div></div>'
+      + '<div class="brk" style="padding:4px 0 8px"><div class="fst" style="opacity:1;animation:none">' + (R_.skBest ? (s2 === f ? '' : '<div><b>' + g1 + '/' + tot + '</b><span>first try</span></div>') + '<div><b style="color:#0c9c84">' + g2 + '/' + tot + '</b><span>your best result</span></div>' : '<div><b>' + g1 + '/' + tot + '</b><span>first try</span></div><div><b style="color:#0c9c84">' + g2 + '/' + tot + '</b><span>after the retake</span></div><div><b>' + (g2 - g1 >= 0 ? "+" + (g2 - g1) : g2 - g1) + '</b><span>improvement</span></div>') + '</div></div>'
+      + (R_.skBest ? '<p class="sub" style="text-align:center;margin:0 0 10px">Your teacher moved you on. This is your best result so far, with every answer and explanation.</p>' : '')
       + cards + '<div style="text-align:center;margin:20px 0 30px"><button class="go" id="rfin">Finish the reading →</button></div>');
     wide(false); el("cb").onclick = hub;
     el("rfin").onclick = function(){ S.rdRes = S.rdRes || {}; S.rdRes[S.unit] = {first: g1, final: g2, total: tot, secs: Math.round((Date.now() - R_.t0) / 1000)}; readingDone(); };
@@ -1434,11 +1435,30 @@ function NNTcoach(text, r, o){
     Promise.resolve(R("nv_class_status", {tok: O.tok, u: u})).then(function(r){ S.skChk = 0; var x = r && r.ok && r[st];
       if (!x || !x.done || S.cur !== st || S.unit !== u || stDone(st)) return;
       clearDrafts(st);
-      if (st === "read" && S.R && S.R.D && S.R.first && S.R.unit !== -1){ if (S.R.skShown) return; S.R.skShown = 1; S.R.second = S.R.second || {good: [], ans: {}}; try { rdAnswers(); return; } catch (e) { S.R.skShown = 0; } }
+      S.skipped = S.skipped || {}; S.skipped[u + ":" + st] = true;
+      /* the teacher moved this student on: show the best result reached so far, with the key, instead of the next step */
+      if (st === "read" && S.R && S.R.D && S.R.first && S.R.unit !== -1){ if (S.R.skShown) return; S.R.skShown = 1;
+        var f0 = S.R.first, l0 = S.R.last || f0, bst = l0.good.length >= f0.good.length ? l0 : f0; S.R.second = bst; S.R.skBest = true; try { rdAnswers(); return; } catch (e) { S.R.skShown = 0; S.R.skBest = false; } }
+      if (st === "write" && S.W && S.W.att && S.W.att.length){ if (S.W.skShown) return; S.W.skShown = 1; try { wrSkipKey(); return; } catch (e) { S.W.skShown = 0; } }
+      if (st === "lis" && S.L && S.P && S.P.exercises && S.P.exercises.length && S.P.exercises.every(function(e){ return S.L.a3 && S.L.a3[e.id]; })){ if (S.lSkip === u) return; S.lSkip = u; stopAudio(); try { l4Analysis(); return; } catch (e) { S.lSkip = 0; } }
       if (st === "write"){ S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
       else if (st === "read"){ S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
       else { S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
     }, function(){ S.skChk = 0; });
+  }
+  /* the teacher moved the student on from the writing: best mark so far, saved, plus the key (every marked sentence corrected) */
+  function wrSkipKey(){
+    var W = S.W, A = W.att, ml = W.tr === "ml", best = A[0]; A.forEach(function(x){ if (x.sc >= best.sc) best = x; });
+    var nd = wrNeed(W), crit = wrCrit(best.W, ml), items = []; try { items = drItems(best); } catch (e) {}
+    flushLog("write", {ok: best.sc >= nd.n, tries: A.length, sc: best.sc, skipped: true});
+    clearDrafts("write"); if (S.bt) clearInterval(S.bt);
+    var rows = items.map(function(it){ return '<div class="acard bd"><div><span class="yr">' + esc(it.sn) + '</span><span class="ky">' + esc(it.good) + '</span>' + drExp(it) + '</div></div>'; }).join("");
+    page(top("← Unit") + '<div class="rdh"><h2>✍️ Writing · your best result and the key</h2></div>'
+      + '<div class="wsc"><div class="wbg">' + (ml ? best.W.m75.total + '<small> / 75</small>' : best.W.total + '<small> / 9</small>') + '</div><div class="wcr">' + crit.map(function(c){ return '<span>' + c[0] + ' <b>' + c[1] + '</b> / ' + c[2] + '</span>'; }).join("") + '</div>'
+      + '<div class="sub" style="margin:8px 0 0">Best of ' + A.length + ' ' + (A.length > 1 ? "tries" : "try") + '. Your teacher moved you on, so here is the key to your writing.</div></div>'
+      + '<div style="max-width:900px;margin:14px auto 0"><h3 style="margin:0 0 6px">🔑 The key: your marked sentences, corrected</h3>' + (rows || '<p class="sub">No marked mistakes in your best essay.</p>') + '</div>'
+      + '<div style="text-align:center;margin:20px 0 30px"><button class="go" id="wskf">Finish the writing →</button></div>');
+    wide(false); el("cb").onclick = hub; el("wskf").onclick = function(){ writingDone(); };
   }
   function dKey(st){ return "nnt_clsdraft_" + ((O && O.name) || "") + "_" + S.unit + "_" + st; }
   function draftFields(){ var r = root(); return r ? [].slice.call(r.querySelectorAll("textarea, input[type=text], input:not([type])")).filter(function(f){ return !f.disabled && f.type !== "password" && f.type !== "hidden"; }) : []; }
@@ -1510,6 +1530,7 @@ function NNTcoach(text, r, o){
   function floorOk(st, back){
     flushLog(st);
     if (O.nofloor) return true;
+    if (S.skipped && S.skipped[S.unit + ":" + st]) return true;
     var have = stageSecs(st), need = FLOOR[st];
     if (have >= need) return true;
     S.fbn = {st: st, unit: S.unit};
@@ -1541,9 +1562,9 @@ function NNTcoach(text, r, o){
     var extra = 0, ok = it.all.every(function(o){ var b = drNorm(o.bad), al = String(o.fix).split(/\s*\/\s*/); extra += al.length - 1; return al.some(function(x){ var f = drNorm(x); return f && a.indexOf(f) > -1 && (f.indexOf(b) > -1 || a.indexOf(b) < 0); }); });
     return ok && Math.abs(a.split(" ").length - g.split(" ").length) <= 2 + 2 * extra;
   }
-  function drItems(){
+  function drItems(only){
     var W = S.W, seen = {}, out = [];
-    W.att.forEach(function(a){
+    (only ? [only] : W.att).forEach(function(a){
       if (a.ai){ drAiItems(a, seen, out); return; }
       var text = String(a.text || ""), iss = (a.W && a.W.iss) || [], sents = [], re = /[^.!?\n]+[.!?]*/g, m, by = {};
       while ((m = re.exec(text))) sents.push({s: m.index, e: m.index + m[0].length});
