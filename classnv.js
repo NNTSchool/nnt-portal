@@ -1582,7 +1582,7 @@ function NNTcoach(text, r, o){
     var F = S.FB; return near && (!(F && F.errsOf) || F.errsOf(String(ans)) === 0);
   }
   function startDrill(){
-    var W = S.W; W.dr = {q: drItems(), t0: Date.now()};
+    var W = S.W; if (!(W.dr && W.dr.att === W.att.length && W.dr.q.length)) W.dr = {q: drItems(), t0: Date.now(), att: W.att.length};
     if (!W.dr.q.length){ return drFinish(); }
     drAsk();
   }
@@ -1595,8 +1595,8 @@ function NNTcoach(text, r, o){
       + '<div class="drc"><div class="dri">Here is a sentence you wrote. It has ' + (it.nm > 1 ? it.nm + " mistakes" : "a mistake") + '.</div><div class="drs">' + esc(it.sn) + '</div>'
       + '<div class="dri">Write the whole sentence again, correctly.</div><textarea id="dra" class="wrta drta" spellcheck="false" autocomplete="off"></textarea>'
       + (it.fails ? '<div class="drx">' + drExp(it) + '</div>' : '')
-      + '<div id="drm"></div><button class="go" id="drk">Check</button></div></div>');
-    wide(false); el("cb").onclick = hub; var ta = el("dra"); ta.onpaste = function(e){ e.preventDefault(); }; ta.ondrop = ta.onpaste; noPaste(ta); ta.focus();
+      + '<div id="drm"></div><button class="go" id="drk">Check</button> <button class="pill" id="drq" style="margin-left:8px">← Back to my feedback</button></div></div>');
+    wide(false); el("cb").onclick = hub; el("drq").onclick = wrFeedback; var ta = el("dra"); ta.onpaste = function(e){ e.preventDefault(); }; ta.ondrop = ta.onpaste; noPaste(ta); ta.focus();
     el("drk").onclick = function(){
       var v = ta.value.trim(); if (v.split(/\s+/).length < 3) return;
       if (drJudge(it, v)){ it.ok = true; drOk(it); }
@@ -1604,12 +1604,12 @@ function NNTcoach(text, r, o){
     };
   }
   function drOk(it){
-    page(top("← Unit") + '<div class="brk"><div class="bk good"><div class="be">✅</div><h1 class="bh">Correct!</h1><p class="drg">' + esc(it.good) + '</p><p class="sub">' + (it.fails ? "You fixed it after the explanation. It will stick now." : "Well done.") + '</p></div><button class="go" id="drn" style="margin-top:20px">Next →</button></div>');
-    el("cb").onclick = hub; el("drn").onclick = drAsk;
+    page(top("← Unit") + '<div class="brk"><div class="bk good"><div class="be">✅</div><h1 class="bh">Correct!</h1><p class="drg">' + esc(it.good) + '</p><p class="sub">' + (it.fails ? "You fixed it after the explanation. It will stick now." : "Well done.") + '</p></div><button class="go" id="drn" style="margin-top:20px">Next →</button> <button class="pill" id="drq" style="margin-top:20px;margin-left:8px">← Back to my feedback</button></div>');
+    el("cb").onclick = hub; el("drn").onclick = drAsk; el("drq").onclick = wrFeedback;
   }
   function drBad(it, v){
-    page(top("← Unit") + '<div class="brk"><div class="bk"><div class="be">🤔</div><h1 class="bh">Not quite</h1><p class="sub">You wrote:</p><p class="drg bad">' + esc(v) + '</p><div class="drx" style="text-align:left">' + drExp(it) + '</div><p class="sub">The correct sentence is:</p><p class="drg">' + esc(it.good) + '</p></div><button class="go" id="drn" style="margin-top:20px">Try it again →</button></div>');
-    el("cb").onclick = hub; el("drn").onclick = drAsk;
+    page(top("← Unit") + '<div class="brk"><div class="bk"><div class="be">🤔</div><h1 class="bh">Not quite</h1><p class="sub">You wrote:</p><p class="drg bad">' + esc(v) + '</p><div class="drx" style="text-align:left">' + drExp(it) + '</div><p class="sub">The correct sentence is:</p><p class="drg">' + esc(it.good) + '</p></div><button class="go" id="drn" style="margin-top:20px">Try it again →</button> <button class="pill" id="drq" style="margin-top:20px;margin-left:8px">← Back to my feedback</button></div>');
+    el("cb").onclick = hub; el("drn").onclick = drAsk; el("drq").onclick = wrFeedback;
   }
   function drFinish(){
     var D = S.W.dr, n = D ? D.q.length : 0, fails = D ? D.q.reduce(function(a, x){ return a + x.fails; }, 0) : 0;
