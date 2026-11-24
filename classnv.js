@@ -1233,6 +1233,15 @@
   function wrNeed(Wd){ return Wd.tr === "ml" ? {n: 51, show: "51 / 75"} : {n: 6.5, show: "6.5 / 9"}; }
   function wrBest(A){ var b = 0; A.forEach(function(x){ if (x.sc > b) b = x.sc; }); return b; }
   function wrCanFinish(){ var Wd = S.W, A = Wd.att; if (O.nofloor) return A.length >= 1; return A.length >= 2 && wrBest(A) >= wrNeed(Wd).n; }
+  /* the student's own text with the AI's real mistakes underlined in red and the corrected words in green */
+  function aiEssay(text, fixes){
+    var T = String(text || ""), M = [];
+    (fixes || []).forEach(function(f){ var i = T.indexOf(f.bad); if (i < 0 || !f.bad) return; M.push({i: i, j: i + f.bad.length, fix: f.fix}); });
+    M.sort(function(x, y){ return x.i - y.i || (y.j - y.i) - (x.j - x.i); });
+    var out = "", pos = 0;
+    M.forEach(function(m){ if (m.i < pos) return; out += esc(T.slice(pos, m.i)) + '<u class="err">' + esc(T.slice(m.i, m.j)) + '</u> <span class="okfx">(' + esc(m.fix) + ')</span>'; pos = m.j; });
+    return out + esc(T.slice(pos));
+  }
   function wrDetail(a){
     var W = a.W, NEED = S.W.need, h = "", nt = [];
     if (W.junk) nt.push("This does not look like real English writing, so the mark is 0 and there are no corrections. Write real sentences about the topic."); else if (W.empty) nt.push("You wrote nothing, so the mark is 0."); else if (W.tooShort) nt.push("Only " + W.n + " words. Under 10 words cannot be marked, so the mark is 0."); else if (W.n < NEED) nt.push(W.n + " of " + NEED + " words, so the mark was lowered.");
@@ -1240,7 +1249,8 @@
     if (!W.empty && !W.tooShort){
       h += '<div class="wsec" style="padding:14px 16px">' + nntCrit(W, S.W.tr === "ml", ESC0, function(x){ return wrSan(S.W.tr, x); }) + '</div>';
     }
-    h += '<div class="wsec"><h3>✍️ Your writing</h3><div class="wlg"><u>red</u> = mistake <span>(green = correct version)</span> · amber dotted = please check · green highlight = unit word</div>' + (a.text.trim() ? '<div class="wess">' + W.html + '</div>' : '<p>Nothing written.</p>') + '</div>';
+    var aiH = a.ai ? aiEssay(a.text, a.ai.fix) : null;
+    h += '<div class="wsec"><h3>✍️ Your writing</h3><div class="wlg"><u>red</u> = mistake <span>(green = correct version)</span>' + (aiH ? '' : ' · amber dotted = please check · green highlight = unit word') + '</div>' + (a.text.trim() ? '<div class="wess">' + (aiH || W.html) + '</div>' : '<p>Nothing written.</p>') + '</div>';
     return h;
   }
   /* what holds the mark back: the two weakest criteria with one concrete job each, and the change since the last try */
