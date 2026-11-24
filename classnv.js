@@ -1183,10 +1183,39 @@
       [].forEach.call(document.querySelectorAll('.widea[data-s="' + sd + '"]'), function(x){ x.classList.toggle("on", x === bt); }); var oi = el("own" + sd); oi.style.display = bt.classList.contains("own") ? "block" : "none"; if (bt.classList.contains("own")) oi.focus(); }; });
     [].forEach.call(document.querySelectorAll(".wown"), function(oi, k){ oi.oninput = function(){ W.own[k] = oi.value; }; });
   }
+  /* the AI marker (server side). Any failure returns null and the standard checker's marks are used, so a student is never blocked */
+  function aiMark(){
+    var P = window.PORTAL, Wd = S.W; if (!P || !O || !O.tok || !window.AbortController) return Promise.resolve(null);
+    var prev = Wd.att.length ? Wd.att[Wd.att.length - 1] : null, ctl = new AbortController(), t = setTimeout(function(){ ctl.abort(); }, 50000);
+    var sc = function(r){ return Wd.tr === "ml" ? {ta: r.m75.ta, cc: r.m75.cc, gr: r.m75.gr, lr: r.m75.lr, total: r.m75.total} : {ta: r.ta, cc: r.cc, gr: r.gr, lr: r.lr, total: r.total}; };
+    return fetch(P.URL + "/functions/v1/essay-check", {method: "POST", signal: ctl.signal, headers: {"Content-Type": "application/json", "apikey": P.KEY},
+      body: JSON.stringify({tok: O.tok, u: S.unit, track: Wd.tr, topic: Wd.P.q, text: Wd.text, units: (Wd.FB.CHUNKS || []).map(function(c){ return c[0]; }), prev: prev ? {text: prev.text, scores: sc(prev.W)} : null})})
+      .then(function(r){ return r.json(); }).then(function(j){ clearTimeout(t); return j && j.ok && j.scores && !j.junk ? j : null; }).catch(function(){ clearTimeout(t); return null; });
+  }
   function wrCheck(){
-    var W = S.W, r = W.FB.analyseEssay(W.text, W.tr, W.ideas); ["good", "better"].forEach(function(k){ if (r[k]) r[k] = r[k].map(function(x){ return wrSan(W.tr, x); }); });
+    var W = S.W; if (W.busy) return;
+    var r = W.FB.analyseEssay(W.text, W.tr, W.ideas); ["good", "better"].forEach(function(k){ if (r[k]) r[k] = r[k].map(function(x){ return wrSan(W.tr, x); }); });
     if (!r.m75) r.m75 = {ta: 0, cc: 0, gr: 0, lr: 0, total: 0};  /* junk or empty text returns early without the 75-mark scores */
-    W.att.push({W: r, sc: wrScore(r, W.tr), text: W.text}); W.mode = "fb"; wrFeedback();
+    function done(ai){
+      if (ai){ var s = ai.scores; if (W.tr === "ml") r.m75 = {ta: s.ta, cc: s.cc, gr: s.gr, lr: s.lr, total: s.total}; else { r.ta = s.ta; r.cc = s.cc; r.gr = s.gr; r.lr = s.lr; r.total = s.total; } }
+      W.busy = false; W.att.push({W: r, sc: wrScore(r, W.tr), text: W.text, ai: ai || null}); W.mode = "fb"; wrFeedback();
+    }
+    if (r.empty || r.tooShort || r.junk || O.nofloor && !/[a-z]/i.test(W.text)) return done(null);
+    W.busy = true; var b = el("wck"); if (b){ b.disabled = true; b.textContent = "Marking your essay… this takes up to a minute"; }
+    aiMark().then(done);
+  }
+  /* the tailored coaching written for this student's own essay by the AI marker */
+  function aiCoach(a, ml){
+    var G = a.ai, W = a.W, e = function(x){ return esc(wrSan(S.W.tr, x)); };
+    var crit = wrCrit(W, ml).map(function(c){ return {k: c[0], r: c[1] / c[2]}; }).sort(function(x, y){ return x.r - y.r; });
+    var NAME = {TA: "Answering the question", CC: "Organisation", GR: "Grammar", LR: "Vocabulary"}, h = '<div class="wsec" style="padding:14px 16px"><h3>🎯 What to do to raise your mark</h3><p class="sub" style="margin:2px 0 6px">Start with the first item: it is what is holding your mark down.</p>';
+    crit.forEach(function(c, i){ var L = (G.coach && G.coach[c.k]) || []; if (!L.length) return; if (i === 2) h += '<details style="margin:8px 0"><summary class="sub" style="cursor:pointer">More to improve</summary>';
+      h += '<div style="margin:10px 0"><b>' + NAME[c.k] + '</b><ol style="margin:4px 0 0 20px;padding:0">' + L.slice(0, i < 2 ? 3 : 2).map(function(x){ return '<li style="margin:5px 0">' + e(x) + '</li>'; }).join("") + '</ol></div>'; });
+    if (crit.length > 2) h += '</details>';
+    if (G.good && G.good.length) h += '<div style="margin-top:10px"><b>✅ You did well</b><ul style="margin:4px 0 0 20px;padding:0">' + G.good.map(function(x){ return '<li>' + e(x) + '</li>'; }).join("") + '</ul></div>';
+    if (G.fix && G.fix.length) h += '<div style="margin-top:10px"><b>🔧 Fix these</b><ul style="margin:4px 0 0 20px;padding:0">' + G.fix.map(function(f){ return '<li><span class="wbd">' + e(f.bad) + '</span> → <span class="wfx">' + e(f.fix) + '</span><small style="display:block">' + e(f.why) + '</small></li>'; }).join("") + '</ul></div>';
+    if (G.next) h += '<p style="margin-top:10px"><b>➡️ Next time:</b> ' + e(G.next) + '</p>';
+    return h + '</div>';
   }
   function gvP(ttl, emo, G){
     var esc = function(x){ return ESC0(wrSan(S.W.tr, x == null ? "" : x)); };
@@ -1303,6 +1332,7 @@ function NNTcoach(text, r, o){
 
   function wrPrior(a, prev){
     var Wd = S.W; if (a.W.empty || a.W.tooShort || a.W.junk) return "";
+    if (a.ai) return aiCoach(a, Wd.tr === "ml");
     return NNTcoach(a.text, a.W, {kind: "essay", ml: Wd.tr === "ml", FB: Wd.FB, ideas: Wd.ideas, esc: esc, prev: prev ? {text: prev.text, r: prev.W} : null});
   }
   function wrFeedback(){
