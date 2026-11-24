@@ -1088,10 +1088,10 @@
       [].forEach.call(g.children, function(b){ b.onclick = function(){ A[i] = +b.getAttribute("data-k"); [].forEach.call(g.children, function(x){ x.classList.toggle("sel", x === b); }); var n = Object.keys(A).length; el("rqs").disabled = n < 20; el("rqh").textContent = n < 20 ? (20 - n) + " left" : "Ready."; }; }); });
     el("rqs").onclick = function(){
       var sc = 0; Q.forEach(function(q, i){ if (q.opts[A[i]] === q.ans) sc++; });
-      var ok = sc >= 18;
-      page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · quiz result</h2>' + rdSteps(3) + '</div><div class="brk" style="padding-top:6px"><div class="rsc"><div class="ring" style="--c:' + (ok ? "#0c9c84" : "#d6395f") + ';--a:' + (sc * 5) + '%"><div><b style="font-size:46px;color:' + (ok ? "#0c9c84" : "#d6395f") + '">' + sc + '/20</b><small>need 18</small></div></div></div>'
-        + '<h1 class="bh" style="font-size:34px">' + (ok ? "Quiz passed! Now the whole reading test again." : "Not yet. Learn the words once more and try again.") + '</h1>'
-        + '<p class="sub">' + (ok ? 'Now answer ALL the questions again.' : "You need 18 out of 20. Study the list again, then take a new quiz.") + '</p>'
+      var ok = sc >= 18, vc = ok ? "#0c9c84" : "#2f6fed";
+      page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · word check</h2>' + rdSteps(3) + '</div><div class="brk" style="padding-top:6px"><div class="rsc"><div class="ring" style="--c:' + vc + ';--a:' + (sc * 5) + '%"><div><b style="font-size:46px;color:' + vc + '">' + sc + '/20</b><small>words known · need 18</small></div></div></div>'
+        + '<h1 class="bh" style="font-size:34px">' + (ok ? "Word check passed! Now the whole reading test again." : "Almost there. A little more practice with the words.") + '</h1>'
+        + '<p class="sub">' + (ok ? 'Now answer ALL the questions again.' : "Tip: read each word with its Uzbek meaning, say it aloud, then try to use it in a sentence. You need 18 out of 20; a new set of questions is waiting.") + '</p>'
         + '<div style="margin-top:22px"><button class="go" id="rnx">' + (ok ? "Start the full retake →" : "Study again →") + '</button></div></div>');
       wide(false); el("cb").onclick = hub;
       el("rnx").onclick = function(){ if (ok){ R_.t0 = Date.now(); R_.hl = true; R_.ans = {}; R_.step = "quiz"; rdTest(true); } else rdVocab(); };
