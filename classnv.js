@@ -1156,7 +1156,7 @@
       + '<div class="wrm"><b id="wcn">0 words</b><span id="wnd"></span><span id="wpr"></span></div></div></div>'
       + '<div class="rbar rbfix" style="max-width:none"><button class="go" id="wck" disabled>Check my writing</button><small id="whint"></small></div>');
     wide(true); wrTimer(); el("cb").onclick = function(){ if (S.bt) clearInterval(S.bt); wide(false); hub(); };
-    var ta = el("wtx"); ta.value = init || ""; ta.onpaste = function(e){ e.preventDefault(); }; ta.ondrop = function(e){ e.preventDefault(); }; ta.oncontextmenu = function(e){ e.preventDefault(); };
+    var ta = el("wtx"); ta.value = init || ""; ta.onpaste = function(e){ e.preventDefault(); }; ta.ondrop = function(e){ e.preventDefault(); }; ta.oncontextmenu = function(e){ e.preventDefault(); }; noPaste(ta);
     function upd(){
       var tx = ta.value, n = FB.words(tx), u = FB.used(tx); W.text = tx;
       el("wcn").textContent = n + " word" + (n === 1 ? "" : "s"); el("wnd").textContent = n >= NEED ? (W.tr === "ml" && n > 200 ? "a bit long · aim for 180–200" : "enough ✓") : (NEED - n) + " more words needed";
@@ -1320,6 +1320,18 @@ function NNTcoach(text, r, o){
     var Wd = S.W, a = Wd.att[Wd.att.length - 1]; Wd.mode = "rw";
     var P = Wd.P, need = wrNeed(Wd);
     wrEditor('<h1 class="rpt" style="font-size:30px">' + esc(P.title) + '</h1><div class="qgh"><span class="qi">📝</span><div><b>' + esc(P.q) + '</b><small>Your essay is on the right. Improve it, then press Check. You need <b>' + need.show + '</b> to finish.</small></div></div>', a.text);
+  }
+  /* nothing can be pasted, dropped or inserted in one go (also from a phone keyboard's clipboard bar): text must be typed */
+  function noPaste(ta){
+    var last = ta.value || "";
+    ta.addEventListener("focus", function(){ last = ta.value; });
+    ta.addEventListener("keydown", function(e){ if ((e.ctrlKey || e.metaKey) && (e.key === "v" || e.key === "V" || e.key === "Insert") || e.shiftKey && e.key === "Insert") e.preventDefault(); });
+    ta.addEventListener("beforeinput", function(e){ var t = e.inputType || ""; if (t === "insertFromPaste" || t === "insertFromDrop" || t === "insertFromYank" || t === "insertFromPasteAsQuotation") e.preventDefault(); });
+    ta.addEventListener("input", function(e){
+      var v = ta.value, d = v.length - last.length;
+      if (d > 40 && !e.isComposing){ ta.value = last; try { ta.dispatchEvent(new Event("nvpaste")); } catch (x) {} var m = document.getElementById("nvnp"); if (!m){ m = document.createElement("div"); m.id = "nvnp"; m.style.cssText = "margin:6px 0;color:#c0213f;font-weight:700;font-size:14px"; ta.parentNode.insertBefore(m, ta.nextSibling); } m.textContent = "Pasting is not allowed. Please type your own text."; setTimeout(function(){ if (m && m.parentNode) m.parentNode.removeChild(m); }, 5000); }
+      else last = v;
+    });
   }
   function writingDone(){ if (!floorOk("write", wrFeedback)) return; clearDrafts("write"); S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
 
@@ -1505,7 +1517,7 @@ function NNTcoach(text, r, o){
       + '<div class="dri">Write the whole sentence again, correctly.</div><textarea id="dra" class="wrta drta" spellcheck="false" autocomplete="off"></textarea>'
       + (it.fails ? '<div class="drx">' + drExp(it) + '</div>' : '')
       + '<div id="drm"></div><button class="go" id="drk">Check</button></div></div>');
-    wide(false); el("cb").onclick = hub; var ta = el("dra"); ta.onpaste = function(e){ e.preventDefault(); }; ta.ondrop = ta.onpaste; ta.focus();
+    wide(false); el("cb").onclick = hub; var ta = el("dra"); ta.onpaste = function(e){ e.preventDefault(); }; ta.ondrop = ta.onpaste; noPaste(ta); ta.focus();
     el("drk").onclick = function(){
       var v = ta.value.trim(); if (v.split(/\s+/).length < 3) return;
       if (drJudge(it, v)){ it.ok = true; drOk(it); }
