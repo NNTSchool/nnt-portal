@@ -1514,9 +1514,32 @@ function NNTcoach(text, r, o){
   }
 
   /* ---------- writing: mistake drill ---------- */
+  /* the optional drill built from the AI marker's own list of mistakes (same mistakes as the red marks in the essay) */
+  function drAiItems(a, seen, out){
+    var text = String(a.text || ""), fx = (a.ai && a.ai.fix) || [], sents = [], re = /[^.!?\n]+[.!?]*/g, m, by = {}, used = [];
+    while ((m = re.exec(text))) sents.push({s: m.index, e: m.index + m[0].length});
+    fx.forEach(function(f){
+      var i = f.bad ? text.indexOf(f.bad) : -1; if (i < 0 || !f.fix || drNorm(f.bad) === drNorm(String(f.fix).split(/\s*\/\s*/)[0])) return;
+      var e = i + f.bad.length; if (used.some(function(u){ return i < u[1] && e > u[0]; })) return; used.push([i, e]);
+      for (var j = 0; j < sents.length; j++) if (i >= sents[j].s && e <= sents[j].e){ (by[j] = by[j] || []).push({s: i, e: e, bad: f.bad.trim(), fix: String(f.fix).trim(), why: String(f.why || "")}); break; }
+    });
+    Object.keys(by).forEach(function(j){
+      var g = by[j].sort(function(x, y){ return x.s - y.s; }), sd = sents[j], base = text.slice(sd.s, sd.e), key = base.replace(/\s+/g, " ").trim().toLowerCase(); if (seen[key]) return; seen[key] = 1;
+      var o = base; g.slice().reverse().forEach(function(i){ o = o.slice(0, i.s - sd.s) + String(i.fix).split(/\s*\/\s*/)[0] + o.slice(i.e - sd.s); });
+      var good = o.replace(/\s+/g, " ").trim(), TY = /^(Grammar|Vocabulary|Spelling|Punctuation)\s*:\s*/i;
+      var all = g.map(function(i){ var mm = TY.exec(i.why); return {bad: i.bad, fix: i.fix, cat: mm ? mm[1] : "Mistake", why: i.why.replace(TY, ""), nd: false}; });
+      out.push({ai: true, sn: base.replace(/\s+/g, " ").trim(), bad: all[0].bad, fix: all[0].fix, good: good, combos: [drNorm(good)], cat: all[0].cat, why: all[0].why, fails: 0, ok: false, all: all, nm: all.length});
+    });
+  }
+  function drJudgeAi(it, ans){
+    var a = drNorm(ans), g = drNorm(it.good); if (a === g || (it.combos || []).indexOf(a) > -1) return true;
+    var extra = 0, ok = it.all.every(function(o){ var b = drNorm(o.bad), al = String(o.fix).split(/\s*\/\s*/); extra += al.length - 1; return al.some(function(x){ var f = drNorm(x); return f && a.indexOf(f) > -1 && (f.indexOf(b) > -1 || a.indexOf(b) < 0); }); });
+    return ok && Math.abs(a.split(" ").length - g.split(" ").length) <= 2 + 2 * extra;
+  }
   function drItems(){
     var W = S.W, seen = {}, out = [];
     W.att.forEach(function(a){
+      if (a.ai){ drAiItems(a, seen, out); return; }
       var text = String(a.text || ""), iss = (a.W && a.W.iss) || [], sents = [], re = /[^.!?\n]+[.!?]*/g, m, by = {};
       while ((m = re.exec(text))) sents.push({s: m.index, e: m.index + m[0].length});
       iss.forEach(function(i){ if (i.t !== "err") return; if (!i.alts || !i.alts.length){ var fx0 = String(i.fix || ""); if (!i.nd || !fx0 || fx0.charAt(0) === "(") return; i = {s: i.s, e: i.e, t: i.t, fix: fx0, why: i.why, nd: true, alts: fx0.split(/\s*\/\s*/).filter(Boolean)}; } else if (i.nd) return; for (var j = 0; j < sents.length; j++){ if (i.s >= sents[j].s && i.e <= sents[j].e){ (by[j] = by[j] || []).push(i); break; } } });
@@ -1546,6 +1569,7 @@ function NNTcoach(text, r, o){
     return !all.some(function(o){ return o.nd; }) && aw.length === gw.length;
   }
   function drJudge(it, ans){
+    if (it.ai) return drJudgeAi(it, ans);
     var a = drNorm(ans), g = drNorm(it.good);
     if (a === g || (it.combos || []).indexOf(a) > -1) return true;
     if (drFree(it, ans)) return true;
