@@ -3,16 +3,16 @@
   if (window.__nng) return; window.__nng = 1;
   function ok(t){ try { if (!t || !t.tagName) return false; var n = t.tagName; if (n === "INPUT") return /^(password|search|number|tel|email)$/i.test(t.type || ""); return !!(t.closest && t.closest("[data-pasteok]")); } catch (e) { return false; } }
   /* the teacher's own account may paste and copy (the server says who is the teacher; students never get this) */
-  function isT(){ return !!(window.__NNT_TEACHER || (window.__PORTAL__ && window.__PORTAL__.teacher)); }
-  function stop(e){ if (isT() || ok(e.target)) return; e.preventDefault(); e.stopPropagation(); if (e.stopImmediatePropagation) e.stopImmediatePropagation(); }
+  function isT(t){ return !!(t && /^(wtx|dra|wt|da)$/.test(t.id || "") && (window.__NNT_TEACHER || (window.__PORTAL__ && window.__PORTAL__.teacher))); }  /* only the writing boxes: class essay, class drill, home essay, home drill */
+  function stop(e){ if (isT(e.target) || ok(e.target)) return; e.preventDefault(); e.stopPropagation(); if (e.stopImmediatePropagation) e.stopImmediatePropagation(); }
   ["paste", "drop", "cut", "copy", "dragstart", "dragover"].forEach(function(ev){ document.addEventListener(ev, stop, true); });
-  document.addEventListener("beforeinput", function(e){ if (isT()) return; if (/insertFromPaste|insertFromDrop|insertFromYank|insertFromPasteAsQuotation|insertReplacementText|deleteByCut/.test(e.inputType || "")) stop(e); }, true);
-  document.addEventListener("keydown", function(e){ if (isT()) return; var k = (e.key || "").toLowerCase(); if (((e.ctrlKey || e.metaKey) && (k === "v" || k === "x" || k === "insert")) || (e.shiftKey && k === "insert")) stop(e); }, true);
-  document.addEventListener("contextmenu", function(e){ if (isT()) return; var t = e.target; if (t && (t.tagName === "TEXTAREA" || (t.tagName === "INPUT" && !ok(t)))) e.preventDefault(); }, true);
+  document.addEventListener("beforeinput", function(e){ if (isT(e.target)) return; if (/insertFromPaste|insertFromDrop|insertFromYank|insertFromPasteAsQuotation|insertReplacementText|deleteByCut/.test(e.inputType || "")) stop(e); }, true);
+  document.addEventListener("keydown", function(e){ if (isT(e.target)) return; var k = (e.key || "").toLowerCase(); if (((e.ctrlKey || e.metaKey) && (k === "v" || k === "x" || k === "insert")) || (e.shiftKey && k === "insert")) stop(e); }, true);
+  document.addEventListener("contextmenu", function(e){ if (isT(e.target)) return; var t = e.target; if (t && (t.tagName === "TEXTAREA" || (t.tagName === "INPUT" && !ok(t)))) e.preventDefault(); }, true);
   /* a keyboard that pastes by "typing": a big jump in one step is undone */
   var last = new WeakMap();
   document.addEventListener("beforeinput", function(e){ var t = e.target; if (t && (t.tagName === "TEXTAREA" || t.tagName === "INPUT")) last.set(t, t.value); }, true);
-  document.addEventListener("input", function(e){ var t = e.target; if (isT() || !e.isTrusted || !t || (t.tagName !== "TEXTAREA" && t.tagName !== "INPUT") || ok(t) || !last.has(t)) return;
+  document.addEventListener("input", function(e){ var t = e.target; if (isT(t) || !e.isTrusted || !t || (t.tagName !== "TEXTAREA" && t.tagName !== "INPUT") || ok(t) || !last.has(t)) return;
     var p = last.get(t), v = t.value; last.delete(t);
     if (v.length - p.length > 25 && !e.isComposing){ t.value = p; e.stopImmediatePropagation(); } }, true);
 })();
