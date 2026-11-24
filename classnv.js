@@ -1439,26 +1439,12 @@ function NNTcoach(text, r, o){
       /* the teacher moved this student on: show the best result reached so far, with the key, instead of the next step */
       if (st === "read" && S.R && S.R.D && S.R.first && S.R.unit !== -1){ if (S.R.skShown) return; S.R.skShown = 1;
         var f0 = S.R.first, l0 = S.R.last || f0, bst = l0.good.length >= f0.good.length ? l0 : f0; S.R.second = bst; S.R.skBest = true; try { rdAnswers(); return; } catch (e) { S.R.skShown = 0; S.R.skBest = false; } }
-      if (st === "write" && S.W && S.W.att && S.W.att.length){ if (S.W.skShown) return; S.W.skShown = 1; try { wrSkipKey(); return; } catch (e) { S.W.skShown = 0; } }
+      if (st === "write" && S.W && S.W.att && S.W.att.length){ var bw = 0; S.W.att.forEach(function(x){ if (x.sc > bw) bw = x.sc; }); flushLog("write", {ok: bw >= wrNeed(S.W).n, tries: S.W.att.length, sc: bw, skipped: true}); } /* writing: the student already saw the feedback, so the best mark is saved and they go straight on to the key */
       if (st === "lis" && S.L && S.P && S.P.exercises && S.P.exercises.length && S.P.exercises.every(function(e){ return S.L.a3 && S.L.a3[e.id]; })){ if (S.lSkip === u) return; S.lSkip = u; stopAudio(); try { l4Analysis(); return; } catch (e) { S.lSkip = 0; } }
       if (st === "write"){ S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
       else if (st === "read"){ S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
       else { S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
     }, function(){ S.skChk = 0; });
-  }
-  /* the teacher moved the student on from the writing: best mark so far, saved, plus the key (every marked sentence corrected) */
-  function wrSkipKey(){
-    var W = S.W, A = W.att, ml = W.tr === "ml", best = A[0]; A.forEach(function(x){ if (x.sc >= best.sc) best = x; });
-    var nd = wrNeed(W), crit = wrCrit(best.W, ml), items = []; try { items = drItems(best); } catch (e) {}
-    flushLog("write", {ok: best.sc >= nd.n, tries: A.length, sc: best.sc, skipped: true});
-    clearDrafts("write"); if (S.bt) clearInterval(S.bt);
-    var rows = items.map(function(it){ return '<div class="acard bd"><div><span class="yr">' + esc(it.sn) + '</span><span class="ky">' + esc(it.good) + '</span>' + drExp(it) + '</div></div>'; }).join("");
-    page(top("← Unit") + '<div class="rdh"><h2>✍️ Writing · your best result and the key</h2></div>'
-      + '<div class="wsc"><div class="wbg">' + (ml ? best.W.m75.total + '<small> / 75</small>' : best.W.total + '<small> / 9</small>') + '</div><div class="wcr">' + crit.map(function(c){ return '<span>' + c[0] + ' <b>' + c[1] + '</b> / ' + c[2] + '</span>'; }).join("") + '</div>'
-      + '<div class="sub" style="margin:8px 0 0">Best of ' + A.length + ' ' + (A.length > 1 ? "tries" : "try") + '. Your teacher moved you on, so here is the key to your writing.</div></div>'
-      + '<div style="max-width:900px;margin:14px auto 0"><h3 style="margin:0 0 6px">🔑 The key: your marked sentences, corrected</h3>' + (rows || '<p class="sub">No marked mistakes in your best essay.</p>') + '</div>'
-      + '<div style="text-align:center;margin:20px 0 30px"><button class="go" id="wskf">Finish the writing →</button></div>');
-    wide(false); el("cb").onclick = hub; el("wskf").onclick = function(){ writingDone(); };
   }
   function dKey(st){ return "nnt_clsdraft_" + ((O && O.name) || "") + "_" + S.unit + "_" + st; }
   function draftFields(){ var r = root(); return r ? [].slice.call(r.querySelectorAll("textarea, input[type=text], input:not([type])")).filter(function(f){ return !f.disabled && f.type !== "password" && f.type !== "hidden"; }) : []; }
