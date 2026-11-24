@@ -3,7 +3,7 @@
   if (window.__nng) return; window.__nng = 1;
   function ok(t){ try { if (!t || !t.tagName) return false; var n = t.tagName; if (n === "INPUT") return /^(password|search|number|tel|email)$/i.test(t.type || ""); return !!(t.closest && t.closest("[data-pasteok]")); } catch (e) { return false; } }
   /* the teacher's own account may paste and copy (the server says who is the teacher; students never get this) */
-  function isT(t){ return !!(t && /^(wtx|dra|wt|da)$/.test(t.id || "") && (window.__NNT_TEACHER || (window.__PORTAL__ && window.__PORTAL__.teacher))); }  /* only the writing boxes: class essay, class drill, home essay, home drill */
+  function isT(t){ return !!(t && /^(wtx|dra|wt|da)$/.test(t.id || "") && (window.__NNT_TEACHER || (window.__PORTAL__ && (window.__PORTAL__.teacher || window.__PORTAL__.paste)))); }  /* only the writing boxes: class essay, class drill, home essay, home drill */
   function stop(e){ if (isT(e.target) || ok(e.target)) return; e.preventDefault(); e.stopPropagation(); if (e.stopImmediatePropagation) e.stopImmediatePropagation(); }
   ["paste", "drop", "cut", "copy", "dragstart", "dragover"].forEach(function(ev){ document.addEventListener(ev, stop, true); });
   document.addEventListener("beforeinput", function(e){ if (isT(e.target)) return; if (/insertFromPaste|insertFromDrop|insertFromYank|insertFromPasteAsQuotation|insertReplacementText|deleteByCut/.test(e.inputType || "")) stop(e); }, true);

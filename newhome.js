@@ -723,7 +723,7 @@
       return fetchDecrypt(r.path, r.key).then(function(buf){
         var html = new TextDecoder("utf-8").decode(buf);
         return fetch("shim.js", {cache: "no-store"}).then(function(x){ return x.text(); }).then(function(shim){
-          var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, teacher: !!(S.teacher || S.testacct), name: r.name, mode: "write", track: r.track}) + ";";
+          var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, teacher: !!S.teacher, paste: !!(S.teacher || S.testacct), name: r.name, mode: "write", track: r.track}) + ";";
           var tag = "<script>" + cfg + "\n" + shim.replace(/<\/script/gi, "<\\/script") + "<\/script>";
           var m = html.match(/<head[^>]*>/i); html = m ? html.replace(m[0], m[0] + tag) : tag + html;
           document.open(); document.write(html); document.close();
