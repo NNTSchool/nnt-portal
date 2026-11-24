@@ -1194,13 +1194,27 @@
     [].forEach.call(document.querySelectorAll(".wown"), function(oi, k){ oi.oninput = function(){ W.own[k] = oi.value; }; });
   }
   /* the AI marker (server side). Any failure returns null and the standard checker's marks are used, so a student is never blocked */
+  /* the marker must never contradict its own earlier advice: a suggestion the student followed is not flagged again, and the original is not suggested back */
+  function aiHist(){ var h = []; ((S.W && S.W.att) || []).forEach(function(a){ ((a.ai && a.ai.fix) || []).forEach(function(f){ if (f && f.bad && f.fix) h.push({bad: String(f.bad), fix: String(f.fix)}); }); }); return h.slice(-40); }
+  function aiConsistent(list, text, hist){
+    var nm = function(x){ return String(x).toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim(); }, T = " " + nm(text) + " ";
+    return (list || []).filter(function(f){
+      var fb = nm(f.bad), ff = String(f.fix).split(/\s*\/\s*/).map(nm);
+      return !hist.some(function(h){
+        var hb = nm(h.bad), hf = String(h.fix).split(/\s*\/\s*/).map(nm);
+        var followed = hf.some(function(a){ return a && (a === fb || (a.length > 3 && (" " + a + " ").indexOf(" " + fb + " ") > -1 && T.indexOf(" " + a + " ") > -1)); });
+        var revert = ff.some(function(a){ return a && a === hb; }) && hf.indexOf(fb) > -1;
+        return followed || revert;
+      });
+    });
+  }
   function aiMark(){
     var P = window.PORTAL, Wd = S.W; if (!P || !O || !O.tok || !window.AbortController) return Promise.resolve(null);
     var prev = Wd.att.length ? Wd.att[Wd.att.length - 1] : null, ctl = new AbortController(), t = setTimeout(function(){ ctl.abort(); }, 60000);
     var sc = function(r){ return Wd.tr === "ml" ? {ta: r.m75.ta, cc: r.m75.cc, gr: r.m75.gr, lr: r.m75.lr, total: r.m75.total} : {ta: r.ta, cc: r.cc, gr: r.gr, lr: r.lr, total: r.total}; };
     return fetch(P.URL + "/functions/v1/essay-check", {method: "POST", signal: ctl.signal, headers: {"Content-Type": "application/json", "apikey": P.KEY},
-      body: JSON.stringify({tok: O.tok, u: S.unit, track: Wd.tr, topic: Wd.P.q, text: Wd.text, units: (Wd.FB.CHUNKS || []).map(function(c){ return c[0]; }), prev: prev ? {text: prev.text, scores: sc(prev.W)} : null})})
-      .then(function(r){ return r.json().then(function(j){ if (j) j._http = r.status; return j; }); }).then(function(j){ clearTimeout(t); if (j && j.ok) Wd.nextAt = j.nextWait ? Date.now() + j.nextWait * 1000 : 0; if (j && j.err === "wait"){ Wd.nextAt = Date.now() + (j.wait || 60) * 1000; return {wait: j.wait || 60}; } window.__aiErr = j && j.ok ? "" : j ? ("http " + j._http + " · " + (j.err || "?") + (j.status ? " " + j.status : "") + (j.detail ? " · " + j.detail : "")) : "empty reply"; return j && j.ok && j.scores && !j.junk ? j : null; }).catch(function(e){ clearTimeout(t); window.__aiErr = "network: " + (e && e.name === "AbortError" ? "timeout" : e && e.message || "failed"); return null; });
+      body: JSON.stringify({tok: O.tok, u: S.unit, track: Wd.tr, topic: Wd.P.q, text: Wd.text, units: (Wd.FB.CHUNKS || []).map(function(c){ return c[0]; }), prev: prev ? {text: prev.text, scores: sc(prev.W)} : null, hist: aiHist()})})
+      .then(function(r){ return r.json().then(function(j){ if (j) j._http = r.status; return j; }); }).then(function(j){ clearTimeout(t); if (j && j.ok) Wd.nextAt = j.nextWait ? Date.now() + j.nextWait * 1000 : 0; if (j && j.err === "wait"){ Wd.nextAt = Date.now() + (j.wait || 60) * 1000; return {wait: j.wait || 60}; } if (j && j.ok && j.fix) j.fix = aiConsistent(j.fix, Wd.text, aiHist()); window.__aiErr = j && j.ok ? "" : j ? ("http " + j._http + " · " + (j.err || "?") + (j.status ? " " + j.status : "") + (j.detail ? " · " + j.detail : "")) : "empty reply"; return j && j.ok && j.scores && !j.junk ? j : null; }).catch(function(e){ clearTimeout(t); window.__aiErr = "network: " + (e && e.name === "AbortError" ? "timeout" : e && e.message || "failed"); return null; });
   }
   function wrCheck(){
     var W = S.W; if (W.busy || (W.nextAt && W.nextAt > Date.now())) return;
