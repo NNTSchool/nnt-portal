@@ -98,7 +98,7 @@
       + '<div class="row"><span class="info">Speed:</span><button class="q" data-s="0.75" type="button">0.75×</button><button class="q on" data-s="1" type="button">1×</button><button class="q" data-s="1.25" type="button">1.25×</button><span class="info" style="margin-left:auto">Max speed 1.25×</span></div>'
       + '<div class="bar"><i id="nvbar" style="width:0%"></i></div><div class="info" id="nvinfo"></div>'
       + '<div class="info" id="nvstate" style="margin-top:6px"></div>'
-      + '<div class="ans" id="nvans"><b style="font-size:18px">✅ You reached the target!</b><div class="info" style="margin:4px 0 8px">Type the 3 secret words, in the order they appeared.</div><input id="nva1" placeholder="Word 1" autocomplete="off"><input id="nva2" placeholder="Word 2" autocomplete="off"><input id="nva3" placeholder="Word 3" autocomplete="off"><button class="go" id="nvsend" type="button">Check the words</button><div class="info" id="nvam" style="margin-top:8px"></div></div></div>'
+      + '<div class="ans" id="nvans"><b style="font-size:18px">✅ You reached the target!</b><div class="info" style="margin:4px 0 8px">Type at least 2 of the 3 secret words. Any order. The third box is optional.</div><input id="nva1" placeholder="Word" autocomplete="off"><input id="nva2" placeholder="Word" autocomplete="off"><input id="nva3" placeholder="Another word (optional)" autocomplete="off"><button class="go" id="nvsend" type="button">Check the words</button><div class="info" id="nvam" style="margin-top:8px"></div></div></div>'
       + '<div class="ov" id="nvov"><div><div style="font-size:60px">👀</div><h3 id="nvoh"></h3><p id="nvop"></p><button class="go" id="nvok" type="button">OK, continue</button></div></div>';
     document.body.appendChild(d);
     el("nvb").onclick = leave; zInit();
@@ -677,7 +677,7 @@
       if (tOK) b2 = '<b>Home test</b><small>Done · ' + Math.round(st.pct || 0) + '%</small>';
       else if (!all && !S.teacher) b2 = '<b>Home test</b><small>Opens after the videos · 91 questions, about 1 hour</small>';
       else if (!S.track) b2 = '<b>Choose your track</b><small>You choose once. Only your teacher can change it later.</small><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="go" id="nvtml" type="button">Multi-level</button><button class="go" id="nvtie" type="button">IELTS</button></div>';
-      else b2 = '<b>Home test</b><small>91 questions · about 1 hour · ' + tn + '. Listening needs headphones. Do it in one go.</small>' + (st.tries ? '<small style="color:#ffe27a;font-weight:700;margin-top:6px">Your last try: ' + Math.round(st.lastpct || 0) + '%. You need ' + Math.round(st.need || 70) + '% to pass. Watch the videos again (the button in step 1), then redo the test. The answers appear after you pass.</small>' : '') + (st.cancels ? '<small style="color:#ffe27a;font-weight:700;margin-top:6px">⚠ Your last try was cancelled (you left the test window 3 times). You must take the test again.</small>' : '') + '<button class="go" id="nvstarttest" type="button" style="' + cta + '">' + (st.tries ? "Redo the test" : "Start the home test") + '</button>';
+      else b2 = '<b>Home test</b><small>91 questions · about 1 hour · ' + tn + '. Listening needs headphones. Do it in one go.</small>' + (st.tries ? '<small style="color:#ffe27a;font-weight:700;margin-top:6px">Your last try: ' + Math.round(st.lastpct || 0) + '%. You need ' + Math.round(st.need || 70) + '% to pass. Watching the videos again is optional (the button in step 1). You can redo the test right now, as many times as you need. The answers appear after you pass.</small>' : '') + (st.cancels ? '<small style="color:#ffe27a;font-weight:700;margin-top:6px">⚠ Your last try was cancelled (you left the test window 3 times). You must take the test again.</small>' : '') + '<button class="go" id="nvstarttest" type="button" style="' + cta + '">' + (st.tries ? "Redo the test" : "Start the home test") + '</button>';
       h += node(k2, tOK ? (st.cancelled ? "✕" : "✓") : "2", b2);
       /* 3 writing */
       var k3 = wOK ? "done" : tOK ? "now" : "wait", b3;
@@ -788,7 +788,7 @@
     el("nvt").textContent = v.title; el("nvans").classList.remove("on"); el("nvwb").classList.remove("on"); el("nvov").classList.remove("on"); el("nvam").textContent = "";
     el("nvp").classList.add("on"); document.body.style.overflow = "hidden";
     paint(v.covered, v.target, v.wack || 0);
-    if (!v.covered && !v.wack) showOv("🔑 Before you start", "3 secret words will pop up on the screen while you watch, for about 20 seconds each. They come at different moments for every student. Remember or write them down. At the end you must type all 3 in order, or you watch the video again. Only real watching counts: do not pause for long, skip ahead or leave the screen.");
+    if (!v.covered && !v.wack) showOv("🔑 Before you start", "3 secret words will pop up on the screen while you watch, for about 20 seconds each. They come at different moments for every student. Remember or write them down. At the end you type at least 2 of them (any order). If you cannot, you can try again; after 5 wrong tries you watch the video again. Only real watching counts: do not pause for long, skip ahead or leave the screen.");
     loadYT(function(){
       el("nvyw").innerHTML = '<div id="nv_yt"></div>';
       S.pl = new YT.Player("nv_yt", {videoId: v.yt, host: "https://www.youtube-nocookie.com",
@@ -800,7 +800,7 @@
   function paint(cov, tgt, wack){
     el("nvbar").style.width = Math.min(100, cov / tgt * 100) + "%";
     el("nvinfo").textContent = "Watched " + fmt(Math.min(cov, tgt)) + " of " + fmt(tgt) + " needed (80% of the video)";
-    el("nvstate").textContent = "🔑 Secret words seen: " + wack + " of 3. Remember them. You will type them at the end.";
+    el("nvstate").textContent = "🔑 Secret words seen: " + wack + " of 3. Remember them. You will type at least 2 at the end.";
   }
   function state(){
     var pl = S.pl; if (!pl || !pl.getPlayerState) return "pause";
@@ -821,6 +821,7 @@
       if (!r || !r.ok){ if (r && r.err){ try{ S.pl.pauseVideo(); }catch(e){} if (r.err !== "unpaid") showOv("Cannot continue", "This video is not available right now. Go back and try again."); } return; }
       if (r.done){ finish(); return; }
       S.mack = null; paint(r.covered, r.target, r.wack);
+      try{ var nt = el("nvnote"); if (!nt){ nt = document.createElement("div"); nt.id = "nvnote"; nt.className = "info"; nt.style.cssText = "margin-top:6px;color:#ffd27a;font-weight:700"; el("nvstate").parentNode.insertBefore(nt, el("nvstate")); } nt.textContent = st === "muted" ? "🔇 The sound is off, so this time is NOT counted. Turn the sound on." : st === "hidden" ? "👀 Come back to this page: time on other tabs is NOT counted." : st === "pause" ? "⏸ Paused: time is not counted." : ""; }catch(e){}
       if (r.word && r.word.n > S.ack){ S.ack = r.word.n; showWord(r.word); }
       if (r.msg){ S.mack = r.msg.id; showOv("Message from your teacher", r.msg.body); }
       if (r.ready){ var an = el("nvans"); if (!an.classList.contains("on")){ an.classList.add("on"); try{ an.scrollIntoView({behavior:"smooth",block:"end"}); }catch(e){} } }
@@ -834,12 +835,13 @@
     clearTimeout(S.wordT); S.wordT = setTimeout(function(){ el("nvwb").classList.remove("on"); }, 20000);
   }
   function sendWords(){
-    var a = [el("nva1").value, el("nva2").value, el("nva3").value]; if (!a[0].trim() || !a[1].trim() || !a[2].trim()){ el("nvam").textContent = "Type all 3 words."; return; }
+    var a = [el("nva1").value, el("nva2").value, el("nva3").value]; if (a.filter(function(x){ return x.trim(); }).length < 2){ el("nvam").textContent = "Type at least 2 of the 3 words."; return; }
     el("nvsend").disabled = true;
     rpc("nv_answer", {tok: tok(), u: S.unit, i: S.cur.idx, a: a}).then(function(r){
       el("nvsend").disabled = false;
       if (r && r.ok){ finish(); return; }
-      if (r && r.err === "redo"){ try{ S.pl.pauseVideo(); }catch(e){} stopPlayer(); showOv("Not correct", "At least one word was wrong, so you need to watch this video again from the start. New secret words will appear."); el("nvok").onclick = function(){ el("nvov").classList.remove("on"); el("nvok").onclick = function(){ el("nvov").classList.remove("on"); }; leave(); }; return; }
+      if (r && r.err === "wrong"){ el("nvam").innerHTML = "❌ Incorrect code. Try again. Tries left: <b>" + r.left + "</b>."; return; }
+      if (r && r.err === "redo"){ try{ S.pl.pauseVideo(); }catch(e){} stopPlayer(); showOv("Not correct", "You used all 5 tries, so you need to watch this video again from the start. New secret words will appear."); el("nvok").onclick = function(){ el("nvov").classList.remove("on"); el("nvok").onclick = function(){ el("nvov").classList.remove("on"); }; leave(); }; return; }
       el("nvam").textContent = "Not ready yet. Keep watching.";
     }).catch(function(){ el("nvsend").disabled = false; el("nvam").textContent = "No internet. Try again."; });
   }
