@@ -231,7 +231,7 @@
   + '#cnv .l4how .rc,#cnv .l4sm .rc{animation:none}#cnv .l4how .rc small,#cnv .l4sm .rc small{color:#3d5a78!important;font-size:14.5px!important}#cnv .l4how .rc b,#cnv .l4sm .rc b{color:#10204a!important;font-size:19px}#cnv .l4gr.hd b{color:#fff}#cnv .l4sm .rc.g i{color:#0c9c84}#cnv .l4sm .rc.b i{color:#d6395f}#cnv .l4how .rc .rn,#cnv .l4sm .rc .rn{background:#3e63d8;color:#fff}@media(max-width:1100px){#cnv .l4two,#cnv .l4two.rv{grid-template-columns:1fr}}';
   function css(){ if (el("cnvcss")) return; var s = document.createElement("style"); s.id = "cnvcss"; s.textContent = CSS; document.head.appendChild(s); }
   function root(){ var r = el("cnv"); if (!r){ r = document.createElement("div"); r.id = "cnv"; document.body.appendChild(r); } return r; }
-  function page(h){ S.pgn = (S.pgn || 0) + 1; try{ document.body.classList.toggle("nvfocus", h.indexOf('id="cnbody"') < 0 && h.indexOf('class="hm"') < 0); }catch(e){} stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + h + '</div>'; root().scrollTop = 0; try { hideExit(); } catch (e) {} try { restoreDraft(); } catch (e) {} }
+  function page(h){ S.pgn = (S.pgn || 0) + 1; try{ document.body.classList.toggle("nvfocus", h.indexOf('id="cnbody"') < 0 && h.indexOf('class="hm"') < 0); }catch(e){} stopAudio(); if (S.bt){ clearInterval(S.bt); S.bt = null; } root().innerHTML = '<div class="bg"></div><div class="w">' + floorBanner() + h + '</div>'; root().scrollTop = 0; try { hideExit(); } catch (e) {} try { restoreDraft(); } catch (e) {} }
   function hideExit(){ var b = el("cb"); if (!b || !S.cur || ["lis", "read", "write"].indexOf(S.cur) < 0 || O.nofloor || root().querySelector(".card.warn")) return; b.style.display = "none"; }
   function top(back){ return '<div class="tb"><button class="pill" id="cb">' + (back || "← Back") + '</button><div class="sp"></div><b>NNT · Classroom</b></div>'; }
   function stopAudio(){ S.stopN = (S.stopN || 0) + 1; if (A){ try{ A.pause(); }catch(e){} A = null; } }
@@ -372,7 +372,7 @@
   }
   fsWatch(); draftWatch();
   function leaveFS(){ if (document.fullscreenElement || document.webkitFullscreenElement){ try { (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) {} } }
-  function hub(){ S.cur = null; leaveFS(); statusSync(); if (S.upd) setTimeout(updNow, 400);
+  function hub(){ S.cur = null; S.fbn = null; leaveFS(); statusSync(); if (S.upd) setTimeout(updNow, 400);
     function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
     function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
     page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Unit ' + S.unit + '</h2><p class="sub">Your path today: three drillings, with a break between them</p></div>'
@@ -591,7 +591,7 @@
       + (S.fix.length && need80 ? '<div class="card warn" style="margin:14px 0 4px;text-align:center"><b>You need 80% to move on.</b> You are at ' + pct + '%. The dictation counts 15% of the score and each dictation passage needs 90% word accuracy to be won back. The fix rounds repeat until you get there.</div><button class="go fixgo" id="cfix">🛠 Start the fix round: ' + miss + ' item' + (miss > 1 ? "s" : "") + ' to win back →</button>' : S.fix.length ? '<button class="go fixgo" id="cfix" style="font-size:19px">🏆 Reach 100%: win back the last ' + miss + ' item' + (miss > 1 ? "s" : "") + ' →</button><button class="pill" id="cdone" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button><p class="sub" style="text-align:center;margin:8px 0 0">You passed with ' + pct + '%. The 100% round is your choice: perfect scores are what the best students bring home.</p>' : '<button class="go" id="cdone" style="margin-top:6px">Continue →</button>'));
     el("cb").onclick = hub;
     if (el("cfix")) el("cfix").onclick = function(){ S.fi = 0; S.fres = {}; S.fixRound = (S.fixRound || 0) + 1; saveProg(); flushLog("lis", {first: S.firstPct, fr: S.fixRound, now: pct}); fixEx(); };   /* every fix round has its own single play */
-    if (el("cdone")) el("cdone").onclick = listeningDone;
+    if (el("cdone")) el("cdone").onclick = function(){ listeningDone(summary); };
   }
   function fixEx(){
     if (S.fi >= S.fix.length){ S.inFix = false; S.P.exercises.forEach(function(e){ var f = S.fres && S.fres[e.id]; if (f && f.ks && S.res[e.id]){ if (e.long && f.txt){ S.res[e.id].txt = S.res[e.id].txt || {}; Object.keys(f.txt).forEach(function(k){ S.res[e.id].txt[k] = f.txt[k]; }); if (f.pa){ S.res[e.id].pa = S.res[e.id].pa || {}; Object.keys(f.pa).forEach(function(k){ S.res[e.id].pa[k] = Math.max(S.res[e.id].pa[k] || 0, f.pa[k]); }); } } S.res[e.id].good += f.ks.length; S.res[e.id].miss = S.res[e.id].miss.filter(function(k){ return f.ks.indexOf(k) < 0; }); } }); S.fres = {}; saveProg(); return summary(); }
@@ -790,7 +790,7 @@
     el("cb").onclick = function(){ stopAudio(); hub(); };
     var tok = S.pgn, pl = el("l4pl"), B = null;
     pl.onclick = function(){ if (B){ if (B.paused){ B.play(); pl.textContent = "❚❚ Pause"; } else { B.pause(); pl.textContent = "▶ Continue"; } return; } pl.textContent = "Loading…"; var sn = S.stopN; audioUrl(ex).then(function(u){ if (tok !== S.pgn || sn !== S.stopN) return; B = new Audio(u); B.controls = false; B.onended = function(){ B = null; pl.textContent = "▶ Listen again"; }; A = B; B.play(); pl.textContent = "❚❚ Pause"; }); };
-    el("l4nx").onclick = function(){ stopAudio(); if (!last){ L.ri++; l4Review(); } else if (S.fix.length){ l4Drill(); } else listeningDone(); }; if (el("l4fin")) el("l4fin").onclick = function(){ stopAudio(); listeningDone(); };
+    el("l4nx").onclick = function(){ stopAudio(); if (!last){ L.ri++; l4Review(); } else if (S.fix.length){ l4Drill(); } else listeningDone(l4Review); }; if (el("l4fin")) el("l4fin").onclick = function(){ stopAudio(); listeningDone(l4Review); };
   }
   /* win the mistakes back: re-answer each missed question after seeing the sentence, until all are right */
   var L4MIN = 90;
@@ -834,8 +834,8 @@
   /* end of a round: one full review of what is still wrong, with the sentence from the script */
   function l4RoundEnd(){
     var L = S.L, won = L.pr.filter(function(r){ return r.ok; }), lost = L.pr.filter(function(r){ return !r.ok; });
-    L.dfix = (L.dfix || 0) + won.length;
-    L.dq = L.dq.filter(function(it){ return !won.some(function(r){ return r.it === it; }); });
+    if (L.re !== L.pr){ L.re = L.pr; L.dfix = (L.dfix || 0) + won.length;
+      L.dq = L.dq.filter(function(it){ return !won.some(function(r){ return r.it === it; }); }); }
     var pct = Math.round(l4Run() * 100), t = tier(pct), left = L.dq.length, ok = pct >= L4MIN, rnd = L.rounds || 1;
     flushLog("lis", {first: L.first, fr: rnd, dtry: L.tries || 0, now: pct});
     var h = lost.map(function(r){ var w = r.it.w;
@@ -849,12 +849,12 @@
       + (!left ? '<button class="go" id="l4nx" style="margin-top:14px">Continue →</button>' : '<button class="go fixgo" id="l4mo" style="margin-top:14px;font-size:19px">' + (ok ? '🏆 Reach 100%: win the last ' + left + ' back →' : '🛠 Next round: win back the ' + left + ' left →') + '</button>' + (ok ? '<button class="pill" id="l4fin" style="margin-top:10px;width:100%;padding:14px">Continue to the reading part →</button>' : '')));
     el("cb").onclick = hub;
     if (el("l4mo")) el("l4mo").onclick = function(){ L.rounds = rnd + 1; l4Pass(); };
-    if (el("l4fin")) el("l4fin").onclick = listeningDone;
+    if (el("l4fin")) el("l4fin").onclick = function(){ listeningDone(l4RoundEnd); };
     if (el("l4nx")) el("l4nx").onclick = l4DrillEnd;
   }
   function l4DrillEnd(){
     page(top("Exit") + '<div class="brk"><div class="bk good"><div class="be">🏆</div><h1 class="bh">100%! Perfect!</h1><p class="sub">You fixed every mistake from the exam. That is exactly how listening scores go up.</p></div><button class="go" id="l4nx" style="margin-top:20px">Finish the listening →</button></div>');
-    el("cb").onclick = hub; el("l4nx").onclick = listeningDone;
+    el("cb").onclick = hub; el("l4nx").onclick = function(){ listeningDone(l4DrillEnd); };
   }
   var BRK = 600;
   function mmss(t){ t = Math.max(0, Math.floor(t)); return ("0" + Math.floor(t / 60)).slice(-2) + ":" + ("0" + t % 60).slice(-2); }
@@ -1362,15 +1362,16 @@ function NNTcoach(text, r, o){
   function stDone(st){ var m = st === "lis" ? S.lisDone : st === "read" ? S.rdDone : S.wrDone; return !!(m && m[S.unit]); }
   /* the teacher can let a student through a stage from the dashboard: the server then shows that stage as done, and the open stage ends as if the student had finished it */
   function skipWatch(){
-    if (document.visibilityState !== "visible" || !O.tok || S.skChk) return; var st = S.cur, u = S.unit;
-    if (st !== "lis" && st !== "read" && st !== "write") return; if (stDone(st)) return; S.skChk = true;
-    Promise.resolve(R("nv_class_status", {tok: O.tok, u: u})).then(function(r){ S.skChk = false; var x = r && r.ok && r[st];
+    if (document.visibilityState !== "visible" || !O.tok) return; if (S.skChk && Date.now() - S.skChk < 12000) return; var st = S.cur, u = S.unit;
+    if (st !== "lis" && st !== "read" && st !== "write") return; if (stDone(st)) return; S.skChk = Date.now();
+    Promise.resolve(R("nv_class_status", {tok: O.tok, u: u})).then(function(r){ S.skChk = 0; var x = r && r.ok && r[st];
       if (!x || !x.done || S.cur !== st || S.unit !== u || stDone(st)) return;
       clearDrafts(st);
+      if (st === "read" && S.R && S.R.D && S.R.first && S.R.unit !== -1){ if (S.R.skShown) return; S.R.skShown = 1; S.R.second = S.R.second || {good: [], ans: {}}; try { rdAnswers(); return; } catch (e) { S.R.skShown = 0; } }
       if (st === "write"){ S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
       else if (st === "read"){ S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
       else { S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
-    }, function(){ S.skChk = false; });
+    }, function(){ S.skChk = 0; });
   }
   function dKey(st){ return "nnt_clsdraft_" + ((O && O.name) || "") + "_" + S.unit + "_" + st; }
   function draftFields(){ var r = root(); return r ? [].slice.call(r.querySelectorAll("textarea, input[type=text], input:not([type])")).filter(function(f){ return !f.disabled && f.type !== "password" && f.type !== "hidden"; }) : []; }
@@ -1435,14 +1436,19 @@ function NNTcoach(text, r, o){
   }
   function stageSecs(st){ var k = S.unit + ":" + st; return Math.max(S.tm[k] || 0, S.srv[k] || 0); }
   /* true = may finish. Otherwise shows the "keep going" screen */
+  /* minutes still missing before a stage may be finished (shown the same way as on the "Not so fast" screen) */
+  function floorLeft(st){ var have = stageSecs(st), need = FLOOR[st]; if (have >= need) return 0; var k = SHOWF[st] ? SHOWF[st] / need : 1; return Math.ceil((need - have) * k / 60); }
+  function floorBanner(){ try { var b = S.fbn; if (!b || O.nofloor || S.unit !== b.unit) return ""; var l = floorLeft(b.st); if (!l){ S.fbn = null; return ""; }
+    return '<div class="card warn" style="margin:0 0 10px;text-align:center;border-radius:12px;padding:10px 12px">⏳ <b>' + l + ' more minute' + (l > 1 ? "s" : "") + '</b> of real ' + SNAME[b.st] + ' work before you can finish. Use the time to improve your answers.</div>'; } catch (e) { return ""; } }
   function floorOk(st, back){
     flushLog(st);
     if (O.nofloor) return true;
     var have = stageSecs(st), need = FLOOR[st];
     if (have >= need) return true;
+    S.fbn = {st: st, unit: S.unit};
     var k = SHOWF[st] ? SHOWF[st] / need : 1, left = Math.ceil((need - have) * k / 60), shown = Math.min(have * k, (SHOWF[st] || need) - 60);
     page(top() + '<div class="brk"><div class="bk"><div class="be">⏳</div><h1 class="bh">Not so fast!</h1><p class="sub">Your ' + SNAME[st] + ' needs at least ' + Math.round((SHOWF[st] || need) / 60) + ' minutes of real work. You have done ' + Math.floor(shown / 60) + '. Use the next ' + left + ' minute' + (left > 1 ? "s" : "") + ' to go back over your mistakes and do it better.</p></div><button class="go" id="fkb" style="margin-top:20px">Go back and keep working →</button></div>');
-    el("cb").onclick = hub; el("fkb").onclick = back || hub; return false;
+    el("cb").onclick = hub; el("fkb").onclick = function(){ if (back){ try { back(); return; } catch (e) {} } hub(); }; return false;
   }
 
   /* ---------- writing: mistake drill ---------- */
@@ -1526,7 +1532,7 @@ function NNTcoach(text, r, o){
     if (S.dict) return lisPct();
     return Math.round(100 * l4Run());
   } catch (e) { return 0; } }
-  function listeningDone(){ if (!floorOk("lis")) return; clearDrafts("lis"); flushLog("lis", {done: true, acc: lisAcc(), prog: null, prog4: null, draft: null}); S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
+  function listeningDone(back){ if (!floorOk("lis", back)) return; clearDrafts("lis"); flushLog("lis", {done: true, acc: lisAcc(), prog: null, prog4: null, draft: null}); S.lisDone = S.lisDone || {}; S.lisDone[S.unit] = true; S.nextKind = "lis"; stageBreak("LISTENING DONE ✔", nextStage); }
   function readingDone(){ if (!floorOk("read")) return; clearDrafts("read"); flushLog("read", {done: true, acc: 100, draft: null}); S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
   /* ---------- automatic update: a new version is installed when the current step is finished ---------- */
   var MYV = (function(){ try { var ss = document.getElementsByTagName("script"); for (var i = 0; i < ss.length; i++){ var m = /classnv\.js\?v=(\d+)/.exec(ss[i].getAttribute("src") || ""); if (m) return +m[1]; } } catch (e) {} return 0; })();
@@ -1551,7 +1557,7 @@ function NNTcoach(text, r, o){
     }).catch(function(){});
   }
   function updStart(){ if (S.updT) return; return; }
-  function stageBreak(label, onNext){ S.cur = null;
+  function stageBreak(label, onNext){ S.cur = null; S.fbn = null;
     var t0 = Date.now(), C = 2 * Math.PI * 130;
     page('<div class="brk"><small class="wu">' + label + '</small><h1 class="bh">Break time!</h1><p class="sub" id="bsub">Great focus. Recharge for ten minutes. We will keep the clock for you.</p>'
       + '<div class="bring" id="bring"><svg viewBox="0 0 300 300"><defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5df2d6"/><stop offset="1" stop-color="#c58bff"/></linearGradient></defs><circle cx="150" cy="150" r="130" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="16"/><circle id="barc" cx="150" cy="150" r="130" fill="none" stroke="url(#bg1)" stroke-width="16" stroke-linecap="round" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="0" transform="rotate(-90 150 150)"/></svg>'
