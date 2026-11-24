@@ -307,6 +307,11 @@
       var c = document.querySelector(".nd.cur") || document.querySelector(".nd"); if (c && c.scrollIntoView) c.scrollIntoView({block: "center"});
     }).catch(function(){ el("cnsub").textContent = "No internet connection. Please try again."; });
   }
+  /* the teacher account may paste and copy: the server says who is the teacher (hidden, non-test account); students never get this */
+  function teacherFlag(){
+    if (window.__NNT_TEACHER) return Promise.resolve(true);
+    try { return Promise.resolve(R("nv_class_check", {tok: O.tok, u: S.unit || 1})).then(function(r){ if (r && r.ok && r.teacher) window.__NNT_TEACHER = true; return !!window.__NNT_TEACHER; }, function(){ return false; }); } catch (e) { return Promise.resolve(false); }
+  }
   function keyCheck(){
     page(top() + '<div class="hero"><h2>Checking your key…</h2></div>'); el("cb").onclick = path;
     R("nv_class_check", {tok: O.tok, u: S.unit}).then(function(r){
@@ -1130,7 +1135,7 @@
   function wrSan(tr, x){ return tr === "ml" ? String(x).replace(/band\s*\d+(\.\d)?\+?/ig, "the top mark").replace(/\bband\b/ig, "mark") : x; }
   function startWriting(){ if (!opn("write")) return hub(); S.cur = "write";
     page(top() + '<div class="hero"><h2>Loading the writing…</h2></div>'); el("cb").onclick = hub;
-    Promise.all([wrLoad(), wrTrack(), syncP()]).then(function(r){
+    Promise.all([wrLoad(), wrTrack(), syncP(), teacherFlag()]).then(function(r){
       var FB = r[0], tr = r[1], P = FB.ESSAY[tr];
       S.W = {need: tr === "ml" ? 180 : 250, FB: FB, P: P, tr: tr, ideas: [-1, -1], own: ["", ""], text: "", att: [], t0: Date.now(), mins: tr === "ml" ? 30 : 40};
       var dw = loadDraft("write"); if (dw && dw.x && Date.now() - (dw.at || 0) < 12 * 3600 * 1000){ if (dw.x.t0) S.W.t0 = dw.x.t0; if (dw.x.ideas) S.W.ideas = dw.x.ideas; if (dw.x.own) S.W.own = dw.x.own; if (dw.x.text) S.W.text = dw.x.text; }
@@ -1154,7 +1159,7 @@
   function wrEditor(leftHtml, init){
     var W = S.W, FB = W.FB, NEED = W.need;
     page(top("← Unit") + '<div class="rdh"><h2>✍️ Writing · Unit ' + S.unit + ' · ' + esc(W.P.title) + '</h2>' + wrSteps() + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
-      + '<div class="rsp"><div class="rpn hlz" id="rdp">' + leftHtml + '</div><div class="rpn q" id="rdq"><div class="wrh">Your answer · ' + (W.tr === "ml" ? "180–200 words" : "at least " + NEED + " words") + '</div>'
+      + '<div class="rsp"><div class="rpn hlz" id="rdp">' + leftHtml + '</div><div class="rpn q" id="rdq"><div class="wrh">Your answer' + (window.__NNT_TEACHER ? ' 👑 paste on' : '') + ' · ' + (W.tr === "ml" ? "180–200 words" : "at least " + NEED + " words") + '</div>'
       + '<textarea id="wtx" class="wrta" spellcheck="false" autocomplete="off" placeholder="Start writing here…"></textarea>'
       + '<div class="wrm"><b id="wcn">0 words</b><span id="wnd"></span><span id="wpr"></span></div></div></div>'
       + '<div class="rbar rbfix" style="max-width:none"><button class="go" id="wck" disabled>Check my writing</button><small id="whint"></small></div>');
@@ -1652,7 +1657,7 @@ function NNTcoach(text, r, o){
   }
 
   window.CNV = {
-    open: function(o){ O = o; R = o.rpc; css(); hlWire(); trk(); updStart(); home(); },
+    open: function(o){ O = o; R = o.rpc; css(); hlWire(); trk(); updStart(); home(); teacherFlag(); },
     _unitDone: function(){ unitDone(); }
   };
 })();
