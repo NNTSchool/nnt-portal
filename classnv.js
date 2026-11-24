@@ -1388,7 +1388,7 @@ function NNTcoach(text, r, o){
       else last = v;
     });
   }
-  function writingDone(){ if (!floorOk("write", wrFeedback)) return; clearDrafts("write"); S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
+  function writingDone(){ if (S.W && !wrCanFinish()) return wrFeedback(); if (!floorOk("write", wrFeedback)) return; clearDrafts("write"); S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
 
   /* ---------- supervision: active time per stage, minimum floors ---------- */
   var FLOOR = {lis: 1800, read: 0, write: 1200}, SHOWF = {}, SNAME = {lis: "listening", read: "reading", write: "writing"};
@@ -1614,8 +1614,8 @@ function NNTcoach(text, r, o){
   function drFinish(){
     var D = S.W.dr, n = D ? D.q.length : 0, fails = D ? D.q.reduce(function(a, x){ return a + x.fails; }, 0) : 0;
     flushLog("write", {ok: true, tries: S.W.att.length, sc: S.W.att[S.W.att.length - 1].sc, drill: n, fails: fails});
-    page(top() + '<div class="brk"><div class="bk good"><div class="be">🏅</div><h1 class="bh">' + (n ? "All mistakes mastered!" : "No mistakes to drill!") + '</h1><p class="sub">' + (n ? "You corrected " + n + " of your own sentence" + (n > 1 ? "s" : "") + "." : "Your writing had no marked mistakes. Great work.") + '</p></div><button class="go" id="drd" style="margin-top:20px">Finish writing →</button></div>');
-    el("cb").onclick = hub; el("drd").onclick = function(){ S.W.drDone = true; writingDone(); };
+    page(top() + '<div class="brk"><div class="bk good"><div class="be">🏅</div><h1 class="bh">' + (n ? "All mistakes mastered!" : "No mistakes to drill!") + '</h1><p class="sub">' + (n ? "You corrected " + n + " of your own sentence" + (n > 1 ? "s" : "") + "." : "Your writing had no marked mistakes. Great work.") + '</p></div>' + (wrCanFinish() ? '' : '<p class="sub" style="margin-top:14px">Well done. To finish writing you still need ' + wrNeed(S.W).show + ' in your essay. Use what you just practised in your next rewrite.</p>') + '<button class="go" id="drd" style="margin-top:20px">' + (wrCanFinish() ? "Finish writing →" : "Back to my feedback →") + '</button></div>');
+    el("cb").onclick = hub; el("drd").onclick = function(){ if (!wrCanFinish()){ wrFeedback(); return; } S.W.drDone = true; writingDone(); };
   }
   /* one break screen for every stage: listening, reading, writing... */
   /* accuracy the student has reached in this listening, sent to the server with "done" */
