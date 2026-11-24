@@ -1170,7 +1170,7 @@
       el("wcn").textContent = n + " word" + (n === 1 ? "" : "s"); el("wnd").textContent = n >= NEED ? (W.tr === "ml" && n > 200 ? "a bit long · aim for 180–200" : "enough ✓") : (NEED - n) + " more words needed";
       var pw = tx.split(/\n+/).map(function(x){ return FB.words(x); }).filter(function(x){ return x > 0; }); el("wpr").textContent = pw.length ? "paragraphs: " + pw.join(" + ") : "";
       var wl = W.nextAt ? Math.ceil((W.nextAt - Date.now()) / 1000) : 0;
-      el("wck").disabled = (n < NEED && !O.nofloor) || wl > 0 || !!W.busy; el("whint").textContent = wl > 0 ? "⏳ The next AI check opens in " + mmss(wl) + ". Use this time to apply the feedback." : n < NEED ? "The check unlocks at " + NEED + " words." : "Ready. You can keep improving it before you check.";
+      el("wck").disabled = (n < NEED && !O.nofloor) || wl > 0 || !!W.busy; el("whint").textContent = wl > 0 ? "⏳ The next check opens in " + mmss(wl) + ". Use this time to apply the feedback." : n < NEED ? "The check unlocks at " + NEED + " words." : "Ready. You can keep improving it before you check.";
       [].forEach.call(document.querySelectorAll(".wch span"), function(c){ c.classList.toggle("on", u.indexOf(c.getAttribute("data-c")) > -1); });
     }
     ta.oninput = upd; W.upd = upd; upd(); ta.focus();
@@ -1216,7 +1216,7 @@
   function aiCoach(a, ml){
     var G = a.ai, W = a.W, e = function(x){ return esc(wrSan(S.W.tr, x)); };
     var crit = wrCrit(W, ml).map(function(c){ return {k: c[0], r: c[1] / c[2]}; }).sort(function(x, y){ return x.r - y.r; });
-    var NAME = {TA: "Answering the question", CC: "Organisation", GR: "Grammar", LR: "Vocabulary"}, h = '<div class="wsec" style="padding:14px 16px"><h3>🎯 What to do to raise your mark</h3><p class="sub" style="margin:2px 0 6px">Start with the first item: it is what is holding your mark down.</p>' + (S.W && S.W.nextAt && S.W.nextAt > Date.now() ? '<p class="sub" style="margin:2px 0 8px"><b>⏳ Do the whole list in one go.</b> The next AI check opens in a few minutes, so apply everything below first.</p>' : "");
+    var NAME = {TA: "Answering the question", CC: "Organisation", GR: "Grammar", LR: "Vocabulary"}, h = '<div class="wsec" style="padding:14px 16px"><h3>🎯 What to do to raise your mark</h3><p class="sub" style="margin:2px 0 6px">Start with the first item: it is what is holding your mark down.</p>' + (S.W && S.W.nextAt && S.W.nextAt > Date.now() ? '<p class="sub" style="margin:2px 0 8px"><b>⏳ Do the whole list in one go.</b> The next check opens in a few minutes, so apply everything below first.</p>' : "");
     crit.forEach(function(c, i){ var L = (G.coach && G.coach[c.k]) || []; if (!L.length) return; if (i === 2) h += '<details style="margin:8px 0"><summary class="sub" style="cursor:pointer">More to improve</summary>';
       h += '<div style="margin:10px 0"><b>' + NAME[c.k] + '</b><ol style="margin:4px 0 0 20px;padding:0">' + L.slice(0, i < 2 ? 4 : 3).map(function(x){ return '<li style="margin:5px 0">' + e(x) + '</li>'; }).join("") + '</ol></div>'; });
     if (crit.length > 2) h += '</details>';
