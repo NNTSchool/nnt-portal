@@ -1453,7 +1453,7 @@ function NNTcoach(text, r, o){
       /* the teacher moved this student on: show the best result reached so far, with the key, instead of the next step */
       if (st === "read" && S.R && S.R.D && S.R.first && S.R.unit !== -1){ if (S.R.skShown) return; S.R.skShown = 1;
         var f0 = S.R.first, l0 = S.R.last || f0, bst = l0.good.length >= f0.good.length ? l0 : f0; S.R.second = bst; S.R.skBest = true; try { rdAnswers(); return; } catch (e) { S.R.skShown = 0; S.R.skBest = false; } }
-      if (st === "write" && S.W && S.W.att && S.W.att.length){ var bw = 0; S.W.att.forEach(function(x){ if (x.sc > bw) bw = x.sc; }); flushLog("write", {ok: bw >= wrNeed(S.W).n, tries: S.W.att.length, sc: bw, skipped: true}); } /* writing: the student already saw the feedback, so the best mark is saved and they go straight on to the key */
+      if (st === "write" && S.W && S.W.att && S.W.att.length){ var bw = 0; S.W.att.forEach(function(x){ if (x.sc > bw) bw = x.sc; }); flushLog("write", {ok: true, tries: S.W.att.length, sc: bw, skipped: true}); } /* writing: the student already saw the feedback, so the best mark is saved and they go straight on to the key */
       if (st === "lis" && S.L && S.P && S.P.exercises && S.P.exercises.length && S.P.exercises.every(function(e){ return S.L.a3 && S.L.a3[e.id]; })){ if (S.lSkip === u) return; S.lSkip = u; stopAudio(); try { l4Analysis(); return; } catch (e) { S.lSkip = 0; } }
       if (st === "write"){ S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
       else if (st === "read"){ S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
