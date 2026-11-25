@@ -1250,7 +1250,7 @@
     else h += '<ul>' + G.fix.map(function(f){ return '<li><b>' + esc(f.cat) + (f.count ? ' (' + f.count + ')' : '') + '</b><br><span class="wbd">' + esc(f.bad) + '</span> → <span class="wfx">' + esc(f.fix) + '</span>' + (f.extra ? '<br><span class="wbd">' + esc(f.extra.bad) + '</span> → <span class="wfx">' + esc(f.extra.fix) + '</span>' : '') + '<small>' + esc(f.why) + '</small></li>'; }).join("") + '</ul>';
     return h + '<div class="wgh">➡️ Next time</div><p>' + esc(G.next) + '</p></div>';
   }
-  function wrNeed(Wd){ return Wd.tr === "ml" ? {n: 51, show: "51 / 75"} : {n: 6.5, show: "6.5 / 9"}; }
+  function wrNeed(Wd){ return Wd.tr === "ml" ? {n: 51, show: "51 / 75"} : {n: 6, show: "6 / 9"}; }
   function wrBest(A){ var b = 0; A.forEach(function(x){ if (x.sc > b) b = x.sc; }); return b; }
   function wrCanFinish(){ var Wd = S.W, A = Wd.att; if (O.nofloor) return A.length >= 1; return A.length >= 2 && wrBest(A) >= wrNeed(Wd).n; }
   /* the student's own text with the AI's real mistakes underlined in red and the corrected words in green */
