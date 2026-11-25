@@ -638,7 +638,7 @@
     }).catch(function(){ if (!c) page('<h2>Novel</h2><p class="sub">No internet connection. Please try again.</p>', true); });
   }
   function paintUnit(x, r, F){
-    S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); if (S.teacher) window.__NNT_TEACHER = true; S.jump = !!(x && x.ok && x.jump); S.testacct = !!(x && x.ok && x.testacct); if (S.testacct) window.__NNT_TEACHER = true; S.jpct = x && x.ok ? x.jpct : 80;
+    S.st = x && x.ok ? x.st : null; S.track = x && x.ok ? x.track : null; S.teacher = !!(x && x.ok && x.teacher); if (S.teacher) window.__NNT_TEACHER = true; S.jump = !!(x && x.ok && x.jump); S.testacct = !!(x && x.ok && x.testacct); if (S.testacct) window.__NNT_TEACHER = true; S.jpct = x && x.ok ? x.jpct : 80; S.wex = !!(x && x.ok && x.wex);
     {
       if (!r || !r.ok){ page('<h2>Unit ' + S.unit + '</h2><p class="sub">' + (r && r.err === "closed" ? "This unit is not open yet. Your teacher will open it soon." : r && r.err === "locked" ? "Finish the earlier unit and its class test first." : "Not available right now.") + ' <small style="opacity:.6">(' + esc((r && r.err) || "error") + ')</small></p>' + (S.testacct && r && r.err === "locked" ? skipBox(false) : ""), true); if (S.testacct && r && r.err === "locked") skipWire(); return; }
       S.vids = r.videos;
@@ -857,7 +857,7 @@
       try{ var nt = el("nvnote"); if (!nt){ nt = document.createElement("div"); nt.id = "nvnote"; nt.className = "info"; nt.style.cssText = "margin-top:6px;color:#ffd27a;font-weight:700"; el("nvstate").parentNode.insertBefore(nt, el("nvstate")); } nt.textContent = st === "muted" ? "🔇 The sound is off, so this time is NOT counted. Turn the sound on." : st === "hidden" ? "👀 Come back to this page: time on other tabs is NOT counted." : st === "pause" ? "⏸ Paused: time is not counted." : ""; }catch(e){}
       if (r.word && r.word.n > S.ack){ S.ack = r.word.n; showWord(r.word); }
       if (r.msg){ S.mack = r.msg.id; showOv("Message from your teacher", r.msg.body); }
-      if (r.ready){ var an = el("nvans"); if (!an.classList.contains("on")){ an.classList.add("on"); try{ an.scrollIntoView({behavior:"smooth",block:"end"}); }catch(e){} } }
+      if (r.ready){ var an = el("nvans"); if (!an.classList.contains("on")){ if (S.wex){ var inf = an.querySelector(".info"); if (inf) inf.textContent = "Press the button to finish this video."; ["nva1", "nva2", "nva3"].forEach(function(i){ var e = el(i); if (e) e.style.display = "none"; }); el("nvsend").textContent = "Finish the video"; } an.classList.add("on"); try{ an.scrollIntoView({behavior:"smooth",block:"end"}); }catch(e){} } }
     }).catch(function(){
       S.busy = false; S.fails++;
       if (S.fails >= 2){ try{ S.pl.pauseVideo(); }catch(e){} showOv("Connection lost", "The video was paused because the internet is not working. Time without internet does not count."); }
@@ -868,7 +868,7 @@
     clearTimeout(S.wordT); S.wordT = setTimeout(function(){ el("nvwb").classList.remove("on"); }, 20000);
   }
   function sendWords(){
-    var a = [el("nva1").value, el("nva2").value, el("nva3").value]; if (a.filter(function(x){ return x.trim(); }).length < 2){ el("nvam").textContent = "Type at least 2 of the 3 words."; return; }
+    var a = [el("nva1").value, el("nva2").value, el("nva3").value]; if (!S.wex && a.filter(function(x){ return x.trim(); }).length < 2){ el("nvam").textContent = "Type at least 2 of the 3 words."; return; }
     el("nvsend").disabled = true;
     rpc("nv_answer", {tok: tok(), u: S.unit, i: S.cur.idx, a: a}).then(function(r){
       el("nvsend").disabled = false;
