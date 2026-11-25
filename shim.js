@@ -70,6 +70,8 @@
   window.nvSave = function(trk, sc, tot, miss, ans, lv){ return call("nv_save_test", {tok: P.tok, u: P.nvunit, trk: trk, sc: sc, tot: tot, miss: miss, ans: ans, lv: lv || 0}, false, true).then(function(r){ if (!r || !r.ok){ window.__nvErr = "server said: " + ((r && r.err) || "not saved"); throw new Error(window.__nvErr); } return r; }); };
   window.nvGrade = function(trk, ans, lv, used){ return call("nv_grade_test", {tok: P.tok, u: P.nvunit, trk: trk, ans: ans || {}, lv: lv || 0, used: used || 0}, false, true).then(function(r){ if (!r || !r.ok){ window.__nvErr = "server said: " + ((r && r.err) || "not graded"); throw new Error(window.__nvErr); } return r; }); };
   window.nvSaveEssay = function(body, words, band, lv){ return call("nv_save_essay", {tok: P.tok, u: P.nvunit, body: body, words: words, band: band, lv: lv || 0}, false, true).then(function(r){ if (!r || !r.ok){ window.__nvErr = "server said: " + ((r && r.err) || "not saved"); throw new Error(window.__nvErr); } return r; }); };
+  /* every check is kept for the teacher's skip and the student's feedback sheet; a separate call, failures are ignored */
+  window.nvAttempt = function(kind, sc, tot, words, data){ try { return call("nv_attempt_save", {tok: P.tok, u: P.nvunit, kind: kind, score: sc, total: tot, words: words, data: data || null}, true).catch(function(){}); } catch (e) {} };
   window.nvEssayTry = function(){ return call("nv_essay_try", {tok: P.tok, u: P.nvunit}).catch(function(){}); };
   /* time on the unit: counted only while the page is open and the student is active (typing, tapping, moving) */
   if (HOME && P.nvunit){

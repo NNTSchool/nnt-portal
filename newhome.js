@@ -699,6 +699,7 @@
           + '<button class="go" id="nvtt" type="button">Home test</button> <button class="go" id="nvtw" type="button" style="margin-left:6px">' + (S.unit <= 10 ? 'Summary' : 'Writing') + '</button> <button class="go" id="nvts" type="button" style="margin-left:6px">Speaking</button>'; }
       if (S.testacct && !S.teacher) h += skipBox({all: all, tOK: tOK, wOK: wOK, sOK: sOK, key: key});
       page(h, true); if (S.testacct && !S.teacher) skipWire();
+      if (tOK || wOK) nvSheets(tOK, wOK);
       ["ml","ie"].forEach(function(t){ var b = el("nvt" + t); if (b) b.onclick = function(){ nvAsk("Choose " + (t === "ie" ? "IELTS" : "Multi-level") + "?", "You cannot change this later without your teacher.", "Yes, choose it", function(){ rpc("nv_set_track", {tok: tok(), trk: t}).then(function(r){ if (r && (r.ok || r.err === "fixed")) unitPage(); }); }); }; });
       if (el("nvstarttest")) el("nvstarttest").onclick = function(){ startHome(this); };
       if (el("nvstartwrite")) el("nvstartwrite").onclick = function(){ startWrite(this); };
@@ -712,6 +713,38 @@
       else if (ret && auto === "write" && st.test && !st.essay && el("nvstartwrite")) autoNext(SM ? "Read and summarise" : "Writing", "nvstartwrite", startWrite);
       else if (ret && auto === "speak" && st.essay && !st.speak && el("nvstartspeak")) autoNext("Speaking", "nvstartspeak", startSpeak);
     }
+  }
+  /* ---------- feedback sheets: after the teacher skipped a step, the student can read the best attempt (read-only) ---------- */
+  function nvSheets(tOK, wOK){
+    var u = S.unit;
+    rpc("nv_sheet_get", {tok: tok(), u: u}).then(function(r){
+      if (!r || !r.ok || S.unit !== u) return;
+      var nds = document.querySelectorAll("#newv .nd .bx");
+      function add(i, key, label){
+        var x = r[key]; if (!x || !nds[i] || nds[i].querySelector("[data-sheet]")) return;
+        var b = document.createElement("button"); b.type = "button"; b.className = "go ghost"; b.setAttribute("data-sheet", key); b.textContent = label;
+        b.onclick = function(){ nvSheetShow(key, x); }; nds[i].appendChild(b);
+      }
+      if (tOK) add(1, "test", "📋 My best result and mistakes");
+      if (wOK) add(2, "essay", "📋 My best result and feedback");
+    }).catch(function(){});
+  }
+  function nvSheetShow(key, x){
+    var d = x.data || {}, h = '', max = x.total || 0, pc = max ? Math.round(1000 * x.score / max) / 10 : 0, t = x.tries || 1;
+    if (key === "test"){
+      var m = d.m || [];
+      h = '<h2>Home test · your best result</h2><div class="big">' + Math.round(x.score) + ' / ' + Math.round(x.total) + '</div><p class="sub">' + pc + '% · your best of ' + t + ' ' + (t > 1 ? 'tries' : 'try') + '. This is where you stood before your teacher moved you on.</p>'
+        + (m.length ? '<h3>Your mistakes (' + m.length + ')</h3>' + m.map(function(q, k){ return '<div class="mk"><div class="mkq"><b>' + (k + 1) + '.</b> ' + esc(q.q) + '</div><div class="mkg">Your answer: <span>' + esc(q.g) + '</span></div><div class="mkr">Correct answer: <b>' + esc(q.r) + '</b></div>' + (q.e ? '<div class="mke">' + esc(q.e) + '</div>' : '') + (q.u ? '<div class="mke">' + esc(q.u) + '</div>' : '') + '</div>'; }).join("") : '<p class="sub">No mistakes were saved for this try.</p>');
+    } else {
+      var f = d.fix || [], cr = d.crit || [];
+      h = '<h2>Summary · your best mark</h2><div class="big">' + x.score + ' / ' + Math.round(x.total) + '</div><p class="sub">Your best of ' + t + ' ' + (t > 1 ? 'tries' : 'try') + (x.words ? ' · ' + x.words + ' words' : '') + '. This is where you stood before your teacher moved you on.</p>'
+        + (cr.length ? '<p class="sub">' + cr.map(function(c){ return esc(c[0]) + ' <b>' + esc(c[1]) + '</b> / ' + esc(c[2]); }).join(' · ') + '</p>' : '')
+        + (f.length ? '<h3>What to fix (' + f.length + ')</h3>' + f.map(function(q, k){ return '<div class="mk"><div class="mkg">You wrote: <span>' + esc(q.bad) + '</span></div><div class="mkr">Better: <b>' + esc(q.fix) + '</b></div>' + (q.why ? '<div class="mke">' + esc(q.why) + '</div>' : '') + '</div>'; }).join("") : '<p class="sub">No corrections were saved for this try.</p>');
+    }
+    var o = document.createElement("div"); o.id = "nvsheet";
+    o.style.cssText = "position:fixed;inset:0;z-index:99998;background:#14102e;color:#f2f0ff;overflow:auto;padding:18px 16px 40px;font-family:system-ui,sans-serif";
+    o.innerHTML = '<style>#nvsheet .in{max-width:640px;margin:0 auto}#nvsheet .big{font-size:44px;font-weight:800;margin:4px 0}#nvsheet h3{margin:18px 0 8px}#nvsheet .sub{color:#b8b4dc}#nvsheet .mk{background:rgba(255,255,255,.07);border:1px solid rgba(185,176,255,.2);border-radius:14px;padding:12px 14px;margin:10px 0}#nvsheet .mkg span{color:#ff9aa8;text-decoration:line-through}#nvsheet .mkr b{color:#7be3a6}#nvsheet .mke{color:#b8b4dc;font-size:14px;margin-top:6px}</style><div class="in"><button class="go ghost" type="button" id="nvshx">← Back to my unit</button>' + h + '</div>';
+    document.body.appendChild(o); el("nvshx").onclick = function(){ o.remove(); };
   }
   /* ---------- writing ---------- */
   function startWrite(btn){
