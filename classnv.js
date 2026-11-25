@@ -899,7 +899,11 @@
   function rdJudge(q, said){
     said = String(said || "").trim(); if (!said) return false;
     if (q.t === "tf" || q.t === "sel" || q.t === "mcq" || q.t === "mp" || q.t === "pm") return said.toUpperCase() === q.a[0];
-    var n = norm(said).replace(/-/g, " "); return q.a.some(function(a){ return norm(a).replace(/-/g, " ") === n; });
+    var n = norm(said).replace(/-/g, " ");
+    if (q.a.some(function(a){ return norm(a).replace(/-/g, " ") === n; })) return true;
+    /* the label says ONE WORD: a student who adds only small filler words (the, a, it, had, was...) around the right word is not marked wrong */
+    var core = n.split(/\s+/).filter(function(w){ return !/^(the|a|an|it|they|its|was|were|is|are|had|has|have|been|be|to|of)$/.test(w); }).join(" ");
+    return core !== n && !!core && q.a.some(function(a){ return !/\s/.test(String(a).trim()) && norm(a).replace(/-/g, " ") === core; });
   }
   function keyTxt(q, D){ var a = q.a[0]; if (q.t === "mcq" && q.opts){ var i = "ABCDEFGH".indexOf(a); return i >= 0 && q.opts[i] ? a + " · " + q.opts[i] : a; } if (q.t === "mp" && D && D.people){ var p = D.people.filter(function(x){ return x[0] === a; })[0]; return p && p[1] && String(p[1]).length > 2 ? a + " · " + p[1] : a; } return a; }
   function rdAll(D){ if (D.parts){ var o = []; D.parts.forEach(function(p){ o = o.concat(p.qs); }); return o; } return D.q.concat(D.t); }
