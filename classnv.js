@@ -1728,7 +1728,7 @@ function NNTcoach(text, r, o){
   }
   function drFinish(){
     var D = S.W.dr, n = D ? D.q.length : 0, fails = D ? D.q.reduce(function(a, x){ return a + x.fails; }, 0) : 0;
-    flushLog("write", {ok: true, tries: S.W.att.length, sc: S.W.att[S.W.att.length - 1].sc, drill: n, fails: fails});
+    flushLog("write", {ok: wrCanFinish(), tries: S.W.att.length, sc: S.W.att[S.W.att.length - 1].sc, drill: n, fails: fails});  /* finishing the optional drill must not mark the writing as done when the mark is still below the pass mark */
     page(top() + '<div class="brk"><div class="bk good"><div class="be">🏅</div><h1 class="bh">' + (n ? "All mistakes mastered!" : "No mistakes to drill!") + '</h1><p class="sub">' + (n ? "You corrected " + n + " of your own sentence" + (n > 1 ? "s" : "") + "." : "Your writing had no marked mistakes. Great work.") + '</p></div>' + (wrCanFinish() ? '' : '<p class="sub" style="margin-top:14px">Well done. To finish writing you still need ' + wrNeed(S.W).show + ' in your essay. Use what you just practised in your next rewrite.</p>') + '<button class="go" id="drd" style="margin-top:20px">' + (wrCanFinish() ? "Finish writing →" : "Back to my feedback →") + '</button></div>');
     el("cb").onclick = hub; el("drd").onclick = function(){ if (!wrCanFinish()){ wrFeedback(); return; } S.W.drDone = true; writingDone(); };
   }
