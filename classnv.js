@@ -1197,7 +1197,10 @@
       var FB = r[0], tr = r[1], P = FB.ESSAY[tr];
       S.W = {need: tr === "ml" ? 180 : 250, FB: FB, P: P, tr: tr, ideas: [-1, -1], own: ["", ""], text: "", att: [], t0: Date.now(), mins: tr === "ml" ? 30 : 40};
       var dw = loadDraft("write"); if (dw && dw.x && Date.now() - (dw.at || 0) < 12 * 3600 * 1000){ if (dw.x.t0) S.W.t0 = dw.x.t0; if (dw.x.ideas) S.W.ideas = dw.x.ideas; if (dw.x.own) S.W.own = dw.x.own; if (dw.x.text) S.W.text = dw.x.text; }
-      wrFirst();
+      var back = false;
+      if (dw && dw.x && Date.now() - (dw.at || 0) < 12 * 3600 * 1000 && dw.x.att && dw.x.att.length){ try { S.W.att = dw.x.att.map(wrRebuild); back = true; } catch (e) { S.W.att = []; } }
+      if (back){ var la = S.W.att[S.W.att.length - 1], mid = dw.x.text && dw.x.text.trim() && dw.x.text !== la.text; S.W.mode = "fb"; if (mid){ S.W.text = dw.x.text; wrRewrite(dw.x.text); } else wrFeedback(); }
+      else wrFirst();
       try { [0, 1].forEach(function(sd){ var i = S.W.ideas[sd]; if (i >= 0){ var b = document.querySelector('.widea[data-s="' + sd + '"][data-i="' + i + '"]'); if (b) b.onclick(); } });
         [].forEach.call(document.querySelectorAll(".wown"), function(oi, k){ if (S.W.own[k] && !oi.value) oi.value = S.W.own[k]; }); } catch (e) {}
     }).catch(function(){ page(top() + '<div class="card warn"><h2>The writing is not ready yet</h2><p>Please ask your teacher.</p></div>'); el("cb").onclick = hub; });
@@ -1271,6 +1274,13 @@
       body: JSON.stringify({tok: O.tok, u: S.unit, track: Wd.tr, topic: Wd.P.q, text: Wd.text, units: (Wd.FB.CHUNKS || []).map(function(c){ return c[0]; }), prev: prev ? {text: prev.text, scores: sc(prev.W), nraw: prev.ai && prev.ai.nraw} : null, hist: aiHist()})})
       .then(function(r){ return r.json().then(function(j){ if (j) j._http = r.status; return j; }); }).then(function(j){ clearTimeout(t); if (j && j.ok) Wd.nextAt = j.nextWait ? Date.now() + j.nextWait * 1000 : 0; if (j && j.err === "wait"){ Wd.nextAt = Date.now() + (j.wait || 60) * 1000; return {wait: j.wait || 60}; } if (j && j.ok && j.fix) j.fix = aiConsistent(j.fix, Wd.text, aiHist()); window.__aiErr = j && j.ok ? "" : j ? ("http " + j._http + " · " + (j.err || "?") + (j.status ? " " + j.status : "") + (j.detail ? " · " + j.detail : "")) : "empty reply"; return j && j.ok && j.scores && !j.junk ? j : null; }).catch(function(e){ clearTimeout(t); window.__aiErr = "network: " + (e && e.name === "AbortError" ? "timeout" : e && e.message || "failed"); return null; });
   }
+  /* every checked essay is kept on this phone AND on the server, so after a power cut the student comes back to their marks and feedback */
+  function wrSaveAtt(){ var x = draftExtra(); if (!x || !S.W) return; var d = {sig: "w-att", vals: [], at: Date.now(), x: x}; try { localStorage.setItem(dKey("write"), JSON.stringify(d)); } catch (e) {} S.dsrv = Date.now(); flushLog("write", {draft: d}); }
+  function wrRebuild(a){
+    var W = S.W, r = W.FB.analyseEssay(a.text, W.tr, W.ideas); ["good", "better"].forEach(function(k){ if (r[k]) r[k] = r[k].map(function(x){ return wrSan(W.tr, x); }); }); if (!r.m75) r.m75 = {ta: 0, cc: 0, gr: 0, lr: 0, total: 0};
+    if (a.ai && a.ai.scores){ var s = a.ai.scores; if (W.tr === "ml") r.m75 = {ta: s.ta, cc: s.cc, gr: s.gr, lr: s.lr, total: s.total}; else { r.ta = s.ta; r.cc = s.cc; r.gr = s.gr; r.lr = s.lr; r.total = s.total; } }
+    return {W: r, sc: wrScore(r, W.tr), text: a.text, ai: a.ai || null, aiErr: ""};
+  }
   function wrCheck(){
     var W = S.W; if (W.busy || (W.nextAt && W.nextAt > Date.now())) return;
     var r = W.FB.analyseEssay(W.text, W.tr, W.ideas); ["good", "better"].forEach(function(k){ if (r[k]) r[k] = r[k].map(function(x){ return wrSan(W.tr, x); }); });
@@ -1278,7 +1288,7 @@
     function done(ai){
       if (ai && ai.wait){ W.busy = false; var bw = el("wck"); if (bw) bw.textContent = "Check my writing"; if (W.upd) W.upd(); return; }
       if (ai){ var s = ai.scores; if (W.tr === "ml") r.m75 = {ta: s.ta, cc: s.cc, gr: s.gr, lr: s.lr, total: s.total}; else { r.ta = s.ta; r.cc = s.cc; r.gr = s.gr; r.lr = s.lr; r.total = s.total; } }
-      W.busy = false; W.att.push({W: r, sc: wrScore(r, W.tr), text: W.text, ai: ai || null, aiErr: ai ? "" : (window.__aiErr || "")}); W.mode = "fb"; wrFeedback();
+      W.busy = false; W.att.push({W: r, sc: wrScore(r, W.tr), text: W.text, ai: ai || null, aiErr: ai ? "" : (window.__aiErr || "")}); W.mode = "fb"; try { wrSaveAtt(); } catch (e) {} wrFeedback();
     }
     if (r.empty || r.tooShort || r.junk || O.nofloor && !/[a-z]/i.test(W.text)) return done(null);
     W.busy = true; var b = el("wck"); if (b){ b.disabled = true; b.textContent = "Marking your essay… this takes up to a minute"; }
@@ -1438,12 +1448,12 @@ function NNTcoach(text, r, o){
       + '<div class="rbar rbfix"><button class="go fixgo" id="wrw">↻ Rewrite my essay</button><button class="pill" id="wdr" style="margin-right:6px">🔧 Practise my mistakes (optional)</button><button class="pill" id="wfin"' + (!fin ? ' disabled style="opacity:.5;cursor:not-allowed"' : '') + '>Finish writing ✓</button><small>' + (A.length < 2 ? "Finish unlocks after one rewrite and a mark of " + nd.show + "." : !fin ? "You need " + nd.show + " to finish. Your best so far: " + wrBest(A) + ". Rewrite again." : "You reached " + nd.show + ". You can finish, or rewrite again to push your mark higher.") + '</small></div>');
     wide(false); el("cb").onclick = hub;
     if (!a.ai && a.aiErr && window.__NNT_TEACHER){ var rp0 = el("rdp"); if (rp0) rp0.insertAdjacentHTML("afterbegin", '<div class="card warn">👑 Teacher note: the AI marker was NOT used (' + esc(a.aiErr) + '). Students never see this note.</div>'); }
-    el("wrw").onclick = wrRewrite; el("wfin").onclick = function(){ if (wrCanFinish()){ flushLog("write", {ok: true, tries: S.W.att.length, sc: S.W.att[S.W.att.length - 1].sc, drill: 0, fails: 0}); writingDone(); } }; if (el("wdr")) el("wdr").onclick = startDrill;
+    el("wrw").onclick = wrRewrite; el("wfin").onclick = function(){ if (wrCanFinish()){ flushLog("write", {ok: true, tries: S.W.att.length, sc: S.W.att[S.W.att.length - 1].sc, drill: 0, fails: 0, draft: null}); writingDone(); } }; if (el("wdr")) el("wdr").onclick = startDrill;
   }
-  function wrRewrite(){
+  function wrRewrite(init){
     var Wd = S.W, a = Wd.att[Wd.att.length - 1]; Wd.mode = "rw";
     var P = Wd.P, need = wrNeed(Wd);
-    wrEditor('<h1 class="rpt" style="font-size:30px">' + esc(P.title) + '</h1><div class="qgh"><span class="qi">📝</span><div><b>' + esc(P.q) + '</b><small>Your essay is on the right. Improve it, then press Check. You need <b>' + need.show + '</b> to finish.</small></div></div>', a.text);
+    wrEditor('<h1 class="rpt" style="font-size:30px">' + esc(P.title) + '</h1><div class="qgh"><span class="qi">📝</span><div><b>' + esc(P.q) + '</b><small>Your essay is on the right. Improve it, then press Check. You need <b>' + need.show + '</b> to finish.</small></div></div>', typeof init === "string" && init ? init : a.text);
   }
   /* nothing can be pasted, dropped or inserted in one go (also from a phone keyboard's clipboard bar): text must be typed */
   function noPaste(ta){
@@ -1561,7 +1571,7 @@ function NNTcoach(text, r, o){
   function draftExtra(){
     try {
       if (S.cur === "read" && S.R && S.R.ans) return {t0: S.R.t0, ans: S.R.ans};
-      if (S.cur === "write" && S.W){ var ta = el("wtx"); return {t0: S.W.t0, ideas: S.W.ideas, own: S.W.own, text: ta ? ta.value : S.W.text}; }
+      if (S.cur === "write" && S.W){ var ta = el("wtx"); return {t0: S.W.t0, ideas: S.W.ideas, own: S.W.own, text: ta ? ta.value : S.W.text, att: (S.W.att || []).map(function(a){ return {text: a.text, ai: a.ai || null}; })}; }
     } catch (e) {} return null;
   }
   function saveDraft(){
