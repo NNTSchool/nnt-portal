@@ -176,7 +176,7 @@
   + '#cnv .mq{display:grid;gap:8px;grid-template-columns:1fr 1fr}@media(max-width:640px){#cnv .mq{grid-template-columns:1fr}}#cnv .mq.one{grid-template-columns:1fr}#cnv .mo b{margin-right:6px;color:#3e63d8}#cnv .mo.sel b{color:#fff}#cnv .mo{padding:10px 12px;border-radius:12px;border:2px solid #9fb2dc;background:#fff;color:#2d3f73;font-weight:700;font-size:14px;cursor:pointer;text-align:left}#cnv .mo.sel{background:#3e63d8;border-color:#3e63d8;color:#fff}'
   + '#cnv input.rin{width:100%;box-sizing:border-box;padding:10px 12px;border-radius:12px;border:2px solid #8fa6d6;background:#fff;color:#10204a;font:700 17px system-ui;outline:none}#cnv input.rin:focus{border-color:#3e63d8;box-shadow:0 0 0 4px rgba(62,99,216,.2)}#cnv input.rin.rt{width:150px;padding:6px 8px;font-size:15px;display:inline-block;margin:2px 4px}'
   + '#cnv table.rtb{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.5;color:#1b2a52;border:2px solid #b9c9e6;border-radius:14px;overflow:hidden;background:#fff}#cnv .rtb th{background:#dfe8fb;text-align:left;padding:9px 10px;font-weight:800;color:#10204a}#cnv .rtb td{padding:10px;border-top:1px solid #d3dcf0;vertical-align:top}#cnv .rtb td:first-child{font-weight:800;font-style:italic}#cnv .rtb td+td{border-left:1px solid #e1e8f7}'
-  + '#cnv .tqn{display:inline-block;min-width:22px;text-align:center;padding:1px 6px;margin-right:2px;border-radius:7px;background:#3e63d8;color:#fff;font-weight:800;font-size:13px}#cnv .tqn.gd{background:#0c9c84}#cnv .tqn.bd{background:#d6395f}#cnv .tw{display:inline-block;white-space:nowrap}'
+  + '#cnv .tqn{display:inline-block;min-width:22px;text-align:center;padding:1px 6px;margin-right:2px;border-radius:7px;background:#3e63d8;color:#fff;font-weight:800;font-size:13px}#cnv .tqn.gd{background:#0c9c84}#cnv .tqn.bd{background:#d6395f}#cnv .tw{display:inline-block;white-space:nowrap}#cnv .rsum{margin:10px 0 14px;padding:16px 18px;border:2px solid #c9d4f5;border-radius:14px;background:#f7f9ff;line-height:2.15;font-size:17px;color:#1b2559}#cnv .rsum .rsumt{font-weight:800;margin-bottom:6px;font-size:18px}#cnv .rsum input.rin{width:150px;margin:0 3px}#cnv .rsum select.rsel{margin:0 3px;padding:4px 6px}'
   + '#cnv .rbar{position:sticky;bottom:0;display:flex;align-items:center;gap:14px;padding:12px 4px 2px;background:linear-gradient(transparent,#f6f9ff 30%)}#cnv .rbar .go{margin:0}#cnv .rbar small{font-weight:700;color:#3d4f80}#cnv .go:disabled{opacity:.45;cursor:not-allowed;animation:none;filter:grayscale(.4)}'
   + '#cnv .rsc{display:flex;gap:22px;align-items:center;flex-wrap:wrap;justify-content:center;margin:14px 0}#cnv .rsc .ring{width:190px;height:190px}#cnv .qchips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:620px;margin:8px auto 0}#cnv .qchips i{font-style:normal;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;color:#fff;animation:rpop .5s cubic-bezier(.2,1.5,.4,1) both}#cnv .qchips i.g{background:#0c9c84}#cnv .qchips i.b{background:#d6395f}'
   + '#cnv .vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin:12px 0}#cnv .vc{padding:12px 14px;border-radius:14px;background:#fff;border:2px solid #c9d6ee;border-left:8px solid #3e63d8}#cnv .vc.c{border-left-color:#8a5cf0}#cnv .vc b{font-size:19px;display:block}#cnv .vc span{display:block;color:#3d4f80;font-size:15px;margin-top:2px}#cnv .vc em{display:block;font-style:normal;color:#b25400;font-weight:700;font-size:15px;margin-top:3px}#cnv .vc i{display:block;font-style:italic;color:#1d2f63;font-size:14.5px;margin-top:6px;padding-top:6px;border-top:1px dashed #c9d6ee}'
@@ -336,7 +336,7 @@
   function skipRun(step, then){
     Promise.resolve(R("nv_skip", {tok: O.tok, u: S.unit, step: step})).then(function(r){ if (r && r.ok){ S.stU = null; if (then) then(); } else { var m = el("hlk"); if (m) m.textContent = "Could not skip this step."; } }, function(){ var m = el("hlk"); if (m) m.textContent = "No internet connection."; });
   }
-  function opn(st){ if (O.nofloor) return true; return st === "read" ? !!(S.lisDone && S.lisDone[S.unit]) : !!(S.rdDone && S.rdDone[S.unit]); }
+  function opn(st){ if (O.nofloor) return true; return st === "read" ? (!LIS[S.unit] || !!(S.lisDone && S.lisDone[S.unit])) : !!(S.rdDone && S.rdDone[S.unit]); }
   function lockMsg(el_, txt){ el_.classList.add("shk"); setTimeout(function(){ el_.classList.remove("shk"); }, 400); var m = el("hlk"); if (m) m.textContent = txt; }
   function stKey(u){ return "nnt_clsst_" + ((O && O.name) || "") + "_" + u; }
   function stPrime(){ var u = S.unit; if (S.stPr && S.stPr[u]) return; S.stPr = S.stPr || {}; S.stPr[u] = 1;
@@ -358,7 +358,8 @@
   }
   function syncP(){ var p = statusSync(); return p ? Promise.race([p.catch(function(){}), new Promise(function(r){ setTimeout(r, 8000); })]) : Promise.resolve(); }
   function synced(fn){ var d = false, g = function(){ if (!d){ d = true; fn(); } }; var p = statusSync(); if (!p){ g(); return; } p.then(g, g); setTimeout(g, 8000); }
-  var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1};
+  var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1, 16: 1};
+  var LIS = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1};   /* units whose listening is published; reading opens at once for the others */
   /* the drilling takes the whole screen, like the classic tests; the hub gives it back */
   function goFS(){ var d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen || d.msRequestFullscreen; try { var p = f && f.call(d); if (p && p.then) p.then(function(){ try { if (navigator.keyboard && navigator.keyboard.lock) navigator.keyboard.lock(["Escape"]).catch(function(){}); } catch (e) {} }, function(){}); } catch (e) {} }
   /* Esc cannot be fully blocked by a web page (Chrome lets a long press out), so if the student gets out, the drilling is covered until they return to full screen */
@@ -381,13 +382,13 @@
     function card(id, ic, t, sub, tm, on, n){ return '<button class="fc' + (on ? " on" : "") + '" id="' + id + '"><i class="fb">' + n + '</i><span class="fi">' + ic + '</span><b>' + t + '</b><small>' + sub + '</small><em>' + tm + '</em></button>'; }
     function link(){ return '<div class="fl"><svg viewBox="0 0 120 24" preserveAspectRatio="none"><path d="M2 12H108" stroke="currentColor" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/><path d="M100 4l12 8-12 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>10 min break</span></div>'; }
     page(top() + '<div class="hero" style="padding:6px 8px 0"><h2>Unit ' + S.unit + '</h2><p class="sub">Your path today: three drillings, with a break between them</p></div>'
-      + '<div class="fch">' + card("hl", "🎧", "Listening drilling", (S.lisDone && S.lisDone[S.unit]) ? "Done ✔ · you can redo it" : "Start here", "about 60 min", true, 1) + link()
+      + '<div class="fch">' + card("hl", "🎧", "Listening drilling", !LIS[S.unit] ? "Coming soon" : (S.lisDone && S.lisDone[S.unit]) ? "Done ✔ · you can redo it" : "Start here", "about 60 min", !!LIS[S.unit], 1) + link()
       + card("hr", "📖", "Reading drilling", (S.rdDone && S.rdDone[S.unit]) ? "Done ✔ · you can redo it" : "Passage + questions", "about 30 min", RW[S.unit] && opn("read"), 2) + link()
       + card("hw", "✍️", "Writing drilling", (S.wrDone && S.wrDone[S.unit]) ? "Done ✔ · you can redo it" : "Write · feedback · rewrite", "about 40 min", RW[S.unit] && opn("write"), 3) + '</div><p class="sub" id="hlk" style="text-align:center;margin-top:14px;min-height:22px"></p>');
     if (S.lisDone && S.lisDone[S.unit] && S.rdDone && S.rdDone[S.unit] && S.wrDone && S.wrDone[S.unit]){ var kb = document.createElement("div"); kb.style.cssText = "text-align:center;margin:18px 0 6px"; kb.innerHTML = '<button class="go" id="hkey" style="font-size:20px;padding:16px 28px">🔑 Get my class key</button>'; el("hlk").parentNode.insertBefore(kb, el("hlk")); el("hkey").onclick = function(){ unitDone(); }; }
     /* never start a stage before the saved progress has arrived: a student must not begin from zero because the answer was slow */
     function wait_(f){ return f; }   /* no waiting gate: a slow answer must never lock a student out */
-    el("cb").onclick = path; el("hl").onclick = wait_(function(){ goFS(); (S.unit > 1 ? startPart4 : startPart)(); });
+    el("cb").onclick = path; el("hl").onclick = !LIS[S.unit] ? function(){ lockMsg(this, "🎧 The listening for this unit is coming soon."); } : wait_(function(){ goFS(); (S.unit > 1 ? startPart4 : startPart)(); });
     el("hr").onclick = RW[S.unit] && opn("read") ? wait_(function(){ goFS(); startReading(); }) : function(){ lockMsg(this, RW[S.unit] ? "🔒 Finish the listening drilling first." : ""); };
     el("hw").onclick = RW[S.unit] && opn("write") ? wait_(function(){ goFS(); startWriting(); }) : function(){ lockMsg(this, RW[S.unit] ? "🔒 Finish the reading drilling first." : ""); };
     if (S.testacct){
@@ -898,10 +899,10 @@
   function wide(on){ var w = document.querySelector("#cnv .w"); if (w) w.classList.toggle("rdw", !!on); }
   function rdJudge(q, said){
     said = String(said || "").trim(); if (!said) return false;
-    if (q.t === "tf" || q.t === "sel" || q.t === "mcq" || q.t === "mp" || q.t === "pm") return said.toUpperCase() === q.a[0];
+    if (q.t === "tf" || q.t === "sel" || q.t === "mcq" || q.t === "mp" || q.t === "pm" || q.t === "sl" || q.t === "se") return said.toUpperCase() === q.a[0];
     var n = norm(said).replace(/-/g, " "); return q.a.some(function(a){ return norm(a).replace(/-/g, " ") === n; });
   }
-  function keyTxt(q, D){ var a = q.a[0]; if (q.t === "hd" && q.hlt){ var hi = ROM.indexOf(String(a).toLowerCase()); return hi >= 0 && q.hlt[hi] ? a + " · " + q.hlt[hi] : a; } if (q.t === "mcq" && q.opts){ var i = "ABCDEFGH".indexOf(a); return i >= 0 && q.opts[i] ? a + " · " + q.opts[i] : a; } if (q.t === "mp" && D && D.people){ var p = D.people.filter(function(x){ return x[0] === a; })[0]; return p && p[1] && String(p[1]).length > 2 ? a + " · " + p[1] : a; } return a; }
+  function keyTxt(q, D){ var a = q.a[0]; if ((q.t === "sl" || q.t === "se") && q.lst){ var li = "ABCDEFGHIJKLMNOP".indexOf(a); return li >= 0 && q.lst[li] ? a + " · " + q.lst[li] : a; } if (q.t === "hd" && q.hlt){ var hi = ROM.indexOf(String(a).toLowerCase()); return hi >= 0 && q.hlt[hi] ? a + " · " + q.hlt[hi] : a; } if (q.t === "mcq" && q.opts){ var i = "ABCDEFGH".indexOf(a); return i >= 0 && q.opts[i] ? a + " · " + q.opts[i] : a; } if (q.t === "mp" && D && D.people){ var p = D.people.filter(function(x){ return x[0] === a; })[0]; return p && p[1] && String(p[1]).length > 2 ? a + " · " + p[1] : a; } return a; }
   function rdAll(D){ if (D.parts){ var o = []; D.parts.forEach(function(p){ o = o.concat(p.qs); }); return o; } return D.q.concat(D.t); }
   function startReading(){ if (!opn("read")) return hub(); S.cur = "read";
     page(top() + '<div class="hero"><h2>Loading the reading…</h2></div>'); el("cb").onclick = hub;
@@ -910,7 +911,7 @@
     }).then(function(b){ return JSON.parse(new TextDecoder().decode(b)); }).then(function(D){
       return Promise.all([syncP(), fetch(O.base + "readx.json", {cache: "no-store"}).then(function(r){ return r.json(); }).catch(function(){ return {}; }), fetch(O.base + "readp.json", {cache: "no-store"}).then(function(r){ return r.json(); }).catch(function(){ return {}; }), fetch(O.base + "readeg.json", {cache: "no-store"}).then(function(r){ return r.json(); }).catch(function(){ return {}; })]).then(function(z){ D.eg = z[3] || {}; D.x = (z[1] && z[1][S.unit]) || []; var pp = z[2] && z[2][D.parts ? "ml" : "ie"]; D.pw = (pp && pp[S.unit]) || []; if (D.pw.length) D.x = []; return D; });
     }).then(function(D){
-      if (D.passes) D = twoPrep(D); else if (D.parts && D.twoPass) D.pmins = Math.round((D.mins || 40) / 2);
+      if (D.passes) D = twoPrep(D); else if (D.parts && D.twoPass){ D.pmins = Math.round((D.mins || 40) / 2); D.parts.forEach(function(p){ if (p.ieP){ (p.ieP.q || []).forEach(function(q){ if (q.t === "sl") q.lst = p.ieP.sl.list; if (q.t === "se") q.lst = p.ieP.se.list; if ((q.t === "sm" || q.t === "sl") && !q.q) q.q = "Summary, gap (" + q.n + ")"; }); p.qs = p.qs.concat(p.ieP.q); } }); }
       S.R = {D: D, ans: {}, first: null, second: null, t0: Date.now(), phase: 0, step: "test", mist: 0};
       var dr = loadDraft("read"), st0 = "test"; if (dr && dr.x && Date.now() - (dr.at || 0) < 12 * 3600 * 1000){ if (dr.x.t0) S.R.t0 = dr.x.t0; S.R.ans = dr.x.ans || {}; st0 = dr.x.step || "test"; S.R.mist = dr.x.mist || 0; S.R.rounds = dr.x.rr || 0;
         if (D.twoPass){ S.R.pd = dr.x.pd || {}; S.R.sg = dr.x.sg || []; S.R.only = (dr.x.only === undefined ? null : dr.x.only); } }
@@ -928,7 +929,7 @@
     D.twoPass = true; D.pmins = Math.round((D.mins || 40) / 2);
     D.parts = D.passes.map(function(P){
       (P.t || []).forEach(function(q){ var m = (P.tb || []).filter(function(r){ return (r.feat + r.note).indexOf("{" + q.n + "}") >= 0; })[0]; if (m && !q.q) q.q = m.name + ": " + (m.feat + " / " + m.note).replace(/<br>/g, " / ").replace(/<[^>]+>/g, "").replace(/\{(\d+)\}/g, "(" + "$1" + ") ____"); });
-      (P.q || []).forEach(function(q){ if (q.t === "hd") q.hlt = P.hl; });
+      (P.q || []).forEach(function(q){ if (q.t === "hd") q.hlt = P.hl; if (q.t === "sl") q.lst = P.sl.list; if (q.t === "se") q.lst = P.se.list; if ((q.t === "sm" || q.t === "sl") && !q.q) q.q = "Summary, gap (" + q.n + ")"; });
       var qs = (P.q || []).concat(P.t || []);
       var left = P.p.map(function(p, i){ return '<p class="rp"><span class="pl">' + String.fromCharCode(65 + i) + '</span>' + p + '</p>'; }).join("");
       return {tab: P.tab, ic: "📄", head: P.title.toUpperCase(), instr: P.sub, left: left, qs: qs, ieP: P};
@@ -973,6 +974,17 @@
     var hds = D.q.filter(function(q){ return q.t === "hd" && on(q.n); });
     var ghd = hds.length ? '<div class="qg"><div class="qgh"><span class="qi">🏷️</span><div><b>Questions ' + rg(hds) + ' · Matching headings</b><small>' + (D.hdi || ('The passage has paragraphs A–' + "ABCDEFGHIJKLMNOP".charAt(D.p.length - 1) + '. Choose the correct heading for each paragraph from the list of headings below. There are more headings than you need.')) + '</small></div></div>'
       + '<div class="qd" style="display:block"><div style="margin-bottom:4px"><b>List of Headings</b></div>' + (D.hl || []).map(function(t, k){ return '<div><b>' + ROM[k] + '</b> ' + esc(t) + '</div>'; }).join("") + '</div>' + hds.map(qrow).join("") + '</div>' : "";
+    function sumHtml(S){ return '<div class="rsum">' + (S.t ? '<div class="rsumt">' + esc(S.t) + '</div>' : '') + S.h.replace(/\{(\d+)\}/g, function(m, n){ n = +n; var q = D.q.filter(function(x){ return x.n === n; })[0];
+      if (q && q.t === "sl") return '<span class="tw"><span class="tqn">' + n + '</span><select class="rsel" data-n="' + n + '" style="min-width:74px"><option value="">…</option>' + (S.list || []).map(function(_, k){ return '<option>' + "ABCDEFGHIJKLMNOP".charAt(k) + '</option>'; }).join("") + '</select></span>';
+      return '<span class="tw"><span class="tqn" data-t="' + n + '">' + n + '</span><input class="rin rt" type="text" autocomplete="off" spellcheck="false" data-n="' + n + '"></span>'; }) + '</div>'; }
+    function listBox(L){ return '<div class="qd" style="display:block">' + (L || []).map(function(t, k){ return '<div><b>' + "ABCDEFGHIJKLMNOP".charAt(k) + '</b> ' + esc(t) + '</div>'; }).join("") + '</div>'; }
+    var sms = D.q.filter(function(q){ return q.t === "sm" && on(q.n); });
+    var gsm = sms.length ? '<div class="qg"><div class="qgh"><span class="qi">📝</span><div><b>Questions ' + rg(sms) + ' · ' + esc(D.sm.title || "Summary completion") + '</b><small>' + (D.sm.i || "Complete the summary below. Write ONE WORD ONLY from the passage for each answer.") + '</small></div></div>' + sumHtml(D.sm) + '</div>' : "";
+    var sls = D.q.filter(function(q){ return q.t === "sl" && on(q.n); });
+    var gsl = sls.length ? '<div class="qg"><div class="qgh"><span class="qi">🧾</span><div><b>Questions ' + rg(sls) + ' · Summary completion</b><small>' + (D.sl.i || "Complete the summary using the list of words, A–" + "ABCDEFGHIJKLMNOP".charAt(D.sl.list.length - 1) + ", below. Write the correct letter, A–" + "ABCDEFGHIJKLMNOP".charAt(D.sl.list.length - 1) + ".") + '</small></div></div>' + sumHtml(D.sl) + listBox(D.sl.list) + '</div>' : "";
+    var ses = D.q.filter(function(q){ return q.t === "se" && on(q.n); });
+    var gse = ses.length ? '<div class="qg"><div class="qgh"><span class="qi">🔗</span><div><b>Questions ' + rg(ses) + ' · Sentence endings</b><small>' + (D.se.i || "Complete each sentence with the correct ending, A–" + "ABCDEFGHIJKLMNOP".charAt(D.se.list.length - 1) + ", below.") + '</small></div></div>' + listBox(D.se.list)
+      + ses.map(function(q){ return '<div class="qr" data-n="' + q.n + '"><div class="qn">' + q.n + '</div><div class="qb"><div class="qt">' + esc(q.q) + '</div><select class="rsel" data-n="' + q.n + '"><option value="">Choose…</option>' + D.se.list.map(function(_, k){ return '<option>' + "ABCDEFGHIJKLMNOP".charAt(k) + '</option>'; }).join("") + '</select></div></div>'; }).join("") + '</div>' : "";
     var mcs = D.q.filter(function(q){ return q.t === "mcq" && on(q.n); });
     var gmc = mcs.length ? '<div class="qg"><div class="qgh"><span class="qi">🔤</span><div><b>Questions ' + rg(D.q.filter(function(q){ return q.t === "mcq"; })) + ' · Multiple choice</b><small>Choose the correct letter, A, B, C or D.</small></div></div>' + mcs.map(qrow).join("") + '</div>' : "";
     var gts = "";
@@ -982,8 +994,8 @@
           return '<span class="tw"><span class="tqn" data-t="' + n + '">' + n + '</span><input class="rin rt" type="text" autocomplete="off" spellcheck="false" data-n="' + n + '"></span>'; }); }
         return '<tr><td>' + r.name + '</td><td>' + r.date + '</td><td>' + cell(r.feat) + '</td><td>' + cell(r.note) + '</td></tr>'; }).join("") + '</table>';
       gts = '<div class="qg"><div class="qgh"><span class="qi">🧩</span><div><b>Questions ' + rg(D.t) + ' · Table completion</b><small>Complete the table. Choose <b>' + (D.tl || wlim(D.t, "ONE WORD AND/OR A NUMBER")) + '</b> from the passage for each answer.</small></div></div>' + tb + '</div>'; }
-    var GR = {tf: gtf, w: gws, tb: gts, mp: gmp, mcq: gmc, pm: gpm, hd: ghd}; (D.order || ["tf", "w", "tb"]).forEach(function(k){ h += GR[k]; });
-    var need = [].concat(tfs, ws, ts, mps, pms, mcs, hds).map(function(q){ return q.n; });
+    var GR = {tf: gtf, w: gws, tb: gts, mp: gmp, mcq: gmc, pm: gpm, hd: ghd, sm: gsm, sl: gsl, se: gse}; (D.order || ["tf", "w", "tb"]).forEach(function(k){ h += GR[k]; });
+    var need = [].concat(tfs, ws, ts, mps, pms, mcs, hds, sms, sls, ses).map(function(q){ return q.n; });
     if (PB) return {h: h, need: need};
     page(top("← Unit") + '<div class="rdh"><h2>📖 Reading · ' + esc(D.title) + '</h2>' + rdSteps(retake ? 4 : 0) + hlTip() + '<div class="rtm" id="rtm">⏱</div></div>'
       + '<div class="rsp">' + rdPassage() + '<div class="rpn q hlz" id="rdq">' + h + '<div class="rbar"><button class="go" id="rck" disabled>Check my answers</button><small id="rhint"></small></div></div></div>');
@@ -997,7 +1009,7 @@
     [].forEach.call(document.querySelectorAll("#rdq input.rin"), function(i){ var n = +i.getAttribute("data-n");
       i.oninput = function(){ R_.ans[n] = i.value; var r = i.closest(".qr"); if (r) r.classList.toggle("fld", !!i.value.trim()); upd(); };
       i.onpaste = function(e){ e.preventDefault(); }; i.oncontextmenu = function(e){ e.preventDefault(); }; });
-    [].forEach.call(document.querySelectorAll("#rdq select.rsel"), function(c){ var n = +c.getAttribute("data-n"); c.onchange = function(){ R_.ans[n] = c.value; c.closest(".qr").classList.toggle("fld", !!c.value); upd(); }; });
+    [].forEach.call(document.querySelectorAll("#rdq select.rsel"), function(c){ var n = +c.getAttribute("data-n"); c.onchange = function(){ R_.ans[n] = c.value; var _r = c.closest(".qr"); if (_r) _r.classList.toggle("fld", !!c.value); upd(); }; });
     upd();
     el("rck").onclick = function(){ rdCheck(need); };
   }
@@ -1042,7 +1054,7 @@
         var pe = document.querySelectorAll('.rpart[data-p="' + pi + '"] [data-l]'); [].forEach.call(pe, function(x){ x.classList.toggle("used", !!used[x.getAttribute("data-l")]); });
         sels.forEach(function(c){ [].forEach.call(c.options, function(o){ if (!o.value) return; o.disabled = false; o.textContent = o.value; }); }); });
     }
-    [].forEach.call(document.querySelectorAll("#rdq select.rsel"), function(c){ var n = +c.getAttribute("data-n"); c.onchange = function(){ R_.ans[n] = c.value; c.closest(".qr").classList.toggle("fld", !!c.value); crossOut(); upd(); }; });
+    [].forEach.call(document.querySelectorAll("#rdq select.rsel"), function(c){ var n = +c.getAttribute("data-n"); c.onchange = function(){ R_.ans[n] = c.value; var _r = c.closest(".qr"); if (_r) _r.classList.toggle("fld", !!c.value); crossOut(); upd(); }; });
     [].forEach.call(document.querySelectorAll("#rdq .tf, #rdq .mq"), function(g){ var row = g.closest(".qr"), n = +row.getAttribute("data-n");
       [].forEach.call(g.children, function(b){ b.onclick = function(){ R_.ans[n] = b.getAttribute("data-v"); [].forEach.call(g.children, function(x){ x.classList.toggle("sel", x === b); }); row.classList.add("fld"); upd(); }; }); });
     crossOut();
