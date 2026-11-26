@@ -1458,6 +1458,35 @@ function NNTcoach(text, r, o){
       else last = v;
     });
   }
+  /* the teacher moved the student on from the writing: they see their best result so far, then fix every listed mistake in their own essay to get the key */
+  function wrSkipFix(){
+    var Wd = S.W, A = Wd.att, best = A[0], ml = Wd.tr === "ml"; A.forEach(function(x){ if (x.sc >= best.sc) best = x; });
+    if (!best || !best.ai || !best.ai.fix || best.W.empty || best.W.tooShort || best.W.junk) return false;
+    var FB = Wd.FB, orig = String(best.text || ""), fixes = best.ai.fix.filter(function(f){ return f && f.bad && orig.indexOf(f.bad) > -1; });
+    var nm = function(x){ return String(x).toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim(); };
+    var minW = Math.min(Wd.need, Math.floor(0.9 * FB.words(orig)));
+    var W = best.W, big = ml ? W.m75.total + '<small> / 75</small>' : W.total + '<small> / 9</small>';
+    var crit = wrCrit(W, ml).map(function(c){ return '<span>' + c[0] + ' <b>' + c[1] + '</b> / ' + c[2] + '</span>'; }).join("");
+    var list = fixes.map(function(f, i){ return '<li class="wfi" data-i="' + i + '" style="list-style:none;margin:0 0 12px;padding:10px 12px;border:2px solid #f0a0a0;border-radius:12px;background:#fff"><span class="wtk" style="font-weight:800;margin-right:6px">○</span><span class="wbd">' + esc(wrSan(Wd.tr, f.bad)) + '</span> → <span class="wfx">' + esc(wrSan(Wd.tr, f.fix)) + '</span>' + (f.why ? '<small style="display:block;margin-top:4px">' + esc(wrSan(Wd.tr, f.why)) + '</small>' : '') + '</li>'; }).join("");
+    Wd.skFix = 1; Wd.mode = "skfix"; if (S.bt) clearInterval(S.bt); if (S.wi) clearInterval(S.wi);
+    page(top("← Unit") + '<div class="rdh"><h2>✍️ Writing · your best result</h2></div>'
+      + '<div class="wsc"><div class="wbg">' + big + '</div><div class="wcr">' + crit + '</div><p class="sub" style="margin:8px 0 0">Your teacher moved you on. This is your best mark so far. To get the key, correct every mistake listed on the right in your essay.</p></div>'
+      + '<div class="rsp"><div class="rpn hlz" id="rdp"><div class="wrh">Your essay · fix the mistakes here</div><textarea id="wsx" class="wrta" spellcheck="false" autocomplete="off"></textarea><div class="wrm"><b id="wsn"></b><span id="wsw"></span></div></div>'
+      + '<div class="rpn q" id="rdq"><div class="wrh">Mistakes to fix · <b id="wsc">0</b> of ' + fixes.length + ' fixed</div>' + (fixes.length ? '<ul style="margin:0;padding:0">' + list + '</ul>' : '<p>No mistakes left to fix. Great!</p>') + '</div></div>'
+      + '<div class="rbar rbfix" style="max-width:none"><button class="go" id="wsk" disabled>Get the key →</button><small id="wsh"></small></div>');
+    wide(true); el("cb").onclick = function(){ wide(false); hub(); };
+    var ta = el("wsx"); ta.value = orig; ta.onpaste = function(e){ e.preventDefault(); }; ta.ondrop = function(e){ e.preventDefault(); }; ta.oncontextmenu = function(e){ e.preventDefault(); }; noPaste(ta);
+    function upd(){
+      var tx = ta.value, T = " " + nm(tx) + " ", nw = FB.words(tx), lenOk = nw >= minW, done = 0;
+      [].forEach.call(document.querySelectorAll(".wfi"), function(li){ var f = fixes[+li.getAttribute("data-i")], b = nm(f.bad), gone = b ? T.indexOf(" " + b + " ") < 0 : tx.indexOf(f.bad) < 0, ok = gone && lenOk;
+        if (ok) done++; li.style.borderColor = ok ? "#7cc9a8" : "#f0a0a0"; li.style.background = ok ? "#effaf5" : "#fff"; li.querySelector(".wtk").textContent = ok ? "✓" : "○"; li.querySelector(".wtk").style.color = ok ? "#1f9d72" : "#d64545"; });
+      el("wsc").textContent = done; el("wsn").textContent = nw + " words"; el("wsw").textContent = lenOk ? "" : "Keep your essay at least " + minW + " words long.";
+      var all = done === fixes.length && lenOk; el("wsk").disabled = !all; el("wsh").textContent = all ? "Every mistake is fixed. You can get the key." : (fixes.length - done) + " mistake" + (fixes.length - done === 1 ? "" : "s") + " left. Change each wrong phrase on the left.";
+    }
+    ta.oninput = upd; upd(); S.sig = null;
+    el("wsk").onclick = function(){ if (el("wsk").disabled) return; S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; wide(false); S.nextKind = "write"; nextStage(); };
+    return true;
+  }
   function writingDone(){ if (S.W && !wrCanFinish()) return wrFeedback(); if (!floorOk("write", wrFeedback)) return; clearDrafts("write"); S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
 
   /* ---------- supervision: active time per stage, minimum floors ---------- */
@@ -1508,7 +1537,7 @@ function NNTcoach(text, r, o){
       /* the teacher moved this student on: show the best result reached so far, with the key, instead of the next step */
       if (st === "read" && S.R && S.R.D && S.R.first && S.R.unit !== -1){ if (S.R.skShown) return; S.R.skShown = 1;
         var f0 = S.R.first, l0 = S.R.last || f0, bst = l0.good.length >= f0.good.length ? l0 : f0; if (S.R.D.twoPass){ var ug = f0.good.slice(); (S.R.sg || []).concat(l0.good).forEach(function(n){ if (ug.indexOf(n) < 0) ug.push(n); }); var ua = {}; [f0.ans, S.R.sa || {}, l0.ans].forEach(function(o){ for (var k in o) ua[k] = o[k]; }); bst = {bad: [], good: ug, ans: ua}; } S.R.second = bst; S.R.skBest = true; try { rdAnswers(); return; } catch (e) { S.R.skShown = 0; S.R.skBest = false; } }
-      if (st === "write" && S.W && S.W.att && S.W.att.length){ var bw = 0; S.W.att.forEach(function(x){ if (x.sc > bw) bw = x.sc; }); flushLog("write", {ok: true, tries: S.W.att.length, sc: bw, skipped: true}); } /* writing: the student already saw the feedback, so the best mark is saved and they go straight on to the key */
+      if (st === "write" && S.W && S.W.att && S.W.att.length){ if (S.W.skFix) return; var bw = 0; S.W.att.forEach(function(x){ if (x.sc > bw) bw = x.sc; }); flushLog("write", {ok: true, tries: S.W.att.length, sc: bw, skipped: true}); try { if (wrSkipFix()) return; } catch (e) { S.W.skFix = 0; } } /* writing: the student already saw the feedback, so the best mark is saved and they go straight on to the key */
       if (st === "lis" && S.L && S.P && S.P.exercises && S.P.exercises.length && S.P.exercises.every(function(e){ return S.L.a3 && S.L.a3[e.id]; })){ if (S.lSkip === u) return; S.lSkip = u; stopAudio(); try { l4Analysis(); return; } catch (e) { S.lSkip = 0; } }
       if (st === "write"){ S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; if (S.bt) clearInterval(S.bt); wide(false); S.nextKind = "write"; nextStage(); }
       else if (st === "read"){ S.rdDone = S.rdDone || {}; S.rdDone[S.unit] = true; S.nextKind = "read"; stageBreak("READING DONE ✔", nextStage); }
