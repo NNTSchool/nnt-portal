@@ -1470,9 +1470,9 @@ function NNTcoach(text, r, o){
     var list = fixes.map(function(f, i){ return '<li class="wfi" data-i="' + i + '" style="list-style:none;margin:0 0 12px;padding:10px 12px;border:2px solid #f0a0a0;border-radius:12px;background:#fff"><span class="wtk" style="font-weight:800;margin-right:6px">○</span><span class="wbd">' + esc(wrSan(Wd.tr, f.bad)) + '</span> → <span class="wfx">' + esc(wrSan(Wd.tr, f.fix)) + '</span>' + (f.why ? '<small style="display:block;margin-top:4px">' + esc(wrSan(Wd.tr, f.why)) + '</small>' : '') + '</li>'; }).join("");
     Wd.skFix = 1; Wd.mode = "skfix"; if (S.bt) clearInterval(S.bt); if (S.wi) clearInterval(S.wi);
     page(top("← Unit") + '<div class="rdh"><h2>✍️ Writing · your best result</h2></div>'
-      + '<div class="wsc"><div class="wbg">' + big + '</div><div class="wcr">' + crit + '</div><p class="sub" style="margin:8px 0 0">Your teacher moved you on. This is your best mark so far. To get the key, correct every mistake listed on the right in your essay.</p></div>'
-      + '<div class="rsp"><div class="rpn hlz" id="rdp"><div class="wrh">Your essay · fix the mistakes here</div><textarea id="wsx" class="wrta" spellcheck="false" autocomplete="off"></textarea><div class="wrm"><b id="wsn"></b><span id="wsw"></span></div></div>'
-      + '<div class="rpn q" id="rdq"><div class="wrh">Mistakes to fix · <b id="wsc">0</b> of ' + fixes.length + ' fixed</div>' + (fixes.length ? '<ul style="margin:0;padding:0">' + list + '</ul>' : '<p>No mistakes left to fix. Great!</p>') + '</div></div>'
+      + '<div class="wsc"><div class="wbg">' + big + '</div><div class="wcr">' + crit + '</div><p class="sub" style="margin:8px 0 0">Your teacher moved you on. This is your best mark so far. To get the key, correct every mistake listed on the left in your essay.</p></div>'
+      + '<div class="rsp"><div class="rpn hlz" id="rdp"><div class="wrh">Mistakes to fix · <b id="wsc">0</b> of ' + fixes.length + ' fixed</div>' + (fixes.length ? '<ul style="margin:0;padding:0">' + list + '</ul>' : '<p>No mistakes left to fix. Great!</p>') + '</div>'
+      + '<div class="rpn q" id="rdq"><div class="wrh">Your essay · fix the mistakes here</div><textarea id="wsx" class="wrta" spellcheck="false" autocomplete="off"></textarea><div class="wrm"><b id="wsn"></b><span id="wsw"></span></div></div></div>'
       + '<div class="rbar rbfix" style="max-width:none"><button class="go" id="wsk" disabled>Get the key →</button><small id="wsh"></small></div>');
     wide(true); el("cb").onclick = function(){ wide(false); hub(); };
     var ta = el("wsx"); ta.value = orig; ta.onpaste = function(e){ e.preventDefault(); }; ta.ondrop = function(e){ e.preventDefault(); }; ta.oncontextmenu = function(e){ e.preventDefault(); }; noPaste(ta);
@@ -1481,7 +1481,7 @@ function NNTcoach(text, r, o){
       [].forEach.call(document.querySelectorAll(".wfi"), function(li){ var f = fixes[+li.getAttribute("data-i")], b = nm(f.bad), gone = b ? T.indexOf(" " + b + " ") < 0 : tx.indexOf(f.bad) < 0, ok = gone && lenOk;
         if (ok) done++; li.style.borderColor = ok ? "#7cc9a8" : "#f0a0a0"; li.style.background = ok ? "#effaf5" : "#fff"; li.querySelector(".wtk").textContent = ok ? "✓" : "○"; li.querySelector(".wtk").style.color = ok ? "#1f9d72" : "#d64545"; });
       el("wsc").textContent = done; el("wsn").textContent = nw + " words"; el("wsw").textContent = lenOk ? "" : "Keep your essay at least " + minW + " words long.";
-      var all = done === fixes.length && lenOk; el("wsk").disabled = !all; el("wsh").textContent = all ? "Every mistake is fixed. You can get the key." : (fixes.length - done) + " mistake" + (fixes.length - done === 1 ? "" : "s") + " left. Change each wrong phrase on the left.";
+      var all = done === fixes.length && lenOk; el("wsk").disabled = !all; el("wsh").textContent = all ? "Every mistake is fixed. You can get the key." : (fixes.length - done) + " mistake" + (fixes.length - done === 1 ? "" : "s") + " left. Change each wrong phrase in your essay on the right.";
     }
     ta.oninput = upd; upd(); S.sig = null;
     el("wsk").onclick = function(){ if (el("wsk").disabled) return; S.cur = null; S.wrDone = S.wrDone || {}; S.wrDone[S.unit] = true; wide(false); S.nextKind = "write"; nextStage(); };
