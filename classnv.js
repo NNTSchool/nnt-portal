@@ -359,7 +359,7 @@
   function syncP(){ var p = statusSync(); return p ? Promise.race([p.catch(function(){}), new Promise(function(r){ setTimeout(r, 8000); })]) : Promise.resolve(); }
   function synced(fn){ var d = false, g = function(){ if (!d){ d = true; fn(); } }; var p = statusSync(); if (!p){ g(); return; } p.then(g, g); setTimeout(g, 8000); }
   var RW = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1, 16: 1};
-  var LIS = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1};   /* units whose listening is published; reading opens at once for the others */
+  var LIS = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1};   /* units whose listening is published; reading opens at once for the others */
   /* the drilling takes the whole screen, like the classic tests; the hub gives it back */
   function goFS(){ var d = document.documentElement, f = d.requestFullscreen || d.webkitRequestFullscreen || d.msRequestFullscreen; try { var p = f && f.call(d); if (p && p.then) p.then(function(){ try { if (navigator.keyboard && navigator.keyboard.lock) navigator.keyboard.lock(["Escape"]).catch(function(){}); } catch (e) {} }, function(){}); } catch (e) {} }
   /* Esc cannot be fully blocked by a web page (Chrome lets a long press out), so if the student gets out, the drilling is covered until they return to full screen */
@@ -664,7 +664,7 @@
     if (ex.kind === "tf") ex.qs.forEach(function(q, k){ rows.push({n: k + 1, ok: ans[k] === q.a, said: ans[k] ? (ans[k] === "T" ? "True" : "False") : "", right: q.a === "T" ? "True" : "False", text: q.t, ev: q.ev}); });
     else if (ex.kind === "grid") ex.groups.forEach(function(g, gi){ ex.cols.forEach(function(c, ci){ var k = gi * ex.cols.length + ci, a = ans[k]; rows.push({n: k + 1, ok: a === g.ans[ci], said: a >= 0 ? g.rows[a] : "", right: g.rows[g.ans[ci]], text: c + ": " + g.title.replace(/^Which\s+/i, "").replace(/\?$/, ""), ev: g.ev[ci]}); }); });
     else ex.qs.forEach(function(q, k){ var a = ans[k], ok = false, right = q.a || "✔ correct (no change)";
-      if (!q.a) ok = a === "tick"; else if (q.set){ if (a && a !== "tick"){ var L = String(a).toUpperCase().replace(/\bAND\b/g, " ").replace(/[^A-Z]/g, "").split("").filter(function(c, i, z){ return z.indexOf(c) === i; }).sort().join(""); ok = L === q.set.slice().sort().join(""); } } else if (a && a !== "tick"){ var f = " " + fnorm(a) + " "; ok = (q.acc || []).some(function(x){ return f.indexOf(" " + fnorm(x) + " ") > -1 || (/\d/.test(x) && f.replace(/ /g, "").indexOf(fnorm(x).replace(/ /g, "")) > -1); }); }
+      if (!q.a) ok = a === "tick"; else if (q.set){ if (a && a !== "tick"){ var L = String(a).toUpperCase().replace(/\bAND\b/g, " ").replace(/[^A-Z]/g, "").split("").filter(function(c, i, z){ return z.indexOf(c) === i; }).sort().join(""); ok = L === q.set.slice().sort().join(""); } } else if (a && a !== "tick"){ var f = " " + fnorm(a) + " "; ok = q.all ? q.all.every(function(x){ return f.indexOf(" " + fnorm(x) + " ") > -1; }) : (q.acc || []).some(function(x){ return f.indexOf(" " + fnorm(x) + " ") > -1 || (/\d/.test(x) && f.replace(/ /g, "").indexOf(fnorm(x).replace(/ /g, "")) > -1); }); }
       rows.push({n: k + 1, ok: ok, said: a === "tick" ? "✔ correct" : a, right: right, text: q.l + (q.s ? " (" + q.s + ")" : ""), ev: q.ev}); });
     return rows;
   }
@@ -702,6 +702,7 @@
   }
   function l4Intro(){
     var P = S.P, ie = S.L.track === "ie";
+    if (P.mock){ page(top() + '<div class="hero"><h2>Listening · Practice test</h2><p class="sub">' + esc(P.title) + ' · one recording · about 60 minutes</p></div>' + stgBar(0) + '<div class="gr g2 fr l4how"><div class="rc g"><span class="rn">1</span><div><b>Exam</b><small style="color:#bcd0ff">The whole recording plays ONCE, exactly like the real test: four sections, no pausing, no rewinding. Answer while you listen.</small></div></div><div class="rc g"><span class="rn">2</span><div><b>Analysis</b><small style="color:#bcd0ff">See every mistake with the exact sentence you missed, read the script, and win your mistakes back.</small></div></div></div><button class="go" id="l4go" style="margin-top:8px">Start the test →</button>'); el("cb").onclick = hub; el("l4go").onclick = function(){ S.L.stage = 3; S.L.ei = 0; l4Exam(); }; return; }
     page(top() + '<div class="hero"><h2>Listening · Part ' + S.unit + '</h2><p class="sub">' + esc(P.title) + ' · ' + P.exercises.length + ' recordings · about 60 minutes</p></div>' + stgBar(0)
       + '<div class="gr g2 fr l4how">'
       + '<div class="rc g"><span class="rn">1</span><div><b>Take notes</b><small style="color:#bcd0ff">Sound only. Play each recording as often as you like and write down names, numbers, dates, choices and reasons. You cannot see the questions yet.</small></div></div>'
@@ -751,7 +752,7 @@
     };
   }
   function l4Exam(){
-    var ex = S.P.exercises[S.L.ei], L = S.L, ie = L.track === "ie", lim = ie ? 1 : 2;
+    var ex = S.P.exercises[S.L.ei], L = S.L, ie = L.track === "ie" || !!S.P.mock, lim = ie ? 1 : 2;
     page(l4Head() + '<div class="ins hlz"><span class="ii">⏱</span><div><small>STAGE 3 · EXAM CONDITIONS</small><strong>' + esc(ex.say) + ' The recording is played ' + (ie ? "once only" : "up to twice") + '. Your notes are hidden: answer while you listen.</strong></div></div>'
       + l4Player(ex) + '<div class="l4ans" id="l4a">' + qWidget(ex) + '</div><div class="l4bar"><span class="wrm"></span><button class="go" id="l4ck">Submit my answers</button></div><div id="cout"></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; qWire(el("l4a"), ex);
