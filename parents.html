@@ -77,6 +77,16 @@
 .hist td span{font-size:13px;margin-left:4px;font-weight:700}
 .t-g{color:#0b6b46}.t-r{color:#9c2442}.t-o{color:#8a5a00}.t-n{color:#7b86a3}
 body.lock{overflow:hidden}
+.all{margin-top:10px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.all .ar{display:grid;grid-template-columns:60px 58px 46px 1fr;align-items:center;gap:6px;padding:8px 10px;border-top:1px solid var(--line);font-size:13.5px;font-weight:700}
+.all .ar:first-child{border-top:0}
+.all .ah{background:#f3f4f8;color:var(--mute);font:700 11.5px var(--sans);text-transform:uppercase;letter-spacing:.05em}
+.all .ar>div{display:flex;align-items:center;gap:5px;min-width:0;line-height:1.15}
+.all .ar.ah>div{font-size:10.5px;line-height:1.1}
+.all svg{width:28px;height:28px;flex:0 0 28px}
+.all .ar.bad{background:#fff6f8}
+.all .ar .t-r{color:#9c2442}.all .ar .t-g{color:#0b6b46}.all .ar .t-o{color:#8a5a00}.all .ar .t-n{color:#7b86a3}
+@media(max-width:380px){.all .ar{grid-template-columns:52px 54px 40px 1fr;font-size:12px}}
 @media(prefers-reduced-motion:no-preference){.sheet{animation:up .22s ease-out}@keyframes up{from{transform:translateY(30px);opacity:.4}}}
 </style></head><body>
 <div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small data-i="sub"></small></div>
@@ -260,6 +270,15 @@ function drawBoard(){
     var tone = a === "absent" ? "r" : (s === "done" && kk) ? "g" : s === "part" || s === "done" ? "o" : "";
     var wk = t(home ? "hw" : "cw"), wv = t((home ? "hw" : "cw") + (s === "done" ? "Done" : s === "part" ? "Part" : "None"));
     n++;
+    if (toks.length){
+      var ah = '<div class="all"><div class="ar ah"><div>' + esc(t("lessonW")) + '</div><div>' + esc(t(home ? "hw" : "cw")) + '</div><div>' + esc(t("key")) + '</div><div>' + esc(t("att")) + '</div></div>';
+      (r.us || []).forEach(function(z){
+        var zs = home ? z.h : z.c, zk = home ? z.hk : z.ck, za = z.a;
+        ah += '<div class="ar' + (za === "absent" ? " bad" : "") + '"><div>' + esc(lessonName(z.u)) + '</div><div class="t-' + stTone(zs) + '">' + dot(stTone(zs)) + '</div><div>' + keyIco(zk) + '</div><div class="t-' + attTone(za) + '">' + dot(attTone(za)) + '<span>' + esc(za ? t(za) : "") + '</span></div></div>';
+      });
+      h += '<div class="st ' + (a === "absent" ? "r" : "") + '"><div class="nm">' + esc(nm(r.name)) + (r.g && !GRP ? '<span class="gtag">' + t(r.g === "A" ? "toq" : "juft") + '</span>' : "") + '</div>' + ah + '</div><button class="bt" type="button" data-id="' + r.id + '" data-n="' + esc(r.name) + '" data-g="' + esc(r.g || "") + '">' + esc(t("batb")) + '</button></div>';
+      return;
+    }
     h += '<div class="st ' + tone + '"><div class="nm">' + esc(nm(r.name)) + (r.g && !GRP ? '<span class="gtag">' + t(r.g === "A" ? "toq" : "juft") + '</span>' : "") + '</div><div class="ic3">'
       + ic(stTone(s), dot(stTone(s)), wk, wv)
       + ic(kk ? "g" : "n", keyIco(kk), t("key"), kk ? t("keyYes") : t("keyNo"), kk === "teacher" ? t("keyT") : "")
