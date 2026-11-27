@@ -61,62 +61,156 @@
 .tip{display:flex;gap:12px;align-items:flex-start;margin-top:14px;padding:14px;border-radius:14px;background:#eaf1ff;border:1px solid #c9d9fb;color:var(--ink);font-size:15.5px}
 .tip button{margin-top:8px;border:0;background:var(--royal);color:#fff;font:700 15px var(--sans);padding:9px 18px;border-radius:10px;cursor:pointer}
 .foot{text-align:center;color:#9aa6bf;font-size:13px;margin-top:26px}
+
+.deck{margin-top:12px;display:grid;gap:10px}
+.deck .row{display:flex;gap:10px;flex-wrap:wrap}
+.seg{display:flex;flex:1;min-width:230px;background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:4px;gap:4px;box-shadow:0 6px 18px -12px rgba(7,23,51,.35)}
+.seg button{flex:1;border:0;background:none;border-radius:12px;padding:10px 8px;font:700 17px var(--sans);color:var(--ink);cursor:pointer;line-height:1.15;transition:transform .12s,background .15s}
+.seg button small{display:block;font:500 12px var(--sans);color:var(--mute);margin-top:3px}
+.seg button:active{transform:scale(.97)}
+.seg button.on{background:linear-gradient(180deg,#14367e,var(--ink));color:#fff;box-shadow:0 6px 14px -6px rgba(7,23,51,.6)}
+.seg button.on small{color:#efdca8}
+.seg.big button{font-size:21px;padding:14px 8px}
+.seg.big{border-color:var(--gold);background:linear-gradient(135deg,#fffaf0,#fff)}
+.seg.big button.on{background:linear-gradient(135deg,#ffd45c,#c8963a);color:#071733;box-shadow:0 8px 20px -8px rgba(200,150,58,.9)}
+.seg.big button.on small{color:#4a3510}
+.bat{flex:1;min-width:230px;border:0;border-radius:16px;padding:14px 16px;font:800 20px var(--sans);letter-spacing:.02em;color:#071733;cursor:pointer;background:linear-gradient(110deg,#ffc93c 0%,#fff1b8 38%,#ffc93c 56%,#ff9ec4 100%);background-size:220% 100%;animation:shine 3.2s ease-in-out infinite;box-shadow:0 0 0 3px rgba(255,201,60,.35),0 12px 26px -10px rgba(200,150,58,.95)}
+.bat small{display:block;font:600 12.5px var(--sans);opacity:.8;margin-top:2px}
+.bat.on{background:linear-gradient(135deg,#123f9c,#071733);color:#fff;animation:none;box-shadow:0 0 0 3px rgba(18,63,156,.3),0 12px 26px -10px rgba(7,23,51,.7)}
+@keyframes shine{50%{background-position:100% 0}}
+@media(prefers-reduced-motion:reduce){.bat{animation:none}}
+.today{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 10px;font-size:15.5px}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 14px;font-weight:700;font-size:14.5px;background:#eef1f8;color:var(--ink)}
+.chip.g{background:#dff5ea;color:#0b6b46}.chip.r{background:#fde4e9;color:#9c2442}.chip.o{background:#fff1d6;color:#8a5a00}.chip.n{background:#eef1f8;color:#5a6785}
+.lnav{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;-webkit-overflow-scrolling:touch}
+.lnav button{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:9px 16px;font:700 16px var(--sans);color:var(--ink);cursor:pointer}
+.lnav button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.lnav button i{font-style:normal;margin-left:6px;font-size:13px}
+.ucard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 1px 2px rgba(7,23,51,.04),0 10px 24px -16px rgba(7,23,51,.2)}
+.uh{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.uh .pn{flex:0 0 46px}
+.uh h3{margin:0;font:600 22px var(--serif);color:var(--ink)}
+.q3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:620px){.q3{grid-template-columns:1fr}}
+.qc{border-radius:14px;padding:12px 14px;background:#f6f8fc;border:1.5px solid var(--line)}
+.qc span{display:block;font-size:13.5px;color:var(--mute);font-weight:600;letter-spacing:.02em}
+.qc b{display:block;margin-top:4px;font-size:19px;line-height:1.2}
+.qc.g{background:#effaf4;border-color:#bfe8d3}.qc.g b{color:#0b6b46}
+.qc.r{background:#fff1f4;border-color:#f6c4cf}.qc.r b{color:#9c2442}
+.qc.o{background:#fff8e8;border-color:#f3dba3}.qc.o b{color:#8a5a00}
+.qc.n b{color:#5a6785}
+.qc em{display:block;font-style:normal;font-size:13.5px;color:var(--mute);margin-top:3px}
+.dh{margin:18px 0 8px;font:700 13px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#8a6410}
+.dl{display:grid;grid-template-columns:1fr auto;gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.dl div{padding:10px 14px;border-bottom:1px solid var(--line);font-size:16px}
+.dl div:nth-last-child(-n+2){border-bottom:0}
+.dl div:nth-child(odd){color:var(--mute);background:#fafbfd}
+.dl div:nth-child(even){font-weight:700;color:var(--ink);text-align:right}
+.hist{width:100%;border-collapse:collapse;font-size:15px;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.hist th{background:#f3f4f8;color:var(--mute);font:700 12.5px var(--sans);text-transform:uppercase;letter-spacing:.06em;padding:9px 8px;text-align:left}
+.hist td{padding:10px 8px;border-top:1px solid var(--line);vertical-align:top}
+.hist tr.cur td{background:var(--gold3)}
+.hist .t-g{color:#0b6b46;font-weight:700}.hist .t-r{color:#9c2442;font-weight:700}.hist .t-o{color:#8a5a00;font-weight:700}.hist .t-n{color:#7b86a3}
+.hwrap{overflow-x:auto}
+.empty{margin-top:12px;padding:14px;border-radius:12px;background:#eaf1ff;color:var(--ink);font-size:16px}
+@media(max-width:520px){.top{flex-wrap:wrap}.lang{margin-left:0;width:100%;justify-content:center}.lang button{flex:1}}
+.gtag{font-size:13px;font-weight:700;color:#8a6410;background:var(--gold3);border-radius:999px;padding:3px 10px;margin-left:8px}
 </style></head><body>
-<div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small data-i="sub"></small></div><div class="lang"><button id="l_lat">Lotin</button><button id="l_cyr">Кирилл</button></div></div>
+<div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small data-i="sub"></small></div><div class="lang"><button id="l_lat">Lotin</button><button id="l_cyr">Кирилл</button><button id="l_en">English</button></div></div>
 <div class="pwrap">
+ <div class="phero"><img src="logo.jpg" alt=""><h1 data-h="h1"></h1><p data-i="intro"></p></div>
+ <div class="deck">
+  <div class="row">
+   <div class="seg big" id="gseg"><button id="g_A" type="button"><span data-i="toq"></span><small data-i="toqS"></small></button><button id="g_B" type="button"><span data-i="juft"></span><small data-i="juftS"></small></button></div>
+   <div class="seg" id="mseg"><button id="m_home" type="button" data-i="mHome"></button><button id="m_class" type="button" data-i="mClass"></button></div>
+  </div>
+  <div class="row"><button class="bat" id="bat" type="button" aria-pressed="false"><span id="batt"></span><small id="bats"></small></button></div>
+ </div>
  <div id="s_find">
-  <div class="phero"><img src="logo.jpg" alt=""><h1 data-h="h1"></h1><p data-i="intro"></p></div>
   <div class="card sbox">
    <label for="q" data-i="lbl"></label>
    <input type="search" id="q" autocomplete="off">
-   <p class="hint" data-i="hint"></p>
-   <div class="plist" id="plist"></div><div id="nf"></div>
-   <button class="allb" id="allb" type="button"></button>
+   <p class="hint" id="fhint"></p>
+   <div class="plist big" id="plist"></div><div id="nf"></div>
   </div>
   <div class="tip" id="tip"><div>📲</div><div><b data-i="tipT"></b><br><span data-i="tipB"></span><br><button id="tipx" type="button" data-i="tipOk"></button></div></div>
  </div>
  <div id="s_kid" class="hide">
   <button class="back2" id="back"></button>
-  <div class="kid"><h2 id="kname"></h2></div>
-  <div class="sumrow"><div class="sum"><b id="s1">0</b><span data-i="done"></span></div><div class="sum"><b id="s2">–</b><span data-i="avg"></span></div></div>
-  <div class="legend" id="legend"></div>
+  <div class="kid"><h2 id="kname"></h2><span class="gtag" id="kgrp"></span></div>
+  <div class="today" id="today"></div>
   <div class="live"><i></i><span id="upd"></span></div>
-  <div id="units"></div>
+  <div class="lnav" id="lnav"></div>
+  <div id="ubody"></div>
  </div>
  <div class="foot">NNT School Academy</div>
 </div>
 <script src="core.js?v=16"></script>
 <script>
-var SID = 0, T = null, ROS = null, ALL = false, KNAME = "", LAST = null, LVC = ["#e5365f","#e0409a","#0a9f6e","#ff6a00","#7b2ff7"], MED = ["🥇","🥈","🥉"];
-var LANG = ls("nnt_parent_lang") === "cyr" ? "cyr" : "lat";
-var D = {
- lat:{sub:"Ota-onalar uchun",intro:"Farzandingizning ismini yozing va uning barcha testlar bo'yicha natijalarini ko'ring.",lbl:"Farzandingizning ismi",ph:"Masalan: Fotima",
-  hint:"Ismning boshlanishini yozing va ro'yxatdan o'quvchini tanlang.",all:"Barcha o'quvchilar ro'yxatini ko'rsatish",hide:"Ro'yxatni yashirish",
-  nf:"Bunday ism topilmadi. Ismni boshqacha yozib ko'ring (masalan, faqat ismini yoki familiyasini).",net:"Internet bilan aloqa yo'q. Iltimos, qayta urinib ko'ring.",
-  tipT:"Telefoningizga saqlab qo'ying",tipB:"Brauzer menyusini oching va «Bosh ekranga qo'shish» tugmasini bosing. Shunda sahifa ilova kabi bir bosishda ochiladi.",tipOk:"Tushunarli",
-  back:"← Boshqa o'quvchini qidirish",done:"Bajarilgan testlar",avg:"O'rtacha natija",
-  legend:"<b class='g'>O'tdi</b> — 60% va undan yuqori natija. <b class='r'>O'tmadi</b> — 60% dan past natija.",
-  upd:"Natijalar avtomatik yangilanib turadi",updAt:"Natijalar avtomatik yangilanib turadi · oxirgi yangilanish ",off:"Internet bilan aloqa yo'q. Qayta urinilmoqda…",
-  load:"Yuklanmoqda…",nodata:"Ma'lumot topilmadi.",pass:"O'tdi",fail:"O'tmadi",
-  lv:["Qayta urinish kerak","Yaxshi","A'lo","Ajoyib","Afsonaviy"],
-  wait:"Test topshirilgan. Natija tez orada e'lon qilinadi.",live:"Hozir test ishlayapti…",none:"Testni bajarmagan",
-  rank:function(r,n){return "Sinfdagi o'rni: <b>"+r+"-o'rin</b> ("+n+" nafar o'quvchi ichida)";},wr:"Yozma ish bahosi: ",top:"Eng yaxshi 3 o'quvchi"},
- cyr:{sub:"Ота-оналар учун",intro:"Фарзандингизнинг исмини ёзинг ва унинг барча тестлар бўйича натижаларини кўринг.",lbl:"Фарзандингизнинг исми",ph:"Масалан: Фотима",
-  hint:"Исмнинг бошланишини ёзинг ва рўйхатдан ўқувчини танланг.",all:"Барча ўқувчилар рўйхатини кўрсатиш",hide:"Рўйхатни яшириш",
-  nf:"Бундай исм топилмади. Исмни бошқачароқ ёзиб кўринг (масалан, фақат исмини ёки фамилиясини).",net:"Интернет билан алоқа йўқ. Илтимос, қайта уриниб кўринг.",
-  tipT:"Телефонингизга сақлаб қўйинг",tipB:"Браузер менюсини очинг ва «Бош экранга қўшиш» тугмасини босинг. Шунда саҳифа илова каби бир босишда очилади.",tipOk:"Тушунарли",
-  back:"← Бошқа ўқувчини излаш",done:"Бажарилган тестлар",avg:"Ўртача натижа",
-  legend:"<b class='g'>Ўтди</b> — 60% ва ундан юқори натижа. <b class='r'>Ўтмади</b> — 60% дан паст натижа.",
-  upd:"Натижалар автоматик янгиланиб туради",updAt:"Натижалар автоматик янгиланиб туради · охирги янгиланиш ",off:"Интернет билан алоқа йўқ. Қайта уринилмоқда…",
-  load:"Юкланмоқда…",nodata:"Маълумот топилмади.",pass:"Ўтди",fail:"Ўтмади",
-  lv:["Қайта уриниш керак","Яхши","Аъло","Ажойиб","Афсонавий"],
-  wait:"Тест топширилган. Натижа тез орада эълон қилинади.",live:"Ҳозир тест ишлаяпти…",none:"Тестни бажармаган",
-  rank:function(r,n){return "Синфдаги ўрни: <b>"+r+"-ўрин</b> ("+n+" нафар ўқувчи ичида)";},wr:"Ёзма иш баҳоси: ",top:"Энг яхши 3 ўқувчи"}
+var SID = 0, T = null, ROS = null, KNAME = "", DATA = null, UNIT = 0, UPICK = false;
+var GRP = ls("nnt_parent_grp") === "B" ? "B" : (ls("nnt_parent_grp") === "A" ? "A" : "");
+var MODE = ls("nnt_parent_mode") === "class" ? "class" : "home";
+var DET = ls("nnt_parent_det") === "1";
+var LANG = ({cyr: 1, en: 1})[ls("nnt_parent_lang")] ? ls("nnt_parent_lang") : "lat";
+/* Latin Uzbek is written by hand; Cyrillic is made from it with the same letter table that already turns names into Cyrillic */
+var LAT = {
+ sub:"Ota-onalar uchun", intro:"Guruhni tanlang, farzandingizni toping va uning natijalarini ko'ring.",
+ toq:"Toq", toqS:"Du · Chor · Ju", juft:"Juft", juftS:"Se · Pay · Sha",
+ mHome:"Uy", mClass:"Darsxona", more:"Batafsil", moreS:"Barcha tafsilotlarni ko'rish", less:"Qisqacha ko'rinish", lessS:"Faqat asosiy natijalar",
+ lbl:"Farzandingizning ismi", ph:"Masalan: Fotima",
+ fhintG:"Guruhdagi o'quvchilar ro'yxati. Boshqa ismni qidirish uchun yozing.", fhint0:"Yuqoridan Toq yoki Juft guruhini tanlang yoki istalgan ismni yozing.",
+ nf:"Bunday ism topilmadi. Ismni boshqacha yozib ko'ring (masalan, faqat ismini yoki familiyasini).", net:"Internet bilan aloqa yo'q. Iltimos, qayta urinib ko'ring.",
+ tipT:"Telefoningizga saqlab qo'ying", tipB:"Brauzer menyusini oching va «Bosh ekranga qo'shish» tugmasini bosing. Shunda sahifa ilova kabi bir bosishda ochiladi.", tipOk:"Tushunarli",
+ back:"← Boshqa o'quvchini qidirish", load:"Yuklanmoqda…", nodata:"Ma'lumot topilmadi.", upd:"Natijalar avtomatik yangilanib turadi", updAt:"Natijalar avtomatik yangilanib turadi · oxirgi yangilanish ", off:"Internet bilan aloqa yo'q. Qayta urinilmoqda…",
+ today:"Bugun", tPres:"Darsga kelgan", tAbs:"Darsga kelmagan", tLate:"Kechikib kelgan", tNone:"Bugun davomat belgilanmagan",
+ lesson:"-dars", lessonW:"Dars", noUnits:"Hozircha darslar ochilmagan.",
+ hw:"Uy vazifasi", cw:"Darsxonadagi ish", key:"Kalit", att:"Davomat",
+ hwDone:"Bajarilgan", hwPart:"Jarayonda", hwNone:"Bajarilmagan", cwDone:"Bajarilgan", cwPart:"Jarayonda", cwNone:"Bajarilmagan",
+ keyYes:"Olindi", keyNo:"Olinmagan", keyT:"Kalitni ustoz berdi", keyHome:"Uy kaliti", keyClass:"Sinf kaliti",
+ absent:"Darsga kelmagan", late:"Kechikib kelgan", present:"Darsga kelgan", noatt:"Belgilanmagan",
+ sVid:"Videolar", sTest:"Uy testi", sSum:"Yozma ish", sSpk:"Gapirish", sKey:"Kalit", sLis:"Tinglash", sRead:"O'qish", sWrite:"Yozish",
+ done:"Bajarildi", skipped:"O'tkazib yuborilgan", notyet:"Hali yo'q", ready:"Tayyor", doing:"Hozir bajaryapti",
+ jump:"Sakrash testi", jPass:"O'tdi", jFail:"O'tmadi", jCancel:"Bekor qilingan", jStart:"Bajarilmoqda", jAband:"Tashlab ketilgan",
+ vids:"Ko'rilgan videolar", jumped:"Videolar o'tkazib yuborildi (sakrash testi)", tpct:"Uy testi natijasi", tbest:"Eng yaxshi natija", ttries:"Urinishlar soni", passm:"O'tish bali",
+ pass:"O'tdi", fail:"O'tmadi", sscore:"Yozma ish bahosi", swords:"So'zlar soni", stries:"Yozma ish urinishlari", spk:"Gapirish topshirig'i",
+ leaves:"Oynadan chiqqan", cancels:"Bekor qilingan urinishlar", times:" marta", min:" daq",
+ first:"Birinchi natija", final:"Yakuniy natija", fix:"Xatolarni tuzatish turlari", drillT:"Mashq urinishlari", rtests:"Testlar soni", wsc:"Yozma ish bali", wtries:"Urinishlar", wdrill:"Mashq qilingan gaplar", wfails:"Mashqdagi xatolar", spent:"Sarflangan vaqt",
+ secHome:"Uy vazifasi tafsilotlari", secClass:"Darsxona tafsilotlari", secAtt:"Davomat", secAll:"Barcha darslar", secKeys:"Kalitlar",
+ tHome:"Uy", tClass:"Sinf", kUstoz:"ustoz berdi", noWork:"Hali ish boshlanmagan",
+ a:"A", g:"Guruh"
 };
-function t(k){ return D[LANG][k]; }
+var EN = {
+ sub:"For parents", intro:"Choose the group, find your child and see their results.",
+ toq:"Odd", toqS:"Mon · Wed · Fri", juft:"Even", juftS:"Tue · Thu · Sat",
+ mHome:"Home", mClass:"Classroom", more:"Details", moreS:"See every detail", less:"Short view", lessS:"Main results only",
+ lbl:"Your child's name", ph:"For example: Fotima",
+ fhintG:"Students in this group. Type to search for any other name.", fhint0:"Choose the Odd or Even group above, or type any name.",
+ nf:"No such name found. Try writing it differently (for example just the first name or the surname).", net:"No internet connection. Please try again.",
+ tipT:"Save it on your phone", tipB:"Open the browser menu and tap “Add to Home screen”. The page then opens with one tap, like an app.", tipOk:"Got it",
+ back:"← Find another student", load:"Loading…", nodata:"No data found.", upd:"Results refresh automatically", updAt:"Results refresh automatically · last update ", off:"No internet connection. Trying again…",
+ today:"Today", tPres:"Attended the lesson", tAbs:"Did not attend the lesson", tLate:"Came late", tNone:"No attendance marked today",
+ lesson:"Lesson ", lessonW:"Lesson", noUnits:"No lessons are open yet.",
+ hw:"Homework", cw:"Classroom work", key:"Key", att:"Attendance",
+ hwDone:"Done", hwPart:"In progress", hwNone:"Not done", cwDone:"Done", cwPart:"In progress", cwNone:"Not done",
+ keyYes:"Received", keyNo:"Not received", keyT:"Key given by the teacher", keyHome:"Home key", keyClass:"Class key",
+ absent:"Did not attend", late:"Came late", present:"Attended", noatt:"Not marked",
+ sVid:"Videos", sTest:"Home test", sSum:"Writing", sSpk:"Speaking", sKey:"Key", sLis:"Listening", sRead:"Reading", sWrite:"Writing",
+ done:"Done", skipped:"Skipped", notyet:"Not yet", ready:"Ready", doing:"Doing it now",
+ jump:"Jump test", jPass:"Passed", jFail:"Failed", jCancel:"Cancelled", jStart:"In progress", jAband:"Abandoned",
+ vids:"Videos watched", jumped:"Videos skipped (jump test)", tpct:"Home test result", tbest:"Best result", ttries:"Number of tries", passm:"Pass mark",
+ pass:"Passed", fail:"Not passed", sscore:"Writing score", swords:"Words written", stries:"Writing tries", spk:"Speaking task",
+ leaves:"Left the window", cancels:"Cancelled attempts", times:"×", min:" min",
+ first:"First result", final:"Final result", fix:"Fix rounds", drillT:"Practice tries", rtests:"Tests taken", wsc:"Writing score", wtries:"Tries", wdrill:"Sentences practised", wfails:"Practice slips", spent:"Time spent",
+ secHome:"Homework details", secClass:"Classroom details", secAtt:"Attendance", secAll:"All lessons", secKeys:"Keys",
+ tHome:"Home", tClass:"Class", kUstoz:"teacher gave it", noWork:"No work started yet",
+ a:"A", g:"Group"
+};
+var D = {lat: LAT, en: EN, cyr: {}};
+function t(k){ var v = D[LANG][k]; return v == null ? (LAT[k] == null ? k : LAT[k]) : v; }
+function lessonName(n){ return LANG === "en" ? t("lesson") + n : n + t("lesson"); }
 /* Latin -> Cyrillic for names (Uzbek) */
-var L2C = [["o'","ў"],["o\u2018","ў"],["o\u02bb","ў"],["g'","ғ"],["g\u2018","ғ"],["g\u02bb","ғ"],["sh","ш"],["ch","ч"],["yo","ё"],["yu","ю"],["ya","я"],["ye","е"],["ts","ц"],["ng","нг"],
- ["a","а"],["b","б"],["d","д"],["e","е"],["f","ф"],["g","г"],["h","ҳ"],["i","и"],["j","ж"],["k","к"],["l","л"],["m","м"],["n","н"],["o","о"],["p","п"],["q","қ"],["r","р"],["s","с"],["t","т"],["u","у"],["v","в"],["x","х"],["y","й"],["z","з"],["w","в"],["'","ъ"],["\u2019","ъ"]];
+var L2C = [["o'","ў"],["o‘","ў"],["oʻ","ў"],["g'","ғ"],["g‘","ғ"],["gʻ","ғ"],["sh","ш"],["ch","ч"],["yo","ё"],["yu","ю"],["ya","я"],["ye","е"],["ts","ц"],["ng","нг"],
+ ["a","а"],["b","б"],["d","д"],["e","е"],["f","ф"],["g","г"],["h","ҳ"],["i","и"],["j","ж"],["k","к"],["l","л"],["m","м"],["n","н"],["o","о"],["p","п"],["q","қ"],["r","р"],["s","с"],["t","т"],["u","у"],["v","в"],["x","х"],["y","й"],["z","з"],["w","в"],["'","ъ"],["’","ъ"]];
 function capIf(c, up){ return up ? c.charAt(0).toUpperCase() + c.slice(1) : c; }
 function toCyr(str){
   return String(str || "").split(/(\s+|-)/).map(function(w){
@@ -135,76 +229,181 @@ function toCyr(str){
 var C2L = {"а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"yo","ж":"j","з":"z","и":"i","й":"y","к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r","с":"s","т":"t","у":"u","ф":"f","х":"h","ц":"ts","ч":"ch","ш":"sh","щ":"sh","э":"e","ю":"yu","я":"ya","ў":"o","ғ":"g","қ":"k","ҳ":"h","ъ":"","ь":"","ы":"i"};
 function norm(s){
   s = String(s || "").toLowerCase().replace(/[а-яёўғқҳъь]/g, function(c){ return C2L[c] != null ? C2L[c] : c; });
-  return s.replace(/['\u2018\u2019\u02bb\u02bc`´]/g, "").replace(/x/g, "h").replace(/q/g, "k").replace(/w/g, "v").replace(/ts/g, "s").replace(/j/g, "y").replace(/yy+/g, "y").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+  return s.replace(/['‘’ʻʼ`´]/g, "").replace(/x/g, "h").replace(/q/g, "k").replace(/w/g, "v").replace(/ts/g, "s").replace(/j/g, "y").replace(/yy+/g, "y").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
 }
 function nm(x){ return LANG === "cyr" ? toCyr(x) : x; }
+Object.keys(LAT).forEach(function(k){ D.cyr[k] = toCyr(LAT[k]); });
+/* hand-fixes where the letter table is not enough */
+D.cyr.toq = "Тоқ"; D.cyr.juft = "Жуфт"; D.cyr.toqS = "Ду · Чор · Жу"; D.cyr.juftS = "Се · Пай · Ша"; D.cyr.tipB = "Браузер менюсини очинг ва «Бош экранга қўшиш» тугмасини босинг. Шунда саҳифа илова каби бир босишда очилади.";
 function applyLang(){
-  document.documentElement.lang = LANG === "cyr" ? "uz-Cyrl" : "uz";
+  document.documentElement.lang = LANG === "cyr" ? "uz-Cyrl" : LANG === "en" ? "en" : "uz";
   document.title = "NNT School · " + t("sub");
   [].forEach.call(document.querySelectorAll("[data-i]"), function(e){ e.textContent = t(e.getAttribute("data-i")); });
-  $("q").placeholder = t("ph"); $("back").textContent = t("back"); $("legend").innerHTML = t("legend");
-  document.querySelector("[data-h=h1]").innerHTML = LANG === "cyr" ? "Фарзандингиз <em>натижалари</em>" : "Farzandingiz <em>natijalari</em>";
-  $("l_lat").className = LANG === "lat" ? "on" : ""; $("l_cyr").className = LANG === "cyr" ? "on" : "";
-  $("allb").textContent = ALL ? t("hide") : t("all");
-  find(); if (LAST) draw(LAST); else if (SID) $("kname").textContent = nm(KNAME);
-  if (!$("kname").textContent) $("upd").textContent = t("upd"); 
+  $("q").placeholder = t("ph"); $("back").textContent = t("back");
+  document.querySelector("[data-h=h1]").innerHTML = LANG === "cyr" ? "Фарзандингиз <em>натижалари</em>" : LANG === "en" ? "Your child's <em>results</em>" : "Farzandingiz <em>natijalari</em>";
+  ["lat", "cyr", "en"].forEach(function(l){ $("l_" + l).className = LANG === l ? "on" : ""; });
+  paintDeck(); find(); if (DATA) draw(); else if (SID) $("kname").textContent = nm(KNAME);
+  if (!SID) $("upd").textContent = t("upd");
+}
+function paintDeck(){
+  $("g_A").className = GRP === "A" ? "on" : ""; $("g_B").className = GRP === "B" ? "on" : "";
+  $("m_home").className = MODE === "home" ? "on" : ""; $("m_class").className = MODE === "class" ? "on" : "";
+  $("bat").className = "bat" + (DET ? " on" : ""); $("bat").setAttribute("aria-pressed", DET ? "true" : "false");
+  $("batt").textContent = (DET ? "✓ " : "🔍 ") + t(DET ? "less" : "more"); $("bats").textContent = t(DET ? "lessS" : "moreS");
 }
 $("l_lat").onclick = function(){ LANG = "lat"; ls("nnt_parent_lang", "lat"); applyLang(); };
 $("l_cyr").onclick = function(){ LANG = "cyr"; ls("nnt_parent_lang", "cyr"); applyLang(); };
-function show(k){ $("s_find").classList.toggle("hide", k !== "find"); $("s_kid").classList.toggle("hide", k !== "kid"); window.scrollTo(0,0); }
+$("l_en").onclick = function(){ LANG = "en"; ls("nnt_parent_lang", "en"); applyLang(); };
+function show(k){ $("s_find").classList.toggle("hide", k !== "find"); $("s_kid").classList.toggle("hide", k !== "kid"); window.scrollTo(0, 0); }
+["A", "B"].forEach(function(g){ $("g_" + g).onclick = function(){ GRP = GRP === g && !SID ? "" : g; ls("nnt_parent_grp", GRP || null); if (SID) goBack(); paintDeck(); find(); }; });
+$("m_home").onclick = function(){ MODE = "home"; ls("nnt_parent_mode", "home"); paintDeck(); if (DATA) draw(); };
+$("m_class").onclick = function(){ MODE = "class"; ls("nnt_parent_mode", "class"); paintDeck(); if (DATA) draw(); };
+$("bat").onclick = function(){ DET = !DET; ls("nnt_parent_det", DET ? "1" : "0"); paintDeck(); if (DATA) draw(); };
+
 function getRoster(){
   if (ROS) return Promise.resolve(ROS);
-  return rpc("roster").then(function(r){ ROS = r.map(function(x){ x.k = norm(x.name); return x; }); return ROS; });
+  return rpc("parent_group", {}).then(function(r){ if (!r || !r.ok) throw new Error("x"); ROS = r.rows.map(function(x){ x.k = norm(x.name); return x; }); return ROS; });
 }
-function listHtml(r){ return r.map(function(x){ return '<div data-id="' + x.id + '" data-n="' + esc(x.name) + '">' + esc(nm(x.name)) + '</div>'; }).join(""); }
+function listHtml(r){ return r.map(function(x){ return '<div data-id="' + x.id + '" data-n="' + esc(x.name) + '">' + esc(nm(x.name)) + (x.g && !GRP ? ' <span class="gtag">' + (x.g === "A" ? t("toq") : t("juft")) + '</span>' : (x.g && x.g !== GRP ? ' <span class="gtag">' + (x.g === "A" ? t("toq") : t("juft")) + '</span>' : "")) + '</div>'; }).join(""); }
 function find(){
   var raw = $("q").value.trim(), q = norm(raw), pl = $("plist");
-  pl.classList.toggle("big", ALL);
-  if (!ALL && q.length < 2){ pl.innerHTML = ""; $("nf").innerHTML = ""; return; }
+  $("fhint").textContent = t(GRP ? "fhintG" : "fhint0");
+  if (!GRP && q.length < 2){ pl.innerHTML = ""; $("nf").innerHTML = ""; return; }
   getRoster().then(function(R){
     if ($("q").value.trim() !== raw) return;
-    var toks = q.split(" ").filter(Boolean);
-    var r = R.filter(function(x){ return toks.every(function(w){ return x.k.indexOf(w) > -1; }); });
-    if (!ALL) r = r.slice(0, 12);
+    var toks = q.split(" ").filter(Boolean), r;
+    if (q.length >= 2) r = R.filter(function(x){ return toks.every(function(w){ return x.k.indexOf(w) > -1; }); });
+    else r = R.filter(function(x){ return x.g === GRP; });
     if (!r.length){ pl.innerHTML = ""; $("nf").innerHTML = '<div class="nf">' + t("nf") + '</div>'; return; }
     $("nf").innerHTML = ""; pl.innerHTML = listHtml(r);
-  }).catch(function(){
-    if (raw.length < 2){ $("nf").innerHTML = '<div class="nf">' + t("net") + '</div>'; return; }
-    rpc("parent_search", {q: LANG === "cyr" || /[а-яёўғқҳ]/i.test(raw) ? norm(raw) : raw}).then(function(r){ $("nf").innerHTML = r.length ? "" : '<div class="nf">' + t("nf") + '</div>'; pl.innerHTML = listHtml(r); }).catch(function(){ $("nf").innerHTML = '<div class="nf">' + t("net") + '</div>'; });
-  });
+  }).catch(function(){ pl.innerHTML = ""; $("nf").innerHTML = '<div class="nf">' + t("net") + '</div>'; });
 }
 var qt = null; $("q").oninput = function(){ clearTimeout(qt); qt = setTimeout(find, 200); };
-$("allb").onclick = function(){ ALL = !ALL; $("allb").textContent = ALL ? t("hide") : t("all"); find(); };
 $("plist").onclick = function(e){ var d = e.target.closest("div[data-id]"); if (!d) return; openKid(+d.getAttribute("data-id"), d.getAttribute("data-n")); };
-function openKid(id, name){ SID = id; LAST = null; KNAME = name || ""; ls("nnt_parent_sid", String(id)); $("kname").textContent = nm(KNAME); $("units").innerHTML = '<p style="color:var(--mute)">' + t("load") + '</p>'; show("kid"); load(); }
-$("back").onclick = function(){ SID = 0; LAST = null; ls("nnt_parent_sid", null); clearInterval(T); $("q").value = ""; ALL = false; $("allb").textContent = t("all"); $("plist").innerHTML = ""; $("nf").innerHTML = ""; show("find"); };
-function draw(d){
-  LAST = d; KNAME = d.name; $("kname").textContent = nm(d.name);
-  var done = 0, sum = 0, cnt = 0, h = "";
-  d.units.forEach(function(u){
-    var top = u.top && u.top.length, st = "", left = "";
-    if (u.state === "done"){
-      done++; sum += +u.pct; cnt++;
-      var ok = +u.pct >= 60;
-      st = '<div class="pas ' + (ok ? "ok" : "no") + '">' + (ok ? "✓ " + t("pass") : "✕ " + t("fail")) + '</div>' +
-           '<div class="res"><span class="big2">' + Math.round(u.pct) + '%</span><span class="lv" style="background:' + LVC[u.level] + '">' + t("lv")[u.level] + '</span></div>' +
-           '<div class="pos">' + t("rank")(u.rank, u.n) + '</div>' +
-           (u.ws != null ? '<div class="wr">' + t("wr") + '<b>' + (u.no >= 19 ? Math.min(9, u.ws) + ' / 9' : u.ws + ' / 10') + '</b></div>' : '');
-    } else if (u.state === "wait"){ done++; st = '<div class="pst wait">' + t("wait") + '</div>'; }
-    else if (u.state === "live"){ st = '<div class="pst liv">' + t("live") + '</div>'; }
-    else st = '<div class="pst none">' + t("none") + '</div>';
-    left = '<div class="pl"><div class="pn">' + u.no + '</div><div><div class="pt">' + esc(u.title.replace(/^Unit \d+ · /, "")) + '</div>' + st + '</div></div>';
-    var right = top ? '<div class="tp"><h4>' + t("top") + '</h4>' + u.top.map(function(x, i){ return '<div class="tr"><span class="m">' + MED[i] + '</span><span class="nm">' + esc(nm(x.name)) + '</span><span class="pc">' + Math.round(x.pct) + '%</span></div>'; }).join("") + '</div>' : "";
-    h += '<div class="pu' + (top ? " has-top" : "") + '">' + left + right + '</div>';
+function openKid(id, name){ SID = id; DATA = null; UPICK = false; UNIT = 0; KNAME = name || ""; ls("nnt_parent_sid", String(id)); $("kname").textContent = nm(KNAME); $("kgrp").textContent = ""; $("today").innerHTML = ""; $("lnav").innerHTML = ""; $("ubody").innerHTML = '<p style="color:var(--mute)">' + t("load") + '</p>'; show("kid"); load(); }
+function goBack(){ SID = 0; DATA = null; ls("nnt_parent_sid", null); clearInterval(T); $("q").value = ""; $("plist").innerHTML = ""; $("nf").innerHTML = ""; show("find"); find(); }
+$("back").onclick = goBack;
+
+/* ---------- reading the data (all read-only) ---------- */
+function attOf(x){ var a = (x.att || []).map(function(r){ return r.status; }); return a.indexOf("absent") > -1 ? "absent" : a.indexOf("late") > -1 ? "late" : a.length ? "present" : null; }
+function homeInfo(x){
+  var st = x.st || {}, vt = +st.vtotal || 0, vd = +st.vdone || 0, vDone = !!st.jumped || (vt > 0 && vd >= vt);
+  var test = !!st.test, ess = !!st.essay, spk = !!st.speak, key = !!st.key;
+  var done = spk || key, any = vd > 0 || test || ess || spk || key || !!st.jumped || +st.tries > 0;
+  var cur = !vDone ? "sVid" : !test ? "sTest" : !ess ? "sSum" : !spk ? "sSpk" : "sKey";
+  return {st: st, vt: vt, vd: vd, vDone: vDone, test: test, ess: ess, spk: spk, key: key, done: done, any: any, cur: cur, state: done ? "done" : any ? "part" : "none"};
+}
+function classInfo(x){
+  var P = {}; (x.cls || []).forEach(function(p){ P[p.st] = p; });
+  var order = ["lis", "read", "write"], S = order.map(function(k){ var p = P[k] || {}, d = p.d || {}; return {k: k, secs: p.secs || 0, mins: Math.floor((p.secs || 0) / 60), d: d, done: k === "write" ? (d.ok === true || d.ok === "true") : !!d.done}; });
+  S.forEach(function(s, i){ if (!s.done && S.slice(i + 1).some(function(n){ return n.secs > 0; })) s.done = true; });
+  var all = S.every(function(s){ return s.done; }), any = S.some(function(s){ return s.done || s.secs > 0; });
+  return {S: S, all: all, any: any, ckey: x.ckey || null, done: all || !!x.ckey, state: (all || x.ckey) ? "done" : any ? "part" : "none"};
+}
+function pickUnit(d){
+  var us = d.units; if (!us.length) return 0;
+  var today = us.filter(function(x){ return (x.att || []).some(function(a){ return String(a.day).slice(0, 10) === d.today; }); });
+  if (today.length) return today[today.length - 1].u;
+  for (var i = 0; i < us.length; i++){ var h = homeInfo(us[i]), c = classInfo(us[i]); if (!(h.key || (h.done && c.done))) return us[i].u; }
+  return us[us.length - 1].u;
+}
+function qc(label, val, tone, sub){ return '<div class="qc ' + tone + '"><span>' + esc(label) + '</span><b>' + esc(val) + '</b>' + (sub ? '<em>' + esc(sub) + '</em>' : '') + '</div>'; }
+function row(a, b){ return '<div>' + esc(a) + '</div><div>' + b + '</div>'; }
+function attTone(a){ return a === "absent" ? "r" : a === "late" ? "o" : a === "present" ? "g" : "n"; }
+function dayTxt(s){ s = String(s || "").slice(0, 10).split("-"); return s.length === 3 ? s[2] + "." + s[1] : ""; }
+function stateTone(s){ return s === "done" ? "g" : s === "part" ? "o" : "n"; }
+
+function unitCard(x, d){
+  var h = homeInfo(x), c = classInfo(x), a = attOf(x), st = h.st, pass = +d.pass || 80, out = "";
+  var ie = d.track === "ie" || (d.track !== "ml" && st.band != null && +st.band <= 9);
+  out += '<div class="ucard"><div class="uh"><div class="pn">' + x.u + '</div><h3>' + esc(lessonName(x.u)) + '</h3></div>';
+  /* first things a parent sees: done or not, key or not, attended or not */
+  var q = "";
+  if (MODE === "home"){
+    q += qc(t("hw"), t("hw" + (h.state === "done" ? "Done" : h.state === "part" ? "Part" : "None")), stateTone(h.state), h.state === "part" ? t(h.cur) : "");
+    q += qc(t("keyHome"), h.key ? t("keyYes") : t("keyNo"), h.key ? "g" : "r", h.key && st.via === "teacher" ? t("keyT") : "");
+  } else {
+    q += qc(t("cw"), t("cw" + (c.state === "done" ? "Done" : c.state === "part" ? "Part" : "None")), stateTone(c.state), "");
+    q += qc(t("keyClass"), c.ckey ? t("keyYes") : t("keyNo"), c.ckey ? "g" : "r", c.ckey === "teacher" ? t("keyT") : "");
+  }
+  var days = (x.att || []).map(function(r){ return dayTxt(r.day); }).filter(Boolean).join(", ");
+  q += qc(t("att"), a ? t(a) : t("noatt"), attTone(a), a ? days : "");
+  out += '<div class="q3">' + q + '</div>';
+  if (DET){ out += MODE === "home" ? homeDetail(x, h, d, pass, ie) : classDetail(x, c); out += attDetail(x); }
+  return out + '</div>';
+}
+function homeDetail(x, h, d, pass, ie){
+  var st = h.st, r = "", at = {}; (x.att2 || []).forEach(function(z){ at[z.kind] = z; });
+  r += row(t("sVid"), h.vt ? (st.jumped ? t("jumped") : h.vd + " / " + h.vt) : "–");
+  if (x.jump){ var o = x.jump.outcome; r += row(t("jump"), o === "pass" ? t("jPass") + " · " + Math.round(x.jump.pct) + "%" : o === "fail" ? t("jFail") + " · " + Math.round(x.jump.pct) + "%" : o === "cancel" ? t("jCancel") : o === "started" ? t("jStart") : t("jAband")); }
+  if (h.test){ var pc = Math.round(st.pct || 0); r += row(t("tpct"), '<span style="color:' + (pc >= pass ? "var(--ok)" : "var(--bad)") + '">' + pc + '% · ' + (pc >= pass ? t("pass") : t("fail")) + '</span>'); if (st.best != null && +st.tries > 1) r += row(t("tbest"), Math.round(st.best) + "%"); }
+  else r += row(t("sTest"), (+st.tries > 0 ? Math.round(st.lastpct || 0) + "% · " : "") + t(h.vDone ? "ready" : "notyet"));
+  if (+st.tries) r += row(t("ttries"), st.tries);
+  r += row(t("passm"), Math.round(pass) + "%");
+  var eb = st.band != null ? st.band : (at.essay ? at.essay.best : null), ew = +st.words || 0, et = Math.max(+st.etries || 0, at.essay ? +at.essay.tries : 0);
+  if (h.ess && eb == null && !ew) r += row(t("sSum"), t("skipped"));
+  else if (eb != null) r += row(t("sscore"), eb + " / " + (ie ? 9 : 75));
+  else r += row(t("sSum"), t(h.test ? "ready" : "notyet"));
+  if (ew) r += row(t("swords"), ew);
+  if (et) r += row(t("stries"), et);
+  r += row(t("spk"), h.spk ? "✓ " + t("done") : t(h.ess ? "ready" : "notyet"));
+  if (+st.leaves) r += row(t("leaves") + " (" + t("sTest") + ")", st.leaves + t("times"));
+  if (+st.eleaves) r += row(t("leaves") + " (" + t("sSum") + ")", st.eleaves + t("times"));
+  if (+st.cancels) r += row(t("cancels"), st.cancels + t("times"));
+  r += row(t("keyHome"), h.key ? t("keyYes") + (st.via === "teacher" ? " · " + t("kUstoz") : "") : t("keyNo"));
+  return '<div class="dh">' + esc(t("secHome")) + '</div><div class="dl">' + r + '</div>';
+}
+function classDetail(x, c){
+  var r = "", nm2 = {lis: "sLis", read: "sRead", write: "sWrite"}, pc = function(v){ return v == null ? "–" : Math.round(v) + "%"; };
+  c.S.forEach(function(s){
+    var d = s.d, v = s.done ? "✓ " + t("done") : s.secs > 0 ? t("hwPart") : "–";
+    r += row(t(nm2[s.k]), v + (s.secs ? " · " + s.mins + t("min") : ""));
+    if (s.k === "lis" && d.first != null){ var fin = d.done ? d.acc : d.now; r += row("  " + t("first"), pc(d.first)); if (fin != null && fin !== d.first) r += row("  " + t("final"), pc(fin)); if (d.fr) r += row("  " + t("fix"), d.fr); if (d.dtry) r += row("  " + t("drillT"), d.dtry); }
+    else if (s.k === "lis" && d.done && d.acc != null) r += row("  " + t("final"), pc(d.acc));
+    if (s.k === "read" && d.r1 != null){ r += row("  " + t("first"), pc(d.r1)); if (d.rr) r += row("  " + t("rtests"), d.rr); }
+    if (s.k === "write" && s.done){ if (d.sc != null) r += row("  " + t("wsc"), d.sc); r += row("  " + t("wtries"), d.tries || 1); if (d.drill) r += row("  " + t("wdrill"), d.drill); if (d.fails) r += row("  " + t("wfails"), d.fails); }
+    if (+d.leaves) r += row("  " + t("leaves"), d.leaves + t("times"));
   });
-  $("units").innerHTML = h;
-  $("s1").textContent = done + " / " + d.units.length; $("s2").textContent = cnt ? Math.round(sum / cnt) + "%" : "–";
+  r += row(t("keyClass"), c.ckey ? t("keyYes") + (c.ckey === "teacher" ? " · " + t("kUstoz") : "") : t("keyNo"));
+  return '<div class="dh">' + esc(t("secClass")) + '</div><div class="dl">' + r + '</div>';
+}
+function attDetail(x){
+  var a = x.att || []; if (!a.length) return "";
+  return '<div class="dh">' + esc(t("secAtt")) + '</div><div class="dl">' + a.map(function(z){ return row(dayTxt(z.day), esc(t(z.status === "absent" ? "absent" : z.status === "late" ? "late" : "present"))); }).join("") + '</div>';
+}
+function history(d){
+  var h = '<div class="dh">' + esc(t("secAll")) + '</div><div class="hwrap"><table class="hist"><tr><th>' + esc(t("lessonW")) + '</th><th>' + esc(t("hw")) + '</th><th>' + esc(t("keyHome")) + '</th><th>' + esc(t("cw")) + '</th><th>' + esc(t("keyClass")) + '</th><th>' + esc(t("att")) + '</th></tr>';
+  d.units.forEach(function(x){
+    var hi = homeInfo(x), ci = classInfo(x), a = attOf(x), T = {g: "t-g", o: "t-o", n: "t-n", r: "t-r"};
+    h += '<tr' + (x.u === UNIT ? ' class="cur"' : "") + '><td><b>' + x.u + '</b></td>'
+      + '<td class="' + T[stateTone(hi.state)] + '">' + esc(t("hw" + (hi.state === "done" ? "Done" : hi.state === "part" ? "Part" : "None"))) + (hi.st.pct != null && hi.test ? '<br>' + Math.round(hi.st.pct) + '%' : '') + '</td>'
+      + '<td class="' + (hi.key ? "t-g" : "t-n") + '">' + (hi.key ? "🔑 " + (hi.st.via === "teacher" ? t("kUstoz") : t("keyYes")) : "–") + '</td>'
+      + '<td class="' + T[stateTone(ci.state)] + '">' + esc(t("cw" + (ci.state === "done" ? "Done" : ci.state === "part" ? "Part" : "None"))) + '</td>'
+      + '<td class="' + (ci.ckey ? "t-g" : "t-n") + '">' + (ci.ckey ? "🔑 " + (ci.ckey === "teacher" ? t("kUstoz") : t("keyYes")) : "–") + '</td>'
+      + '<td class="' + T[attTone(a)] + '">' + (a ? esc(t(a)) : "–") + '</td></tr>';
+  });
+  return h + '</table></div>';
+}
+function draw(){
+  var d = DATA; if (!d) return;
+  KNAME = d.name; $("kname").textContent = nm(d.name);
+  if (d.g && d.g !== GRP){ GRP = d.g; ls("nnt_parent_grp", GRP); paintDeck(); }
+  $("kgrp").textContent = d.g ? (d.g === "A" ? t("toq") : t("juft")) : "";
+  if (!d.units.length){ $("ubody").innerHTML = '<div class="empty">' + t("noUnits") + '</div>'; $("lnav").innerHTML = ""; return; }
+  if (!UPICK || !d.units.some(function(x){ return x.u === UNIT; })){ UNIT = pickUnit(d); }
+  var tdy = []; d.units.forEach(function(x){ (x.att || []).forEach(function(r){ if (String(r.day).slice(0, 10) === d.today) tdy.push(r.status); }); });
+  var ts = tdy.indexOf("absent") > -1 ? "absent" : tdy.indexOf("late") > -1 ? "late" : tdy.length ? "present" : null;
+  $("today").innerHTML = '<b>' + esc(t("today")) + ':</b> <span class="chip ' + attTone(ts) + '">' + esc(ts ? t(ts === "absent" ? "tAbs" : ts === "late" ? "tLate" : "tPres") : t("tNone")) + '</span>';
+  $("lnav").innerHTML = d.units.map(function(x){ var h = homeInfo(x), c = classInfo(x), ok = MODE === "home" ? h.done : c.done; return '<button type="button" data-u="' + x.u + '" class="' + (x.u === UNIT ? "on" : "") + '">' + esc(lessonName(x.u)) + '<i>' + (ok ? "✓" : "") + '</i></button>'; }).join("");
+  var cur = d.units.filter(function(x){ return x.u === UNIT; })[0];
+  $("ubody").innerHTML = unitCard(cur, d) + (DET ? history(d) : "");
   var n = new Date(); $("upd").textContent = t("updAt") + ("0" + n.getHours()).slice(-2) + ":" + ("0" + n.getMinutes()).slice(-2);
 }
+$("lnav").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b) return; UNIT = +b.getAttribute("data-u"); UPICK = true; draw(); };
 function load(){
   if (!SID) return;
-  rpc("parent_view", {p_sid: SID}).then(function(d){ if (!d || !d.ok){ $("units").innerHTML = '<div class="nf">' + t("nodata") + '</div>'; return; } draw(d); }).catch(function(){ $("upd").textContent = t("off"); });
-  clearInterval(T); T = setInterval(function(){ if (!document.hidden) load(); }, 8000);
+  rpc("parent_novel", {p_sid: SID}).then(function(d){ if (!d || !d.ok){ $("ubody").innerHTML = '<div class="nf">' + t("nodata") + '</div>'; return; } DATA = d; draw(); }).catch(function(){ $("upd").textContent = t("off"); });
+  clearInterval(T); T = setInterval(function(){ if (!document.hidden) load(); }, 15000);
 }
 var tipHide = ls("nnt_parent_tip") === "1" || (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone;
 if (tipHide) $("tip").style.display = "none";
