@@ -274,7 +274,7 @@ function planFor(g){
 }
 function plans(g){ var gs = g ? [g] : ["A", "B"], o = []; gs.forEach(function(x){ var p = planFor(x); if (p) o.push(p); }); o.sort(function(a, b){ return (b.tag === "todayB") - (a.tag === "todayB"); }); return o; }
 function keepOn(el){ var b = el && el.querySelector("button.on"); if (b) el.scrollLeft = Math.max(0, b.offsetLeft - (el.clientWidth - b.offsetWidth) / 2); }
-function lessonOf(p, mode){ return p.cl; }
+function lessonOf(p, mode){ return mode === "home" ? p.ch : p.cl; }
 function tagsHtml(ps, u, mode){
   return ps.filter(function(p){ return lessonOf(p, mode) === u; }).map(function(p){ var tx = t(p.tag); return '<i>' + esc((ps.length > 1 ? t(p.g === "A" ? "toq" : "juft") + " · " : "") + tx) + '</i>'; }).join("");
 }
@@ -282,7 +282,7 @@ function tagsHtml(ps, u, mode){
 function drawLnav(){
   if (!B || !(B.units || []).length){ $("lnav").innerHTML = ""; return; }
   var ps = plans(GRP);
-  $("tdl").innerHTML = ps.map(function(p){ return '<span class="tdp">' + esc(t(p.g === "A" ? "toq" : "juft")) + ': ' + esc(lessonName(p.cl)) + ' · ' + esc(t(p.tag)) + '</span>'; }).join("");
+  $("tdl").innerHTML = ps.map(function(p){ return '<span class="tdp">' + esc(t(p.g === "A" ? "toq" : "juft")) + ' · ' + esc(t("cW")) + ': ' + esc(lessonName(p.cl)) + ' (' + esc(t(p.tag)) + ') · ' + esc(t("hW")) + ': ' + esc(lessonName(p.ch)) + '</span>'; }).join("");
   if (!BUPICK && ps.length){ var u0 = lessonOf(ps[0], MODE); if (u0 && BU !== u0) BU = u0; }
   $("lnav").innerHTML = B.units.map(function(u){ var tg = tagsHtml(ps, u, MODE); return '<button type="button" data-u="' + u + '" class="' + (u === BU ? "on" : "") + (tg ? " td" : "") + '">' + esc(lessonName(u)) + tg + '</button>'; }).join(""); keepOn($("lnav"));
 }
