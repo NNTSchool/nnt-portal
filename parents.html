@@ -25,7 +25,8 @@
 .lnav{display:flex;gap:8px;overflow-x:auto;padding:2px 1px 4px;-webkit-overflow-scrolling:touch}
 .lnav button{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 16px;font:700 16px var(--sans);color:var(--ink);cursor:pointer}
 .lnav button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
-.tdl{margin-left:10px;font:800 12.5px var(--sans);letter-spacing:.02em;text-transform:none;color:#071733;background:linear-gradient(135deg,#ffd45c,#e0a52c);border-radius:999px;padding:3px 10px}
+.tdp{display:inline-block;margin:0;font:800 12.5px var(--sans);letter-spacing:.02em;text-transform:none;color:#071733;background:linear-gradient(135deg,#ffd45c,#e0a52c);border-radius:999px;padding:3px 10px}
+.tdl{margin-left:0;display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;font:800 12.5px var(--sans);letter-spacing:.02em;text-transform:none;color:#071733;background:linear-gradient(135deg,#ffd45c,#e0a52c);border-radius:999px;padding:3px 10px}
 .lnav button.td{position:relative;border-color:#e0a52c;box-shadow:0 0 0 2px rgba(224,165,44,.3)}
 .lnav button.td.on{border-color:var(--ink)}
 .lnav button i{display:block;font-style:normal;font:800 10.5px var(--sans);color:#8a5a00;margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
@@ -137,7 +138,7 @@ var LAT = {
  nf:"Bunday ism topilmadi.", empty:"Bu guruhda o'quvchi topilmadi.", net:"Internet bilan aloqa yo'q.", retry:"Qayta urinish", load:"Yuklanmoqda…",
  tipT:"Telefoningizga saqlab qo'ying", tipB:"Brauzer menyusini oching va «Bosh ekranga qo'shish» tugmasini bosing. Shunda sahifa ilova kabi bir bosishda ochiladi.", tipOk:"Tushunarli",
  updAt:"Yangilandi ", off:"Internet bilan aloqa yo'q. Qayta urinilmoqda…", nodata:"Ma'lumot topilmadi.",
- lesson:"-dars", lessonW:"Dars", todayB:"Bugun", todayL:"Bugungi dars: ", noToday:"Bugun dars belgilanmagan", noUnits:"Hozircha darslar ochilmagan.",
+ lesson:"-dars", lessonW:"Dars", todayB:"Bugun", nextB:"Keyingi", todayL:"Bugungi dars", nextL:"Keyingi dars", noUnits:"Hozircha darslar ochilmagan.",
  hw:"Uy vazifasi", cw:"Darsxonadagi ish", key:"Kalit", att:"Davomat",
  hwDone:"Bajarilgan", hwPart:"Jarayonda", hwNone:"Bajarilmagan", cwDone:"Bajarilgan", cwPart:"Jarayonda", cwNone:"Bajarilmagan",
  keyYes:"Olindi", keyNo:"Olinmagan", keyT:"Ustoz berdi", keyHome:"Uy kaliti", keyClass:"Sinf kaliti",
@@ -160,7 +161,7 @@ var EN = {
  nf:"No such name found.", empty:"No students found in this group.", net:"No internet connection.", retry:"Try again", load:"Loading…",
  tipT:"Save it on your phone", tipB:"Open the browser menu and tap “Add to Home screen”. The page then opens with one tap, like an app.", tipOk:"Got it",
  updAt:"Updated ", off:"No internet connection. Trying again…", nodata:"No data found.",
- lesson:"Lesson ", lessonW:"Lesson", todayB:"Today", todayL:"Today's lesson: ", noToday:"No lesson marked for today", noUnits:"No lessons are open yet.",
+ lesson:"Lesson ", lessonW:"Lesson", todayB:"Today", nextB:"Next", todayL:"Today's lesson", nextL:"Next lesson", noUnits:"No lessons are open yet.",
  hw:"Homework", cw:"Classroom work", key:"Key", att:"Attendance",
  hwDone:"Done", hwPart:"In progress", hwNone:"Not done", cwDone:"Done", cwPart:"In progress", cwNone:"Not done",
  keyYes:"Received", keyNo:"Not received", keyT:"Teacher gave it", keyHome:"Home key", keyClass:"Class key",
@@ -257,12 +258,22 @@ function pickBoardUnit(b){
   (b.rows || []).forEach(function(r){ (r.us || []).forEach(function(e){ if ((e.h !== "none" || e.c !== "none") && +e.u > best) best = +e.u; }); });
   return best || us[us.length - 1];
 }
-function todayUnit(b){ var best = 0; if (!b) return 0; (b.rows || []).forEach(function(r){ if (GRP && r.g !== GRP) return; (r.us || []).forEach(function(e){ if (String(e.ad || "").slice(0, 10) === b.today && +e.u > best) best = +e.u; }); }); return best; }
+/* which lesson a group has today: the lesson with attendance marked today; before attendance is ticked, the lesson after the last one most of the group has finished in class (it is a class day for Toq Mon/Wed/Fri, for Juft Tue/Thu/Sat) */
+function planFor(g){
+  if (!B) return null; var rows = (B.rows || []).filter(function(r){ return r.g === g; }), us = B.units || []; if (!rows.length || !us.length) return null;
+  var at = 0; rows.forEach(function(r){ (r.us || []).forEach(function(e){ if (String(e.ad || "").slice(0, 10) === B.today && +e.u > at) at = +e.u; }); });
+  var wd = new Date(B.today + "T00:00:00Z").getUTCDay(), cd = (g === "A" ? [1, 3, 5] : [2, 4, 6]).indexOf(wd) > -1, u = at;
+  if (!u){ var m = 0; us.forEach(function(x){ var n = rows.filter(function(r){ var e = ent(r, x); return e && e.ck; }).length; if (n * 2 > rows.length) m = x; }); var i = us.indexOf(m); u = m ? (us[i + 1] || m) : us[0]; }
+  return {u: u, now: !!at || cd};
+}
+function plans(g){ var gs = g ? [g] : ["A", "B"], o = []; gs.forEach(function(x){ var p = planFor(x); if (p) o.push({g: x, u: p.u, now: p.now}); }); return o; }
+function planTag(ps, u){ var tag = ""; ps.forEach(function(p){ if (p.u === u){ if (p.now) tag = "todayB"; else if (!tag) tag = "nextB"; } }); return tag; }
 function drawLnav(){
   if (!B || !(B.units || []).length){ $("lnav").innerHTML = ""; return; }
-  var tu = todayUnit(B); $("tdl").textContent = tu ? t("todayL") + lessonName(tu) : t("noToday");
-  $("lnav").innerHTML = B.units.map(function(u){ return '<button type="button" data-u="' + u + '" class="' + (u === BU ? "on" : "") + (u === tu ? " td" : "") + '">' + esc(lessonName(u)) + (u === tu ? '<i>' + esc(t("todayB")) + '</i>' : "") + '</button>'; }).join("");
-  if (!BUPICK && tu && BU !== tu){ BU = tu; }
+  var ps = plans(GRP), both = !GRP;
+  $("tdl").innerHTML = ps.map(function(p){ return '<span class="tdp">' + (both ? esc(t(p.g === "A" ? "toq" : "juft")) + ": " : esc(t(p.now ? "todayL" : "nextL")) + ": ") + esc(lessonName(p.u)) + (both ? ' · ' + esc(t(p.now ? "todayB" : "nextB")) : "") + '</span>'; }).join("");
+  if (!BUPICK && ps.length && ps[0].u && BU !== ps[0].u){ BU = ps[0].u; }
+  $("lnav").innerHTML = B.units.map(function(u){ var tg = planTag(ps, u); return '<button type="button" data-u="' + u + '" class="' + (u === BU ? "on" : "") + (tg ? " td" : "") + '">' + esc(lessonName(u)) + (tg ? '<i>' + esc(t(tg)) + '</i>' : "") + '</button>'; }).join("");
 }
 $("lnav").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b) return; BU = +b.getAttribute("data-u"); BUPICK = true; drawLnav(); drawBoard(); };
 function drawBoard(){
@@ -389,7 +400,7 @@ function drawDlg(){
   $("dname").textContent = nm(d.name); $("dgrp").textContent = d.g ? t(d.g === "A" ? "toq" : "juft") : ""; $("dgrp").style.display = d.g ? "" : "none";
   if (!d.units.length){ $("dbody").innerHTML = '<div class="msg">' + t("noUnits") + '</div>'; $("dlnav").innerHTML = ""; return; }
   if (!MUPICK || !d.units.some(function(x){ return x.u === MU; })) MU = d.units.some(function(x){ return x.u === BU; }) ? BU : d.units[d.units.length - 1].u;
-  var tu2 = todayUnit(B); $("dlnav").innerHTML = d.units.map(function(x){ return '<button type="button" data-u="' + x.u + '" class="' + (x.u === MU ? "on" : "") + (x.u === tu2 ? " td" : "") + '">' + esc(lessonName(x.u)) + (x.u === tu2 ? '<i>' + esc(t("todayB")) + '</i>' : "") + '</button>'; }).join("");
+  var ps2 = plans(d.g || ""); $("dlnav").innerHTML = d.units.map(function(x){ var tg = planTag(ps2, x.u); return '<button type="button" data-u="' + x.u + '" class="' + (x.u === MU ? "on" : "") + (tg ? " td" : "") + '">' + esc(lessonName(x.u)) + (tg ? '<i>' + esc(t(tg)) + '</i>' : "") + '</button>'; }).join("");
   var cur = d.units.filter(function(x){ return x.u === MU; })[0];
   $("dbody").innerHTML = unitCard(cur, d) + history(d);
 }
