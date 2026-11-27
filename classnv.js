@@ -288,7 +288,8 @@
       + '<path d="M22 38a44 44 0 0 1 30-24" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="5" stroke-linecap="round"/><path class="gsp" d="M96 22l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#fff"/></svg>'; }
   function path(){
     page(top() + '<div id="cnbody"><p class="sub" id="cnsub" style="text-align:center">Opening…</p></div>'); el("cb").onclick = home;
-    R("nv_nav", {tok: O.tok}).then(function(n){
+    var tchP = O.nofloor ? Promise.resolve(true) : Promise.resolve(R("nv_class_check", {tok: O.tok, u: 1})).then(function(r){ return !!(r && r.ok && r.teacher); }, function(){ return false; });   /* the real teacher account only: it sees every open unit */
+    Promise.all([R("nv_nav", {tok: O.tok}), tchP]).then(function(pr){ var n = pr[0]; if (pr[1]) O.nofloor = true;
       if (!n || !n.ok){ el("cnsub").textContent = "Please try again in a moment."; return; }
       S.nav = n; var ck = (n.ckeys || []).map(Number), lim = O.nofloor ? 999 : 10 + ck.filter(function(u){ return u <= 10 + ck.length; }).length, open = (n.open || []).map(Number).filter(function(u){ return u <= lim; }), cur = null;
       for (var i = 0; i < open.length; i++) if (ck.indexOf(open[i]) < 0){ cur = open[i]; break; }
