@@ -293,7 +293,7 @@ function drawBoard(){
   if (!(B.units || []).length){ bd.innerHTML = '<div class="msg">' + t("noUnits") + '</div>'; return; }
   var q = norm($("q").value), toks = q.split(" ").filter(Boolean), h = "", n = 0;
   (B.rows || []).forEach(function(r){
-    if (GRP && r.g !== GRP) return;
+    if (!toks.length && GRP && r.g !== GRP) return;   /* a search looks through both groups */
     if (toks.length){ var k = norm(r.name); if (!toks.every(function(w){ return k.indexOf(w) > -1; })) return; }
     var e = ent(r, BU) || {h: "none", c: "none"}, home = MODE === "home";
     var s = home ? e.h : e.c, kk = home ? e.hk : e.ck, a = e.a;
@@ -306,10 +306,10 @@ function drawBoard(){
         var zs = home ? z.h : z.c, zk = home ? z.hk : z.ck, za = z.a;
         ah += '<div class="ar' + (za === "absent" ? " bad" : "") + '"><div>' + esc(lessonName(z.u)) + '</div><div class="t-' + stTone(zs) + '">' + dot(stTone(zs)) + '</div><div>' + keyIco(zk) + '</div><div class="t-' + attTone(za) + '">' + dot(attTone(za)) + '<span>' + esc(za ? t(za) : "") + '</span></div></div>';
       });
-      h += '<div class="st ' + (a === "absent" ? "r" : "") + '"><div class="nm">' + esc(nm(r.name)) + (r.g && !GRP ? '<span class="gtag">' + t(r.g === "A" ? "toq" : "juft") + '</span>' : "") + '</div>' + ah + '</div><button class="bt" type="button" data-id="' + r.id + '" data-n="' + esc(r.name) + '" data-g="' + esc(r.g || "") + '">' + esc(t("batb")) + '</button></div>';
+      h += '<div class="st ' + (a === "absent" ? "r" : "") + '"><div class="nm">' + esc(nm(r.name)) + (r.g && (!GRP || toks.length) ? '<span class="gtag">' + t(r.g === "A" ? "toq" : "juft") + '</span>' : "") + '</div>' + ah + '</div><button class="bt" type="button" data-id="' + r.id + '" data-n="' + esc(r.name) + '" data-g="' + esc(r.g || "") + '">' + esc(t("batb")) + '</button></div>';
       return;
     }
-    h += '<div class="st ' + tone + '"><div class="nm">' + esc(nm(r.name)) + (r.g && !GRP ? '<span class="gtag">' + t(r.g === "A" ? "toq" : "juft") + '</span>' : "") + '</div><div class="ic3">'
+    h += '<div class="st ' + tone + '"><div class="nm">' + esc(nm(r.name)) + (r.g && (!GRP || toks.length) ? '<span class="gtag">' + t(r.g === "A" ? "toq" : "juft") + '</span>' : "") + '</div><div class="ic3">'
       + ic(stTone(s), dot(stTone(s)), wk, wv)
       + ic(kk ? "g" : "n", keyIco(kk), t("key"), kk ? t("keyYes") : t("keyNo"), kk === "teacher" ? t("keyT") : "")
       + ic(attTone(a), dot(attTone(a)), t("att"), a ? t(a) : t("noatt"))
