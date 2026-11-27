@@ -40,7 +40,7 @@ function ss(k, v){ try{ if (v === undefined) return sessionStorage.getItem(k); i
 function hex2buf(h){ var a = new Uint8Array(h.length/2); for (var i=0;i<a.length;i++) a[i] = parseInt(h.substr(i*2,2),16); return a; }
 /* encrypted files: 12 bytes IV + AES-GCM ciphertext. Key comes from the server only after the checks. */
 function fetchDecrypt(path, keyHex, onProgress){
-  return fetch(path, {cache: "no-store"}).then(function(r){
+  return fetch(path, {cache: "no-cache"}).then(function(r){   /* no-cache = ask the server if it changed; an unchanged file is not downloaded again */
     if (!r.ok) throw new Error("file " + r.status);
     var len = +r.headers.get("Content-Length") || 0;
     if (!r.body || !r.body.getReader || !onProgress){ return r.arrayBuffer(); }

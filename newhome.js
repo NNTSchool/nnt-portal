@@ -748,14 +748,15 @@
   }
   /* ---------- writing ---------- */
   function startWrite(btn){
+    var shimP = fetch("shim.js", {cache: "no-cache"}).then(function(x){ return x.text(); });   /* starts at once, in parallel with the file */
     CACHE = {};
     try{ sessionStorage.setItem("nvauto", "speak"); }catch(e){}
     btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
     rpc("nv_write", {tok: tok(), u: S.unit}).then(function(r){
       if (!r || !r.ok){ btn.disabled = false; btn.textContent = S.unit <= 10 ? "Start" : "Start the writing"; if (r && r.err === "done") unitPage(); else nvNote("The writing is not ready. Tell your teacher."); return; }
-      return fetchDecrypt(r.path, r.key).then(function(buf){
+      return fetchDecrypt(r.path, r.key, function(f){ btn.textContent = "Opening… " + Math.round(f * 100) + "%"; }).then(function(buf){
         var html = new TextDecoder("utf-8").decode(buf);
-        return fetch("shim.js", {cache: "no-store"}).then(function(x){ return x.text(); }).then(function(shim){
+        return shimP.then(function(shim){
           var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, teacher: !!S.teacher, paste: !!(S.teacher || S.testacct), name: r.name, mode: "write", track: r.track}) + ";";
           var tag = "<script>" + cfg + "\n" + shim.replace(/<\/script/gi, "<\\/script") + "<\/script>";
           var m = html.match(/<head[^>]*>/i); html = m ? html.replace(m[0], m[0] + tag) : tag + html;
@@ -766,13 +767,14 @@
   }
   /* ---------- speaking ---------- */
   function startSpeak(btn){
+    var shimP = fetch("shim.js", {cache: "no-cache"}).then(function(x){ return x.text(); });   /* starts at once, in parallel with the file */
     CACHE = {};
     btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
     rpc("nv_speak", {tok: tok(), u: S.unit}).then(function(r){
       if (!r || !r.ok){ btn.disabled = false; btn.textContent = "Start the speaking"; if (r && r.err === "done" || r.err === "essay") unitPage(); else nvNote("The speaking is not ready. Tell your teacher."); return; }
-      return fetchDecrypt(r.path, r.key).then(function(buf){
+      return fetchDecrypt(r.path, r.key, function(f){ btn.textContent = "Opening… " + Math.round(f * 100) + "%"; }).then(function(buf){
         var html = new TextDecoder("utf-8").decode(buf);
-        return fetch("shim.js", {cache: "no-store"}).then(function(x){ return x.text(); }).then(function(shim){
+        return shimP.then(function(shim){
           var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, teacher: !!S.teacher, name: r.name, mode: "speak", track: r.track}) + ";";
           var tag = "<script>" + cfg + "\n" + shim.replace(/<\/script/gi, "<\\/script") + "<\/script>";
           var m = html.match(/<head[^>]*>/i); html = m ? html.replace(m[0], m[0] + tag) : tag + html;
@@ -783,15 +785,16 @@
   }
   /* ---------- home test ---------- */
   function startHome(btn, jump){
+    var shimP = fetch("shim.js", {cache: "no-cache"}).then(function(x){ return x.text(); });   /* starts at once, in parallel with the file */
     CACHE = {};
     try{ sessionStorage.setItem("nvauto", "write"); }catch(e){}
     var lab0 = btn.textContent;
     btn.disabled = true; btn.textContent = "Opening… this can take a few seconds.";
     rpc(jump ? "nv_jump_start" : "nv_test", {tok: tok(), u: S.unit}).then(function(r){
       if (!r || !r.ok){ btn.disabled = false; btn.textContent = jump ? lab0 : "Start the home test"; if (jump && r && r.err === "nojump"){ S.chose = S.unit; unitPage(); } else if (r && r.err === "done") unitPage(); else nvNote(r && r.err === "videos" ? "Finish all the videos first." : "The home test is not ready. Tell your teacher."); return; }
-      return fetchDecrypt(r.path, r.key).then(function(buf){
+      return fetchDecrypt(r.path, r.key, function(f){ btn.textContent = "Opening… " + Math.round(f * 100) + "%"; }).then(function(buf){
         var html = new TextDecoder("utf-8").decode(buf);
-        return fetch("shim.js", {cache: "no-store"}).then(function(x){ return x.text(); }).then(function(shim){
+        return shimP.then(function(shim){
           var cfg = "window.__PORTAL__=" + JSON.stringify({url: PORTAL.URL, key: PORTAL.KEY, tok: tok(), unit: "U" + S.unit, nvunit: S.unit, teacher: !!S.teacher, name: r.name, mode: "home", track: r.track, pass: r.pass, jump: !!jump, jpct: r.jpct}) + ";";
           var tag = "<script>" + cfg + "\n" + shim.replace(/<\/script/gi, "<\\/script") + "<\/script>";
           var m = html.match(/<head[^>]*>/i); html = m ? html.replace(m[0], m[0] + tag) : tag + html;
