@@ -25,8 +25,8 @@
 .lnav{display:flex;gap:8px;overflow-x:auto;padding:2px 1px 4px;-webkit-overflow-scrolling:touch}
 .lnav button{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 16px;font:700 16px var(--sans);color:var(--ink);cursor:pointer}
 .lnav button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
-.tdp{display:inline-block;margin:0;font:800 12.5px var(--sans);letter-spacing:.02em;text-transform:none;color:#071733;background:linear-gradient(135deg,#ffd45c,#e0a52c);border-radius:999px;padding:3px 10px}
-.tdl{margin-left:0;display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;font:800 12.5px var(--sans);letter-spacing:.02em;text-transform:none;color:#071733;background:linear-gradient(135deg,#ffd45c,#e0a52c);border-radius:999px;padding:3px 10px}
+.tdp{display:inline-block;margin:0;border-radius:12px !important;font:800 12.5px var(--sans);letter-spacing:.02em;text-transform:none;color:#071733;background:linear-gradient(135deg,#ffd45c,#e0a52c);border-radius:999px;padding:3px 10px}
+.tdl{margin-left:0;display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-top:6px;font:800 12.5px var(--sans);letter-spacing:.02em;text-transform:none;color:#071733;background:linear-gradient(135deg,#ffd45c,#e0a52c);border-radius:999px;padding:3px 10px}
 .lnav button.td{position:relative;border-color:#e0a52c;box-shadow:0 0 0 2px rgba(224,165,44,.3)}
 .lnav button.td.on{border-color:var(--ink)}
 .lnav button i{display:block;font-style:normal;font:800 10.5px var(--sans);color:#8a5a00;margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
@@ -138,7 +138,7 @@ var LAT = {
  nf:"Bunday ism topilmadi.", empty:"Bu guruhda o'quvchi topilmadi.", net:"Internet bilan aloqa yo'q.", retry:"Qayta urinish", load:"Yuklanmoqda…",
  tipT:"Telefoningizga saqlab qo'ying", tipB:"Brauzer menyusini oching va «Bosh ekranga qo'shish» tugmasini bosing. Shunda sahifa ilova kabi bir bosishda ochiladi.", tipOk:"Tushunarli",
  updAt:"Yangilandi ", off:"Internet bilan aloqa yo'q. Qayta urinilmoqda…", nodata:"Ma'lumot topilmadi.",
- lesson:"-dars", lessonW:"Dars", todayB:"Bugun", nextB:"Keyingi", todayL:"Bugungi dars", nextL:"Keyingi dars", noUnits:"Hozircha darslar ochilmagan.",
+ lesson:"-dars", lessonW:"Dars", todayB:"Bugun", nextB:"Keyingi", tomB:"Ertaga", homeTag:"Uyda", cW:"Darsxona", hW:"Uy", noUnits:"Hozircha darslar ochilmagan.",
  hw:"Uy vazifasi", cw:"Darsxonadagi ish", key:"Kalit", att:"Davomat",
  hwDone:"Bajarilgan", hwPart:"Jarayonda", hwNone:"Bajarilmagan", cwDone:"Bajarilgan", cwPart:"Jarayonda", cwNone:"Bajarilmagan",
  keyYes:"Olindi", keyNo:"Olinmagan", keyT:"Ustoz berdi", keyHome:"Uy kaliti", keyClass:"Sinf kaliti",
@@ -161,7 +161,7 @@ var EN = {
  nf:"No such name found.", empty:"No students found in this group.", net:"No internet connection.", retry:"Try again", load:"Loading…",
  tipT:"Save it on your phone", tipB:"Open the browser menu and tap “Add to Home screen”. The page then opens with one tap, like an app.", tipOk:"Got it",
  updAt:"Updated ", off:"No internet connection. Trying again…", nodata:"No data found.",
- lesson:"Lesson ", lessonW:"Lesson", todayB:"Today", nextB:"Next", todayL:"Today's lesson", nextL:"Next lesson", noUnits:"No lessons are open yet.",
+ lesson:"Lesson ", lessonW:"Lesson", todayB:"Today", nextB:"Next", tomB:"Tomorrow", homeTag:"At home", cW:"Classroom", hW:"Home", noUnits:"No lessons are open yet.",
  hw:"Homework", cw:"Classroom work", key:"Key", att:"Attendance",
  hwDone:"Done", hwPart:"In progress", hwNone:"Not done", cwDone:"Done", cwPart:"In progress", cwNone:"Not done",
  keyYes:"Received", keyNo:"Not received", keyT:"Teacher gave it", keyHome:"Home key", keyClass:"Class key",
@@ -258,22 +258,33 @@ function pickBoardUnit(b){
   (b.rows || []).forEach(function(r){ (r.us || []).forEach(function(e){ if ((e.h !== "none" || e.c !== "none") && +e.u > best) best = +e.u; }); });
   return best || us[us.length - 1];
 }
-/* which lesson a group has today: the lesson with attendance marked today; before attendance is ticked, the lesson after the last one most of the group has finished in class (it is a class day for Toq Mon/Wed/Fri, for Juft Tue/Thu/Sat) */
+/* Two lessons run at once for every group: the CLASS lesson (taught on its class day; Toq Mon/Wed/Fri, Juft Tue/Thu/Sat) and the HOME lesson (the next class lesson, so one ahead once today's class has been taught).
+   The class lesson number comes from the attendance that was ticked: it is the lesson after the last one ticked for the group. It counts as taught when attendance is ticked today or the class day passes 17:30. */
 function planFor(g){
   if (!B) return null; var rows = (B.rows || []).filter(function(r){ return r.g === g; }), us = B.units || []; if (!rows.length || !us.length) return null;
-  var at = 0; rows.forEach(function(r){ (r.us || []).forEach(function(e){ if (String(e.ad || "").slice(0, 10) === B.today && +e.u > at) at = +e.u; }); });
-  var wd = new Date(B.today + "T00:00:00Z").getUTCDay(), cd = (g === "A" ? [1, 3, 5] : [2, 4, 6]).indexOf(wd) > -1, u = at;
-  if (!u){ var m = 0; us.forEach(function(x){ var n = rows.filter(function(r){ var e = ent(r, x); return e && e.ck; }).length; if (n * 2 > rows.length) m = x; }); var i = us.indexOf(m); u = m ? (us[i + 1] || m) : us[0]; }
-  return {u: u, now: !!at || cd};
+  var nt = new Date(new Date(B.now).getTime() + 5 * 3600000), hh = nt.getUTCHours() * 60 + nt.getUTCMinutes();
+  var wd = new Date(B.today + "T00:00:00Z").getUTCDay(), days = g === "A" ? [1, 3, 5] : [2, 4, 6], cd = days.indexOf(wd) > -1;
+  var todayU = 0, T = 0, TD = "";
+  rows.forEach(function(r){ (r.us || []).forEach(function(e){ var d = String(e.ad || "").slice(0, 10); if (!d) return; if (d === B.today && +e.u > todayU) todayU = +e.u; if (d > TD || (d === TD && +e.u > T)){ TD = d; T = +e.u; } }); });
+  var nx = function(x){ var i = us.indexOf(x); return i < 0 ? us[0] : (us[i + 1] || x); };
+  var L, held = false;
+  if (todayU){ L = todayU; held = true; } else { L = T ? nx(T) : us[0]; if (cd && hh >= 17 * 60 + 30) held = true; }
+  var tag = (todayU || cd) ? "todayB" : (days.indexOf((wd + 1) % 7) > -1 ? "tomB" : "nextB");
+  return {g: g, cl: L, ch: held ? nx(L) : L, tag: tag};
 }
-function plans(g){ var gs = g ? [g] : ["A", "B"], o = []; gs.forEach(function(x){ var p = planFor(x); if (p) o.push({g: x, u: p.u, now: p.now}); }); return o; }
-function planTag(ps, u){ var tag = ""; ps.forEach(function(p){ if (p.u === u){ if (p.now) tag = "todayB"; else if (!tag) tag = "nextB"; } }); return tag; }
+function plans(g){ var gs = g ? [g] : ["A", "B"], o = []; gs.forEach(function(x){ var p = planFor(x); if (p) o.push(p); }); o.sort(function(a, b){ return (b.tag === "todayB") - (a.tag === "todayB"); }); return o; }
+function keepOn(el){ var b = el && el.querySelector("button.on"); if (b) el.scrollLeft = Math.max(0, b.offsetLeft - (el.clientWidth - b.offsetWidth) / 2); }
+function lessonOf(p, mode){ return mode === "home" ? p.ch : p.cl; }
+function tagsHtml(ps, u, mode){
+  return ps.filter(function(p){ return lessonOf(p, mode) === u; }).map(function(p){ var tx = mode === "home" ? t("homeTag") : t(p.tag); return '<i>' + esc((ps.length > 1 ? t(p.g === "A" ? "toq" : "juft") + " · " : "") + tx) + '</i>'; }).join("");
+}
+
 function drawLnav(){
   if (!B || !(B.units || []).length){ $("lnav").innerHTML = ""; return; }
-  var ps = plans(GRP), both = !GRP;
-  $("tdl").innerHTML = ps.map(function(p){ return '<span class="tdp">' + (both ? esc(t(p.g === "A" ? "toq" : "juft")) + ": " : esc(t(p.now ? "todayL" : "nextL")) + ": ") + esc(lessonName(p.u)) + (both ? ' · ' + esc(t(p.now ? "todayB" : "nextB")) : "") + '</span>'; }).join("");
-  if (!BUPICK && ps.length && ps[0].u && BU !== ps[0].u){ BU = ps[0].u; }
-  $("lnav").innerHTML = B.units.map(function(u){ var tg = planTag(ps, u); return '<button type="button" data-u="' + u + '" class="' + (u === BU ? "on" : "") + (tg ? " td" : "") + '">' + esc(lessonName(u)) + (tg ? '<i>' + esc(t(tg)) + '</i>' : "") + '</button>'; }).join("");
+  var ps = plans(GRP);
+  $("tdl").innerHTML = ps.map(function(p){ return '<span class="tdp">' + esc(t(p.g === "A" ? "toq" : "juft")) + ' · ' + esc(t("cW")) + ': ' + esc(lessonName(p.cl)) + ' (' + esc(t(p.tag)) + ') · ' + esc(t("hW")) + ': ' + esc(lessonName(p.ch)) + '</span>'; }).join("");
+  if (!BUPICK && ps.length){ var u0 = lessonOf(ps[0], MODE); if (u0 && BU !== u0) BU = u0; }
+  $("lnav").innerHTML = B.units.map(function(u){ var tg = tagsHtml(ps, u, MODE); return '<button type="button" data-u="' + u + '" class="' + (u === BU ? "on" : "") + (tg ? " td" : "") + '">' + esc(lessonName(u)) + tg + '</button>'; }).join(""); keepOn($("lnav"));
 }
 $("lnav").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b) return; BU = +b.getAttribute("data-u"); BUPICK = true; drawLnav(); drawBoard(); };
 function drawBoard(){
@@ -400,7 +411,7 @@ function drawDlg(){
   $("dname").textContent = nm(d.name); $("dgrp").textContent = d.g ? t(d.g === "A" ? "toq" : "juft") : ""; $("dgrp").style.display = d.g ? "" : "none";
   if (!d.units.length){ $("dbody").innerHTML = '<div class="msg">' + t("noUnits") + '</div>'; $("dlnav").innerHTML = ""; return; }
   if (!MUPICK || !d.units.some(function(x){ return x.u === MU; })) MU = d.units.some(function(x){ return x.u === BU; }) ? BU : d.units[d.units.length - 1].u;
-  var ps2 = plans(d.g || ""); $("dlnav").innerHTML = d.units.map(function(x){ var tg = planTag(ps2, x.u); return '<button type="button" data-u="' + x.u + '" class="' + (x.u === MU ? "on" : "") + (tg ? " td" : "") + '">' + esc(lessonName(x.u)) + (tg ? '<i>' + esc(t(tg)) + '</i>' : "") + '</button>'; }).join("");
+  var ps2 = plans(d.g || ""); $("dlnav").innerHTML = d.units.map(function(x){ var tg = tagsHtml(ps2, x.u, MM); return '<button type="button" data-u="' + x.u + '" class="' + (x.u === MU ? "on" : "") + (tg ? " td" : "") + '">' + esc(lessonName(x.u)) + tg + '</button>'; }).join(""); keepOn($("dlnav"));
   var cur = d.units.filter(function(x){ return x.u === MU; })[0];
   $("dbody").innerHTML = unitCard(cur, d) + history(d);
 }
