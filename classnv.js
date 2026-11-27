@@ -290,7 +290,7 @@
     page(top() + '<div id="cnbody"><p class="sub" id="cnsub" style="text-align:center">Opening…</p></div>'); el("cb").onclick = home;
     R("nv_nav", {tok: O.tok}).then(function(n){
       if (!n || !n.ok){ el("cnsub").textContent = "Please try again in a moment."; return; }
-      S.nav = n; var ck = (n.ckeys || []).map(Number), lim = 10 + ck.filter(function(u){ return u <= 10 + ck.length; }).length, open = (n.open || []).map(Number).filter(function(u){ return u <= lim; }), cur = null;
+      S.nav = n; var ck = (n.ckeys || []).map(Number), lim = O.nofloor ? 999 : 10 + ck.filter(function(u){ return u <= 10 + ck.length; }).length, open = (n.open || []).map(Number).filter(function(u){ return u <= lim; }), cur = null;
       for (var i = 0; i < open.length; i++) if (ck.indexOf(open[i]) < 0){ cur = open[i]; break; }
       var hint = cur === null ? "Everything open is complete. Well done!" : "Tap your stage to begin";
       var H = 170, tot = open.length * H + 330, h = '<div class="pth" style="height:' + tot + 'px">';
