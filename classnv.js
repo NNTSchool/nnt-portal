@@ -724,7 +724,7 @@
   function l4Notes(){
     var ex = S.P.exercises[S.L.ei], L = S.L;
     page(l4Head() + '<div class="ins hlz"><span class="ii">📝</span><div><small>STAGE 1 · TAKE NOTES</small><strong>' + esc(ex.intro) + ' Listen and write down everything useful. The questions come later.</strong></div></div>'
-      + l4Player(ex) + (ex.img && ex.kind !== "fix" ? '<div class="l4map"><img src="' + ex.img + '" alt="Map"></div>' : '') + '<textarea id="l4n" class="wrta l4na" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Type your notes here. Names, numbers, dates, prices, who said what, what changed…">' + esc(L.notes[ex.id] || "") + '</textarea>'
+      + l4Player(ex) + (ex.img && /map|plan/i.test(ex.name || "") ? '<div class="l4map"><img src="' + ex.img + '" alt="Map"></div>' : '') + '<textarea id="l4n" class="wrta l4na" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Type your notes here. Names, numbers, dates, prices, who said what, what changed…">' + esc(L.notes[ex.id] || "") + '</textarea>'
       + '<div class="l4bar"><span id="l4wc" class="wrm"></span><button class="go" id="l4nx" disabled>' + (L.ei + 1 < S.P.exercises.length ? "Next recording →" : "Go to stage 2 →") + '</button></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); };
     l4Wire(ex, 0, "n" + ex.id, "Play it as many times as you need. You cannot skip ahead or rewind: that is the exam skill.");
