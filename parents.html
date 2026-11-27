@@ -3,212 +3,168 @@
 <link rel="icon" href="logo.jpg">
 <title>NNT School · Ota-onalar uchun</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css?v=15">
 <style>
-.pwrap{max-width:900px;margin:0 auto;padding:18px 14px 60px}
-.phero{position:relative;overflow:hidden;border-radius:22px;padding:26px 18px 22px;text-align:center;color:#fff;background:radial-gradient(120% 90% at 15% 0%,#1d4fbf 0%,#0b2a6e 45%,#071733 100%);border:1.5px solid rgba(239,220,168,.55);box-shadow:0 14px 34px -14px rgba(7,23,51,.55)}
-.phero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 88% 10%,rgba(239,220,168,.28),transparent 40%);pointer-events:none}
-.phero>*{position:relative}
-.phero img{width:68px;height:68px;border-radius:50%;object-fit:cover;border:2.5px solid var(--gold2);box-shadow:0 0 0 6px rgba(200,150,58,.22);margin-bottom:8px}
-.phero h1{color:#fff;font-size:28px;margin:2px 0 6px}.phero h1 em{font-style:normal;background:linear-gradient(90deg,#fff1b8,#ffc93c,#ff8fb8);-webkit-background-clip:text;background-clip:text;color:transparent}
-.phero p{margin:0 auto;max-width:440px;color:#dbe4fb;font-size:16px}
-.sbox{margin-top:14px;border-top:3px solid var(--gold);border-radius:18px}
-.sbox label{font-size:17px;color:var(--ink);margin:0 0 8px}
-#q{font-size:20px;padding:16px 16px}
-.plist div{padding:16px 14px;font-size:19px;font-weight:600;border-bottom:1px solid var(--line);cursor:pointer}
-.plist div:active,.plist div:hover{background:var(--gold3)}
-.plist{border:1.5px solid var(--line);border-radius:12px;margin-top:10px;overflow:hidden;background:#fff}
-.plist:empty{display:none}
-.nf{margin-top:12px;padding:14px;border-radius:12px;background:#fff6e0;color:#7a4300;font-size:16px}
-.back2{background:none;border:0;color:var(--royal);font:700 17px var(--sans);padding:10px 0;cursor:pointer}
-.kid{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:6px 0 4px}
-.kid h2{font-size:28px}
-.sumrow{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 4px}
-.sum{flex:1;min-width:140px;background:#fff;border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:14px;padding:12px 14px}
-.sum b{display:block;font:700 30px var(--serif);color:var(--ink);line-height:1.1}.sum span{color:var(--mute);font-size:14.5px}
-.live{display:flex;align-items:center;gap:8px;color:var(--mute);font-size:14px;margin:8px 0 14px}
-.live i{width:9px;height:9px;border-radius:50%;background:#0e9f6e;box-shadow:0 0 0 4px rgba(14,159,110,.18)}
-.pu{display:grid;grid-template-columns:1fr;gap:0;background:#fff;border:1px solid var(--line);border-radius:16px;margin-bottom:12px;overflow:hidden;box-shadow:0 1px 2px rgba(7,23,51,.04),0 8px 22px -14px rgba(7,23,51,.18)}
-.pu.has-top{grid-template-columns:1.15fr 1fr}
-@media(max-width:700px){.pu.has-top{grid-template-columns:1fr}}
-.pl{display:flex;gap:14px;padding:14px 16px;align-items:flex-start}
-.pn{flex:0 0 46px;height:60px;border-radius:8px;background:linear-gradient(180deg,#14367e,var(--ink));color:var(--gold2);font:600 26px var(--serif);display:flex;align-items:center;justify-content:center;border-bottom:3px solid var(--gold)}
-.pt{font:600 17px var(--serif);color:var(--ink);line-height:1.25}
-.pst{margin-top:8px;font-size:16px;font-weight:600}
-.pst.none{color:#7b86a3}.pst.wait{color:#8a5a00}
-.pst.liv{color:#1d4ed8}.pst.liv::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:#1d4ed8;margin-right:8px;animation:pulse 1.4s ease-in-out infinite}
-@keyframes pulse{50%{opacity:.25}}
-.res{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px}
-.big2{font:700 40px var(--serif);color:var(--ink);line-height:1}
-.lv{color:#fff;border-radius:999px;padding:5px 14px;font-weight:800;font-size:14px;letter-spacing:.03em}
-.pos{margin-top:8px;font-size:16px;color:var(--text)}.pos b{color:var(--ink)}
-.wr{margin-top:4px;font-size:15px;color:var(--mute)}
-.tp{background:linear-gradient(135deg,#fbf4df,#fff);border-left:1px solid var(--line);padding:14px 16px}
-@media(max-width:700px){.tp{border-left:0;border-top:1px solid var(--line)}}
-.tp h4{margin:0 0 8px;font:700 13px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#8a6410}
-.tr{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:16px}
-.tr .m{font-size:22px;width:28px}.tr .nm{flex:1;font-weight:600;color:var(--ink)}.tr .pc{font-weight:800;color:var(--ink)}
-.lang{margin-left:auto;display:flex;gap:2px;background:rgba(255,255,255,.14);border-radius:999px;padding:3px}
-.lang button{border:0;background:none;color:#dbe4fb;font:700 14px var(--sans);padding:6px 12px;border-radius:999px;cursor:pointer}
-.lang button.on{background:#fff;color:var(--ink)}
-.hint{margin:8px 0 0;color:var(--mute);font-size:15px}
-.allb{background:none;border:0;color:var(--royal);font:700 16px var(--sans);padding:12px 0 2px;cursor:pointer;text-decoration:underline}
-.plist.big{max-height:60vh;overflow:auto}
-.pas{display:inline-block;font:700 20px var(--serif)}.pas.ok{color:var(--ok)}.pas.no{color:var(--bad)}
-.legend{margin:6px 0 12px;padding:10px 14px;border-radius:12px;background:#fff;border:1px solid var(--line);font-size:14.5px;color:var(--text)}
-.legend b.g{color:var(--ok)}.legend b.r{color:var(--bad)}
+.pwrap{max-width:760px;margin:0 auto;padding:14px 12px 50px}
+.top{position:relative;z-index:30}
+.lg{margin-left:auto;position:relative}
+.lgb{display:flex;align-items:center;gap:6px;border:1.5px solid rgba(239,220,168,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:999px;padding:6px 12px;font:700 14px var(--sans);cursor:pointer}
+.lgb svg{width:16px;height:16px}
+.lgm{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border-radius:14px;box-shadow:0 16px 36px -10px rgba(7,23,51,.5);padding:6px;min-width:150px;z-index:40}
+.lgm button{display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;border:0;background:none;padding:11px 12px;border-radius:10px;font:600 16px var(--sans);color:var(--ink);cursor:pointer}
+.lgm button.on{background:var(--gold3)}.lgm button.on::after{content:"✓";color:#0b6b46}
+.ctl{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px;box-shadow:0 8px 22px -16px rgba(7,23,51,.3)}
+.cl{font:700 12.5px var(--sans);letter-spacing:.09em;text-transform:uppercase;color:#8a6410;margin:10px 2px 6px}.cl:first-child{margin-top:0}
+.seg{display:flex;background:#f3f4f8;border-radius:14px;padding:4px;gap:4px}
+.seg button{flex:1;border:0;background:none;border-radius:11px;padding:12px 8px;font:700 17px var(--sans);color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;line-height:1.1}
+.seg button small{display:block;font:500 11.5px var(--sans);color:var(--mute);margin-top:2px}
+.seg button.on{background:var(--ink);color:#fff;box-shadow:0 6px 14px -8px rgba(7,23,51,.7)}.seg button.on small{color:#efdca8}
+.seg.gold button.on{background:linear-gradient(135deg,#ffd45c,#c8963a);color:#071733}.seg.gold button.on small{color:#4a3510}
+.seg button .tx{text-align:center}
+.lnav{display:flex;gap:8px;overflow-x:auto;padding:2px 1px 4px;-webkit-overflow-scrolling:touch}
+.lnav button{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 16px;font:700 16px var(--sans);color:var(--ink);cursor:pointer}
+.lnav button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.srch{margin:12px 0 4px}
+.srch input{width:100%;font-size:18px;padding:14px 16px;border-radius:14px;border:1.5px solid var(--line);background:#fff;font-family:var(--sans)}
+.leg{display:flex;flex-wrap:wrap;gap:6px 16px;margin:10px 2px 12px;font-size:13.5px;color:var(--mute);align-items:center}
+.leg span{display:inline-flex;align-items:center;gap:6px}.leg svg{width:22px;height:22px}
+.st{background:#fff;border:1px solid var(--line);border-left:6px solid #c9cfdd;border-radius:16px;padding:12px 12px 12px 14px;margin-bottom:10px;box-shadow:0 1px 2px rgba(7,23,51,.04),0 8px 20px -16px rgba(7,23,51,.25)}
+.st.g{border-left-color:#14a56b}.st.o{border-left-color:#f0a21c}.st.r{border-left-color:#d6364f}
+.st .nm{font:700 19px var(--sans);color:var(--ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.gtag{font-size:12.5px;font-weight:700;color:#8a6410;background:var(--gold3);border-radius:999px;padding:3px 10px}
+.ic3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.ic{text-align:center;background:#f7f8fc;border-radius:12px;padding:10px 4px 9px}
+.ic svg{width:44px;height:44px;display:block;margin:0 auto 4px}
+.ic span{display:block;font-size:12px;color:var(--mute);font-weight:600}
+.ic b{display:block;font-size:14.5px;line-height:1.2;margin-top:2px}
+.ic.g b{color:#0b6b46}.ic.o b{color:#8a5a00}.ic.r b{color:#9c2442}.ic.n b{color:#5a6785}
+.bt{display:block;width:100%;margin-top:10px;border:0;border-radius:12px;padding:12px;font:800 17px var(--sans);color:#071733;cursor:pointer;background:linear-gradient(110deg,#ffc93c,#fff1b8 45%,#ffc93c);box-shadow:0 6px 16px -8px rgba(200,150,58,.9)}
+.bt:active{transform:scale(.98)}
+.msg{margin:14px 0;padding:14px;border-radius:12px;background:#eaf1ff;color:var(--ink);font-size:16px}
+.msg button{margin-left:8px;border:0;background:var(--royal);color:#fff;font:700 14px var(--sans);padding:8px 14px;border-radius:9px;cursor:pointer}
 .tip{display:flex;gap:12px;align-items:flex-start;margin-top:14px;padding:14px;border-radius:14px;background:#eaf1ff;border:1px solid #c9d9fb;color:var(--ink);font-size:15.5px}
 .tip button{margin-top:8px;border:0;background:var(--royal);color:#fff;font:700 15px var(--sans);padding:9px 18px;border-radius:10px;cursor:pointer}
-.foot{text-align:center;color:#9aa6bf;font-size:13px;margin-top:26px}
-
-.deck{margin-top:12px;display:grid;gap:10px}
-.deck .row{display:flex;gap:10px;flex-wrap:wrap}
-.seg{display:flex;flex:1;min-width:230px;background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:4px;gap:4px;box-shadow:0 6px 18px -12px rgba(7,23,51,.35)}
-.seg button{flex:1;border:0;background:none;border-radius:12px;padding:10px 8px;font:700 17px var(--sans);color:var(--ink);cursor:pointer;line-height:1.15;transition:transform .12s,background .15s}
-.seg button small{display:block;font:500 12px var(--sans);color:var(--mute);margin-top:3px}
-.seg button:active{transform:scale(.97)}
-.seg button.on{background:linear-gradient(180deg,#14367e,var(--ink));color:#fff;box-shadow:0 6px 14px -6px rgba(7,23,51,.6)}
-.seg button.on small{color:#efdca8}
-.seg.big button{font-size:21px;padding:14px 8px}
-.seg.big{border-color:var(--gold);background:linear-gradient(135deg,#fffaf0,#fff)}
-.seg.big button.on{background:linear-gradient(135deg,#ffd45c,#c8963a);color:#071733;box-shadow:0 8px 20px -8px rgba(200,150,58,.9)}
-.seg.big button.on small{color:#4a3510}
-.bat{flex:1;min-width:230px;border:0;border-radius:16px;padding:14px 16px;font:800 20px var(--sans);letter-spacing:.02em;color:#071733;cursor:pointer;background:linear-gradient(110deg,#ffc93c 0%,#fff1b8 38%,#ffc93c 56%,#ff9ec4 100%);background-size:220% 100%;animation:shine 3.2s ease-in-out infinite;box-shadow:0 0 0 3px rgba(255,201,60,.35),0 12px 26px -10px rgba(200,150,58,.95)}
-.bat small{display:block;font:600 12.5px var(--sans);opacity:.8;margin-top:2px}
-.bat.on{background:linear-gradient(135deg,#123f9c,#071733);color:#fff;animation:none;box-shadow:0 0 0 3px rgba(18,63,156,.3),0 12px 26px -10px rgba(7,23,51,.7)}
-@keyframes shine{50%{background-position:100% 0}}
-@media(prefers-reduced-motion:reduce){.bat{animation:none}}
-.today{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 10px;font-size:15.5px}
-.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 14px;font-weight:700;font-size:14.5px;background:#eef1f8;color:var(--ink)}
-.chip.g{background:#dff5ea;color:#0b6b46}.chip.r{background:#fde4e9;color:#9c2442}.chip.o{background:#fff1d6;color:#8a5a00}.chip.n{background:#eef1f8;color:#5a6785}
-.lnav{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;-webkit-overflow-scrolling:touch}
-.lnav button{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:9px 16px;font:700 16px var(--sans);color:var(--ink);cursor:pointer}
-.lnav button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
-.lnav button i{font-style:normal;margin-left:6px;font-size:13px}
-.ucard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 1px 2px rgba(7,23,51,.04),0 10px 24px -16px rgba(7,23,51,.2)}
+.foot{text-align:center;color:#9aa6bf;font-size:13px;margin-top:22px}
+/* the Batafsil window */
+.dlg{position:fixed;inset:0;z-index:100;background:rgba(7,23,51,.62);display:flex;align-items:flex-end;justify-content:center}
+.dlg.hide{display:none}
+.sheet{background:var(--paper);width:100%;max-width:760px;max-height:94vh;border-radius:22px 22px 0 0;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 -20px 50px -10px rgba(7,23,51,.5)}
+@media(min-width:800px){.dlg{align-items:center}.sheet{border-radius:22px;max-height:90vh}}
+.sh{display:flex;align-items:center;gap:10px;padding:14px 14px 10px;background:linear-gradient(135deg,#14367e,var(--ink));color:#fff}
+.sh h2{margin:0;font:700 20px var(--sans);color:#fff;flex:1;min-width:0}
+.sh .gtag{background:var(--gold2)}
+.sx{border:0;background:rgba(255,255,255,.18);color:#fff;width:42px;height:42px;border-radius:50%;font-size:24px;line-height:1;cursor:pointer;flex:0 0 auto}
+.sb{overflow:auto;padding:12px 12px 24px;-webkit-overflow-scrolling:touch}
+.ucard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:10px}
 .uh{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.uh .pn{flex:0 0 46px}
+.pn{flex:0 0 46px;height:56px;border-radius:8px;background:linear-gradient(180deg,#14367e,var(--ink));color:var(--gold2);font:600 26px var(--serif);display:flex;align-items:center;justify-content:center;border-bottom:3px solid var(--gold)}
 .uh h3{margin:0;font:600 22px var(--serif);color:var(--ink)}
-.q3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-@media(max-width:620px){.q3{grid-template-columns:1fr}}
-.qc{border-radius:14px;padding:12px 14px;background:#f6f8fc;border:1.5px solid var(--line)}
-.qc span{display:block;font-size:13.5px;color:var(--mute);font-weight:600;letter-spacing:.02em}
-.qc b{display:block;margin-top:4px;font-size:19px;line-height:1.2}
-.qc.g{background:#effaf4;border-color:#bfe8d3}.qc.g b{color:#0b6b46}
-.qc.r{background:#fff1f4;border-color:#f6c4cf}.qc.r b{color:#9c2442}
-.qc.o{background:#fff8e8;border-color:#f3dba3}.qc.o b{color:#8a5a00}
-.qc.n b{color:#5a6785}
-.qc em{display:block;font-style:normal;font-size:13.5px;color:var(--mute);margin-top:3px}
+.q3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:560px){.q3{grid-template-columns:1fr}.q3 .ic{display:flex;align-items:center;gap:12px;text-align:left;padding:10px 12px}.q3 .ic svg{margin:0;flex:0 0 44px}}
 .dh{margin:18px 0 8px;font:700 13px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#8a6410}
-.dl{display:grid;grid-template-columns:1fr auto;gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.dl{display:grid;grid-template-columns:1fr auto;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
 .dl div{padding:10px 14px;border-bottom:1px solid var(--line);font-size:16px}
 .dl div:nth-last-child(-n+2){border-bottom:0}
 .dl div:nth-child(odd){color:var(--mute);background:#fafbfd}
 .dl div:nth-child(even){font-weight:700;color:var(--ink);text-align:right}
-.hist{width:100%;border-collapse:collapse;font-size:15px;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.hist th{background:#f3f4f8;color:var(--mute);font:700 12.5px var(--sans);text-transform:uppercase;letter-spacing:.06em;padding:9px 8px;text-align:left}
-.hist td{padding:10px 8px;border-top:1px solid var(--line);vertical-align:top}
-.hist tr.cur td{background:var(--gold3)}
-.hist .t-g{color:#0b6b46;font-weight:700}.hist .t-r{color:#9c2442;font-weight:700}.hist .t-o{color:#8a5a00;font-weight:700}.hist .t-n{color:#7b86a3}
 .hwrap{overflow-x:auto}
-.empty{margin-top:12px;padding:14px;border-radius:12px;background:#eaf1ff;color:var(--ink);font-size:16px}
-@media(max-width:520px){.top{flex-wrap:wrap}.lang{margin-left:0;width:100%;justify-content:center}.lang button{flex:1}}
-.gtag{font-size:13px;font-weight:700;color:#8a6410;background:var(--gold3);border-radius:999px;padding:3px 10px;margin-left:8px}
+.hist{width:100%;border-collapse:collapse;font-size:15px;background:#fff;border:1px solid var(--line)}
+.hist th{background:#f3f4f8;color:var(--mute);font:700 12px var(--sans);text-transform:uppercase;letter-spacing:.05em;padding:9px 8px;text-align:left}
+.hist td{padding:9px 8px;border-top:1px solid var(--line);vertical-align:middle}
+.hist tr.cur td{background:var(--gold3)}
+.hist svg{width:26px;height:26px;vertical-align:middle}
+.hist td span{font-size:13px;margin-left:4px;font-weight:700}
+.t-g{color:#0b6b46}.t-r{color:#9c2442}.t-o{color:#8a5a00}.t-n{color:#7b86a3}
+body.lock{overflow:hidden}
+@media(prefers-reduced-motion:no-preference){.sheet{animation:up .22s ease-out}@keyframes up{from{transform:translateY(30px);opacity:.4}}}
 </style></head><body>
-<div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small data-i="sub"></small></div><div class="lang"><button id="l_lat">Lotin</button><button id="l_cyr">Кирилл</button><button id="l_en">English</button></div></div>
+<div class="top"><img src="logo.jpg" alt=""><div><b>NNT School Academy</b><small data-i="sub"></small></div>
+ <div class="lg"><button class="lgb" id="lgb" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span id="lgc"></span></button>
+  <div class="lgm hide" id="lgm" role="menu"><button type="button" data-l="lat" role="menuitem">Lotin</button><button type="button" data-l="cyr" role="menuitem">Кирилл</button><button type="button" data-l="en" role="menuitem">English</button></div></div></div>
 <div class="pwrap">
- <div class="phero"><img src="logo.jpg" alt=""><h1 data-h="h1"></h1><p data-i="intro"></p></div>
- <div class="deck">
-  <div class="row">
-   <div class="seg big" id="gseg"><button id="g_A" type="button"><span data-i="toq"></span><small data-i="toqS"></small></button><button id="g_B" type="button"><span data-i="juft"></span><small data-i="juftS"></small></button></div>
-   <div class="seg" id="mseg"><button id="m_home" type="button" data-i="mHome"></button><button id="m_class" type="button" data-i="mClass"></button></div>
-  </div>
-  <div class="row"><button class="bat" id="bat" type="button" aria-pressed="false"><span id="batt"></span><small id="bats"></small></button></div>
- </div>
- <div id="s_find">
-  <div class="card sbox">
-   <label for="q" data-i="lbl"></label>
-   <input type="search" id="q" autocomplete="off">
-   <p class="hint" id="fhint"></p>
-   <div class="plist big" id="plist"></div><div id="nf"></div>
-  </div>
-  <div class="tip" id="tip"><div>📲</div><div><b data-i="tipT"></b><br><span data-i="tipB"></span><br><button id="tipx" type="button" data-i="tipOk"></button></div></div>
- </div>
- <div id="s_kid" class="hide">
-  <button class="back2" id="back"></button>
-  <div class="kid"><h2 id="kname"></h2><span class="gtag" id="kgrp"></span></div>
-  <div class="today" id="today"></div>
-  <div class="live"><i></i><span id="upd"></span></div>
+ <div class="ctl">
+  <div class="cl" data-i="lblG"></div>
+  <div class="seg gold" id="gseg"><button id="g_A" type="button"><span class="tx"><span data-i="toq"></span><small data-i="toqS"></small></span></button><button id="g_B" type="button"><span class="tx"><span data-i="juft"></span><small data-i="juftS"></small></span></button></div>
+  <div class="cl" data-i="lblV"></div>
+  <div class="seg" id="mseg"><button id="m_home" type="button" data-i="mHome"></button><button id="m_class" type="button" data-i="mClass"></button></div>
+  <div class="cl" data-i="lblL"></div>
   <div class="lnav" id="lnav"></div>
-  <div id="ubody"></div>
  </div>
- <div class="foot">NNT School Academy</div>
+ <div class="srch"><input type="search" id="q" autocomplete="off" aria-label="search"></div>
+ <div class="leg" id="leg"></div>
+ <div id="board"></div>
+ <div class="tip" id="tip"><div>📲</div><div><b data-i="tipT"></b><br><span data-i="tipB"></span><br><button id="tipx" type="button" data-i="tipOk"></button></div></div>
+ <div class="foot">NNT School Academy · <span id="upd"></span></div>
+</div>
+<div class="dlg hide" id="dlg" role="dialog" aria-modal="true" aria-labelledby="dname">
+ <div class="sheet">
+  <div class="sh"><h2 id="dname"></h2><span class="gtag" id="dgrp"></span><button class="sx" id="dx" type="button" aria-label="Close">×</button></div>
+  <div class="sb">
+   <div class="seg" id="dmseg"><button id="dm_home" type="button" data-i="mHome"></button><button id="dm_class" type="button" data-i="mClass"></button></div>
+   <div class="lnav" id="dlnav" style="margin-top:10px"></div>
+   <div id="dbody"></div>
+  </div>
+ </div>
 </div>
 <script src="core.js?v=16"></script>
 <script>
-var SID = 0, T = null, ROS = null, KNAME = "", DATA = null, UNIT = 0, UPICK = false;
+var B = null, ROWS_SIG = "", BU = 0, BUPICK = false, T = null;
 var GRP = ls("nnt_parent_grp") === "B" ? "B" : (ls("nnt_parent_grp") === "A" ? "A" : "");
 var MODE = ls("nnt_parent_mode") === "class" ? "class" : "home";
-var DET = ls("nnt_parent_det") === "1";
 var LANG = ({cyr: 1, en: 1})[ls("nnt_parent_lang")] ? ls("nnt_parent_lang") : "lat";
-/* Latin Uzbek is written by hand; Cyrillic is made from it with the same letter table that already turns names into Cyrillic */
+var MSID = 0, MD = null, MU = 0, MUPICK = false, MM = "home", MT = null, LASTFOCUS = null;
+ls("nnt_parent_sid", null);
 var LAT = {
- sub:"Ota-onalar uchun", intro:"Guruhni tanlang, farzandingizni toping va uning natijalarini ko'ring.",
+ sub:"Ota-onalar uchun", lblG:"Guruh", lblV:"Nimani ko'rish", lblL:"Dars",
  toq:"Toq", toqS:"Du · Chor · Ju", juft:"Juft", juftS:"Se · Pay · Sha",
- mHome:"Uy", mClass:"Darsxona", more:"Batafsil", moreS:"Barcha tafsilotlarni ko'rish", less:"Qisqacha ko'rinish", lessS:"Faqat asosiy natijalar",
- lbl:"Farzandingizning ismi", ph:"Masalan: Fotima",
- fhintG:"Guruhdagi o'quvchilar ro'yxati. Boshqa ismni qidirish uchun yozing.", fhint0:"Yuqoridan Toq yoki Juft guruhini tanlang yoki istalgan ismni yozing.",
- nf:"Bunday ism topilmadi. Ismni boshqacha yozib ko'ring (masalan, faqat ismini yoki familiyasini).", net:"Internet bilan aloqa yo'q. Iltimos, qayta urinib ko'ring.",
+ mHome:"🏠 Uy", mClass:"🏫 Darsxona", ph:"Ismni yozib qidiring…", batb:"Batafsil ›", close:"Yopish",
+ nf:"Bunday ism topilmadi.", empty:"Bu guruhda o'quvchi topilmadi.", net:"Internet bilan aloqa yo'q.", retry:"Qayta urinish", load:"Yuklanmoqda…",
  tipT:"Telefoningizga saqlab qo'ying", tipB:"Brauzer menyusini oching va «Bosh ekranga qo'shish» tugmasini bosing. Shunda sahifa ilova kabi bir bosishda ochiladi.", tipOk:"Tushunarli",
- back:"← Boshqa o'quvchini qidirish", load:"Yuklanmoqda…", nodata:"Ma'lumot topilmadi.", upd:"Natijalar avtomatik yangilanib turadi", updAt:"Natijalar avtomatik yangilanib turadi · oxirgi yangilanish ", off:"Internet bilan aloqa yo'q. Qayta urinilmoqda…",
- today:"Bugun", tPres:"Darsga kelgan", tAbs:"Darsga kelmagan", tLate:"Kechikib kelgan", tNone:"Bugun davomat belgilanmagan",
+ updAt:"Yangilandi ", off:"Internet bilan aloqa yo'q. Qayta urinilmoqda…", nodata:"Ma'lumot topilmadi.",
  lesson:"-dars", lessonW:"Dars", noUnits:"Hozircha darslar ochilmagan.",
  hw:"Uy vazifasi", cw:"Darsxonadagi ish", key:"Kalit", att:"Davomat",
  hwDone:"Bajarilgan", hwPart:"Jarayonda", hwNone:"Bajarilmagan", cwDone:"Bajarilgan", cwPart:"Jarayonda", cwNone:"Bajarilmagan",
- keyYes:"Olindi", keyNo:"Olinmagan", keyT:"Kalitni ustoz berdi", keyHome:"Uy kaliti", keyClass:"Sinf kaliti",
+ keyYes:"Olindi", keyNo:"Olinmagan", keyT:"Ustoz berdi", keyHome:"Uy kaliti", keyClass:"Sinf kaliti",
  absent:"Darsga kelmagan", late:"Kechikib kelgan", present:"Darsga kelgan", noatt:"Belgilanmagan",
  sVid:"Videolar", sTest:"Uy testi", sSum:"Yozma ish", sSpk:"Gapirish", sKey:"Kalit", sLis:"Tinglash", sRead:"O'qish", sWrite:"Yozish",
- done:"Bajarildi", skipped:"O'tkazib yuborilgan", notyet:"Hali yo'q", ready:"Tayyor", doing:"Hozir bajaryapti",
+ done:"Bajarildi", skipped:"O'tkazib yuborilgan", notyet:"Hali yo'q", ready:"Tayyor",
  jump:"Sakrash testi", jPass:"O'tdi", jFail:"O'tmadi", jCancel:"Bekor qilingan", jStart:"Bajarilmoqda", jAband:"Tashlab ketilgan",
- vids:"Ko'rilgan videolar", jumped:"Videolar o'tkazib yuborildi (sakrash testi)", tpct:"Uy testi natijasi", tbest:"Eng yaxshi natija", ttries:"Urinishlar soni", passm:"O'tish bali",
+ jumped:"Videolar o'tkazib yuborildi (sakrash testi)", tpct:"Uy testi natijasi", tbest:"Eng yaxshi natija", ttries:"Urinishlar soni", passm:"O'tish bali",
  pass:"O'tdi", fail:"O'tmadi", sscore:"Yozma ish bahosi", swords:"So'zlar soni", stries:"Yozma ish urinishlari", spk:"Gapirish topshirig'i",
  leaves:"Oynadan chiqqan", cancels:"Bekor qilingan urinishlar", times:" marta", min:" daq",
- first:"Birinchi natija", final:"Yakuniy natija", fix:"Xatolarni tuzatish turlari", drillT:"Mashq urinishlari", rtests:"Testlar soni", wsc:"Yozma ish bali", wtries:"Urinishlar", wdrill:"Mashq qilingan gaplar", wfails:"Mashqdagi xatolar", spent:"Sarflangan vaqt",
- secHome:"Uy vazifasi tafsilotlari", secClass:"Darsxona tafsilotlari", secAtt:"Davomat", secAll:"Barcha darslar", secKeys:"Kalitlar",
- tHome:"Uy", tClass:"Sinf", kUstoz:"ustoz berdi", noWork:"Hali ish boshlanmagan",
- a:"A", g:"Guruh"
+ first:"Birinchi natija", final:"Yakuniy natija", fix:"Xatolarni tuzatish turlari", drillT:"Mashq urinishlari", rtests:"Testlar soni", wsc:"Yozma ish bali", wtries:"Urinishlar", wdrill:"Mashq qilingan gaplar", wfails:"Mashqdagi xatolar",
+ secHome:"Uy vazifasi tafsilotlari", secClass:"Darsxona tafsilotlari", secAtt:"Davomat", secAll:"Barcha darslar",
+ kUstoz:"ustoz berdi",
+ lgDone:"Bajarilgan / kelgan", lgPart:"Jarayonda / kechikkan", lgBad:"Kelmagan", lgNone:"Hali yo'q", lgKey:"Kalit olindi", lgKeyT:"Kalitni ustoz berdi", lgNoKey:"Kalit yo'q"
 };
 var EN = {
- sub:"For parents", intro:"Choose the group, find your child and see their results.",
+ sub:"For parents", lblG:"Group", lblV:"What to see", lblL:"Lesson",
  toq:"Odd", toqS:"Mon · Wed · Fri", juft:"Even", juftS:"Tue · Thu · Sat",
- mHome:"Home", mClass:"Classroom", more:"Details", moreS:"See every detail", less:"Short view", lessS:"Main results only",
- lbl:"Your child's name", ph:"For example: Fotima",
- fhintG:"Students in this group. Type to search for any other name.", fhint0:"Choose the Odd or Even group above, or type any name.",
- nf:"No such name found. Try writing it differently (for example just the first name or the surname).", net:"No internet connection. Please try again.",
+ mHome:"🏠 Home", mClass:"🏫 Classroom", ph:"Type a name to search…", batb:"Details ›", close:"Close",
+ nf:"No such name found.", empty:"No students found in this group.", net:"No internet connection.", retry:"Try again", load:"Loading…",
  tipT:"Save it on your phone", tipB:"Open the browser menu and tap “Add to Home screen”. The page then opens with one tap, like an app.", tipOk:"Got it",
- back:"← Find another student", load:"Loading…", nodata:"No data found.", upd:"Results refresh automatically", updAt:"Results refresh automatically · last update ", off:"No internet connection. Trying again…",
- today:"Today", tPres:"Attended the lesson", tAbs:"Did not attend the lesson", tLate:"Came late", tNone:"No attendance marked today",
+ updAt:"Updated ", off:"No internet connection. Trying again…", nodata:"No data found.",
  lesson:"Lesson ", lessonW:"Lesson", noUnits:"No lessons are open yet.",
  hw:"Homework", cw:"Classroom work", key:"Key", att:"Attendance",
  hwDone:"Done", hwPart:"In progress", hwNone:"Not done", cwDone:"Done", cwPart:"In progress", cwNone:"Not done",
- keyYes:"Received", keyNo:"Not received", keyT:"Key given by the teacher", keyHome:"Home key", keyClass:"Class key",
+ keyYes:"Received", keyNo:"Not received", keyT:"Teacher gave it", keyHome:"Home key", keyClass:"Class key",
  absent:"Did not attend", late:"Came late", present:"Attended", noatt:"Not marked",
  sVid:"Videos", sTest:"Home test", sSum:"Writing", sSpk:"Speaking", sKey:"Key", sLis:"Listening", sRead:"Reading", sWrite:"Writing",
- done:"Done", skipped:"Skipped", notyet:"Not yet", ready:"Ready", doing:"Doing it now",
+ done:"Done", skipped:"Skipped", notyet:"Not yet", ready:"Ready",
  jump:"Jump test", jPass:"Passed", jFail:"Failed", jCancel:"Cancelled", jStart:"In progress", jAband:"Abandoned",
- vids:"Videos watched", jumped:"Videos skipped (jump test)", tpct:"Home test result", tbest:"Best result", ttries:"Number of tries", passm:"Pass mark",
+ jumped:"Videos skipped (jump test)", tpct:"Home test result", tbest:"Best result", ttries:"Number of tries", passm:"Pass mark",
  pass:"Passed", fail:"Not passed", sscore:"Writing score", swords:"Words written", stries:"Writing tries", spk:"Speaking task",
  leaves:"Left the window", cancels:"Cancelled attempts", times:"×", min:" min",
- first:"First result", final:"Final result", fix:"Fix rounds", drillT:"Practice tries", rtests:"Tests taken", wsc:"Writing score", wtries:"Tries", wdrill:"Sentences practised", wfails:"Practice slips", spent:"Time spent",
- secHome:"Homework details", secClass:"Classroom details", secAtt:"Attendance", secAll:"All lessons", secKeys:"Keys",
- tHome:"Home", tClass:"Class", kUstoz:"teacher gave it", noWork:"No work started yet",
- a:"A", g:"Group"
+ first:"First result", final:"Final result", fix:"Fix rounds", drillT:"Practice tries", rtests:"Tests taken", wsc:"Writing score", wtries:"Tries", wdrill:"Sentences practised", wfails:"Practice slips",
+ secHome:"Homework details", secClass:"Classroom details", secAtt:"Attendance", secAll:"All lessons",
+ kUstoz:"teacher gave it",
+ lgDone:"Done / attended", lgPart:"In progress / late", lgBad:"Did not attend", lgNone:"Not yet", lgKey:"Key received", lgKeyT:"Key given by teacher", lgNoKey:"No key"
 };
 var D = {lat: LAT, en: EN, cyr: {}};
 function t(k){ var v = D[LANG][k]; return v == null ? (LAT[k] == null ? k : LAT[k]) : v; }
 function lessonName(n){ return LANG === "en" ? t("lesson") + n : n + t("lesson"); }
-/* Latin -> Cyrillic for names (Uzbek) */
+/* Latin -> Cyrillic (Uzbek). Names and the Cyrillic texts are made with this table. */
 var L2C = [["o'","ў"],["o‘","ў"],["oʻ","ў"],["g'","ғ"],["g‘","ғ"],["gʻ","ғ"],["sh","ш"],["ch","ч"],["yo","ё"],["yu","ю"],["ya","я"],["ye","е"],["ts","ц"],["ng","нг"],
  ["a","а"],["b","б"],["d","д"],["e","е"],["f","ф"],["g","г"],["h","ҳ"],["i","и"],["j","ж"],["k","к"],["l","л"],["m","м"],["n","н"],["o","о"],["p","п"],["q","қ"],["r","р"],["s","с"],["t","т"],["u","у"],["v","в"],["x","х"],["y","й"],["z","з"],["w","в"],["'","ъ"],["’","ъ"]];
 function capIf(c, up){ return up ? c.charAt(0).toUpperCase() + c.slice(1) : c; }
@@ -226,111 +182,134 @@ function toCyr(str){
     return out;
   }).join("");
 }
+Object.keys(LAT).forEach(function(k){ D.cyr[k] = toCyr(LAT[k]); });
+D.cyr.toqS = "Ду · Чор · Жу"; D.cyr.juftS = "Се · Пай · Ша"; D.cyr.toq = "Тоқ"; D.cyr.juft = "Жуфт"; D.cyr.tipB = "Браузер менюсини очинг ва «Бош экранга қўшиш» тугмасини босинг. Шунда саҳифа илова каби бир босишда очилади.";
 var C2L = {"а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"yo","ж":"j","з":"z","и":"i","й":"y","к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r","с":"s","т":"t","у":"u","ф":"f","х":"h","ц":"ts","ч":"ch","ш":"sh","щ":"sh","э":"e","ю":"yu","я":"ya","ў":"o","ғ":"g","қ":"k","ҳ":"h","ъ":"","ь":"","ы":"i"};
 function norm(s){
   s = String(s || "").toLowerCase().replace(/[а-яёўғқҳъь]/g, function(c){ return C2L[c] != null ? C2L[c] : c; });
   return s.replace(/['‘’ʻʼ`´]/g, "").replace(/x/g, "h").replace(/q/g, "k").replace(/w/g, "v").replace(/ts/g, "s").replace(/j/g, "y").replace(/yy+/g, "y").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
 }
 function nm(x){ return LANG === "cyr" ? toCyr(x) : x; }
-Object.keys(LAT).forEach(function(k){ D.cyr[k] = toCyr(LAT[k]); });
-/* hand-fixes where the letter table is not enough */
-D.cyr.toq = "Тоқ"; D.cyr.juft = "Жуфт"; D.cyr.toqS = "Ду · Чор · Жу"; D.cyr.juftS = "Се · Пай · Ша"; D.cyr.tipB = "Браузер менюсини очинг ва «Бош экранга қўшиш» тугмасини босинг. Шунда саҳифа илова каби бир босишда очилади.";
+
+/* ---------- pictures ---------- */
+function keyIco(v){
+  if (!v) return '<svg viewBox="0 0 48 48" aria-hidden="true"><g opacity=".5"><circle cx="15" cy="24" r="9" fill="#e9ecf4" stroke="#9aa6bf" stroke-width="2.5" stroke-dasharray="4 3"/><path d="M24 24h20M38 24v8M44 24v6" stroke="#9aa6bf" stroke-width="4" stroke-linecap="round" fill="none"/></g></svg>';
+  var b = v === "teacher" ? '<circle cx="37" cy="11" r="9" fill="#123f9c" stroke="#fff" stroke-width="2"/><path d="M37 5.6l1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6-2.6-2.5 3.6-.5z" fill="#fff"/>' : '';
+  return '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="15" cy="26" r="9" fill="#f5c542" stroke="#b8860b" stroke-width="2.5"/><circle cx="15" cy="26" r="3.2" fill="#fff"/><path d="M24 26h20M38 26v8M44 26v6" stroke="#b8860b" stroke-width="4" stroke-linecap="round" fill="none"/>' + b + '</svg>';
+}
+function dot(k){
+  var c = {g: "#14a56b", o: "#f0a21c", r: "#d6364f", n: "#c9cfdd"}[k] || "#c9cfdd", p = {
+    g: '<path d="M14 25l7 7 13-15" stroke="#fff" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+    o: '<path d="M24 13v12l8 5" stroke="#fff" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+    r: '<path d="M16 16l16 16M32 16L16 32" stroke="#fff" stroke-width="4.5" fill="none" stroke-linecap="round"/>',
+    n: '<path d="M16 24h16" stroke="#fff" stroke-width="4.5" fill="none" stroke-linecap="round"/>'}[k] || "";
+  return '<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="' + c + '"/>' + p + '</svg>';
+}
+function ic(tone, svg, label, val, sub){ return '<div class="ic ' + tone + '">' + svg + '<div><span>' + esc(label) + '</span><b>' + esc(val) + '</b>' + (sub ? '<span>' + esc(sub) + '</span>' : '') + '</div></div>'; }
+function stTone(s){ return s === "done" ? "g" : s === "part" ? "o" : "n"; }
+function attTone(a){ return a === "absent" ? "r" : a === "late" ? "o" : a === "present" ? "g" : "n"; }
+
+/* ---------- language and controls ---------- */
 function applyLang(){
   document.documentElement.lang = LANG === "cyr" ? "uz-Cyrl" : LANG === "en" ? "en" : "uz";
   document.title = "NNT School · " + t("sub");
   [].forEach.call(document.querySelectorAll("[data-i]"), function(e){ e.textContent = t(e.getAttribute("data-i")); });
-  $("q").placeholder = t("ph"); $("back").textContent = t("back");
-  document.querySelector("[data-h=h1]").innerHTML = LANG === "cyr" ? "Фарзандингиз <em>натижалари</em>" : LANG === "en" ? "Your child's <em>results</em>" : "Farzandingiz <em>natijalari</em>";
-  ["lat", "cyr", "en"].forEach(function(l){ $("l_" + l).className = LANG === l ? "on" : ""; });
-  paintDeck(); find(); if (DATA) draw(); else if (SID) $("kname").textContent = nm(KNAME);
-  if (!SID) $("upd").textContent = t("upd");
+  $("q").placeholder = t("ph"); $("lgc").textContent = LANG === "lat" ? "UZ" : LANG === "cyr" ? "ЎЗ" : "EN";
+  [].forEach.call($("lgm").querySelectorAll("button"), function(b){ b.className = b.getAttribute("data-l") === LANG ? "on" : ""; });
+  $("dx").setAttribute("aria-label", t("close"));
+  $("leg").innerHTML = '<span>' + dot("g") + esc(t("lgDone")) + '</span><span>' + dot("o") + esc(t("lgPart")) + '</span><span>' + dot("r") + esc(t("lgBad")) + '</span><span>' + dot("n") + esc(t("lgNone")) + '</span><span>' + keyIco("home") + esc(t("lgKey")) + '</span><span>' + keyIco("teacher") + esc(t("lgKeyT")) + '</span><span>' + keyIco(null) + esc(t("lgNoKey")) + '</span>';
+  paintCtl(); drawBoard(); if (!$("dlg").classList.contains("hide")) drawDlg();
 }
-function paintDeck(){
+function paintCtl(){
   $("g_A").className = GRP === "A" ? "on" : ""; $("g_B").className = GRP === "B" ? "on" : "";
   $("m_home").className = MODE === "home" ? "on" : ""; $("m_class").className = MODE === "class" ? "on" : "";
-  $("bat").className = "bat" + (DET ? " on" : ""); $("bat").setAttribute("aria-pressed", DET ? "true" : "false");
-  $("batt").textContent = (DET ? "✓ " : "🔍 ") + t(DET ? "less" : "more"); $("bats").textContent = t(DET ? "lessS" : "moreS");
 }
-$("l_lat").onclick = function(){ LANG = "lat"; ls("nnt_parent_lang", "lat"); applyLang(); };
-$("l_cyr").onclick = function(){ LANG = "cyr"; ls("nnt_parent_lang", "cyr"); applyLang(); };
-$("l_en").onclick = function(){ LANG = "en"; ls("nnt_parent_lang", "en"); applyLang(); };
-function show(k){ $("s_find").classList.toggle("hide", k !== "find"); $("s_kid").classList.toggle("hide", k !== "kid"); window.scrollTo(0, 0); }
-["A", "B"].forEach(function(g){ $("g_" + g).onclick = function(){ GRP = GRP === g && !SID ? "" : g; ls("nnt_parent_grp", GRP || null); if (SID) goBack(); paintDeck(); find(); }; });
-$("m_home").onclick = function(){ MODE = "home"; ls("nnt_parent_mode", "home"); paintDeck(); if (DATA) draw(); };
-$("m_class").onclick = function(){ MODE = "class"; ls("nnt_parent_mode", "class"); paintDeck(); if (DATA) draw(); };
-$("bat").onclick = function(){ DET = !DET; ls("nnt_parent_det", DET ? "1" : "0"); paintDeck(); if (DATA) draw(); };
+function setLang(l){ LANG = l; ls("nnt_parent_lang", l); $("lgm").classList.add("hide"); $("lgb").setAttribute("aria-expanded", "false"); applyLang(); }
+$("lgb").onclick = function(e){ e.stopPropagation(); var h = $("lgm").classList.toggle("hide"); $("lgb").setAttribute("aria-expanded", h ? "false" : "true"); };
+$("lgm").onclick = function(e){ var b = e.target.closest("button[data-l]"); if (b) setLang(b.getAttribute("data-l")); };
+document.addEventListener("click", function(e){ if (!e.target.closest(".lg")){ $("lgm").classList.add("hide"); $("lgb").setAttribute("aria-expanded", "false"); } });
+["A", "B"].forEach(function(g){ $("g_" + g).onclick = function(){ GRP = GRP === g ? "" : g; ls("nnt_parent_grp", GRP || null); paintCtl(); drawBoard(); }; });
+$("m_home").onclick = function(){ MODE = "home"; ls("nnt_parent_mode", "home"); paintCtl(); drawBoard(); drawLnav(); };
+$("m_class").onclick = function(){ MODE = "class"; ls("nnt_parent_mode", "class"); paintCtl(); drawBoard(); drawLnav(); };
+var qt = null; $("q").oninput = function(){ clearTimeout(qt); qt = setTimeout(drawBoard, 150); };
 
-function getRoster(){
-  if (ROS) return Promise.resolve(ROS);
-  return rpc("parent_group", {}).then(function(r){ if (!r || !r.ok) throw new Error("x"); ROS = r.rows.map(function(x){ x.k = norm(x.name); return x; }); return ROS; });
+/* ---------- the results board ---------- */
+function ent(r, u){ var a = r.us || []; for (var i = 0; i < a.length; i++) if (+a[i].u === u) return a[i]; return null; }
+function pickBoardUnit(b){
+  var us = b.units || []; if (!us.length) return 0;
+  var best = 0; (b.rows || []).forEach(function(r){ (r.us || []).forEach(function(e){ if (String(e.ad || "").slice(0, 10) === b.today && +e.u > best) best = +e.u; }); });
+  if (best) return best;
+  (b.rows || []).forEach(function(r){ (r.us || []).forEach(function(e){ if ((e.h !== "none" || e.c !== "none") && +e.u > best) best = +e.u; }); });
+  return best || us[us.length - 1];
 }
-function listHtml(r){ return r.map(function(x){ return '<div data-id="' + x.id + '" data-n="' + esc(x.name) + '">' + esc(nm(x.name)) + (x.g && !GRP ? ' <span class="gtag">' + (x.g === "A" ? t("toq") : t("juft")) + '</span>' : (x.g && x.g !== GRP ? ' <span class="gtag">' + (x.g === "A" ? t("toq") : t("juft")) + '</span>' : "")) + '</div>'; }).join(""); }
-function find(){
-  var raw = $("q").value.trim(), q = norm(raw), pl = $("plist");
-  $("fhint").textContent = t(GRP ? "fhintG" : "fhint0");
-  if (!GRP && q.length < 2){ pl.innerHTML = ""; $("nf").innerHTML = ""; return; }
-  getRoster().then(function(R){
-    if ($("q").value.trim() !== raw) return;
-    var toks = q.split(" ").filter(Boolean), r;
-    if (q.length >= 2) r = R.filter(function(x){ return toks.every(function(w){ return x.k.indexOf(w) > -1; }); });
-    else r = R.filter(function(x){ return x.g === GRP; });
-    if (!r.length){ pl.innerHTML = ""; $("nf").innerHTML = '<div class="nf">' + t("nf") + '</div>'; return; }
-    $("nf").innerHTML = ""; pl.innerHTML = listHtml(r);
-  }).catch(function(){ pl.innerHTML = ""; $("nf").innerHTML = '<div class="nf">' + t("net") + '</div>'; });
+function drawLnav(){
+  if (!B || !(B.units || []).length){ $("lnav").innerHTML = ""; return; }
+  $("lnav").innerHTML = B.units.map(function(u){ return '<button type="button" data-u="' + u + '" class="' + (u === BU ? "on" : "") + '">' + esc(lessonName(u)) + '</button>'; }).join("");
 }
-var qt = null; $("q").oninput = function(){ clearTimeout(qt); qt = setTimeout(find, 200); };
-$("plist").onclick = function(e){ var d = e.target.closest("div[data-id]"); if (!d) return; openKid(+d.getAttribute("data-id"), d.getAttribute("data-n")); };
-function openKid(id, name){ SID = id; DATA = null; UPICK = false; UNIT = 0; KNAME = name || ""; ls("nnt_parent_sid", String(id)); $("kname").textContent = nm(KNAME); $("kgrp").textContent = ""; $("today").innerHTML = ""; $("lnav").innerHTML = ""; $("ubody").innerHTML = '<p style="color:var(--mute)">' + t("load") + '</p>'; show("kid"); load(); }
-function goBack(){ SID = 0; DATA = null; ls("nnt_parent_sid", null); clearInterval(T); $("q").value = ""; $("plist").innerHTML = ""; $("nf").innerHTML = ""; show("find"); find(); }
-$("back").onclick = goBack;
+$("lnav").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b) return; BU = +b.getAttribute("data-u"); BUPICK = true; drawLnav(); drawBoard(); };
+function drawBoard(){
+  var bd = $("board");
+  if (!B){ return; }
+  if (!(B.units || []).length){ bd.innerHTML = '<div class="msg">' + t("noUnits") + '</div>'; return; }
+  var q = norm($("q").value), toks = q.split(" ").filter(Boolean), h = "", n = 0;
+  (B.rows || []).forEach(function(r){
+    if (GRP && r.g !== GRP) return;
+    if (toks.length){ var k = norm(r.name); if (!toks.every(function(w){ return k.indexOf(w) > -1; })) return; }
+    var e = ent(r, BU) || {h: "none", c: "none"}, home = MODE === "home";
+    var s = home ? e.h : e.c, kk = home ? e.hk : e.ck, a = e.a;
+    var tone = a === "absent" ? "r" : (s === "done" && kk) ? "g" : s === "part" || s === "done" ? "o" : "";
+    var wk = t(home ? "hw" : "cw"), wv = t((home ? "hw" : "cw") + (s === "done" ? "Done" : s === "part" ? "Part" : "None"));
+    n++;
+    h += '<div class="st ' + tone + '"><div class="nm">' + esc(nm(r.name)) + (r.g && !GRP ? '<span class="gtag">' + t(r.g === "A" ? "toq" : "juft") + '</span>' : "") + '</div><div class="ic3">'
+      + ic(stTone(s), dot(stTone(s)), wk, wv)
+      + ic(kk ? "g" : "n", keyIco(kk), t("key"), kk ? t("keyYes") : t("keyNo"), kk === "teacher" ? t("keyT") : "")
+      + ic(attTone(a), dot(attTone(a)), t("att"), a ? t(a) : t("noatt"))
+      + '</div><button class="bt" type="button" data-id="' + r.id + '" data-n="' + esc(r.name) + '" data-g="' + esc(r.g || "") + '">' + esc(t("batb")) + '</button></div>';
+  });
+  bd.innerHTML = n ? h : '<div class="msg">' + t(toks.length ? "nf" : "empty") + '</div>';
+  var d = new Date(); $("upd").textContent = t("updAt") + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+}
+$("board").onclick = function(e){ var b = e.target.closest("button.bt"); if (!b) return; openDlg(+b.getAttribute("data-id"), b.getAttribute("data-n"), b.getAttribute("data-g")); };
+function loadBoard(first){
+  if (first) $("board").innerHTML = '<div class="msg">' + t("load") + '</div>';
+  rpc("parent_board", {}).then(function(r){
+    if (!r || !r.ok) throw new Error("x");
+    var sig = JSON.stringify(r.rows) + JSON.stringify(r.units); B = r;
+    if (!BUPICK || (r.units || []).indexOf(BU) < 0) BU = pickBoardUnit(r);
+    if (sig !== ROWS_SIG || first){ ROWS_SIG = sig; drawLnav(); drawBoard(); }
+  }).catch(function(){ if (!B) $("board").innerHTML = '<div class="msg">' + t("net") + ' <button type="button" id="rt">' + t("retry") + '</button></div>'; else $("upd").textContent = t("off"); var rt = $("rt"); if (rt) rt.onclick = function(){ loadBoard(true); }; });
+}
 
-/* ---------- reading the data (all read-only) ---------- */
+/* ---------- the Batafsil window ---------- */
 function attOf(x){ var a = (x.att || []).map(function(r){ return r.status; }); return a.indexOf("absent") > -1 ? "absent" : a.indexOf("late") > -1 ? "late" : a.length ? "present" : null; }
 function homeInfo(x){
   var st = x.st || {}, vt = +st.vtotal || 0, vd = +st.vdone || 0, vDone = !!st.jumped || (vt > 0 && vd >= vt);
-  var test = !!st.test, ess = !!st.essay, spk = !!st.speak, key = !!st.key;
-  var done = spk || key, any = vd > 0 || test || ess || spk || key || !!st.jumped || +st.tries > 0;
-  var cur = !vDone ? "sVid" : !test ? "sTest" : !ess ? "sSum" : !spk ? "sSpk" : "sKey";
-  return {st: st, vt: vt, vd: vd, vDone: vDone, test: test, ess: ess, spk: spk, key: key, done: done, any: any, cur: cur, state: done ? "done" : any ? "part" : "none"};
+  var test = !!st.test, ess = !!st.essay, spk = !!st.speak, key = !!st.key, done = spk || key, any = vd > 0 || test || ess || spk || key || !!st.jumped || +st.tries > 0;
+  return {st: st, vt: vt, vd: vd, vDone: vDone, test: test, ess: ess, spk: spk, key: key, done: done, any: any, cur: !vDone ? "sVid" : !test ? "sTest" : !ess ? "sSum" : !spk ? "sSpk" : "sKey", state: done ? "done" : any ? "part" : "none"};
 }
 function classInfo(x){
   var P = {}; (x.cls || []).forEach(function(p){ P[p.st] = p; });
-  var order = ["lis", "read", "write"], S = order.map(function(k){ var p = P[k] || {}, d = p.d || {}; return {k: k, secs: p.secs || 0, mins: Math.floor((p.secs || 0) / 60), d: d, done: k === "write" ? (d.ok === true || d.ok === "true") : !!d.done}; });
+  var S = ["lis", "read", "write"].map(function(k){ var p = P[k] || {}, d = p.d || {}; return {k: k, secs: p.secs || 0, mins: Math.floor((p.secs || 0) / 60), d: d, done: k === "write" ? (d.ok === true || d.ok === "true") : !!d.done}; });
   S.forEach(function(s, i){ if (!s.done && S.slice(i + 1).some(function(n){ return n.secs > 0; })) s.done = true; });
   var all = S.every(function(s){ return s.done; }), any = S.some(function(s){ return s.done || s.secs > 0; });
   return {S: S, all: all, any: any, ckey: x.ckey || null, done: all || !!x.ckey, state: (all || x.ckey) ? "done" : any ? "part" : "none"};
 }
-function pickUnit(d){
-  var us = d.units; if (!us.length) return 0;
-  var today = us.filter(function(x){ return (x.att || []).some(function(a){ return String(a.day).slice(0, 10) === d.today; }); });
-  if (today.length) return today[today.length - 1].u;
-  for (var i = 0; i < us.length; i++){ var h = homeInfo(us[i]), c = classInfo(us[i]); if (!(h.key || (h.done && c.done))) return us[i].u; }
-  return us[us.length - 1].u;
-}
-function qc(label, val, tone, sub){ return '<div class="qc ' + tone + '"><span>' + esc(label) + '</span><b>' + esc(val) + '</b>' + (sub ? '<em>' + esc(sub) + '</em>' : '') + '</div>'; }
 function row(a, b){ return '<div>' + esc(a) + '</div><div>' + b + '</div>'; }
-function attTone(a){ return a === "absent" ? "r" : a === "late" ? "o" : a === "present" ? "g" : "n"; }
 function dayTxt(s){ s = String(s || "").slice(0, 10).split("-"); return s.length === 3 ? s[2] + "." + s[1] : ""; }
-function stateTone(s){ return s === "done" ? "g" : s === "part" ? "o" : "n"; }
-
 function unitCard(x, d){
-  var h = homeInfo(x), c = classInfo(x), a = attOf(x), st = h.st, pass = +d.pass || 80, out = "";
-  var ie = d.track === "ie" || (d.track !== "ml" && st.band != null && +st.band <= 9);
-  out += '<div class="ucard"><div class="uh"><div class="pn">' + x.u + '</div><h3>' + esc(lessonName(x.u)) + '</h3></div>';
-  /* first things a parent sees: done or not, key or not, attended or not */
-  var q = "";
-  if (MODE === "home"){
-    q += qc(t("hw"), t("hw" + (h.state === "done" ? "Done" : h.state === "part" ? "Part" : "None")), stateTone(h.state), h.state === "part" ? t(h.cur) : "");
-    q += qc(t("keyHome"), h.key ? t("keyYes") : t("keyNo"), h.key ? "g" : "r", h.key && st.via === "teacher" ? t("keyT") : "");
+  var h = homeInfo(x), c = classInfo(x), a = attOf(x), st = h.st, pass = +d.pass || 80;
+  var ie = d.track === "ie" || (d.track !== "ml" && st.band != null && +st.band <= 9), q = "";
+  if (MM === "home"){
+    q += ic(stTone(h.state), dot(stTone(h.state)), t("hw"), t("hw" + (h.state === "done" ? "Done" : h.state === "part" ? "Part" : "None")), h.state === "part" ? t(h.cur) : "");
+    var hk = h.key ? (st.via === "teacher" ? "teacher" : "home") : null; q += ic(hk ? "g" : "n", keyIco(hk), t("keyHome"), hk ? t("keyYes") : t("keyNo"), hk === "teacher" ? t("keyT") : "");
   } else {
-    q += qc(t("cw"), t("cw" + (c.state === "done" ? "Done" : c.state === "part" ? "Part" : "None")), stateTone(c.state), "");
-    q += qc(t("keyClass"), c.ckey ? t("keyYes") : t("keyNo"), c.ckey ? "g" : "r", c.ckey === "teacher" ? t("keyT") : "");
+    q += ic(stTone(c.state), dot(stTone(c.state)), t("cw"), t("cw" + (c.state === "done" ? "Done" : c.state === "part" ? "Part" : "None")));
+    q += ic(c.ckey ? "g" : "n", keyIco(c.ckey), t("keyClass"), c.ckey ? t("keyYes") : t("keyNo"), c.ckey === "teacher" ? t("keyT") : "");
   }
   var days = (x.att || []).map(function(r){ return dayTxt(r.day); }).filter(Boolean).join(", ");
-  q += qc(t("att"), a ? t(a) : t("noatt"), attTone(a), a ? days : "");
-  out += '<div class="q3">' + q + '</div>';
-  if (DET){ out += MODE === "home" ? homeDetail(x, h, d, pass, ie) : classDetail(x, c); out += attDetail(x); }
-  return out + '</div>';
+  q += ic(attTone(a), dot(attTone(a)), t("att"), a ? t(a) : t("noatt"), days);
+  return '<div class="ucard"><div class="uh"><div class="pn">' + x.u + '</div><h3>' + esc(lessonName(x.u)) + '</h3></div><div class="q3">' + q + '</div>'
+    + (MM === "home" ? homeDetail(x, h, d, pass, ie) : classDetail(x, c)) + attDetail(x) + '</div>';
 }
 function homeDetail(x, h, d, pass, ie){
   var st = h.st, r = "", at = {}; (x.att2 || []).forEach(function(z){ at[z.kind] = z; });
@@ -350,7 +329,6 @@ function homeDetail(x, h, d, pass, ie){
   if (+st.leaves) r += row(t("leaves") + " (" + t("sTest") + ")", st.leaves + t("times"));
   if (+st.eleaves) r += row(t("leaves") + " (" + t("sSum") + ")", st.eleaves + t("times"));
   if (+st.cancels) r += row(t("cancels"), st.cancels + t("times"));
-  r += row(t("keyHome"), h.key ? t("keyYes") + (st.via === "teacher" ? " · " + t("kUstoz") : "") : t("keyNo"));
   return '<div class="dh">' + esc(t("secHome")) + '</div><div class="dl">' + r + '</div>';
 }
 function classDetail(x, c){
@@ -364,7 +342,6 @@ function classDetail(x, c){
     if (s.k === "write" && s.done){ if (d.sc != null) r += row("  " + t("wsc"), d.sc); r += row("  " + t("wtries"), d.tries || 1); if (d.drill) r += row("  " + t("wdrill"), d.drill); if (d.fails) r += row("  " + t("wfails"), d.fails); }
     if (+d.leaves) r += row("  " + t("leaves"), d.leaves + t("times"));
   });
-  r += row(t("keyClass"), c.ckey ? t("keyYes") + (c.ckey === "teacher" ? " · " + t("kUstoz") : "") : t("keyNo"));
   return '<div class="dh">' + esc(t("secClass")) + '</div><div class="dl">' + r + '</div>';
 }
 function attDetail(x){
@@ -372,42 +349,47 @@ function attDetail(x){
   return '<div class="dh">' + esc(t("secAtt")) + '</div><div class="dl">' + a.map(function(z){ return row(dayTxt(z.day), esc(t(z.status === "absent" ? "absent" : z.status === "late" ? "late" : "present"))); }).join("") + '</div>';
 }
 function history(d){
-  var h = '<div class="dh">' + esc(t("secAll")) + '</div><div class="hwrap"><table class="hist"><tr><th>' + esc(t("lessonW")) + '</th><th>' + esc(t("hw")) + '</th><th>' + esc(t("keyHome")) + '</th><th>' + esc(t("cw")) + '</th><th>' + esc(t("keyClass")) + '</th><th>' + esc(t("att")) + '</th></tr>';
+  var h = '<div class="dh">' + esc(t("secAll")) + '</div><div class="hwrap"><table class="hist"><tr><th>' + esc(t("lessonW")) + '</th><th>' + esc(t(MM === "home" ? "hw" : "cw")) + '</th><th>' + esc(t("key")) + '</th><th>' + esc(t("att")) + '</th></tr>';
   d.units.forEach(function(x){
-    var hi = homeInfo(x), ci = classInfo(x), a = attOf(x), T = {g: "t-g", o: "t-o", n: "t-n", r: "t-r"};
-    h += '<tr' + (x.u === UNIT ? ' class="cur"' : "") + '><td><b>' + x.u + '</b></td>'
-      + '<td class="' + T[stateTone(hi.state)] + '">' + esc(t("hw" + (hi.state === "done" ? "Done" : hi.state === "part" ? "Part" : "None"))) + (hi.st.pct != null && hi.test ? '<br>' + Math.round(hi.st.pct) + '%' : '') + '</td>'
-      + '<td class="' + (hi.key ? "t-g" : "t-n") + '">' + (hi.key ? "🔑 " + (hi.st.via === "teacher" ? t("kUstoz") : t("keyYes")) : "–") + '</td>'
-      + '<td class="' + T[stateTone(ci.state)] + '">' + esc(t("cw" + (ci.state === "done" ? "Done" : ci.state === "part" ? "Part" : "None"))) + '</td>'
-      + '<td class="' + (ci.ckey ? "t-g" : "t-n") + '">' + (ci.ckey ? "🔑 " + (ci.ckey === "teacher" ? t("kUstoz") : t("keyYes")) : "–") + '</td>'
-      + '<td class="' + T[attTone(a)] + '">' + (a ? esc(t(a)) : "–") + '</td></tr>';
+    var hi = homeInfo(x), ci = classInfo(x), a = attOf(x), home = MM === "home", s = home ? hi.state : ci.state, k = home ? (hi.key ? (hi.st.via === "teacher" ? "teacher" : "home") : null) : ci.ckey;
+    h += '<tr' + (x.u === MU ? ' class="cur"' : "") + '><td><b>' + x.u + '</b></td><td>' + dot(stTone(s)) + '</td><td>' + keyIco(k) + (k === "teacher" ? '<span class="t-n">' + esc(t("kUstoz")) + '</span>' : "") + '</td><td>' + dot(attTone(a)) + '</td></tr>';
   });
   return h + '</table></div>';
 }
-function draw(){
-  var d = DATA; if (!d) return;
-  KNAME = d.name; $("kname").textContent = nm(d.name);
-  if (d.g && d.g !== GRP){ GRP = d.g; ls("nnt_parent_grp", GRP); paintDeck(); }
-  $("kgrp").textContent = d.g ? (d.g === "A" ? t("toq") : t("juft")) : "";
-  if (!d.units.length){ $("ubody").innerHTML = '<div class="empty">' + t("noUnits") + '</div>'; $("lnav").innerHTML = ""; return; }
-  if (!UPICK || !d.units.some(function(x){ return x.u === UNIT; })){ UNIT = pickUnit(d); }
-  var tdy = []; d.units.forEach(function(x){ (x.att || []).forEach(function(r){ if (String(r.day).slice(0, 10) === d.today) tdy.push(r.status); }); });
-  var ts = tdy.indexOf("absent") > -1 ? "absent" : tdy.indexOf("late") > -1 ? "late" : tdy.length ? "present" : null;
-  $("today").innerHTML = '<b>' + esc(t("today")) + ':</b> <span class="chip ' + attTone(ts) + '">' + esc(ts ? t(ts === "absent" ? "tAbs" : ts === "late" ? "tLate" : "tPres") : t("tNone")) + '</span>';
-  $("lnav").innerHTML = d.units.map(function(x){ var h = homeInfo(x), c = classInfo(x), ok = MODE === "home" ? h.done : c.done; return '<button type="button" data-u="' + x.u + '" class="' + (x.u === UNIT ? "on" : "") + '">' + esc(lessonName(x.u)) + '<i>' + (ok ? "✓" : "") + '</i></button>'; }).join("");
-  var cur = d.units.filter(function(x){ return x.u === UNIT; })[0];
-  $("ubody").innerHTML = unitCard(cur, d) + (DET ? history(d) : "");
-  var n = new Date(); $("upd").textContent = t("updAt") + ("0" + n.getHours()).slice(-2) + ":" + ("0" + n.getMinutes()).slice(-2);
+function drawDlg(){
+  $("dm_home").className = MM === "home" ? "on" : ""; $("dm_class").className = MM === "class" ? "on" : "";
+  var d = MD; if (!d){ return; }
+  $("dname").textContent = nm(d.name); $("dgrp").textContent = d.g ? t(d.g === "A" ? "toq" : "juft") : ""; $("dgrp").style.display = d.g ? "" : "none";
+  if (!d.units.length){ $("dbody").innerHTML = '<div class="msg">' + t("noUnits") + '</div>'; $("dlnav").innerHTML = ""; return; }
+  if (!MUPICK || !d.units.some(function(x){ return x.u === MU; })) MU = d.units.some(function(x){ return x.u === BU; }) ? BU : d.units[d.units.length - 1].u;
+  $("dlnav").innerHTML = d.units.map(function(x){ return '<button type="button" data-u="' + x.u + '" class="' + (x.u === MU ? "on" : "") + '">' + esc(lessonName(x.u)) + '</button>'; }).join("");
+  var cur = d.units.filter(function(x){ return x.u === MU; })[0];
+  $("dbody").innerHTML = unitCard(cur, d) + history(d);
 }
-$("lnav").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b) return; UNIT = +b.getAttribute("data-u"); UPICK = true; draw(); };
-function load(){
-  if (!SID) return;
-  rpc("parent_novel", {p_sid: SID}).then(function(d){ if (!d || !d.ok){ $("ubody").innerHTML = '<div class="nf">' + t("nodata") + '</div>'; return; } DATA = d; draw(); }).catch(function(){ $("upd").textContent = t("off"); });
-  clearInterval(T); T = setInterval(function(){ if (!document.hidden) load(); }, 15000);
+function openDlg(id, name, g){
+  MSID = id; MD = null; MUPICK = false; MM = MODE; LASTFOCUS = document.activeElement;
+  $("dname").textContent = nm(name); $("dgrp").textContent = g ? t(g === "A" ? "toq" : "juft") : ""; $("dgrp").style.display = g ? "" : "none";
+  $("dlnav").innerHTML = ""; $("dbody").innerHTML = '<div class="msg">' + t("load") + '</div>';
+  $("dm_home").className = MM === "home" ? "on" : ""; $("dm_class").className = MM === "class" ? "on" : "";
+  $("dlg").classList.remove("hide"); document.body.classList.add("lock"); $("dx").focus();
+  loadDlg(); clearInterval(MT); MT = setInterval(function(){ if (!document.hidden) loadDlg(); }, 15000);
 }
+function loadDlg(){
+  if (!MSID) return;
+  var id = MSID;
+  rpc("parent_novel", {p_sid: id}).then(function(d){ if (id !== MSID) return; if (!d || !d.ok){ $("dbody").innerHTML = '<div class="msg">' + t("nodata") + '</div>'; return; } MD = d; drawDlg(); }).catch(function(){ if (!MD) $("dbody").innerHTML = '<div class="msg">' + t("net") + '</div>'; });
+}
+function closeDlg(){ MSID = 0; MD = null; clearInterval(MT); $("dlg").classList.add("hide"); document.body.classList.remove("lock"); try { if (LASTFOCUS && LASTFOCUS.focus) LASTFOCUS.focus(); } catch (e) {} }
+$("dx").onclick = closeDlg;
+$("dlg").onclick = function(e){ if (e.target === $("dlg")) closeDlg(); };
+document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !$("dlg").classList.contains("hide")) closeDlg(); });
+$("dm_home").onclick = function(){ MM = "home"; drawDlg(); };
+$("dm_class").onclick = function(){ MM = "class"; drawDlg(); };
+$("dlnav").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b) return; MU = +b.getAttribute("data-u"); MUPICK = true; drawDlg(); };
+
 var tipHide = ls("nnt_parent_tip") === "1" || (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone;
 if (tipHide) $("tip").style.display = "none";
 $("tipx").onclick = function(){ ls("nnt_parent_tip", "1"); $("tip").style.display = "none"; };
-applyLang();
-(function(){ var s = +ls("nnt_parent_sid"); if (s){ openKid(s, ""); } else show("find"); })();
+applyLang(); loadBoard(true);
+clearInterval(T); T = setInterval(function(){ if (!document.hidden) loadBoard(false); }, 20000);
 </script></body></html>
