@@ -25,6 +25,11 @@
 .lnav{display:flex;gap:8px;overflow-x:auto;padding:2px 1px 4px;-webkit-overflow-scrolling:touch}
 .lnav button{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 16px;font:700 16px var(--sans);color:var(--ink);cursor:pointer}
 .lnav button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tdl{margin-left:10px;font:800 12.5px var(--sans);letter-spacing:.02em;text-transform:none;color:#071733;background:linear-gradient(135deg,#ffd45c,#e0a52c);border-radius:999px;padding:3px 10px}
+.lnav button.td{position:relative;border-color:#e0a52c;box-shadow:0 0 0 2px rgba(224,165,44,.3)}
+.lnav button.td.on{border-color:var(--ink)}
+.lnav button i{display:block;font-style:normal;font:800 10.5px var(--sans);color:#8a5a00;margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
+.lnav button.on i{color:#ffd45c}
 .srch{margin:12px 0 4px}
 .srch input{width:100%;font-size:18px;padding:14px 16px;border-radius:14px;border:1.5px solid var(--line);background:#fff;font-family:var(--sans)}
 .leg{display:flex;flex-wrap:wrap;gap:6px 16px;margin:10px 2px 12px;font-size:13.5px;color:var(--mute);align-items:center}
@@ -98,7 +103,7 @@ body.lock{overflow:hidden}
   <div class="seg gold" id="gseg"><button id="g_A" type="button"><span class="tx"><span data-i="toq"></span><small data-i="toqS"></small></span></button><button id="g_B" type="button"><span class="tx"><span data-i="juft"></span><small data-i="juftS"></small></span></button></div>
   <div class="cl" data-i="lblV"></div>
   <div class="seg" id="mseg"><button id="m_home" type="button" data-i="mHome"></button><button id="m_class" type="button" data-i="mClass"></button></div>
-  <div class="cl" data-i="lblL"></div>
+  <div class="cl"><span data-i="lblL"></span><b class="tdl" id="tdl"></b></div>
   <div class="lnav" id="lnav"></div>
  </div>
  <div class="srch"><input type="search" id="q" autocomplete="off" aria-label="search"></div>
@@ -132,7 +137,7 @@ var LAT = {
  nf:"Bunday ism topilmadi.", empty:"Bu guruhda o'quvchi topilmadi.", net:"Internet bilan aloqa yo'q.", retry:"Qayta urinish", load:"Yuklanmoqda…",
  tipT:"Telefoningizga saqlab qo'ying", tipB:"Brauzer menyusini oching va «Bosh ekranga qo'shish» tugmasini bosing. Shunda sahifa ilova kabi bir bosishda ochiladi.", tipOk:"Tushunarli",
  updAt:"Yangilandi ", off:"Internet bilan aloqa yo'q. Qayta urinilmoqda…", nodata:"Ma'lumot topilmadi.",
- lesson:"-dars", lessonW:"Dars", noUnits:"Hozircha darslar ochilmagan.",
+ lesson:"-dars", lessonW:"Dars", todayB:"Bugun", todayL:"Bugungi dars: ", noToday:"Bugun dars belgilanmagan", noUnits:"Hozircha darslar ochilmagan.",
  hw:"Uy vazifasi", cw:"Darsxonadagi ish", key:"Kalit", att:"Davomat",
  hwDone:"Bajarilgan", hwPart:"Jarayonda", hwNone:"Bajarilmagan", cwDone:"Bajarilgan", cwPart:"Jarayonda", cwNone:"Bajarilmagan",
  keyYes:"Olindi", keyNo:"Olinmagan", keyT:"Ustoz berdi", keyHome:"Uy kaliti", keyClass:"Sinf kaliti",
@@ -155,7 +160,7 @@ var EN = {
  nf:"No such name found.", empty:"No students found in this group.", net:"No internet connection.", retry:"Try again", load:"Loading…",
  tipT:"Save it on your phone", tipB:"Open the browser menu and tap “Add to Home screen”. The page then opens with one tap, like an app.", tipOk:"Got it",
  updAt:"Updated ", off:"No internet connection. Trying again…", nodata:"No data found.",
- lesson:"Lesson ", lessonW:"Lesson", noUnits:"No lessons are open yet.",
+ lesson:"Lesson ", lessonW:"Lesson", todayB:"Today", todayL:"Today's lesson: ", noToday:"No lesson marked for today", noUnits:"No lessons are open yet.",
  hw:"Homework", cw:"Classroom work", key:"Key", att:"Attendance",
  hwDone:"Done", hwPart:"In progress", hwNone:"Not done", cwDone:"Done", cwPart:"In progress", cwNone:"Not done",
  keyYes:"Received", keyNo:"Not received", keyT:"Teacher gave it", keyHome:"Home key", keyClass:"Class key",
@@ -238,7 +243,7 @@ function setLang(l){ LANG = l; ls("nnt_parent_lang", l); $("lgm").classList.add(
 $("lgb").onclick = function(e){ e.stopPropagation(); var h = $("lgm").classList.toggle("hide"); $("lgb").setAttribute("aria-expanded", h ? "false" : "true"); };
 $("lgm").onclick = function(e){ var b = e.target.closest("button[data-l]"); if (b) setLang(b.getAttribute("data-l")); };
 document.addEventListener("click", function(e){ if (!e.target.closest(".lg")){ $("lgm").classList.add("hide"); $("lgb").setAttribute("aria-expanded", "false"); } });
-["A", "B"].forEach(function(g){ $("g_" + g).onclick = function(){ GRP = GRP === g ? "" : g; ls("nnt_parent_grp", GRP || null); paintCtl(); drawBoard(); }; });
+["A", "B"].forEach(function(g){ $("g_" + g).onclick = function(){ GRP = GRP === g ? "" : g; ls("nnt_parent_grp", GRP || null); BUPICK = false; paintCtl(); drawLnav(); drawBoard(); }; });
 $("m_home").onclick = function(){ MODE = "home"; ls("nnt_parent_mode", "home"); paintCtl(); drawBoard(); drawLnav(); };
 $("m_class").onclick = function(){ MODE = "class"; ls("nnt_parent_mode", "class"); paintCtl(); drawBoard(); drawLnav(); };
 var qt = null; $("q").oninput = function(){ clearTimeout(qt); qt = setTimeout(drawBoard, 150); };
@@ -252,9 +257,12 @@ function pickBoardUnit(b){
   (b.rows || []).forEach(function(r){ (r.us || []).forEach(function(e){ if ((e.h !== "none" || e.c !== "none") && +e.u > best) best = +e.u; }); });
   return best || us[us.length - 1];
 }
+function todayUnit(b){ var best = 0; if (!b) return 0; (b.rows || []).forEach(function(r){ if (GRP && r.g !== GRP) return; (r.us || []).forEach(function(e){ if (String(e.ad || "").slice(0, 10) === b.today && +e.u > best) best = +e.u; }); }); return best; }
 function drawLnav(){
   if (!B || !(B.units || []).length){ $("lnav").innerHTML = ""; return; }
-  $("lnav").innerHTML = B.units.map(function(u){ return '<button type="button" data-u="' + u + '" class="' + (u === BU ? "on" : "") + '">' + esc(lessonName(u)) + '</button>'; }).join("");
+  var tu = todayUnit(B); $("tdl").textContent = tu ? t("todayL") + lessonName(tu) : t("noToday");
+  $("lnav").innerHTML = B.units.map(function(u){ return '<button type="button" data-u="' + u + '" class="' + (u === BU ? "on" : "") + (u === tu ? " td" : "") + '">' + esc(lessonName(u)) + (u === tu ? '<i>' + esc(t("todayB")) + '</i>' : "") + '</button>'; }).join("");
+  if (!BUPICK && tu && BU !== tu){ BU = tu; }
 }
 $("lnav").onclick = function(e){ var b = e.target.closest("button[data-u]"); if (!b) return; BU = +b.getAttribute("data-u"); BUPICK = true; drawLnav(); drawBoard(); };
 function drawBoard(){
@@ -381,7 +389,7 @@ function drawDlg(){
   $("dname").textContent = nm(d.name); $("dgrp").textContent = d.g ? t(d.g === "A" ? "toq" : "juft") : ""; $("dgrp").style.display = d.g ? "" : "none";
   if (!d.units.length){ $("dbody").innerHTML = '<div class="msg">' + t("noUnits") + '</div>'; $("dlnav").innerHTML = ""; return; }
   if (!MUPICK || !d.units.some(function(x){ return x.u === MU; })) MU = d.units.some(function(x){ return x.u === BU; }) ? BU : d.units[d.units.length - 1].u;
-  $("dlnav").innerHTML = d.units.map(function(x){ return '<button type="button" data-u="' + x.u + '" class="' + (x.u === MU ? "on" : "") + '">' + esc(lessonName(x.u)) + '</button>'; }).join("");
+  var tu2 = todayUnit(B); $("dlnav").innerHTML = d.units.map(function(x){ return '<button type="button" data-u="' + x.u + '" class="' + (x.u === MU ? "on" : "") + (x.u === tu2 ? " td" : "") + '">' + esc(lessonName(x.u)) + (x.u === tu2 ? '<i>' + esc(t("todayB")) + '</i>' : "") + '</button>'; }).join("");
   var cur = d.units.filter(function(x){ return x.u === MU; })[0];
   $("dbody").innerHTML = unitCard(cur, d) + history(d);
 }
