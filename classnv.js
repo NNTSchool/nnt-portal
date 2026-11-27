@@ -218,6 +218,11 @@
   + '#cnv .l4notes,#cnv .l4tp{background:#fffdf7;color:#10204a;border:2px solid #c9d6ee;border-radius:18px;padding:16px 20px;max-height:calc(100vh - 260px);overflow:auto}#cnv .l4notes h3,#cnv .l4tp h3{margin:0 0 8px;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:#3e63d8}#cnv .l4tp h3 small{display:block;text-transform:none;letter-spacing:0;font-size:13px;color:#6a7aa6;font-weight:600;margin-top:2px}'
   + '#cnv .l4nt,#cnv .l4tx{font:17px/1.6 Georgia,serif;color:#1b2a52}#cnv .l4tx{font-size:16px}#cnv .l4ev{background:#ffd23f;color:#3a2a00;border-radius:4px;padding:1px 2px;box-shadow:0 0 0 2px #ffd23f}#cnv .l4au{display:flex;align-items:center;gap:12px;margin-top:12px;position:sticky;bottom:0;background:linear-gradient(transparent,#fffdf7 30%);padding-top:8px}'
   + '#cnv .l4ans{background:#fffdf7;color:#10204a;border:2px solid #c9d6ee;border-radius:18px;padding:16px 18px;margin-top:12px}#cnv .l4ans.lk{opacity:.78}#cnv .l4two .l4ans{margin-top:0}#cnv .l4qh{font-weight:700;font-size:16px;color:#2d3f73;margin-bottom:10px;padding:10px 12px;border-radius:12px;background:linear-gradient(120deg,#d7f5ef,#d9e6ff 55%,#eadcff)}'
+  + '#cnv .pp-paper{max-width:900px;margin:0 auto}#cnv .pp-sec{background:#1d2b6b;color:#fff;font-weight:800;font-size:15px;border-radius:12px;padding:12px 16px;margin:22px 0 12px}#cnv .pp-sec:first-child{margin-top:0}#cnv .pp-ins{margin:10px 2px 8px;color:#1d2b6b;font-size:15px;line-height:1.5}#cnv .pp-head{margin:16px 2px 6px;font-size:14px;letter-spacing:.06em;color:#1d2b6b}'
+  + '#cnv .l4r.pq{border:2px solid #c9d6ee;background:#fff;border-radius:14px;padding:11px 14px;margin:8px 0;align-items:flex-start;transition:border-color .15s,background .15s}#cnv .l4r.pq.done{border-color:#2bb59b;background:#f3fbf8}#cnv .pp-row{align-items:center!important}#cnv .pp-row.pp-st{border:2px solid #dfe6f4;background:#fff;border-radius:14px;padding:11px 14px;margin:8px 0;color:#10204a;font-size:16px}#cnv .pp-lab{flex:1;font-size:16px;color:#10204a;font-weight:600}#cnv .pp-row .qn{order:2}#cnv .pp-row input.pp{order:3;flex:0 0 42%}'
+  + '#cnv .pp-body{flex:1;min-width:0}#cnv .pp-qt{font-size:16px;line-height:2.1;color:#10204a;font-weight:600}#cnv input.pp{font:600 16px/1.2 system-ui,sans-serif;color:#10204a;background:#f4f7ff;border:0;border-bottom:2px solid #3e63d8;border-radius:6px 6px 0 0;padding:6px 8px;min-width:150px;max-width:100%;outline:0}#cnv input.pp:focus{background:#e8f0ff;border-bottom-color:#1d2b6b}#cnv .pp-qt input.pp{margin:0 4px;width:190px}'
+  + '#cnv .pp-opts{display:grid;gap:7px;margin-top:8px}#cnv .pc{display:flex;gap:10px;align-items:flex-start;text-align:left;background:#f4f7ff;border:2px solid #d3dcf0;border-radius:12px;padding:9px 12px;font:600 15px/1.4 system-ui,sans-serif;color:#10204a;cursor:pointer}#cnv .pc i{flex:0 0 26px;height:26px;border-radius:8px;background:#fff;border:2px solid #9fb3e6;color:#3e63d8;font-style:normal;font-weight:800;display:flex;align-items:center;justify-content:center}#cnv .pc.on{background:#dfe9ff;border-color:#3e63d8}#cnv .pc.on i{background:#3e63d8;color:#fff;border-color:#3e63d8}#cnv .l4ans.lk .pc,#cnv .l4ans.lk input.pp{pointer-events:none}'
+  + '@media(max-width:640px){#cnv .pp-row{flex-wrap:wrap}#cnv .pp-row input.pp{flex:1 0 100%;order:4}#cnv .pp-qt input.pp{width:150px;min-width:110px}}'
   + '#cnv .l4r{display:flex;align-items:center;gap:12px;padding:10px 6px;border-bottom:1px solid #e3eaf8}#cnv .l4r:last-child{border:0}#cnv .l4r .qn{flex:0 0 34px;height:34px;border-radius:10px;background:#3e63d8;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}#cnv .l4r .qt{flex:1;font-size:17px;line-height:1.4;font-weight:600;color:#10204a}#cnv .l4r .qt strong{color:#b25400;margin-left:6px}'
   + '#cnv .l4t{display:flex;gap:8px;align-items:center}#cnv .l4tf{border:2px solid #b9c9e6;background:#fff;color:#2d3f73;border-radius:12px;padding:9px 18px;font:800 15px Lexend,system-ui;cursor:pointer;min-width:84px}#cnv .l4tf.on{background:#3e63d8;border-color:#3e63d8;color:#fff;box-shadow:0 4px 0 #27409a}#cnv .l4tf:disabled{cursor:default}'
   + '#cnv .l4ok{border:2px solid #b9c9e6;background:#fff;color:#2d3f73;border-radius:12px;padding:9px 14px;font:800 14px Lexend,system-ui;cursor:pointer;white-space:nowrap}#cnv .l4ok.on{background:#0c9c84;border-color:#0c9c84;color:#fff;box-shadow:0 4px 0 #086b5a}#cnv .l4in{width:230px;max-width:46vw;padding:9px 12px;font-size:16px;border:2px solid #b9c9e6;border-radius:12px;color:#10204a;background:#fff}'
@@ -621,12 +626,32 @@
   }
   /* ---------- four-stage listening (Units 2+): notes, answer from notes, exam, analysis ---------- */
   var STG = [["📝", "Take notes"], ["🧠", "Answer from notes"], ["⏱", "Exam"], ["🔎", "Analysis"]];
-  function stgBar(n){ var h = '<div class="stp l4">'; STG.forEach(function(s, i){ h += (i ? '<u class="' + (i < n ? "f" : "") + '"></u>' : '') + '<div class="sn ' + (i + 1 < n ? "dn" : i + 1 === n ? "cu" : "") + '"><span class="sb">' + (i + 1 < n ? "✔" : s[0]) + '</span><small>' + s[1] + '</small><em>' + (i + 1 === n ? "you are here" : "") + '</em></div>'; }); return h + '</div>'; }
+  function stgBar(n){ var mk = !!(S.P && S.P.mock), L3 = mk ? [STG[0], STG[2], STG[3]] : STG; if (mk && n) n = {1: 1, 3: 2, 4: 3}[n] || n; var h = '<div class="stp l4">'; L3.forEach(function(s, i){ h += (i ? '<u class="' + (i < n ? "f" : "") + '"></u>' : '') + '<div class="sn ' + (i + 1 < n ? "dn" : i + 1 === n ? "cu" : "") + '"><span class="sb">' + (i + 1 < n ? "✔" : s[0]) + '</span><small>' + s[1] + '</small><em>' + (i + 1 === n ? "you are here" : "") + '</em></div>'; }); return h + '</div>'; }
   function qn(ex){ return ex.kind === "grid" ? ex.groups.length * ex.cols.length : ex.qs.length; }
   function fnorm(s){ var t0 = String(s).toLowerCase().trim(); if (/^[a-z]$/.test(t0)) return t0; return String(s).toLowerCase().replace(/(\d)(st|nd|rd|th)\b/g, "$1").replace(/[^a-z0-9. ]/g, " ").replace(/\b(dollars?|per|a|day|the|of|from|until|to|and|all|whole|is|it)\b/g, " ").replace(/\s+/g, " ").trim(); }
+  /* digital exam paper (practice test): the questions are the page itself; answers are typed or tapped in place */
+  function paperHtml(ex){
+    var h = '<div class="pp-paper">';
+    ex.paper.forEach(function(b){
+      if (b.t === "sec") h += '<div class="pp-sec">' + esc(b.x) + '</div>';
+      else if (b.t === "ins") h += '<p class="pp-ins">' + esc(b.x) + '</p>';
+      else if (b.t === "head") h += '<h4 class="pp-head">' + esc(b.x) + '</h4>';
+      else if (b.t === "row"){
+        if (b.n) h += '<div class="l4r fx pq pp-row" data-k="' + (b.n - 1) + '" data-m="0"><span class="pp-lab">' + esc(b.x) + '</span><b class="qn">' + b.n + '</b><input class="pp" type="text" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Answer ' + b.n + '"><input class="l4in" type="hidden"></div>';
+        else h += '<div class="pp-row pp-st">' + esc(b.x) + '</div>';
+      } else if (b.t === "q"){
+        var parts = b.x.split("________"), t = "";
+        parts.forEach(function(x, i){ t += esc(x) + (i < parts.length - 1 ? '<input class="pp pp-in" type="text" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Answer ' + b.n + (parts.length > 2 ? " part " + (i + 1) : "") + '">' : ""); });
+        h += '<div class="l4r fx pq pp-q" data-k="' + (b.n - 1) + '" data-m="' + (b.m || 0) + '"><b class="qn">' + b.n + '</b><div class="pp-body"><div class="pp-qt">' + t + '</div>'
+          + (b.o && b.o.length ? '<div class="pp-opts">' + b.o.map(function(o, i){ var L = String.fromCharCode(65 + i); return '<button type="button" class="pc" data-v="' + L + '"><i>' + L + '</i><span>' + esc(o) + '</span></button>'; }).join("") + '</div>' : '') + '</div><input class="l4in" type="hidden"></div>';
+      }
+    });
+    return h + '</div>';
+  }
   /* widgets: draw the answer controls of an exercise; read() gives the answers, mark() gives [{ok, said, right}] */
   function qWidget(ex, pre){
     var h = "", i;
+    if (ex.paper) return paperHtml(ex);
     if (ex.kind === "tf"){
       h += '<div class="l4q">' + '<div class="l4ex"><b>Example</b><span>' + esc(ex.example.t) + '</span><i class="l4tf on">' + ex.example.a + '</i></div>';
       ex.qs.forEach(function(q, k){ h += '<div class="l4r" data-k="' + k + '"><b class="qn">' + (k + 1) + '</b><span class="qt">' + esc(q.t) + '</span><div class="l4t"><button type="button" class="l4tf" data-v="T">True</button><button type="button" class="l4tf" data-v="F">False</button></div></div>'; });
@@ -646,6 +671,16 @@
     return h + '</div>';
   }
   function qWire(root, ex){
+    [].forEach.call(root.querySelectorAll(".pq"), function(q){
+      var hid = q.querySelector(".l4in"), ins = [].slice.call(q.querySelectorAll("input.pp")), cs = [].slice.call(q.querySelectorAll(".pc")), mx = +q.getAttribute("data-m") || 1, order = [];
+      function sync(){ hid.value = cs.length ? cs.filter(function(c){ return c.classList.contains("on"); }).map(function(c){ return c.getAttribute("data-v"); }).sort().join(", ") : ins.map(function(i){ return i.value.trim(); }).filter(Boolean).join(" and "); q.classList.toggle("done", !!hid.value); }
+      ins.forEach(function(i){ i.oninput = sync; });
+      cs.forEach(function(c){ c.onclick = function(){
+        var on = c.classList.contains("on"), v = c.getAttribute("data-v");
+        if (on){ c.classList.remove("on"); order = order.filter(function(x){ return x !== v; }); }
+        else { if (mx === 1){ cs.forEach(function(x){ x.classList.remove("on"); }); order = []; } c.classList.add("on"); order.push(v); if (order.length > mx){ var old = order.shift(); cs.forEach(function(x){ if (x.getAttribute("data-v") === old) x.classList.remove("on"); }); } }
+        sync(); }; });
+    });
     [].forEach.call(root.querySelectorAll(".l4tf[data-v]"), function(b){ b.onclick = function(){ var p = b.parentNode, was = b.getAttribute("data-sel") === "1"; [].forEach.call(p.querySelectorAll(".l4tf"), function(x){ x.removeAttribute("data-sel"); x.classList.remove("on"); }); if (!was){ b.setAttribute("data-sel", "1"); b.classList.add("on"); } }; });
     [].forEach.call(root.querySelectorAll(".l4tk"), function(b){ b.onclick = function(){ var g = b.getAttribute("data-g"), c = b.getAttribute("data-c"), was = b.classList.contains("on");
       [].forEach.call(root.querySelectorAll('.l4tk[data-g="' + g + '"][data-c="' + c + '"]'), function(x){ x.classList.remove("on"); }); if (!was) b.classList.add("on"); }; });
@@ -703,7 +738,7 @@
   }
   function l4Intro(){
     var P = S.P, ie = S.L.track === "ie";
-    if (P.mock){ page(top() + '<div class="hero"><h2>Listening · Practice test</h2><p class="sub">' + esc(P.title) + ' · one recording · about 60 minutes</p></div>' + stgBar(0) + '<div class="gr g2 fr l4how"><div class="rc g"><span class="rn">1</span><div><b>Exam</b><small style="color:#bcd0ff">The whole recording plays ONCE, exactly like the real test: four sections, no pausing, no rewinding. Answer while you listen.</small></div></div><div class="rc g"><span class="rn">2</span><div><b>Analysis</b><small style="color:#bcd0ff">See every mistake with the exact sentence you missed, read the script, and win your mistakes back.</small></div></div></div><button class="go" id="l4go" style="margin-top:8px">Start the test →</button>'); el("cb").onclick = hub; el("l4go").onclick = function(){ S.L.stage = 3; S.L.ei = 0; l4Exam(); }; return; }
+    if (P.mock){ page(top() + '<div class="hero"><h2>Listening · Practice test</h2><p class="sub">' + esc(P.title) + ' · one recording · about 60 minutes</p></div>' + stgBar(0) + '<div class="gr g2 fr l4how"><div class="rc g"><span class="rn">1</span><div><b>Take notes</b><small style="color:#bcd0ff">Sound only. Play the WHOLE recording as often as you like and write down names, numbers, dates, choices and reasons. You cannot see the questions yet.</small></div></div><div class="rc g"><span class="rn">2</span><div><b>Exam</b><small style="color:#bcd0ff">The test is on the screen like a real computer-based exam: type in the blanks and tap the letters right on the paper. The recording plays ONCE, no pausing, no rewinding.</small></div></div><div class="rc g"><span class="rn">3</span><div><b>Analysis</b><small style="color:#bcd0ff">See every mistake with the exact sentence you missed, read the script, and win your mistakes back.</small></div></div></div><button class="go" id="l4go" style="margin-top:8px">Start: take notes →</button>'); el("cb").onclick = hub; el("l4go").onclick = function(){ S.L.stage = 1; S.L.ei = 0; l4Notes(); }; return; }
     page(top() + '<div class="hero"><h2>Listening · Part ' + S.unit + '</h2><p class="sub">' + esc(P.title) + ' · ' + P.exercises.length + ' recordings · about 60 minutes</p></div>' + stgBar(0)
       + '<div class="gr g2 fr l4how">'
       + '<div class="rc g"><span class="rn">1</span><div><b>Take notes</b><small style="color:#bcd0ff">Sound only. Play each recording as often as you like and write down names, numbers, dates, choices and reasons. You cannot see the questions yet.</small></div></div>'
@@ -713,7 +748,7 @@
       + '<button class="go" id="l4go" style="margin-top:8px">Start stage 1 →</button>');
     el("cb").onclick = hub; el("l4go").onclick = function(){ S.L.stage = 1; S.L.ei = 0; l4Notes(); };
   }
-  function l4Head(){ var ex = S.P.exercises[S.L.ei]; setTimeout(saveProg4, 0); return top("Exit") + stgBar(S.L.stage) + '<div class="l4ph">Stage ' + S.L.stage + ' of 4 · recording ' + (S.L.ei + 1) + ' of ' + S.P.exercises.length + '</div><h2 style="margin:4px 0 0">' + esc(ex.id + " · " + ex.name) + '</h2>'; }
+  function l4Head(){ var ex = S.P.exercises[S.L.ei]; setTimeout(saveProg4, 0); return top("Exit") + stgBar(S.L.stage) + '<div class="l4ph">Stage ' + (S.P.mock ? {1: 1, 3: 2, 4: 3}[S.L.stage] : S.L.stage) + ' of ' + (S.P.mock ? 3 : 4) + ' · recording ' + (S.L.ei + 1) + ' of ' + S.P.exercises.length + '</div><h2 style="margin:4px 0 0">' + esc(ex.id + " · " + ex.name) + '</h2>'; }
   function wc(s){ return (s.trim().match(/\S+/g) || []).length; }
   /* at least half of the questions must have an answer before a stage can be submitted */
   function l4Effort(ans, mid){
@@ -724,16 +759,16 @@
   }
   function l4Notes(){
     var ex = S.P.exercises[S.L.ei], L = S.L;
-    page(l4Head() + '<div class="ins hlz"><span class="ii">📝</span><div><small>STAGE 1 · TAKE NOTES</small><strong>' + esc(ex.intro) + ' Listen and write down everything useful. The questions come later.</strong></div></div>'
+    page(l4Head() + '<div class="ins hlz"><span class="ii">📝</span><div><small>STAGE 1 · TAKE NOTES</small><strong>' + esc(ex.intro) + (S.P.mock ? '' : ' Listen and write down everything useful. The questions come later.') + '</strong></div></div>'
       + l4Player(ex) + (ex.img && /map|plan/i.test(ex.name || "") ? '<div class="l4map"><img src="' + ex.img + '" alt="Map"></div>' : '') + '<textarea id="l4n" class="wrta l4na" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Type your notes here. Names, numbers, dates, prices, who said what, what changed…">' + esc(L.notes[ex.id] || "") + '</textarea>'
-      + '<div class="l4bar"><span id="l4wc" class="wrm"></span><button class="go" id="l4nx" disabled>' + (L.ei + 1 < S.P.exercises.length ? "Next recording →" : "Go to stage 2 →") + '</button></div>');
+      + '<div class="l4bar"><span id="l4wc" class="wrm"></span><button class="go" id="l4nx" disabled>' + (L.ei + 1 < S.P.exercises.length ? "Next recording →" : S.P.mock ? "Go to the exam →" : "Go to stage 2 →") + '</button></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); };
     l4Wire(ex, 0, "n" + ex.id, "Play it as many times as you need. You cannot skip ahead or rewind: that is the exam skill.");
     var ta = el("l4n"), nx = el("l4nx"), c = el("l4wc");
     function up(){ L.notes[ex.id] = ta.value; var w = wc(ta.value); c.innerHTML = '<b>' + w + '</b> / ' + ex.min + ' words at least'; nx.disabled = w < ex.min && !O.nofloor; c.classList.toggle("ok", w >= ex.min); }
     ta.oninput = function(){ up(); clearTimeout(S.ntm); S.ntm = setTimeout(saveProg4, 1200); }; up(); ta.focus();
     window.addEventListener("pagehide", function(){ try { if (S.cur === "lis" && !S.dict) saveProg4(); } catch (e) {} });
-    nx.onclick = function(){ stopAudio(); L.ei++; if (L.ei < S.P.exercises.length) l4Notes(); else { L.stage = 2; L.ei = 0; l4Answer(); } };
+    nx.onclick = function(){ stopAudio(); L.ei++; if (L.ei < S.P.exercises.length) l4Notes(); else if (S.P.mock){ L.stage = 3; L.ei = 0; l4Exam(); } else { L.stage = 2; L.ei = 0; l4Answer(); } };
   }
   function l4Answer(){
     var ex = S.P.exercises[S.L.ei], L = S.L;
@@ -754,7 +789,7 @@
   }
   function l4Exam(){
     var ex = S.P.exercises[S.L.ei], L = S.L, ie = L.track === "ie" || !!S.P.mock, lim = ie ? 1 : 2;
-    page(l4Head() + '<div class="ins hlz"><span class="ii">⏱</span><div><small>STAGE 3 · EXAM CONDITIONS</small><strong>' + esc(ex.say) + ' The recording is played ' + (ie ? "once only" : "up to twice") + '. Your notes are hidden: answer while you listen.</strong></div></div>'
+    page(l4Head() + '<div class="ins hlz"><span class="ii">⏱</span><div><small>' + (S.P.mock ? 'STAGE 2' : 'STAGE 3') + ' · EXAM CONDITIONS</small><strong>' + esc(ex.say) + ' The recording is played ' + (ie ? "once only" : "up to twice") + '. Your notes are hidden: answer while you listen.</strong></div></div>'
       + l4Player(ex) + '<div class="l4ans" id="l4a">' + qWidget(ex) + '</div><div class="l4bar"><span class="wrm"></span><button class="go" id="l4ck">Submit my answers</button></div><div id="cout"></div>');
     el("cb").onclick = function(){ stopAudio(); hub(); }; qWire(el("l4a"), ex);
     l4Wire(ex, lim, "x" + ex.id, "You cannot skip or rewind. " + (ie ? "One play only, exactly like the real test." : "You can play it twice."));
